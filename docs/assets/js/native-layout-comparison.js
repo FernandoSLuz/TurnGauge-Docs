@@ -7,23 +7,6 @@
 (function () {
   'use strict';
 
-  var states = {
-    'Initial action': 'initial-action',
-    'Selected target': 'selected-target'
-  };
-  var profiles = {
-    Fantasy: 'Fantasy',
-    'Science fiction': 'ScienceFiction'
-  };
-  var backends = {
-    UGUI: 'UGUI',
-    'UI Toolkit': 'UIToolkit'
-  };
-  var aspects = {
-    '16:9 (1920 × 1080)': '1920_1080',
-    '16:10 (1920 × 1200)': '1920_1200'
-  };
-
   function setup() {
     var root = document.querySelector('[data-native-layout-comparison]');
     if (!root || root.dataset.bound === '1') {
@@ -62,13 +45,14 @@
       var identityName = identity.options[identity.selectedIndex].textContent;
       var backendName = backend.options[backend.selectedIndex].textContent;
       var aspectName = aspect.options[aspect.selectedIndex].textContent;
-      var filename = states[stateName] + '-' + profiles[identityName] + '-' + backends[backendName] + '-' + aspects[aspectName] + '.png';
+      // Values identify files; labels may change for typography or localization.
+      var filename = state.value + '-' + identity.value + '-' + backend.value + '-' + aspect.value + '.png';
       var path = new URL(filename, imageRoot).href;
 
       image.src = path;
       fullSize.href = path;
       image.alt = identityName + ' ' + backendName + ' native HUD capture at ' + stateName.toLowerCase() + ', ' + aspectName + '.';
-      caption.innerHTML = 'Still capture from a Unity 6.3 session: ' + stateName.toLowerCase() + ' · ' + identityName + ' · ' + backendName + ' · ' + aspectName + '. Motion is not demonstrated by this image. <a href="' + path + '">Open full-size capture.</a>';
+      caption.innerHTML = 'Still capture from a Unity 6.3 session: ' + stateName.toLowerCase() + ' / ' + identityName + ' / ' + backendName + ' / ' + aspectName + '. Motion is not demonstrated by this image. <a href="' + path + '">Open full-size capture.</a>';
       status.textContent = 'Selected ' + stateName.toLowerCase() + ', ' + identityName + ', ' + backendName + ', ' + aspectName + '.';
     }
 
