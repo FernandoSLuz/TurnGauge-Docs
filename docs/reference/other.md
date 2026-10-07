@@ -2766,13 +2766,21 @@ Normalized source-space window used only by a portrait presentation.
 
 :   Compares crop components exactly, including the unconfigured sentinel.
 
+    - `other` &mdash; Crop value to compare with this value.
+    - **Returns** &mdash; True when both crop values have equal components.
+
 `public override bool Equals(object obj)`
 
-:   &mdash;
+:   Compares this crop with another object.
+
+    - `obj` &mdash; Object to compare with this crop.
+    - **Returns** &mdash; True when `obj` is an equal `UiPortraitCrop` value.
 
 `public override int GetHashCode()`
 
-:   &mdash;
+:   Returns a hash derived from the crop components.
+
+    - **Returns** &mdash; A hash code for this crop value.
 
 `public static bool IsValid(float centerX, float centerY, float width, float height)`
 
@@ -2782,14 +2790,23 @@ Normalized source-space window used only by a portrait presentation.
     - `centerY` &mdash; Crop center in normalized source coordinates.
     - `width` &mdash; Crop width between .01 and 1.
     - `height` &mdash; Crop height between .01 and 1.
+    - **Returns** &mdash; True when all values are finite and the crop is contained in normalized space.
 
 `public static bool operator !=(UiPortraitCrop left, UiPortraitCrop right)`
 
-:   &mdash;
+:   Compares two crop values for component inequality.
+
+    - `left` &mdash; First crop value.
+    - `right` &mdash; Second crop value.
+    - **Returns** &mdash; True when any crop component differs.
 
 `public static bool operator ==(UiPortraitCrop left, UiPortraitCrop right)`
 
-:   &mdash;
+:   Compares two crop values for component equality.
+
+    - `left` &mdash; First crop value.
+    - `right` &mdash; Second crop value.
+    - **Returns** &mdash; True when both crop values have equal components.
 
 ---
 

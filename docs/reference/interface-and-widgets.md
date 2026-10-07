@@ -445,7 +445,7 @@ shipped default skin rather than rendering unstyled boxes.
 
 :   Advances interface animation by a visual delta. The driver forwards its presentation delta here so pause and speed apply to the HUD exactly as they do to the stage.
 
-    - `presentationDeltaSeconds` &mdash; Presentation seconds since the last call. Zero or negative is ignored, which is how a paused presentation freezes the HUD.
+    - `presentationDeltaSeconds` &mdash; Presentation seconds since the last call. Zero or negative freezes animation clocks while still refreshing layout and target anchors.
 
 `public bool TryGetTooltip(StableId skillId, out TooltipData tooltip)`
 
@@ -1046,6 +1046,9 @@ it reads no simulation state and computes nothing authoritative.
 `public void SetSelectionHighlight(bool actor, bool target)`
 
 :   Highlights this plate for actor or target selection without changing its authored type scale.
+
+    - `actor` &mdash; Whether the plate represents the current actor.
+    - `target` &mdash; Whether the plate represents a selectable target.
 
 `public void SetSortingOrder(int order)`
 

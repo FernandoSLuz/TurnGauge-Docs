@@ -558,15 +558,15 @@ A side rail. Entries are never discarded when the pilot capacity is exceeded.
 
 `public bool CapacityExceeded`
 
-:   &mdash;
+:   Whether the retained entries exceed the visible three-row capacity.
 
 `public IReadOnlyList<BattleStageInformationEntry> Entries`
 
-:   &mdash;
+:   All entries retained for the side, including overflow entries.
 
 `public BattleStageInformationBankSide Side`
 
-:   &mdash;
+:   Rail side represented by this bank.
 
 ---
 
@@ -582,8 +582,8 @@ Which side of the information rail receives a team.
 
 | Value | Meaning |
 | --- | --- |
-| `Left` | &mdash; |
-| `Right` | &mdash; |
+| `Left` | Left information rail. |
+| `Right` | Right information rail. |
 
 ---
 
@@ -602,69 +602,69 @@ rails. It is inert until a presenter calls `Configure`.
 
 `public IReadOnlyList<string> Diagnostics`
 
-:   &mdash;
+:   Layout diagnostics produced while rebuilding the banks.
 
 `public bool IsConfigured`
 
-:   &mdash;
+:   Whether a stage has been configured for the banks.
 
 `public BattleStageInformationBank Left`
 
-:   &mdash;
+:   Current left-side bank, or an empty bank after clearing.
 
 `public BattleStageInformationBank Right`
 
-:   &mdash;
+:   Current right-side bank, or an empty bank after clearing.
 
 **Fields**
 
 `public const int BackingHorizontalExpansionPixels`
 
-:   &mdash;
+:   Horizontal backing expansion reserved around a cell.
 
 `public const int BackingVerticalExpansionPixels`
 
-:   &mdash;
+:   Vertical backing expansion reserved around a cell.
 
 `public const int CellPixels`
 
-:   &mdash;
+:   Authored side-cell size in pixels.
 
 `public const int ContentHeightPixels`
 
-:   &mdash;
+:   Content height remaining inside a side-cell backing.
 
 `public const int ContentWidthPixels`
 
-:   &mdash;
+:   Content width remaining inside a side-cell backing.
 
 `public const int FirstTopPixels`
 
-:   &mdash;
+:   Top offset of the first rail row in full-HUD pixels.
 
 `public const int MinimumHudWidthPixels`
 
-:   &mdash;
+:   Minimum full-HUD width that keeps both side rails readable.
 
 `public const int RailLeftPixels`
 
-:   &mdash;
+:   Left rail inset from the full-HUD left edge in pixels.
 
 `public const int RailRightPixels`
 
-:   &mdash;
+:   Right rail reference position in the default 1920-pixel HUD.
 
 `public const int RailWidthPixels`
 
-:   &mdash;
+:   Authored width of each side rail in pixels.
 
 `public const int RowStepPixels`
 
-:   &mdash;
+:   Vertical step between rail rows in full-HUD pixels.
 
 `public const int RowsPerSide`
 
-:   &mdash;
+:   Maximum number of visible pilot rows per side.
 
 **Methods**
 
@@ -676,21 +676,48 @@ rails. It is inert until a presenter calls `Configure`.
 
 :   Builds the pilot rail from a stage. The player identity is compared as data; no team display name or ordering convention is inferred.
 
+    - `source` &mdash; Stage whose current placements populate the banks.
+    - `fullHudWidthPixels` &mdash; Full-HUD width in pixels.
+    - `fullHudHeightPixels` &mdash; Full-HUD height in pixels.
+    - `pixelUnits` &mdash; World units represented by one authored pixel.
+    - `playerTeam` &mdash; Team identity used by the default side mapping.
+
 `public void Configure(BattleStage2D source, int fullHudWidthPixels, int fullHudHeightPixels, float pixelUnits, StableId playerTeam, IReadOnlyList<BattleStageInformationSide> sides)`
 
 :   Builds the rail with explicit team-to-side identities.
+
+    - `source` &mdash; Stage whose current placements populate the banks.
+    - `fullHudWidthPixels` &mdash; Full-HUD width in pixels.
+    - `fullHudHeightPixels` &mdash; Full-HUD height in pixels.
+    - `pixelUnits` &mdash; World units represented by one authored pixel.
+    - `playerTeam` &mdash; Team identity used when an explicit mapping is absent.
+    - `sides` &mdash; Optional explicit team-to-side assignments.
 
 `public static RectInt PilotCell(int fullHudHeightPixels, BattleStageInformationBankSide side, int row)`
 
 :   Returns one pilot cell in full-HUD pixel coordinates.
 
+    - `fullHudHeightPixels` &mdash; Full-HUD height in pixels.
+    - `side` &mdash; Rail side for the cell.
+    - `row` &mdash; Zero-based visible rail row.
+    - **Returns** &mdash; The full-HUD rectangle assigned to the requested cell.
+
 `public static RectInt PilotCell(int fullHudWidthPixels, int fullHudHeightPixels, BattleStageInformationBankSide side, int row)`
 
 :   Returns one pilot cell in full-HUD pixel coordinates.
 
+    - `fullHudWidthPixels` &mdash; Full-HUD width in pixels.
+    - `fullHudHeightPixels` &mdash; Full-HUD height in pixels.
+    - `side` &mdash; Rail side for the cell.
+    - `row` &mdash; Zero-based visible rail row.
+    - **Returns** &mdash; The full-HUD rectangle assigned to the requested cell.
+
 `public void SetSelection(StableId actor, IReadOnlyList<StableId> targets)`
 
 :   Marks the actor and selected targets for a legible plate highlight.
+
+    - `actor` &mdash; Current actor identity.
+    - `targets` &mdash; Current target identities, or null for no targets.
 
 ---
 
@@ -708,45 +735,55 @@ One combatant retained by a side bank, including overflow entries.
 
 `public BattleStageInformationEntry(StableId combatantId, StableId teamId, ProjectedFormationPoint projected, BattleStageInformationBankSide side, RectInt cell, bool hasCell, Vector2 worldPosition, bool isActor, bool isTarget)`
 
-:   &mdash;
+:   Initializes the retained rail entry with projected formation, cell and selection data.
+
+    - `combatantId` &mdash; Combatant identity represented by the entry.
+    - `teamId` &mdash; Team identity associated with the combatant.
+    - `projected` &mdash; Projected formation information for the combatant.
+    - `side` &mdash; Rail side containing the entry.
+    - `cell` &mdash; Full-HUD pixel cell assigned to the entry.
+    - `hasCell` &mdash; Whether the entry fits within the visible rail capacity.
+    - `worldPosition` &mdash; World-space position corresponding to the assigned cell.
+    - `isActor` &mdash; Whether the entry is the current actor.
+    - `isTarget` &mdash; Whether the entry is one of the current targets.
 
 **Properties**
 
 `public RectInt Cell`
 
-:   &mdash;
+:   Full-HUD pixel cell assigned to the entry.
 
 `public StableId CombatantId`
 
-:   &mdash;
+:   Combatant identity represented by the entry.
 
 `public bool HasCell`
 
-:   &mdash;
+:   Whether the entry fits within the visible rail capacity.
 
 `public bool IsActor`
 
-:   &mdash;
+:   Whether the entry is the current actor.
 
 `public bool IsTarget`
 
-:   &mdash;
+:   Whether the entry is one of the current targets.
 
 `public ProjectedFormationPoint Projected`
 
-:   &mdash;
+:   Projected formation information for the combatant.
 
 `public BattleStageInformationBankSide Side`
 
-:   &mdash;
+:   Rail side containing the entry.
 
 `public StableId TeamId`
 
-:   &mdash;
+:   Team identity associated with the combatant.
 
 `public Vector2 WorldPosition`
 
-:   &mdash;
+:   World-space position corresponding to the assigned cell.
 
 ---
 
@@ -764,17 +801,20 @@ Maps a caller-owned team identity to a rail side without naming assumptions.
 
 `public BattleStageInformationSide(StableId teamId, BattleStageInformationBankSide side)`
 
-:   &mdash;
+:   Creates an explicit team-to-rail assignment.
+
+    - `teamId` &mdash; Team identity assigned to the rail.
+    - `side` &mdash; Rail side that receives the team.
 
 **Properties**
 
 `public BattleStageInformationBankSide Side`
 
-:   &mdash;
+:   Rail side assigned to the team.
 
 `public StableId TeamId`
 
-:   &mdash;
+:   Team identity assigned to the rail.
 
 ---
 
