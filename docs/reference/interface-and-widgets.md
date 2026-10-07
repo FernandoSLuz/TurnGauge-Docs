@@ -49,7 +49,7 @@ readable line rather than an empty one.
 
 ## BattleNumberFormat
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public static class BattleNumberFormat
@@ -157,7 +157,7 @@ A player-chosen command the driver (not the UI) will submit.
 
 ## BattleUiRoot
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleUiRoot : MonoBehaviour
@@ -195,11 +195,11 @@ shipped default skin rather than rendering unstyled boxes.
 
 `public string InputUnavailableMessage`
 
-:   Empty, because shortcuts are available in this build.
+:   Empty, because shortcuts are available in this build.<br>Compilation condition: `#if ENABLE_LEGACY_INPUT_MANAGER`.
 
 `public string InputUnavailableMessage`
 
-:   Display-ready explanation of why the keyboard shortcuts are missing and which project setting restores them. Empty in builds that have them.
+:   Display-ready explanation of why the keyboard shortcuts are missing and which project setting restores them. Empty in builds that have them.<br>Compilation condition: `#else (matching #if ENABLE_LEGACY_INPUT_MANAGER)`.
 
 `public bool IsChoosingTarget`
 
@@ -215,11 +215,11 @@ shipped default skin rather than rendering unstyled boxes.
 
 `public bool LegacyInputAvailable`
 
-:   Classic input is available; the demo polls it here.
+:   Classic input is available; the demo polls it here.<br>Compilation condition: `#if ENABLE_LEGACY_INPUT_MANAGER`.
 
 `public bool LegacyInputAvailable`
 
-:   The legacy input manager is disabled. The tray remains fully clickable through the graphic raycaster, so only the number-key shortcuts are unavailable; nothing throws.
+:   The legacy input manager is disabled. The tray remains fully clickable through the graphic raycaster, so only the number-key shortcuts are unavailable; nothing throws.<br>Compilation condition: `#else (matching #if ENABLE_LEGACY_INPUT_MANAGER)`.
 
 `public IReadOnlyList<SkillCommandShape> OfferedSkills`
 
@@ -532,7 +532,7 @@ re-resolution and calls no engine mutator or preview API.
 
 ## DisplayStringTable
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class DisplayStringTable
@@ -722,7 +722,7 @@ twice.
     - `safeAreaPixels` &mdash; Device-safe rectangle expressed in bottom-left-origin screen pixels.
     - `screenHeight` &mdash; Full render-target height in pixels.
     - `screenWidth` &mdash; Full render-target width in pixels.
-    - **Returns** &mdash; after valid normalized anchors are applied; otherwise for zero screen dimensions or an empty area.
+    - **Returns** &mdash; `true` after valid normalized anchors are applied; otherwise `false` for zero screen dimensions or an empty area.
 
 ---
 

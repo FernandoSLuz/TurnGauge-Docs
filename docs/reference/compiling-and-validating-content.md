@@ -45,7 +45,7 @@ content and the same hashes.
 
 ## AuthoringCompileRequest
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class AuthoringCompileRequest
@@ -104,7 +104,7 @@ diagnostic on the result instead of an exception here.
 
 ## AuthoringCompileResult
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class AuthoringCompileResult
@@ -368,7 +368,7 @@ reports exactly the diagnostics a compile would.
 
 ## BattleContentCompiler
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed partial class BattleContentCompiler
@@ -462,7 +462,7 @@ another by accident.
 
 ## CompiledAuthoringCatalog
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class CompiledAuthoringCatalog

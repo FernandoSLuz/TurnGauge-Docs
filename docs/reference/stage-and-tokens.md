@@ -7,7 +7,7 @@
 
 ## BattlePresenter
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattlePresenter : MonoBehaviour
@@ -1208,7 +1208,7 @@ visual-only and is never read by simulation or included in its hashes.
 
 ## PresenterBinding
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class PresenterBinding

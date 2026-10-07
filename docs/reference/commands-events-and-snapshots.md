@@ -160,7 +160,7 @@ reaches `EndTick`.
 
 ## BattleCommand
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleCommand
@@ -240,7 +240,7 @@ it rather than holding one across ticks.
 
 ## BattleEvent
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleEvent
@@ -297,7 +297,7 @@ event-chain hash, so a dropped or reordered event is detectable.
 
 ## BattleIds
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public static class BattleIds
@@ -644,7 +644,7 @@ compiles cleanly and then silently matches nothing at runtime.
 
 ## BattleSnapshot
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleSnapshot
@@ -1070,7 +1070,7 @@ halves are required: neither an invalid key nor a null value can be stored.
 
 ## PropertySet
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class PropertySet : IReadOnlyList<PropertyEntry>

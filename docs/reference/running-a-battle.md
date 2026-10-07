@@ -7,7 +7,7 @@
 
 ## AdvanceTicksOutcome
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public enum AdvanceTicksOutcome
@@ -33,7 +33,7 @@ outcome leaves the battle at or below it.
 
 ## AdvanceTicksResult
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class AdvanceTicksResult
@@ -94,7 +94,7 @@ event-chain digest.
 
 ## BattleEngine
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed partial class BattleEngine
@@ -251,7 +251,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 
 ## BattleResultState
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleResultState
@@ -344,7 +344,7 @@ while the battle is still running.
 
 ## BattleStartRequest
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed partial class BattleStartRequest

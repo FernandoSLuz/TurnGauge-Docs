@@ -73,7 +73,7 @@ the three hashes pin it to one compiled encounter.
 
 ## BattleRuntimeController
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleRuntimeController : MonoBehaviour
@@ -616,4 +616,3 @@ public sealed class VfxBinding
 Maps one presentation VFX key to an optional pooled prototype.
 
 ---
-

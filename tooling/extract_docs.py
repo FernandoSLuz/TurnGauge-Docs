@@ -221,6 +221,7 @@ def clean_inline(text):
     text = re.sub(r'<see\s+cref="(?:[A-Za-z]:)?([^"]+)"\s*/>', r'`\1`', text)
     text = re.sub(r'<see\s+cref="(?:[A-Za-z]:)?([^"]+)"\s*>(.*?)</see>', r'`\2`', text, flags=re.S)
     text = re.sub(r'<see\s+href="([^"]+)"\s*/>', r'\1', text)
+    text = re.sub(r'<see\s+langword="([^"]+)"\s*/>', r'`\1`', text)
     text = re.sub(r'<seealso\s+cref="(?:[A-Za-z]:)?([^"]+)"\s*/>', r'`\1`', text)
     text = re.sub(r'<paramref\s+name="([^"]+)"\s*/>', r'`\1`', text)
     text = re.sub(r'<typeparamref\s+name="([^"]+)"\s*/>', r'`\1`', text)
@@ -280,6 +281,7 @@ def parse_file(path, display, out):
 
     namespace = ''
     doc_buffer = []
+    conditional_stack = []
     current = None
     depth_of_type = None
     entered_body = False
@@ -313,6 +315,19 @@ def parse_file(path, display, out):
         code = strip_leading_attributes(code)
         stripped = raw.strip()
 
+        directive = DIRECTIVE.match(code)
+        if directive:
+            directive_name = directive.group(1)
+            directive_text = code.strip()[1:].strip()
+            if directive_name == 'if':
+                conditional_stack.append('#if ' + directive_text[2:].strip())
+            elif directive_name == 'else' and conditional_stack:
+                conditional_stack[-1] = '#else (matching ' + conditional_stack[-1] + ')'
+            elif directive_name == 'elif' and conditional_stack:
+                conditional_stack[-1] = '#elif ' + directive_text[4:].strip()
+            elif directive_name == 'endif' and conditional_stack:
+                conditional_stack.pop()
+
         # A declaration may put each parameter on its own line.  Coalesce only
         # lines already recognised as declarations, so a method body call cannot
         # swallow the following source into a phantom signature.
@@ -337,6 +352,7 @@ def parse_file(path, display, out):
             if '(' not in code and '{' not in code:
                 pending_nested_bases.append(brace)
 
+        conditions = list(conditional_stack)
         t = TYPE.match(code) if not suppressed else None
         if t:
             modifiers, kind, name, tail = (
@@ -356,6 +372,7 @@ def parse_file(path, display, out):
                 'namespace': namespace,
                 'name': name,
                 'containing_type': current or '',
+                'conditions': conditions,
                 'bases': bases,
                 'file': display,
                 'doc': parse_doc(doc_buffer),
@@ -399,6 +416,7 @@ def parse_file(path, display, out):
                         'type': '',
                         'name': entry['name'],
                         'signature': 'public ' + entry['name'] + '(' + params + ')',
+                        'conditions': conditions,
                         'doc': parse_doc(doc_buffer),
                     })
                     matched_declaration = True
@@ -431,6 +449,7 @@ def parse_file(path, display, out):
                         'type': rtype,
                         'name': name,
                         'signature': signature,
+                        'conditions': conditions,
                         'doc': parse_doc(doc_buffer),
                     })
                     matched_declaration = True

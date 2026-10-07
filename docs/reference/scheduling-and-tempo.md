@@ -404,7 +404,7 @@ than being guessed.
 
 ## BattleSchedulerRegistry
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleSchedulerRegistry
@@ -665,7 +665,7 @@ crossing is converted into a decision entry and only the remainder kept.
 
 ## IBattleScheduler
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IBattleScheduler
@@ -739,7 +739,7 @@ Order and ATB schedulers.
 
 ## ISchedulerAdjustmentAdapter
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface ISchedulerAdjustmentAdapter
@@ -805,7 +805,7 @@ needs one.
 
 ## ISchedulerAdjustmentAdapterProvider
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface ISchedulerAdjustmentAdapterProvider
@@ -832,7 +832,7 @@ without the caller naming it separately.
 
 ## ISchedulerStateCodec
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface ISchedulerStateCodec
@@ -900,7 +900,7 @@ replayable, and hashable.
 
 ## ISchedulerStateCodecProvider
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface ISchedulerStateCodecProvider

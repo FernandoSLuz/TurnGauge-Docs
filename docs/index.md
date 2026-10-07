@@ -30,41 +30,41 @@ workbench, and a battle interface you can restyle from one asset.</p>
 
 <div markdown>
 
-### :material-rocket-launch: See it work
+### See it work
 
 Run the shipped demo scene, then prove with your own seed that the same inputs replay.
 
-[Install and run the demo :material-arrow-right:](tutorials/first-battle.md)
+[Install and run the demo ->](tutorials/first-battle.md)
 
 </div>
 
 <div markdown>
 
-### :material-code-braces: Drive it from my code
+### Drive it from my code
 
 Compile a catalog, create an engine from an encounter and a seed, pump it from a MonoBehaviour.
 
-[Run a battle from code :material-arrow-right:](tutorials/run-a-battle-from-code.md)
+[Run a battle from code ->](tutorials/run-a-battle-from-code.md)
 
 </div>
 
 <div markdown>
 
-### :material-palette: Match my game
+### Match my game
 
 Turn a shipped skin into an asset you own, then put every interface region where you want it.
 
-[Restyle the interface :material-arrow-right:](tutorials/skinning-your-battle.md)
+[Restyle the interface ->](tutorials/skinning-your-battle.md)
 
 </div>
 
 <div markdown>
 
-### :material-scale-balance: Make it fair
+### Make it fair
 
 Step a battle tick by tick, read the formula trace behind a number you did not expect.
 
-[Step a battle in the Workbench :material-arrow-right:](how-to/balance-with-the-workbench.md)
+[Step a battle in the Workbench ->](how-to/balance-with-the-workbench.md)
 
 </div>
 

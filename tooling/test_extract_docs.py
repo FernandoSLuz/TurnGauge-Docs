@@ -162,6 +162,19 @@ class ExtractDocsTests(unittest.TestCase):
             extract_docs.parameter_text(code),
             'string value = "right)", int count = Math.Max(1, 2)')
 
+    def test_langword_and_conditional_metadata_are_preserved(self):
+        doc = extract_docs.parse_doc([
+            '<summary>Returns <see langword="true"/> or <see langword="false"/>.</summary>'])
+        self.assertEqual(doc['summary'], 'Returns `true` or `false`.')
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'Conditional.cs'
+            source.write_text('''namespace Sample;\npublic class Conditional\n{\n#if ENABLE_LEGACY\n    /// <summary>Legacy branch.</summary>\n    public bool InputAvailable => true;\n#else\n    /// <summary>Modern branch.</summary>\n    public bool InputAvailable => false;\n#endif\n}\n''', encoding='utf-8')
+            api = extract_docs.collect(directory)
+        members = api['Sample.Conditional']['members']
+        self.assertEqual(len(members), 2)
+        self.assertEqual(members[0]['conditions'], ['#if ENABLE_LEGACY'])
+        self.assertEqual(members[1]['conditions'], ['#else (matching #if ENABLE_LEGACY)'])
+
     def test_public_nested_types_are_qualified_and_keep_inline_attributes(self):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / 'Controller.cs'

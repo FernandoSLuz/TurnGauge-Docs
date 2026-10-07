@@ -217,7 +217,7 @@ through here is one of only two ways to obtain one; the other is stepping a
 
 ## Chance64
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public readonly struct Chance64 : IEquatable<Chance64>, IComparable<Chance64>
@@ -504,7 +504,7 @@ on `MechanicsDiagnosticIds`.
 
 ## Fixed64
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public readonly struct Fixed64 : IEquatable<Fixed64>, IComparable<Fixed64>
@@ -838,7 +838,7 @@ difference.
 
 ## StableId
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public readonly struct StableId : IEquatable<StableId>, IComparable<StableId>

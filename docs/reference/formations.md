@@ -460,7 +460,7 @@ on the same pixels on every platform.
 
 ## FormationPresetDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class FormationPresetDefinition : StableIdDefinition

@@ -7,7 +7,7 @@
 
 ## IReplayMigration
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IReplayMigration

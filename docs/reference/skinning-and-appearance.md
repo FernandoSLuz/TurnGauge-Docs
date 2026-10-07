@@ -343,7 +343,7 @@ The Skin Browser materializes any of these into an editable
 
 ## BattleSkinPreset
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleSkinPreset : ScriptableObject
@@ -411,16 +411,16 @@ assigned.
 :   Assembles a skin from finished token groups. Values are stored exactly as given; clamping is `BattleSkinPreset.Compile`'s job, not this constructor's. A null surface, bar, or layout group throws, because the interface has nothing to fall back to for those.
 
     - `bars` &mdash; Complete styling for health, shield, resource, cast, and scheduler bars.
-    - `description` &mdash; Player-facing prose describing the skin, or for no description.
-    - `displayName` &mdash; Player-facing skin name, or for an empty name.
+    - `description` &mdash; Player-facing prose describing the skin, or `null` for no description.
+    - `displayName` &mdash; Player-facing skin name, or `null` for an empty name.
     - `floatingNumbers` &mdash; Size, travel, and easing tokens for combat floating numbers.
-    - `layout` &mdash; Canvas scaling and placement for every HUD region; must not be .
+    - `layout` &mdash; Canvas scaling and placement for every HUD region; must not be `null`.
     - `motion` &mdash; Durations, easing, and reduced-motion policy shared by HUD animations.
     - `palette` &mdash; Semantic colors consumed by surfaces, bars, text, and feedback.
-    - `stableIdText` &mdash; Persistence-safe skin identifier, or for an empty identifier.
+    - `stableIdText` &mdash; Persistence-safe skin identifier, or `null` for an empty identifier.
     - `statusPips` &mdash; Size, spacing, and count presentation for combatant status pips.
     - `stagePresence` &mdash; Grounding, silhouette and selection-presence tokens for world-space combatant art.
-    - `surfaces` &mdash; Complete styling for panels, buttons, tooltips, and the stage backdrop; must not be .
+    - `surfaces` &mdash; Complete styling for panels, buttons, tooltips, and the stage backdrop; must not be `null`.
     - `typography` &mdash; Font reference, sizes, and text style shared across the HUD.
     - `targeting` &mdash; Reticle and affected-area preview tokens used to show a pending target request.
 

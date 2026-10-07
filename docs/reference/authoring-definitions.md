@@ -187,7 +187,7 @@ captures no value, and is reported as an invalid property tag when compiled.
 
 ## BattleContentCatalog
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleContentCatalog : StableIdDefinition
@@ -280,7 +280,7 @@ teams.
 
 ## BattleRulesDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleRulesDefinition : StableIdDefinition
@@ -397,7 +397,7 @@ leave the battle running.
 
 ## BattleTemplate
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleTemplate
@@ -486,7 +486,7 @@ combatants at once. Each shipped template is a pair that works.
 
 ## BattleTemplateDefaults
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public static class BattleTemplateDefaults
@@ -561,7 +561,7 @@ assets. Nothing here is loaded at runtime.
 
 ## CombatantDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class CombatantDefinition : StableIdDefinition
@@ -809,7 +809,7 @@ all hold first, and the ordering data the policy selects with. Immutable.
 
 ## CompiledBattleContent
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed partial class CompiledBattleContent
@@ -983,7 +983,7 @@ changes after construction, so the same content can back many battles.
 :   The automatic decision policy with this id, or null when the content has none. Schema 3 content always answers null, because its automatic combatants are driven by AI policy definitions instead.
 
     - `policyId` &mdash; Id a combatant names when it is placed under automatic control.
-    - **Returns** &mdash; The matching automatic policy, or when the policy is unknown.
+    - **Returns** &mdash; The matching automatic policy, or `null` when the policy is unknown.
 
 `public CompiledCombatantDefinition FindCombatantDefinitionV3(StableId id)`
 
@@ -1011,7 +1011,7 @@ changes after construction, so the same content can back many battles.
 :   The scheduler definition with this id, or null when the content does not offer it. The lookup is a binary search over the sorted definitions.
 
     - `schedulerId` &mdash; Id a battle start uses to select its scheduler.
-    - **Returns** &mdash; The matching scheduler definition, or when the id is absent.
+    - **Returns** &mdash; The matching scheduler definition, or `null` when the id is absent.
 
 `public CompiledSkillDefinition FindSkillDefinitionV3(StableId id)`
 
@@ -1025,7 +1025,7 @@ changes after construction, so the same content can back many battles.
 :   The timing contract for this skill, or null when the content has none. A null answer is what tells you a skill is unknown to the content, which is how a combatant granted a missing skill is caught.
 
     - `skillId` &mdash; Id of the skill whose timing is wanted.
-    - **Returns** &mdash; The matching skill timing, or when the skill is unknown.
+    - **Returns** &mdash; The matching skill timing, or `null` when the skill is unknown.
 
 `public CompiledStatDefinition FindStatDefinitionV3(StableId id)`
 
@@ -1046,7 +1046,7 @@ changes after construction, so the same content can back many battles.
 :   Reports whether a command type is one this content accepts. It binary searches the sorted ids and allocates nothing, so it is cheap enough to call while building a command rather than after submitting one.
 
     - `commandType` &mdash; Command type id to look for; an unknown or default id simply reports false.
-    - **Returns** &mdash; when `commandType` is registered; otherwise, .
+    - **Returns** &mdash; `true` when `commandType` is registered; otherwise, `false`.
 
 `public static B3CreationResult<CompiledBattleContent> TryCreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions)`
 
@@ -1387,7 +1387,7 @@ bookkeeping (stacks, remaining duration, next periodic tick) and never these rul
 
 ## EffectDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class EffectDefinition : StableIdDefinition
@@ -1452,7 +1452,7 @@ appear in the inspector is the order the effects run in.
 
 ## EncounterDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class EncounterDefinition : StableIdDefinition
@@ -1747,7 +1747,7 @@ copy their input, and a null array becomes an empty one.
 :   Creates an authored from booleans entry whose tag and payload slot agree. The catalog compiler later validates the key and collection limits.
 
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
-    - `values` &mdash; Boolean payloads to copy in authored order; means an empty array.
+    - `values` &mdash; Boolean payloads to copy in authored order; `null` means an empty array.
     - **Returns** &mdash; An editable Boolean-array entry owning a copy of `values`.
 
 `public static PropertyEntryDefinition FromChance64Raw(string key, long value)`
@@ -1795,7 +1795,7 @@ copy their input, and a null array becomes an empty one.
 :   Creates an entry holding a copy of a 32-bit signed integer array.
 
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
-    - `values` &mdash; Signed 32-bit payloads to copy in authored order; means empty.
+    - `values` &mdash; Signed 32-bit payloads to copy in authored order; `null` means empty.
     - **Returns** &mdash; An editable Int32-array entry owning a copy of `values`.
 
 `public static PropertyEntryDefinition FromInt64(string key, long value)`
@@ -1811,7 +1811,7 @@ copy their input, and a null array becomes an empty one.
 :   Creates an entry holding a copy of a 64-bit signed integer array.
 
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
-    - `values` &mdash; Signed 64-bit payloads to copy in authored order; means empty.
+    - `values` &mdash; Signed 64-bit payloads to copy in authored order; `null` means empty.
     - **Returns** &mdash; An editable Int64-array entry owning a copy of `values`.
 
 `public static PropertyEntryDefinition FromStableId(string key, string value)`
@@ -1819,7 +1819,7 @@ copy their input, and a null array becomes an empty one.
 :   Creates an entry holding a `StableId` as its raw text; null becomes empty.
 
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
-    - `value` &mdash; Stable-ID text payload; is normalized to an empty string.
+    - `value` &mdash; Stable-ID text payload; `null` is normalized to an empty string.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.StableId` with the normalized ID text.
 
 `public static PropertyEntryDefinition FromStableIds(string key, params string[] values)`
@@ -1835,7 +1835,7 @@ copy their input, and a null array becomes an empty one.
 :   Creates an entry holding free text. Null is stored as null rather than coerced to empty the way `FromStableId` does, and both a null value and text that is not already Unicode NFC are reported as an invalid property value when compiled.
 
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
-    - `value` &mdash; Free-text payload retained verbatim, including for later validation.
+    - `value` &mdash; Free-text payload retained verbatim, including `null` for later validation.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.String` with the supplied text.
 
 `public static PropertyEntryDefinition FromStrings(string key, params string[] values)`
@@ -1859,7 +1859,7 @@ copy their input, and a null array becomes an empty one.
 :   Creates an entry holding a copy of a 64-bit unsigned integer array.
 
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
-    - `values` &mdash; Unsigned 64-bit payloads to copy in authored order; means empty.
+    - `values` &mdash; Unsigned 64-bit payloads to copy in authored order; `null` means empty.
     - **Returns** &mdash; An editable UInt64-array entry owning a copy of `values`.
 
 ---
@@ -1890,7 +1890,7 @@ diagnostic when the owning catalog is compiled.
 
 :   Creates a property set holding the given entries. The array is copied, so later changes to the caller's array are not seen here; a null array yields an empty set.
 
-    - `entries` &mdash; Entries to retain in authored order; the array is copied and means empty.
+    - `entries` &mdash; Entries to retain in authored order; the array is copied and `null` means empty.
 
 **Properties**
 
@@ -2003,7 +2003,7 @@ a tag entry for the same status both count.
 
 ## ResourceDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class ResourceDefinition : StableIdDefinition
@@ -2041,7 +2041,7 @@ units, not the fixed-point raw values a stat uses.
 
 ## SchedulerDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class SchedulerDefinition : StableIdDefinition
@@ -2129,7 +2129,7 @@ action resolves.
 
 ## SkillDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class SkillDefinition : StableIdDefinition
@@ -2472,7 +2472,7 @@ the field fails validation instead of silently meaning full health.
 
 ## StatDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class StatDefinition : StableIdDefinition
@@ -2509,7 +2509,7 @@ it, so a stat asset nothing references affects no battle.
 
 ## StatusDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class StatusDefinition : StableIdDefinition
@@ -2773,7 +2773,7 @@ the greater Strength.
 
 ## TargetDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class TargetDefinition : StableIdDefinition
@@ -2825,7 +2825,7 @@ time it is used is decided by `InvalidTargetPolicy`.
 
 ## TeamDefinition
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class TeamDefinition : StableIdDefinition

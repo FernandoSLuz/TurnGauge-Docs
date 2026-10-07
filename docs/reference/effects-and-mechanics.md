@@ -90,7 +90,7 @@ replay, Workbench, tooltips, and range previews.
 
 ## BattleMechanicsRegistry
 
-:material-star: **Start here**
+**Start here**
 
 ```csharp
 public sealed class BattleMechanicsRegistry
@@ -1331,7 +1331,7 @@ snapshot and no RNG are reachable from here.
 
 ## IAiPolicy
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IAiPolicy : IMechanicsImplementation
@@ -1384,7 +1384,7 @@ survives.
 
 ## IEffectResolver
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IEffectResolver : IMechanicsImplementation
@@ -1437,7 +1437,7 @@ should happen; the engine decides how much of it actually lands.
 
 ## IFormula
 
-:material-star: **Start here** &middot; :material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Start here** &middot; **Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IFormula : IMechanicsImplementation
@@ -1510,7 +1510,7 @@ registered through the same interface, with no privileged path.
 
 ## IMechanicsImplementation
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IMechanicsImplementation
@@ -1577,7 +1577,7 @@ receive an RNG, and the instance must not outlive the call it arrived on.
 
 ## IReactionRule
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IReactionRule : IMechanicsImplementation
@@ -1630,7 +1630,7 @@ depth, count, and once-per-root budgets.
 
 ## ITargetResolver
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface ITargetResolver : IMechanicsImplementation

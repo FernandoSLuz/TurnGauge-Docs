@@ -131,7 +131,7 @@ to a single warning and a null result rather than allocating forever.
 :   True when `RegisterPrototype` has bound a prototype to `key` and that prototype is still alive. A destroyed prototype reports false rather than true, so a scene teardown that took the source object with it degrades to the shared fallback instead of cloning a dead reference.
 
     - `key` &mdash; Prototype identity to inspect without creating or acquiring an instance.
-    - **Returns** &mdash; when the exact key maps to a non-destroyed prototype.
+    - **Returns** &mdash; `true` when the exact key maps to a non-destroyed prototype.
 
 `public int IdleCount(string key)`
 
@@ -222,7 +222,7 @@ Floating-number presentation style; purely cosmetic.
 
 ## IAnimationAdapter
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IAnimationAdapter
@@ -250,7 +250,7 @@ byte-identical.
 
 ## IAudioAdapter
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IAudioAdapter
@@ -274,7 +274,7 @@ touch battle state: audio can never change a battle outcome.
 
 ## IPoolAdapter
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IPoolAdapter
@@ -341,13 +341,13 @@ per-combatant art existed.
 :   True when a prototype has been registered for `key`. Must not acquire, allocate, or mutate anything.
 
     - `key` &mdash; Prototype identity to inspect without checking out an instance.
-    - **Returns** &mdash; only when a live registered prototype exists for the exact key.
+    - **Returns** &mdash; `true` only when a live registered prototype exists for the exact key.
 
 ---
 
 ## IVfxAdapter
 
-:material-puzzle: **Extension point** &mdash; implement this yourself to change behaviour
+**Extension point** &mdash; implement this yourself to change behaviour
 
 ```csharp
 public interface IVfxAdapter

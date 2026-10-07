@@ -167,9 +167,9 @@ def render_group(group, entries, product):
         out.append('')
         badges = []
         if entry.get('headline'):
-            badges.append(':material-star: **Start here**')
+            badges.append('**Start here**')
         if entry.get('extensionPoint'):
-            badges.append(':material-puzzle: **Extension point** &mdash; '
+            badges.append('**Extension point** &mdash; '
                           'implement this yourself to change behaviour')
         if badges:
             out.append(' &middot; '.join(badges))
@@ -185,6 +185,9 @@ def render_group(group, entries, product):
         out.append('')
         out.append('`%s` &middot; <small>%s</small>' % (entry['namespace'], entry['file']))
         out.append('')
+        if entry.get('conditions'):
+            out.append('Compilation condition: ' + '; '.join('`%s`' % c for c in entry['conditions']) + '.')
+            out.append('')
         if entry.get('containing_type'):
             out.append('Nested in `%s`.' % entry['containing_type'])
             out.append('')
@@ -237,6 +240,9 @@ def render_group(group, entries, product):
                         out.append(':   ' + ' '.join(summary.split()))
                     else:
                         out.append(':   &mdash;')
+                    if member.get('conditions'):
+                        out[-1] += '<br>Compilation condition: ' + '; '.join(
+                            '`%s`' % c for c in member['conditions']) + '.'
                     has_details = bool(member['doc']['params'] or member['doc']['returns'])
                     if has_details:
                         # A blank line is required for Markdown to parse the
