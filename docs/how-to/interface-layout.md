@@ -107,8 +107,9 @@ event chain or a result. Field list in
 TurnGauge draws nameplates, bars and pips over a combatant. Six drawn characters ship under
 `Samples/Characters/`, licensed for use in your own projects, so the demo reads as a battle from the
 first run and you can keep them if they suit you. Register a prototype carrying a `SpriteRenderer` under
-`BattleStage2D.TokenPoolKey` before you bind, and every spawned token is a clone of it. The token view flips that sprite for a slot facing left, writes the
-slot's sorting order to the renderer, and treats the prototype's colour as the tint a downed
+`BattleStage2D.TokenPoolKey` before you bind, and every spawned token is a clone of it. The token view
+records the slot facing and mirrors the sprite only when that direction differs from the source-art
+direction, writes the slot's sorting order to the renderer, and treats the prototype's colour as the tint a downed
 combatant desaturates away from. For per-combatant art, resolve the token after binding:
 
 ```csharp

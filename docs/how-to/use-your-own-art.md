@@ -105,9 +105,45 @@ reads the view in `LateUpdate` - never `OnEnable`, which runs before the stage c
 
 | Without a `SpriteRenderer` | Read instead |
 | --- | --- |
-| No horizontal flip on a left-facing slot | `token.Facing == FormationFacing.Left` |
+| No horizontal flip on a slot | Compare `token.SourceArtFacing` with `token.Facing`; mirror only when they differ |
 | No `sortingOrder` written | `token.SortingOrder`; `token.SortingLayerKey` is recorded, never applied |
 | No desaturate-and-fade on death | `token.IsDead` |
+
+### Keep source and displayed facing explicit
+
+`Facing` describes the direction the token should face in its compiled formation slot.
+`SourceArtFacing` describes the direction already painted into the sprite before TurnGauge mirrors
+it. The token mirrors the sprite only when those values differ. This keeps a sprite authored facing
+left facing left in a left-facing slot, while a left-authored sprite placed in a right-facing slot
+is mirrored once. The rule applies to the stage body and the matching turn-order portrait; it does
+not mirror HUD labels, world effects or other presentation elements.
+
+The two-argument `SetCombatantArt` overload remains compatible with older projects and preserves the
+token's existing source-facing metadata. A newly configured token defaults to a Right-facing source;
+use the overload with `sourceArtFacing` whenever the imported illustration points elsewhere:
+
+```csharp
+// This sprite was painted facing left, and the formation slot currently faces right.
+presenter.SetCombatantArt(combatantId, leftFacingSprite, FormationFacing.Left);
+// The stage body and its rail portrait are mirrored once for the right-facing slot.
+```
+
+For a UI-only binding with no stage token, the three-argument
+`SetCombatantPortrait(combatantId, portrait, sourceFacing)` overload records the source direction
+and derives the displayed direction from the current team row. When the rail needs an explicit
+destination, use the four-argument overload instead:
+
+```csharp
+ui.SetCombatantPortrait(
+    combatantId,
+    leftFacingPortrait,
+    FormationFacing.Left,   // source art direction
+    FormationFacing.Right); // desired displayed direction
+```
+
+Passing the same direction for source and desired (`Left` to `Left`, for example) deliberately keeps
+the portrait unmirrored. Keep portrait framing and crop decisions separate from the token's visual
+ground or formation anchors: changing the crop must not move the feet, HUD, or effect attachment.
 
 ### Author the visual ground point
 

@@ -356,9 +356,29 @@ shipped default skin rather than rendering unstyled boxes.
     - `combatantId` &mdash; Combatant the art belongs to.
     - `portrait` &mdash; The sprite to crop, or null to drop one already supplied. The interface never loads art itself, so a combatant with no portrait draws a chip with a plain surface instead.
 
+`public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing)`
+
+:   Supplies a portrait and its source-art direction. The UI derives the displayed
+    direction from the combatant's current team row, then mirrors only when it differs from
+    `sourceFacing`.
+    - `combatantId` &mdash; Combatant the art belongs to.
+    - `portrait` &mdash; The sprite to crop, or null to drop one already supplied.
+    - `sourceFacing` &mdash; Direction encoded by the unmirrored source sprite.
+
+`public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing, FormationFacing desiredFacing)`
+
+:   Supplies a portrait with both directions explicit. Use this overload when a UI-only host needs
+    a destination independent of its current team row. The portrait is mirrored only when the two
+    values differ; `Left` to `Left` is intentionally unmirrored. Portrait crop and framing remain
+    independent of token ground points, HUD elements and world-effect anchors.
+    - `combatantId` &mdash; Combatant the art belongs to.
+    - `portrait` &mdash; The sprite to crop, or null to drop one already supplied.
+    - `sourceFacing` &mdash; Direction encoded by the unmirrored source sprite.
+    - `desiredFacing` &mdash; Direction the portrait should face in the rail.
+
 `public void SetPlayerTeam(StableId teamId)`
 
-:   Names the team the rail and the health bars should read as "ours". Presentation only: it decides a colour and nothing else.
+:   Names the team the rail and the health bars should read as "ours". Presentation only: it selects team colors and refreshes portraits whose destination is derived from the team row; explicit portrait destinations remain fixed.
     - `teamId` &mdash; The player's team. The default id makes every combatant read as an opponent, which is the honest answer when no perspective was supplied.
 
 `public void SetTargetCandidates(StableId skillId, IReadOnlyList<StableId> candidates)`
@@ -1908,4 +1928,3 @@ matters.
 :   Active status count, already floored at zero.
 
 ---
-

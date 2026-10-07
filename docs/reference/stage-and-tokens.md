@@ -145,6 +145,18 @@ event chain, a replay, or a result.
     - `combatantId` &mdash; The combatant to dress. Unknown ids are ignored.
     - `art` &mdash; The illustration, or null to strip it back to the lettered fallback. The same sprite becomes the bust crop on that combatant's turn-order chip, so a project assigns art once rather than twice.
 
+`public void SetCombatantArt(StableId combatantId, Sprite art, FormationFacing sourceArtFacing)`
+
+:   Gives one combatant an illustration and records the direction painted into that source sprite.
+    The stage compares it with the compiled slot's `Facing` and mirrors the body only when they
+    differ; the same source and desired direction therefore stays unmirrored. The direction is
+    also passed to the matching turn-order portrait. The two-argument overload remains the legacy
+    path: it preserves the token's existing source-facing metadata, whose initial default is Right
+    when no source direction has been supplied.
+    - `combatantId` &mdash; The combatant to dress.
+    - `art` &mdash; The illustration, or null to strip it back to the lettered fallback.
+    - `sourceArtFacing` &mdash; Direction encoded by the unmirrored source sprite.
+
 `public void SetReducedMotion(bool value)`
 
 :   Applies a session preference to beats, stage and numbers without changing skin assets or battle state. A custom HUD applies its own matching policy. Existing perform modules reset when reduction is enabled. Effects already started outside those modules remain the host's responsibility.
@@ -1666,4 +1678,3 @@ it never resolves a target, it only says which one is being pointed at.
     - `presentationDeltaSeconds` &mdash; Visual seconds elapsed.
 
 ---
-

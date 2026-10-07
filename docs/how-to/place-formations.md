@@ -69,7 +69,7 @@ The **Selected Slot** panel edits what the slot *is*:
 | **Slot ID** | The identity an encounter assigns a combatant to |
 | **Row ID** | Groups slots into a row for your own layout conventions |
 | **Side ID** | Which side of the field this slot belongs to |
-| **Facing** | `Left` or `Right`; `Left` mirrors the token's sprite |
+| **Facing** | `Left` or `Right`; the direction the token should face. The sprite is mirrored only when this differs from its source-art direction |
 | **Sorting Layer Key** | Carried through to the token placement for your own adapters |
 | **Sorting Order** | Applied to the token's sprite renderer, so it draws in front or behind |
 | **VFX Anchors** | Named anchors, with their coordinates, that effects attach to |
@@ -112,10 +112,12 @@ inside the viewport it was given and centred there; any leftover width or height
 The aspect buttons in the editor change the preview only - they never change what ships.
 
 For every occupancy the stage spawns one token and takes its placement verbatim: position from
-the projected slot point converted to world units, `Facing = Left` flipping the sprite,
-**Sorting Order** written to the sprite renderer, and **Sorting Layer Key** carried on the
-placement for your own code to read. Anchor and approach points are resolved on demand when a
-presentation cue asks for them.
+the projected slot point converted to world units, the compiled **Facing** recorded on the token,
+and **Sorting Order** written to the sprite renderer. A sprite is mirrored only when its source-art
+direction differs from that slot-facing direction; a left-facing slot does not automatically mean
+that every source sprite is flipped. **Sorting Layer Key** is carried on the placement for your own
+code to read. Anchor and approach points are resolved on demand when a presentation cue asks for
+them.
 
 Transforms are outputs here, not inputs. Moving a token in the scene changes nothing
 authoritative and is overwritten the next time the stage is built - which is also why a token
