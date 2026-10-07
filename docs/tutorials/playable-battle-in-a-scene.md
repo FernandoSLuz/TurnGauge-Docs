@@ -5,6 +5,93 @@ own, from a menu item and an Inspector, with no C# at all.
 
 ---
 
+## Recorded walkthrough
+
+Watch the wizard create a **three-versus-three Playable Battle** with seed `424242`, then
+choose an action and its target. The written steps below use **Playable Duel** and seed
+`12345`; both follow the same wizard workflow.
+
+This 81-second recording uses real mouse and keyboard input in Unity `6000.3.25f1` on an
+isolated desktop. Loading and idle waits are shortened. English instructions are included
+in the picture, with optional captions and a transcript. The project already contains the
+starter catalog; installation, Undo/Redo and optional character art are separate workflows.
+
+<figure style="margin:1em 0">
+  <video id="first-battle-video" aria-label="Create and play your first TurnGauge battle" controls preload="metadata" playsinline muted poster="../../assets/images/turngauge-first-battle-neutral-720p.poster.png" aria-describedby="first-battle-transcript" style="display:block;width:100%;aspect-ratio:16/9;background:#070d15;border-radius:8px">
+    <source src="../../assets/videos/turngauge-first-battle-neutral-720p.mp4" type="video/mp4">
+    <track kind="captions" src="../../assets/videos/turngauge-first-battle-neutral-720p.en.vtt" srclang="en" label="English captions">
+    Your browser does not support HTML video. Use the video download or transcript below.
+  </video>
+  <figcaption>Create an empty scene, choose the catalog and encounter, enter Play Mode, and submit the first command.</figcaption>
+</figure>
+
+<button class="md-button" type="button" data-studio-continue="first-battle-video" aria-controls="first-battle-video">Play full tutorial</button>
+<p data-studio-status="first-battle-video" role="status">Choose a step to play it on its own, or watch the full tutorial.</p>
+
+Use fullscreen to read the Unity controls. Each chapter pauses at its end. **Continue full
+tutorial** resumes from that point. Audio starts muted.
+
+<details>
+<summary>Choose a step</summary>
+<div aria-label="First battle video chapters" style="display:flex;flex-wrap:wrap;gap:.5em;margin-top:1em">
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="2.0" data-studio-end="4.0" data-studio-title="Open a new scene" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:02 Open a new scene</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="4.0" data-studio-end="9.0" data-studio-title="Start with an empty scene" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:04 Start with an empty scene</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="9.0" data-studio-end="15.0" data-studio-title="Open the battle wizard" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:09 Open the battle wizard</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="15.0" data-studio-end="20.0" data-studio-title="Choose the starter catalog" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:15 Choose the starter catalog</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="20.0" data-studio-end="25.0" data-studio-title="Set catalog and seed" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:20 Set catalog and seed</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="25.0" data-studio-end="33.0" data-studio-title="Create the encounter" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:25 Create the encounter</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="33.0" data-studio-end="36.5" data-studio-title="Confirm the created scene" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:33 Confirm the created scene</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="36.5" data-studio-end="38.8" data-studio-title="Return to the scene" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:36 Return to the scene</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="38.8" data-studio-end="42.1" data-studio-title="Enter Play Mode" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:38 Enter Play Mode</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="42.1" data-studio-end="47.1" data-studio-title="Wait for the battle" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:42 Wait for the battle</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="47.1" data-studio-end="54.1" data-studio-title="Expand the Game view" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:47 Expand the Game view</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="54.1" data-studio-end="63.1" data-studio-title="Choose an action" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">0:54 Choose an action</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="63.1" data-studio-end="71.6" data-studio-title="Select the enemy" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">1:03 Select the enemy</button>
+  <button type="button" data-studio-video="first-battle-video" data-studio-time="71.6" data-studio-end="78.1" data-studio-title="Continue or leave Play Mode" aria-controls="first-battle-video" style="font:inherit;text-align:left;padding:.5em .7em;border:1px solid currentColor;border-radius:.3em;cursor:pointer">1:11 Continue or leave Play Mode</button>
+</div>
+</details>
+
+<details id="first-battle-transcript">
+<summary>Read the transcript</summary>
+<p><strong>Open a new scene</strong></p>
+<p>Create an Empty scene for the starter battle.</p>
+<p><strong>Start with an empty scene</strong></p>
+<p>Create the empty scene, then open Tools → TurnGauge.</p>
+<p><strong>Open the battle wizard</strong></p>
+<p>Choose Create Playable Battle.</p>
+<p><strong>Choose the starter catalog</strong></p>
+<p>Open the Catalog picker.</p>
+<p><strong>Set catalog and seed</strong></p>
+<p>Choose StarterCatalog and enter a repeatable seed.</p>
+<p><strong>Create the encounter</strong></p>
+<p>Select Playable Battle, then Create Playable Battle.</p>
+<p><strong>Confirm the created scene</strong></p>
+<p>Confirm the result. The wizard created scene objects.</p>
+<p><strong>Return to the scene</strong></p>
+<p>Close the wizard to inspect the created battle.</p>
+<p><strong>Enter Play Mode</strong></p>
+<p>Press Play. TurnGauge starts the selected encounter.</p>
+<p><strong>Wait for the battle</strong></p>
+<p>The battle waits when a human-controlled actor needs input.</p>
+<p><strong>Expand the Game view</strong></p>
+<p>Use the Game tab menu to maximize the battle view.</p>
+<p><strong>Choose an action</strong></p>
+<p>Choose Power Blow to target one enemy.</p>
+<p><strong>Select the enemy</strong></p>
+<p>Choose Iron Duelist. The command resolves in the battle.</p>
+<p><strong>Continue or leave Play Mode</strong></p>
+<p>The next actor becomes ready. Exit Play Mode to return to authoring.</p>
+<p>Undo/Redo and optional character art are separate walkthroughs.</p>
+</details>
+
+[Download video (4.9 MB)](../assets/videos/turngauge-first-battle-neutral-720p.mp4) ·
+[English captions](../assets/videos/turngauge-first-battle-neutral-720p.en.vtt) ·
+[Transcript](../assets/videos/turngauge-first-battle-neutral-720p.transcript.txt) ·
+[Chapter timings](../assets/videos/turngauge-first-battle-neutral-720p.chapters.json)
+
+Music: [Exploration Theme by Cleyton Kauffman](https://opengameart.org/content/exploration-theme),
+[CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
 ## Build the scene
 
 1. Open the scene you want the battle in. A brand new empty scene is fine.

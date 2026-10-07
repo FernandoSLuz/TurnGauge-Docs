@@ -1,0 +1,88 @@
+{
+  "chapters": [
+    {
+      "id": "new-scene",
+      "start": 2.0,
+      "end": 4.0,
+      "title": "Open a new scene"
+    },
+    {
+      "id": "empty-scene",
+      "start": 4.0,
+      "end": 9.0,
+      "title": "Start with an empty scene"
+    },
+    {
+      "id": "open-wizard",
+      "start": 9.0,
+      "end": 15.0,
+      "title": "Open the battle wizard"
+    },
+    {
+      "id": "open-catalog",
+      "start": 15.0,
+      "end": 20.0,
+      "title": "Choose the starter catalog"
+    },
+    {
+      "id": "catalog-seed",
+      "start": 20.0,
+      "end": 25.0,
+      "title": "Set catalog and seed"
+    },
+    {
+      "id": "encounter-create",
+      "start": 25.0,
+      "end": 33.0,
+      "title": "Create the encounter"
+    },
+    {
+      "id": "confirm-created",
+      "start": 33.0,
+      "end": 36.5,
+      "title": "Confirm the created scene"
+    },
+    {
+      "id": "close-wizard",
+      "start": 36.5,
+      "end": 38.8,
+      "title": "Return to the scene"
+    },
+    {
+      "id": "enter-play",
+      "start": 38.8,
+      "end": 42.1,
+      "title": "Enter Play Mode"
+    },
+    {
+      "id": "loaded-game",
+      "start": 42.1,
+      "end": 47.1,
+      "title": "Wait for the battle"
+    },
+    {
+      "id": "maximize-game",
+      "start": 47.1,
+      "end": 54.1,
+      "title": "Expand the Game view"
+    },
+    {
+      "id": "choose-action",
+      "start": 54.1,
+      "end": 63.1,
+      "title": "Choose an action"
+    },
+    {
+      "id": "choose-target",
+      "start": 63.1,
+      "end": 71.6,
+      "title": "Select the enemy"
+    },
+    {
+      "id": "next-turn",
+      "start": 71.6,
+      "end": 78.1,
+      "title": "Continue or leave Play Mode"
+    }
+  ]
+}

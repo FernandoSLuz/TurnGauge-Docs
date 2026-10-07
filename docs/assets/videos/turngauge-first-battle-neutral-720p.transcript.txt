@@ -1,0 +1,61 @@
+# Your first TurnGauge battle
+
+Real mouse and keyboard input in Unity 6000.3.25f1, captured on an isolated desktop. Idle and loading waits are shortened.
+
+## Open a new scene
+
+Create an Empty scene for the starter battle.
+
+## Start with an empty scene
+
+Create the empty scene, then open Tools → TurnGauge.
+
+## Open the battle wizard
+
+Choose Create Playable Battle.
+
+## Choose the starter catalog
+
+Open the Catalog picker.
+
+## Set catalog and seed
+
+Choose StarterCatalog and enter a repeatable seed.
+
+## Create the encounter
+
+Select Playable Battle, then Create Playable Battle.
+
+## Confirm the created scene
+
+Confirm the result. The wizard created scene objects.
+
+## Return to the scene
+
+Close the wizard to inspect the created battle.
+
+## Enter Play Mode
+
+Press Play. TurnGauge starts the selected encounter.
+
+## Wait for the battle
+
+The battle waits when a human-controlled actor needs input.
+
+## Expand the Game view
+
+Use the Game tab menu to maximize the battle view.
+
+## Choose an action
+
+Choose Power Blow to target one enemy.
+
+## Select the enemy
+
+Choose Iron Duelist. The command resolves in the battle.
+
+## Continue or leave Play Mode
+
+The next actor becomes ready. Exit Play Mode to return to authoring.
+
+Undo/Redo and optional character art are separate walkthroughs.

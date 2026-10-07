@@ -1,0 +1,43 @@
+WEBVTT
+
+00:00:02.000 --> 00:00:04.000
+Create an Empty scene for the starter battle.
+
+00:00:04.000 --> 00:00:09.000
+Create the empty scene, then open Tools → TurnGauge.
+
+00:00:09.000 --> 00:00:15.000
+Choose Create Playable Battle.
+
+00:00:15.000 --> 00:00:20.000
+Open the Catalog picker.
+
+00:00:20.000 --> 00:00:25.000
+Choose StarterCatalog and enter a repeatable seed.
+
+00:00:25.000 --> 00:00:33.000
+Select Playable Battle, then Create Playable Battle.
+
+00:00:33.000 --> 00:00:36.500
+Confirm the result. The wizard created scene objects.
+
+00:00:36.500 --> 00:00:38.800
+Close the wizard to inspect the created battle.
+
+00:00:38.800 --> 00:00:42.100
+Press Play. TurnGauge starts the selected encounter.
+
+00:00:42.100 --> 00:00:47.100
+The battle waits when a human-controlled actor needs input.
+
+00:00:47.100 --> 00:00:54.100
+Use the Game tab menu to maximize the battle view.
+
+00:00:54.100 --> 00:01:03.100
+Choose Power Blow to target one enemy.
+
+00:01:03.100 --> 00:01:11.600
+Choose Iron Duelist. The command resolves in the battle.
+
+00:01:11.600 --> 00:01:18.100
+The next actor becomes ready. Exit Play Mode to return to authoring.

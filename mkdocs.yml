@@ -106,6 +106,7 @@ extra_css:
 extra_javascript:
   - assets/js/api-filter.js
   - assets/js/native-layout-comparison.js
+  - assets/js/studio-video.js
 
 extra:
   social:
