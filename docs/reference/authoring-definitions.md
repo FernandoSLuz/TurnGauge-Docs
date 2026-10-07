@@ -19,6 +19,28 @@ kind asks for has to be filled in. Conditions are tested against the battle stat
 without changing it, and the first one that fails drops the rule from
 consideration.
 
+**Fields**
+
+`public AiConditionKind Kind`
+
+:   What this gate tests. It also decides which single operand below is read: the resource, status, and skill kinds each read their own, while the health and head-count kinds read none of them and compare against the threshold alone.
+
+`public ResourceDefinition ResourceOperand`
+
+:   Required by `AiConditionKind.ActorResourceAtLeast`, ignored by every other kind.
+
+`public SkillDefinition SkillOperand`
+
+:   Required by `AiConditionKind.SkillReady` and `AiConditionKind.TargetAvailable`, ignored by every other kind.
+
+`public StatusDefinition StatusOperand`
+
+:   Required by `AiConditionKind.ActorHasStatus`, ignored by every other kind.
+
+`public long Threshold`
+
+:   Comparison bound, in whatever units `Kind` reads: health, resource units, or a count of living combatants. The kinds that only test presence never read it.
+
 ---
 
 ## AiConditionKind
@@ -69,6 +91,20 @@ implementation ID and contract version together, and it validates the authored
 properties itself while content compiles, so a mistyped argument fails the
 compile rather than the battle.
 
+**Fields**
+
+`public MechanicsImplementationReferenceDefinition Implementation`
+
+:   Which registered AI policy makes the decision, matched by ID and contract version together. The built-ins are ai.priority.v1, ai.conditional.v1, and ai.weighted.v1.
+
+`public PropertySetDefinition Properties`
+
+:   The arguments handed to that policy, which it validates itself while content compiles.
+
+`public AiRuleDefinition[] Rules`
+
+:   The candidate actions this policy decides between, up to 256. Which ordering field on a rule matters is the policy's business: the priority and conditional policies read Priority, and the weighted policy reads Weight.
+
 ---
 
 ## AiRuleDefinition
@@ -84,6 +120,32 @@ the conditions that must all hold before it may be chosen, and the ordering data
 the policy selects with. Which ordering field matters depends on the policy: the
 built-in priority and conditional policies read `Priority` and ignore
 `Weight`, while the built-in weighted policy does the reverse.
+
+**Fields**
+
+`public AiConditionDefinition[] Conditions`
+
+:   Gates that must all pass before the rule is offered, evaluated in order. An empty list makes the rule unconditional. Capped by `SimulationLimits.ConditionsPerAiRule`.
+
+`public int Priority`
+
+:   Selection order for the priority and conditional policies, highest first. The weighted policy ignores it.
+
+`public string[] RequestedTargetIds`
+
+:   Target IDs the rule asks for when it is chosen. Each must parse as a stable ID and must not repeat, and the compiler sorts them, so authored order carries no meaning. They still go through the skill's target resolver and its validation like any other request.
+
+`public string RuleId`
+
+:   Identity of this rule inside its policy. It is required, must parse as a stable ID, and must be unique within the policy; decision traces report candidates under this value.
+
+`public SkillDefinition Skill`
+
+:   The skill this rule proposes. It is required, and the engine rejects a candidate whose skill does not match the rule that named it.
+
+`public uint Weight`
+
+:   Relative share for the weighted policy, ignored by the others. Zero removes the rule from a weighted draw entirely.
 
 ---
 
@@ -137,6 +199,64 @@ The sole root of a closed authoring graph. Compilation never searches the
 project, Resources, Addressables, folders, or loaded assemblies, so an asset
 that no list here can reach does not exist to a battle.
 
+**Fields**
+
+`public AiPolicyDefinition[] AiPolicies`
+
+:   Every AI policy this catalog defines. Up to 4096.
+
+`public CombatantDefinition[] Combatants`
+
+:   Every fighter template this catalog defines. Up to 4096.
+
+`public EffectDefinition[] Effects`
+
+:   Every effect this catalog defines. Up to 4096.
+
+`public EncounterDefinition[] Encounters`
+
+:   Every playable fight this catalog defines. Up to 4096; these are the assets a game hands to the engine to start a battle.
+
+`public FormationPresetDefinition[] FormationPresets`
+
+:   Every stage layout this catalog defines. Up to 1024.
+
+`public ReactionDefinition[] Reactions`
+
+:   Every reaction rule this catalog defines. Up to 4096.
+
+`public ResourceDefinition[] Resources`
+
+:   Every spendable pool this catalog defines. It shares the 256 ceiling that stats use rather than having one of its own.
+
+`public BattleRulesDefinition Rules`
+
+:   The one Battle Rules asset every battle from this catalog runs under. It is required, and there is exactly one per catalog.
+
+`public SchedulerDefinition[] Schedulers`
+
+:   The turn-order assets any encounter here may name. Up to 16.
+
+`public SkillDefinition[] Skills`
+
+:   Every skill this catalog defines. Up to 4096.
+
+`public StatDefinition[] Stats`
+
+:   Every stat this catalog defines. Up to 256.
+
+`public StatusDefinition[] Statuses`
+
+:   Every status this catalog defines. Up to 4096.
+
+`public TargetDefinition[] Targets`
+
+:   Every reusable targeting rule this catalog defines. Up to 4096.
+
+`public TeamDefinition[] Teams`
+
+:   Every roster this catalog defines. Up to 4096.
+
 ---
 
 ## BattleResultPolicyKind
@@ -182,6 +302,96 @@ tuning it, but not in the same way: reaching the root-action or tick ceiling
 ends the battle as a stall rather than a victory, while the reaction depth and
 count ceilings only suppress the reaction that would have crossed them and
 leave the battle running.
+
+**Fields**
+
+`public StatDefinition CriticalChanceStat`
+
+:   The stat asset the critical formula reads as the attacker's chance to land a critical hit. It is required.
+
+`public MechanicsImplementationReferenceDefinition CriticalFormula`
+
+:   Which registered formula decides whether a hit is critical, resolved the same way.
+
+`public long CriticalMultiplierRaw`
+
+:   How much a critical hit multiplies by, raw fixed-point where 10000 means 1.0. It must be at least 10000, so the shipped 15000 is a one-and-a-half times critical.
+
+`public MechanicsImplementationReferenceDefinition DamageFormula`
+
+:   Which registered formula every damage calculation runs through. It must resolve by ID and contract version together.
+
+`public MechanicsImplementationReferenceDefinition DefenseFormula`
+
+:   Which registered formula turns the target's defense stat into mitigation, resolved the same way.
+
+`public StatDefinition DefenseStat`
+
+:   The stat asset the defense step reads on whoever is being hit. It is required and must be reachable from this catalog.
+
+`public long FormulaMaximumRaw`
+
+:   Highest result every built-in formula is clamped to, in the same units, and never below the minimum.
+
+`public long FormulaMinimumRaw`
+
+:   Lowest result every built-in formula is clamped to, raw fixed-point where 10000 means 1.0. Watch this pair: leaving both this and the maximum at zero compiles and then clamps all damage and healing to nothing.
+
+`public MechanicsImplementationReferenceDefinition HealingFormula`
+
+:   Which registered formula every healing calculation runs through, resolved the same way.
+
+`public StatDefinition MagicStat`
+
+:   A second offensive stat, required so that it exists to be named. No built-in formula reads it on its own: an effect points at it with a source-stat property when it should scale off magic rather than power.
+
+`public long MaximumBattleTicks`
+
+:   The other stall guard: how many ticks a battle may run before it ends as a stall. 0 to 1,000,000,000, and zero disables it.
+
+`public StatDefinition MaximumHealthStat`
+
+:   The stat asset that means maximum health. It is required, and every combatant must carry it as a base stat that is positive and an exact multiple of 10000.
+
+`public int MaximumReactionCount`
+
+:   How many reactions one root action may fire in total, 0 to 64, suppressed the same way rather than ending the battle.
+
+`public int MaximumReactionDepth`
+
+:   How many reactions may chain off one another, 0 to 8. Crossing it only suppresses the reaction that would have crossed it; the battle keeps running.
+
+`public ulong MaximumRootActions`
+
+:   A stall guard rather than tuning: how many actions a battle may start before it ends as a stall rather than a victory. 0 to 1,000,000, and zero disables the guard.
+
+`public StatDefinition PowerStat`
+
+:   The stat asset built-in damage scales off by default. It is required and must be reachable from this catalog.
+
+`public BattleResultPolicyKind ResultPolicy`
+
+:   How a winner is decided. Last Living Team is the only value that compiles; it reads the encounter's perspective team to turn the survivor into a victory or a defeat.
+
+`public StatDefinition SpeedStat`
+
+:   The stat asset that means speed, which is what turn order is built from. It is required, and every combatant must carry it as a positive base stat.
+
+`public StatDefinition SpiritStat`
+
+:   The stat asset built-in healing scales off by default. It is required and must be reachable from this catalog.
+
+`public MechanicsImplementationReferenceDefinition StatusChanceFormula`
+
+:   Which registered formula decides whether a status lands, resolved the same way.
+
+`public long VarianceMaximumRaw`
+
+:   High end of that same spread, in the same units and never below the minimum. Setting 9000 and 11000 makes damage roll inside plus or minus ten percent.
+
+`public long VarianceMinimumRaw`
+
+:   Low end of the random spread applied to damage, raw fixed-point where 10000 means 1.0. It must be zero or more and no larger than the maximum; leaving both at 10000 means no spread at all. Built-in healing ignores both ends.
 
 ---
 
@@ -375,6 +585,44 @@ diagnostic the moment something reads them. A resource left out of
 `ResourceDefaults` cannot be overridden per member either. Every
 asset referenced from here must be reachable from the same catalog.
 
+**Fields**
+
+`public CombatantStatEntryDefinition[] BaseStats`
+
+:   The stats this fighter carries into battle, one entry per stat and no repeats. A stat left out has no base value at all, and the maximum-health and speed stats must both be here and positive or the catalog will not compile.
+
+`public AiPolicyDefinition DefaultAiPolicy`
+
+:   The AI policy driving this fighter when nothing overrides it. A team member set to Automatic control fails to compile when neither this nor its own override resolves.
+
+`public SkillDefinition[] GrantedSkills`
+
+:   The skills this fighter may use. Up to 256.
+
+`public string[] ImmuneStatusTags`
+
+:   Status tags that can never land on this fighter, matched against the tags a status declares, so one entry can cover a whole family.
+
+`public StatusDefinition[] ImmuneStatuses`
+
+:   Statuses that can never land on this fighter. Immunity is absolute and wins over whatever the resistance entries say.
+
+`public ReactionDefinition[] IntrinsicReactions`
+
+:   Reaction rules this fighter always carries, without needing a status to grant them.
+
+`public StatusResistanceDefinition[] Resistances`
+
+:   Statuses this fighter shrugs off partly. Every entry matching an incoming status adds into one total that is clamped at full immunity.
+
+`public CombatantResourceEntryDefinition[] ResourceDefaults`
+
+:   Starting amounts for the resources this fighter carries, one entry per resource and no repeats. A resource left out cannot be overridden per team member either.
+
+`public string[] Tags`
+
+:   Words that group this fighter with others for your own content to match on. Up to 64, each valid ID text and appearing once.
+
 ---
 
 ## CombatantResourceEntryDefinition
@@ -388,6 +636,16 @@ public sealed class CombatantResourceEntryDefinition
 One entry in a `CombatantDefinition`'s resource default list: the resource, and how
 much of it the combatant starts with unless an encounter's team member entry overrides that
 resource. Amounts here are plain integer units, not the fixed-point raw values a base stat uses.
+
+**Fields**
+
+`public ResourceDefinition Resource`
+
+:   The resource this entry seeds. It is required, and no two entries on one combatant may name the same resource.
+
+`public int Value`
+
+:   Starting amount in whole units; it must fall inside the referenced resource's own authored minimum and maximum.
 
 ---
 
@@ -403,6 +661,16 @@ One entry in a `CombatantDefinition`'s base stat list: the stat, and the value t
 combatant carries into battle. A stat the list omits has no base value at all, so the stats a
 battle needs semantically -- maximum health and speed -- have to be listed explicitly or
 compilation fails with a missing reference.
+
+**Fields**
+
+`public StatDefinition Stat`
+
+:   The stat this entry sets. It is required, and no two entries on one combatant may name the same stat.
+
+`public long ValueRaw`
+
+:   Raw fixed-point value, where 10000 means 1.0. It must fall inside the referenced stat's own authored minimum and maximum. The stat that carries the maximum-health meaning is stricter still: it must be positive and a whole number of points, and the speed stat must be positive.
 
 ---
 
@@ -1140,6 +1408,20 @@ multi-target skill runs this effect once for each target it resolved.
 triggers by matching its declared trigger tags against these, so an untagged
 effect can never set a reaction off.
 
+**Fields**
+
+`public string[] EffectTags`
+
+:   Words this effect publishes while it resolves. A reaction triggers by matching its own trigger tag against these, so an untagged effect can never set a reaction off.
+
+`public MechanicsImplementationReferenceDefinition Implementation`
+
+:   Which registered effect resolver does the work, matched by ID and contract version together. The built-in IDs include effect.damage.v1, effect.heal.v1, effect.shield.v1, effect.apply-status.v1, and effect.dispel.v1.
+
+`public PropertySetDefinition Properties`
+
+:   The arguments handed to that resolver, such as how hard it hits or which status it applies. The resolver checks them itself while the catalog compiles, so a mistyped argument fails the compile rather than the battle.
+
 ---
 
 ## EffectUseDefinition
@@ -1155,6 +1437,16 @@ slot inside that owner. `SkillDefinition`,
 `StatusDefinition`, and `ReactionDefinition` all hold
 lists of these, and the compiler keeps the authored order, so the order entries
 appear in the inspector is the order the effects run in.
+
+**Fields**
+
+`public EffectDefinition Effect`
+
+:   The effect to run. Leaving it empty is a compile error, and it must resolve inside the catalog being compiled.
+
+`public string EntryId`
+
+:   Identity of this slot inside its owner, not the identity of the effect it points at. It is required, must parse as a stable ID, and must be unique among that owner's entries; attribution traces report the effect under this value.
 
 ---
 
@@ -1178,6 +1470,20 @@ different teams. `PerspectiveTeam` is required and must be one of
 those two: it is what turns "one team is left standing" into a victory or a
 defeat, since the engine has no other notion of which side the player is on.
 
+**Fields**
+
+`public TeamDefinition PerspectiveTeam`
+
+:   Which of the two sides the player is on. It is required and must be one of the two above; it is what turns one team being left standing into a victory rather than a defeat.
+
+`public SchedulerDefinition Scheduler`
+
+:   The turn-order asset this fight runs under, which decides who acts when. It is required.
+
+`public EncounterTeamDefinition[] Teams`
+
+:   The two sides that meet. Exactly two entries are expected, and they must name different teams.
+
 ---
 
 ## EncounterTeamDefinition
@@ -1193,6 +1499,20 @@ fights, the formation it fights in, and where each of its members stands. An
 encounter carries exactly two of these, and the two must reference different
 teams.
 
+**Fields**
+
+`public FormationAssignmentDefinition[] Assignments`
+
+:   One entry per member of `Team`; a member left unassigned fails the compile.
+
+`public FormationPresetDefinition Formation`
+
+:   The preset whose slots `Assignments` may name.
+
+`public TeamDefinition Team`
+
+:   The roster fighting on this side. It is required, and the encounter's two sides must name different teams.
+
 ---
 
 ## FormationAssignmentDefinition
@@ -1207,6 +1527,16 @@ Places one team member in one formation slot. Placement is never inferred:
 every member of the team needs exactly one assignment, and no two assignments
 in the encounter may name the same slot, even across the two teams.
 
+**Fields**
+
+`public string CombatantInstanceId`
+
+:   Must match the `TeamMemberDefinition.CombatantInstanceId` of a member of this team.
+
+`public string SlotId`
+
+:   The slot to occupy, which must exist in the team's `EncounterTeamDefinition.Formation` preset. Every slot one team occupies must belong to the same side of that preset.
+
 ---
 
 ## InitialStatusApplicationDefinition
@@ -1220,6 +1550,20 @@ public sealed class InitialStatusApplicationDefinition
 One status already applied to a team member when the battle starts, before the
 first tick is simulated. At most one entry per status definition per member:
 the compiler rejects a repeated status rather than merging the two entries.
+
+**Fields**
+
+`public string SourceCombatantId`
+
+:   Which combatant is credited as the applier. Leave it empty to credit the member that carries the status. When set it must be the `TeamMemberDefinition.CombatantInstanceId` of a member of either team, so a status may legitimately be sourced from the opposing side.
+
+`public int StackCount`
+
+:   Stacks to start with; must be at least one and no more than the status definition's maximum stacks.
+
+`public StatusDefinition Status`
+
+:   The status this member already carries when the battle starts. At most one entry per status on one member.
 
 ---
 
@@ -1316,6 +1660,16 @@ authored content hands work to code -- the formulas on `BattleRulesDefinition`,
 `AiPolicyDefinition`, and `ReactionDefinition` -- and compiles to a
 `MechanicsImplementationReference`. Both fields are required: an implementation is
 found by ID and contract version together, never by ID alone.
+
+**Fields**
+
+`public int ContractVersion`
+
+:   The contract version this content was authored against; must be positive. Resolution matches it exactly, so a registry that offers only another version of the same ID reports an unsupported-version diagnostic instead of binding to it.
+
+`public string ImplementationId`
+
+:   The ID the implementation registered itself under, which is not its C# type name. It is required and must parse as a stable ID.
 
 ---
 
@@ -1570,6 +1924,40 @@ construction in its reaction signature. The depth and count ceilings on
 `BattleRulesDefinition` are no part of that proof - they are runtime
 budgets that suppress a reaction once it would cross one.
 
+**Fields**
+
+`public bool ConsumeRequiredStatusOnEnqueue`
+
+:   Spends the required status as the reaction is queued, which is one of the ways a chain of reactions is proved to end. It needs Required Status to be set; on its own it is rejected.
+
+`public EffectUseDefinition[] Effects`
+
+:   What the reaction does when it fires, run in the order listed. Up to 64 entries.
+
+`public MechanicsImplementationReferenceDefinition Implementation`
+
+:   Which registered reaction rule judges each candidate, matched by ID and contract version together. The built-in reaction.effect-tag.v1 reads a trigger-tag property and matches it against the tags an effect publishes.
+
+`public bool OncePerRoot`
+
+:   Left on, the rule fires at most once inside a single root action. Clearing it allows repeats, bounded only by the reaction depth and count ceilings on Battle Rules.
+
+`public int Priority`
+
+:   Orders this reaction against the others offered at the same moment. Any whole number.
+
+`public PropertySetDefinition Properties`
+
+:   The arguments handed to the rule, including the trigger tag the built-in rule matches on.
+
+`public StatusDefinition RequiredStatus`
+
+:   Optional. When set, the rule is only offered while its owner is carrying that status; otherwise the candidate is simply dropped.
+
+`public ReactionTriggerPhase TriggerPhase`
+
+:   When in the triggering effect the reaction is offered. Before Effect drains fully before the effect rechecks its target; After Effect drains after the effect's events, death included.
+
 ---
 
 ## ReactionTriggerPhase
@@ -1635,6 +2023,20 @@ separately. A combatant only holds the resources its own
 `CombatantDefinition.ResourceDefaults` list seeds; amounts are whole
 units, not the fixed-point raw values a stat uses.
 
+**Fields**
+
+`public int Maximum`
+
+:   Highest amount a combatant may hold, in whole units. Leaving it at zero compiles and then fails the moment a battle starts, so set a real ceiling before authoring against it.
+
+`public bool MayCrossZero`
+
+:   Carried through onto the compiled resource for your own code to read. No built-in effect or engine rule looks at it: in-battle changes are always clamped to zero and the maximum.
+
+`public int Minimum`
+
+:   Lowest amount a combatant may hold, in whole units. It must not be above the maximum.
+
 ---
 
 ## SchedulerDefinition
@@ -1662,11 +2064,33 @@ a positive threshold. An action-order definition does not merely ignore them - i
 requires both to be left at zero. New assets therefore default to a valid action-order
 shape; switching to ATB requires choosing an input policy and positive threshold.
 
+**Fields**
+
+`public int GaugeThresholdUnits`
+
+:   ATB only: how many gauge units a combatant must fill before it may act. 1 to 1,000,000 under Atb, and it must be zero under Action Order.
+
+`public InputPausePolicy InputPausePolicy`
+
+:   ATB only: what happens to the gauges while a player is choosing. Active keeps them filling, Wait For Input holds them one unit below the threshold, Pause On Input stops the scheduler. An Action Order definition must leave it unset.
+
+`public int NoActionRecoveryTicks`
+
+:   How long a combatant waits after producing no legal command. Greater than zero, up to 1,000,000.
+
+`public int SchedulerContractVersion`
+
+:   The scheduler contract this content was authored against. It must equal the version the package ships, which is 1.
+
+`public SchedulerStateTag StateTag`
+
+:   Which scheduling model this asset declares. Action Order hands out opportunities in strict order; Atb fills a gauge and lets a combatant act once it is full. It must agree with the registration found under this asset's stable ID.
+
 **Methods**
 
 `public static SchedulerDefinition CreateTransient(string stableIdRaw, SchedulerStateTag stateTag, int noActionRecoveryTicks, InputPausePolicy inputPausePolicy = default(InputPausePolicy), int gaugeThresholdUnits = 0, int schemaVersion = CurrentSchemaVersion)`
 
-:   The scheduler contract this content was authored against. It must equal the version the package ships, which is 1.
+:   Explicit in-memory construction hook for tests and customer tooling, in the same shape as `FormationPresetDefinition.CreateTransient`. It creates no asset, GUID, or implicit persistent mutation.
 
     - `stableIdRaw` &mdash; Scheduler ID text, stored verbatim and not checked here. Note that this one is looked up in the scheduler registry rather than merely being an identity, so text that names no registration compiles to an unresolved scheduler rather than to a renamed one.
     - `stateTag` &mdash; Which state shape the definition declares. It has to match the registration found under `stableIdRaw`, and it also decides which of the two ATB fields below carry meaning.
@@ -1690,6 +2114,16 @@ One resource a skill spends to be used. The compiler sorts a skill's cost list b
 resource, so the order entries appear in the inspector never changes the compiled
 skill, and the amount is debited when the command is accepted rather than when the
 action resolves.
+
+**Fields**
+
+`public int Amount`
+
+:   Units to spend; must be greater than zero. Zero or negative fails compilation rather than costing nothing.
+
+`public ResourceDefinition Resource`
+
+:   The resource to spend. It is required, and no two cost entries on one skill may name the same resource.
 
 ---
 
@@ -1715,6 +2149,72 @@ through. The `Effects` list keeps its authored order, and the engine
 plans each entry against every locked target before moving to the next, so
 reordering the list changes what a battle produces. Costs are debited when the
 command is accepted, not when the action finally resolves.
+
+**Fields**
+
+`public int CastTicks`
+
+:   Ticks the skill spends winding up before it resolves, 0 to 1,000,000. Zero resolves in the same step that accepts the command.
+
+`public int CooldownAmount`
+
+:   How long the cooldown lasts, in the units chosen above. 0 to 1,000,000, and zero means the skill has no cooldown at all.
+
+`public CooldownClockKind CooldownClockKind`
+
+:   What the cooldown is counted in. Elapsed Ticks counts battle ticks; Owner Opportunities counts the caster's own turns.
+
+`public CooldownStartPolicy CooldownStartPolicy`
+
+:   When the cooldown clock starts. Queue starts it as the command is accepted; Resolve waits until the action actually resolves.
+
+`public SkillCostDefinition[] Costs`
+
+:   Resources spent to use this skill, up to 16 entries naming different resources. They are debited when the command is accepted rather than when it resolves, and the compiler sorts them, so the order here carries no meaning.
+
+`public EffectUseDefinition[] Effects`
+
+:   What the skill actually does, run in the order listed against every target it locked. Up to 64 entries, and reordering them changes what a battle produces.
+
+`public InterruptRefundPolicy InterruptRefundPolicy`
+
+:   What happens to the costs already paid when a cast is interrupted. None keeps them spent; Full pays them back, clamped to the room left below each resource maximum, so a refund can be partial.
+
+`public bool Interruptible`
+
+:   Whether a cast in progress can be broken. It does nothing when Cast Ticks is zero, because there is then no cast window to interrupt.
+
+`public InvalidTargetPolicy InvalidTargetPolicy`
+
+:   What to do when a locked target stops being legal before the skill resolves. Skip Invalid drops that target, Cancel Action abandons the whole skill, Retarget Stable picks a replacement.
+
+`public int MaximumRequestedTargets`
+
+:   Most targets this skill may be used on, up to 256. Set both counts to 1 for an ordinary single-target skill.
+
+`public int MinimumRequestedTargets`
+
+:   Fewest targets this skill may be used on. Zero or more, and never above the maximum below.
+
+`public int RecoveryTicks`
+
+:   Ticks the caster spends recovering after the skill resolves, before it can act again. Greater than zero, up to 1,000,000.
+
+`public string[] Tags`
+
+:   Words that group this skill with others. A status that restricts skill tags blocks any skill listed here, so an untagged skill can never be restricted. Each tag must be valid ID text and appear once.
+
+`public TargetDefinition Target`
+
+:   The reusable Target asset deciding who this skill may hit. It is required and must be listed in the same catalog.
+
+`public TargetLockPolicy TargetLockPolicy`
+
+:   When the chosen targets are fixed. Lock At Acceptance, which fixes them as the command is accepted, is the only value that compiles.
+
+`public TimingResolutionKind TimingResolutionKind`
+
+:   Extra timing behaviour. None is the ordinary case. Interrupt First Locked Cast breaks the target's cast instead, and it additionally requires Cast Ticks of zero and both target counts of exactly one.
 
 ---
 
@@ -1991,6 +2491,20 @@ here and in the base values and status modifiers checked against them. A combata
 only has the stats its own `CombatantDefinition.BaseStats` list gives
 it, so a stat asset nothing references affects no battle.
 
+**Fields**
+
+`public long MaximumRaw`
+
+:   Highest value this stat may hold, in the same raw fixed-point units. It bounds every combatant base value authored for this stat.
+
+`public long MinimumRaw`
+
+:   Lowest value this stat may hold, raw fixed-point where 10000 means 1.0. It must not be above the maximum.
+
+`public string[] SemanticTags`
+
+:   Words that group this stat for your own content to match on. Up to 64, each valid ID text and appearing once; the compiler sorts them, so the order here carries no meaning.
+
 ---
 
 ## StatusDefinition
@@ -2015,6 +2529,84 @@ carrying the same status can never disagree about how it behaves. Several fields
 are only meaningful together and are cross-checked while content compiles: periodic
 effects require a periodic phase, and `StatusStackPolicy.Refresh`
 allows exactly one stack.
+
+**Fields**
+
+`public bool Dispellable`
+
+:   Whether a dispel can strip this status. Clear it and the status survives a dispel whatever its polarity or tags.
+
+`public int DurationAmount`
+
+:   How long the status lasts, in the units chosen above. Greater than zero, up to 1,000,000.
+
+`public StatusDurationClock DurationClock`
+
+:   What the duration is counted in. Owner Action Start, Owner Action End, and Owner Opportunity all count the carrier's own turns; only Elapsed Ticks counts battle ticks.
+
+`public string ExclusiveGroupId`
+
+:   Optional group name, valid ID text when set. A weaker application is blocked while a stronger member of the same group is resident, so use it for statuses that must never stack with one another, such as three grades of the same buff.
+
+`public int MaximumStacks`
+
+:   How many stacks may be held at once, 1 to 64. The Refresh policy allows exactly one.
+
+`public StatusModifierDefinition[] Modifiers`
+
+:   The stat adjustments this status applies for as long as it is resident. Up to 64 entries, and several of them may name the same stat.
+
+`public EffectUseDefinition[] PeriodicEffects`
+
+:   Effects that fire on the status's own clock rather than when it is applied. Up to 16, and Periodic Phase must not be None.
+
+`public int PeriodicInterval`
+
+:   How often the periodic effects fire. It must be 1 to 1,000,000 under Elapsed Boundary and exactly zero under every other phase.
+
+`public StatusPeriodicPhase PeriodicPhase`
+
+:   When the periodic effects fire, if there are any. None means never, and authoring any periodic effect while this is None fails the compile.
+
+`public bool PersistOnDeath`
+
+:   Whether this status stays on a combatant that dies. Statuses are stripped as a combatant dies unless this is set.
+
+`public StatusPolarity Polarity`
+
+:   Whether this counts as good, bad, or neither. A dispel matches exactly one polarity, and it only removes statuses that are also marked dispellable.
+
+`public bool PreventNextOpportunity`
+
+:   The carrier's next turn is spent doing nothing, reported as a prevented action. When several such statuses are resident the oldest one applies.
+
+`public ReactionDefinition[] Reactions`
+
+:   Reaction rules the carrier gains for as long as this status is resident. Up to 16.
+
+`public bool RefreshKeepHigherMetadata`
+
+:   What a blocked application does instead of nothing. Set it and the resident instance has its duration and periodic cursor restarted; clear it and the resident instance is left untouched.
+
+`public string[] RestrictedSkillTags`
+
+:   While this status is resident its carrier cannot use any skill carrying one of these tags. Matching is on skill tags, so an untagged skill can never be restricted.
+
+`public StatusStackPolicy StackPolicy`
+
+:   What a second application does. Refresh restarts the one instance, Add Stacks Refresh All piles them up, Independent tracks each separately, Replace swaps it out, Keep Higher keeps whichever has the greater strength.
+
+`public long StrengthRaw`
+
+:   How strong this status counts as, raw fixed-point where 10000 means 1.0. The Keep Higher policy compares this value.
+
+`public string[] Tags`
+
+:   Words that group this status with others. Resistances, immunities, and tag-filtered dispels all match on these.
+
+`public bool TauntHostileSingleTarget`
+
+:   Set this on a taunt: while the status is resident, single-target hostile picks are forced onto whoever carries it.
 
 ---
 
@@ -2055,6 +2647,24 @@ pipeline the adjustment joins and whether it is added or multiplied in. A status
 may carry several modifiers, including several against the same stat, and the
 authored order of the list is kept as the last tie-break between modifiers that
 order equally.
+
+**Fields**
+
+`public int Priority`
+
+:   Order within the stage, applied lowest first. Ties fall through to status ID, then application order, then the authored index.
+
+`public ModifierStage Stage`
+
+:   Where in the damage and healing pipeline this adjustment joins, and whether it is added in or multiplied in. Flat Stat and Multiplicative Stat change the named stat's effective value; Outgoing, Incoming, Critical Chance, and Critical Multiplier apply at their own pipeline stage instead.
+
+`public StatDefinition Stat`
+
+:   The stat this modifier names. It is required, but only the `ModifierStage.FlatStat` and `ModifierStage.MultiplicativeStat` stages match against it: the outgoing, incoming, and critical stages apply whatever stat is named here.
+
+`public long ValueRaw`
+
+:   Raw fixed-point amount, where 10000 means 1.0. `Stage` decides whether it is added in or multiplied in.
 
 ---
 
@@ -2115,6 +2725,24 @@ ignored, and no two entries may repeat the same kind and key. Every entry that m
 incoming status adds its chance into one total that is clamped at 100%, so a definition entry
 and a tag entry for the same status both count.
 
+**Fields**
+
+`public ResistanceMatchKind MatchKind`
+
+:   Which key this entry matches on. Status Definition reads the status field below and leaves the tag ignored; Status Tag does the reverse.
+
+`public long ResistanceChanceRaw`
+
+:   Raw chance units between zero and 1,000,000, where 1,000,000 is full immunity to this key. It scales the status's own chance down rather than being subtracted from it: half a chance met by half a resistance leaves a quarter.
+
+`public StatusDefinition Status`
+
+:   Required by `ResistanceMatchKind.StatusDefinition`, ignored by the tag kind.
+
+`public string StatusTag`
+
+:   Required by `ResistanceMatchKind.StatusTag`, ignored by the definition kind. It must parse as a stable ID and is matched against the tags a status declares, so one entry can resist a whole family of statuses.
+
 ---
 
 ## StatusStackPolicy
@@ -2164,6 +2792,16 @@ all of them. Both halves are checked then, not here: the resolver must resolve i
 mechanics registry by implementation ID and contract version together, and it validates
 the authored properties itself, with any error failing the whole compile.
 
+**Fields**
+
+`public MechanicsImplementationReferenceDefinition Implementation`
+
+:   Which registered target resolver picks and checks the targets, matched by ID and contract version together. The built-in IDs include target.self.v1, target.one-enemy.v1, target.all-allies.v1, and target.formation-row.v1.
+
+`public PropertySetDefinition Properties`
+
+:   The arguments that resolver reads, which it validates while content compiles.
+
 ---
 
 ## TargetLockPolicy
@@ -2206,6 +2844,12 @@ None of that is enforced as the roster is edited; each failure is reported as a 
 diagnostic. The compiler sorts members by that instance ID, so the order entries appear
 in the inspector never changes the compiled encounter.
 
+**Fields**
+
+`public TeamMemberDefinition[] Members`
+
+:   The fighters on this side, each a combatant template plus the state it starts in. A team needs at least one member and at least one of them starting above zero health; the compiler sorts them by instance ID, so the order here carries no meaning.
+
 ---
 
 ## TeamMemberDefinition
@@ -2221,6 +2865,48 @@ is instantiated and the state it starts the battle in. The compiler sorts
 members by `CombatantInstanceId`, so the order entries appear in
 the inspector never changes the compiled encounter.
 
+**Fields**
+
+`public AiPolicyDefinition AiPolicyOverride`
+
+:   Replaces the combatant definition's default AI policy for this member alone. Leave it null to inherit that default. Whichever policy resolves must exist in the same catalog, and `Automatic` control fails to compile when neither the override nor the default resolves.
+
+`public CombatantDefinition Combatant`
+
+:   The combatant definition this member is built from. It must be reachable from the same catalog, and its maximum-health stat supplies the ceiling that bounds `ExplicitCurrentHealth`.
+
+`public string CombatantInstanceId`
+
+:   Identity of this member inside the encounter, not the identity of the combatant definition it is built from. It must parse as a stable ID and be unique across both teams; formation assignments and initial status sources address the member by this value.
+
+`public DecisionControlKind Control`
+
+:   Whether the member is driven by submitted commands or by an AI policy. Only `Human` and `Automatic` compile, and `Automatic` additionally requires an AI policy to resolve.
+
+`public int ExplicitCurrentHealth`
+
+:   Starting current health, read only when `StartingHealth` is `StartingHealthMode.ExplicitCurrentHealth`. It must be between zero and the combatant definition's maximum health, and a team still needs at least one member starting above zero to compile.
+
+`public int InitialAtbGauge`
+
+:   Gauge units this member starts with. It must be zero under an action-order scheduler, and strictly below an ATB scheduler's gauge threshold, so no member is already due to act before the first tick is simulated.
+
+`public InitialStatusApplicationDefinition[] InitialStatuses`
+
+:   Statuses already applied at battle start, at most one entry per status definition.
+
+`public TeamMemberResourceOverrideDefinition[] ResourceOverrides`
+
+:   Starting-amount overrides; any resource left out keeps the combatant definition's default.
+
+`public StartingHealthMode StartingHealth`
+
+:   Where starting health comes from. Full Health reads the ceiling off the combatant's maximum-health stat; Explicit Current Health reads the field below instead.
+
+`public bool Targetable`
+
+:   Whether the battle may select this member as a target. It gates more than targeting: an actor must be both living and targetable for its command to be accepted, so clearing this also stops the member from acting.
+
 ---
 
 ## TeamMemberResourceOverrideDefinition
@@ -2234,5 +2920,15 @@ public sealed class TeamMemberResourceOverrideDefinition
 Overrides the starting amount of one resource for a single team member. It
 replaces the default the combatant definition already declares for that
 resource; every resource left out of the list keeps its default.
+
+**Fields**
+
+`public int Current`
+
+:   Starting amount; must lie within the resource definition's authored minimum and maximum.
+
+`public ResourceDefinition Resource`
+
+:   The resource to override. The combatant definition must already declare a default for it: overriding a resource the combatant does not have is a compile error, as is naming the same resource twice on one member.
 
 ---

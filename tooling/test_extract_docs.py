@@ -91,6 +91,34 @@ public interface IContract
 }
 '''
 
+NESTED_SOURCE = r'''
+namespace Sample;
+
+/// <summary>Controller with public serialized nested bindings.</summary>
+public class Controller
+{
+    [Serializable]
+    public sealed class AudioBinding
+    {
+        /// <summary>Audio key.</summary>
+        [SerializeField] public string Key = string.Empty;
+
+        /// <summary>Audio clip.</summary>
+        [SerializeField] public object Clip;
+    }
+
+    [Serializable]
+    public sealed class VfxBinding
+    {
+        /// <summary>VFX key.</summary>
+        [SerializeField] public string Key = string.Empty;
+    }
+
+    /// <summary>Outer member after nested types.</summary>
+    public int ActiveCount { get; }
+}
+'''
+
 
 class ExtractDocsTests(unittest.TestCase):
     def test_multiline_methods_constructors_and_interface_members(self):
@@ -133,6 +161,22 @@ class ExtractDocsTests(unittest.TestCase):
         self.assertEqual(
             extract_docs.parameter_text(code),
             'string value = "right)", int count = Math.Max(1, 2)')
+
+    def test_public_nested_types_are_qualified_and_keep_inline_attributes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'Controller.cs'
+            source.write_text(NESTED_SOURCE, encoding='utf-8')
+            api = extract_docs.collect(directory)
+
+        audio = api['Sample.Controller.AudioBinding']
+        vfx = api['Sample.Controller.VfxBinding']
+        self.assertNotIn('Sample.AudioBinding', api)
+        self.assertNotIn('Sample.VfxBinding', api)
+        self.assertEqual({m['name'] for m in audio['members']}, {'Key', 'Clip'})
+        self.assertEqual(vfx['members'][0]['name'], 'Key')
+        self.assertEqual(audio['containing_type'], 'Sample.Controller')
+        self.assertEqual(vfx['containing_type'], 'Sample.Controller')
+        self.assertEqual(api['Sample.Controller']['members'][0]['name'], 'ActiveCount')
 
 
 if __name__ == '__main__':

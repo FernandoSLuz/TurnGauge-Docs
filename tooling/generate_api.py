@@ -67,6 +67,14 @@ def anchor_for(entry):
     return slugify(entry['name'])
 
 
+def index_name(entry):
+    """Name nested types with their short containing path in the index only."""
+    if not entry.get('containing_type'):
+        return entry['name']
+    outer = entry['containing_type'].split('.')[-1]
+    return outer + '.' + entry['name']
+
+
 def render_index(groups, order, product, total_types, tiers=None, excluded=0):
     out = []
     out.append('# API reference')
@@ -98,7 +106,7 @@ def render_index(groups, order, product, total_types, tiers=None, excluded=0):
             out.append('| --- | --- | --- |')
             for group, entry in first:
                 link = '[`%s`](%s#%s)' % (
-                    entry['name'], slugify(group) + '.md', anchor_for(entry))
+                    index_name(entry), slugify(group) + '.md', anchor_for(entry))
                 text = first_sentence(entry['doc']['summary']) or '_Undocumented._'
                 out.append('| %s | %s | %s |' % (link, group, text.replace('|', '\\|')))
             out.append('')
@@ -125,7 +133,7 @@ def render_index(groups, order, product, total_types, tiers=None, excluded=0):
     for group in order:
         for entry in groups.get(group, []):
             page = slugify(group) + '.md'
-            link = '[`%s`](%s#%s)' % (entry['name'], page, anchor_for(entry))
+            link = '[`%s`](%s#%s)' % (index_name(entry), page, anchor_for(entry))
             summary = first_sentence(entry['doc']['summary'])
             if not summary:
                 summary = '_Undocumented._'
@@ -177,6 +185,9 @@ def render_group(group, entries, product):
         out.append('')
         out.append('`%s` &middot; <small>%s</small>' % (entry['namespace'], entry['file']))
         out.append('')
+        if entry.get('containing_type'):
+            out.append('Nested in `%s`.' % entry['containing_type'])
+            out.append('')
 
         if entry['doc']['summary']:
             out.append(entry['doc']['summary'])

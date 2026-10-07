@@ -5,7 +5,7 @@ Generated from source alongside the reference itself, so it cannot quietly drift
 | Scope | Documented | Total | Coverage |
 | --- | --- | --- | --- |
 | Public types | 423 | 423 | 100% |
-| Public members | 2617 | 2690 | 97% |
+| Public members | 2786 | 2867 | 97% |
 
 Measured over the 423 types this reference publishes.
 

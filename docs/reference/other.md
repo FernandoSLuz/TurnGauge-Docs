@@ -13,7 +13,19 @@ public sealed class AudioArtBinding
 
 `TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
+Nested in `TurnGauge.Presentation.Demo.TurnGaugeDemoBootstrap`.
+
 Binds a recipe audio key (an sfx-* clip name) to art.
+
+**Fields**
+
+`public string AudioKey`
+
+:   &mdash;
+
+`public AudioClip Clip`
+
+:   &mdash;
 
 ---
 
@@ -25,7 +37,19 @@ public sealed class AudioBinding
 
 `TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeController.cs</small>
 
+Nested in `TurnGauge.Runtime.BattleRuntimeController`.
+
 Maps one presentation audio key to a Unity audio clip.
+
+**Fields**
+
+`public AudioClip Clip`
+
+:   The clip played for the key, or null for an intentional no-op.
+
+`public string Key`
+
+:   The presentation recipe's audio key.
 
 ---
 
@@ -39,11 +63,17 @@ public sealed class BattleCancelRelay : MonoBehaviour, ICancelHandler
 
 Routes the active input module's cancel event without depending on a particular input package.
 
+**Fields**
+
+`public BattleViewBehaviour Owner`
+
+:   View that receives the cancel intent, or null when the relay is inactive.
+
 **Methods**
 
 `public void OnCancel(BaseEventData eventData)`
 
-:   View that receives the cancel intent, or null when the relay is inactive.
+:   Routes a cancel navigation event to the owning battle view when gamepad input is enabled.
 
     - `eventData` &mdash; Event data consumed when the owner handles the cancel intent.
 
@@ -131,6 +161,10 @@ Authored references only. Runtime and preview never write to this asset.
 
 **Fields**
 
+`public int ActionsPerPage`
+
+:   Maximum number of action choices shown on one page.
+
 `public BattleContentCatalog Catalog`
 
 :   Authoring catalog supplying the encounter and content references.
@@ -163,6 +197,10 @@ Authored references only. Runtime and preview never write to this asset.
 
 :   Optional stage preset validated and consumed by the runtime presentation layer.
 
+`public int TargetsPerPage`
+
+:   Maximum number of target choices shown on one page.
+
 `public BattleUiTechnology Technology`
 
 :   UI technology a host should instantiate for this profile.
@@ -171,9 +209,13 @@ Authored references only. Runtime and preview never write to this asset.
 
 :   Theme values copied into the active view.
 
-`public bool UseGamepad`
+`public float TicksPerSecond`
 
 :   Simulation ticks represented by one real second.
+
+`public bool UseGamepad`
+
+:   Enables directional keyboard and controller navigation.
 
 `public bool UseSideInformationBanks`
 
@@ -945,11 +987,15 @@ Serializable visual values copied by views before they render.
 
 `public Font Font`
 
-:   Default font size used by native controls created by a view.
+:   Optional legacy Unity font for controls that require one.
 
 `public UnityEngine.Object FontAsset`
 
 :   Optional native font asset consumed by the selected UI technology.
+
+`public float FontSize`
+
+:   Default font size used by native controls created by a view.
 
 `public Color Foreground`
 
@@ -1799,7 +1845,19 @@ public sealed class Entry
 
 `TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/DisplayStringTableAsset.cs</small>
 
+Nested in `TurnGauge.Presentation.Demo.DisplayStringTableAsset`.
+
 One stable-id-to-display-name pair.
+
+**Fields**
+
+`public string Id`
+
+:   &mdash;
+
+`public string Label`
+
+:   &mdash;
 
 ---
 
@@ -2152,7 +2210,19 @@ public sealed class ParticleArtBinding
 
 `TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
+Nested in `TurnGauge.Presentation.Demo.TurnGaugeDemoBootstrap`.
+
 Binds a recipe VFX key (a particle-* sprite name) to art.
+
+**Fields**
+
+`public Sprite ParticleSprite`
+
+:   &mdash;
+
+`public string VfxKey`
+
+:   &mdash;
 
 ---
 
@@ -2163,6 +2233,8 @@ public enum SessionEndState
 ```
 
 `TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
+
+Nested in `TurnGauge.Presentation.Demo.TurnGaugeDemoBootstrap`.
 
 Typed end-of-session states surfaced by the driver.
 
@@ -2357,8 +2429,20 @@ public sealed class TokenArtBinding
 
 `TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
+Nested in `TurnGauge.Presentation.Demo.TurnGaugeDemoBootstrap`.
+
 Binds a starter combatant definition id to its generated
 token sprite (the token-* art keys from the art manifest).
+
+**Fields**
+
+`public string CombatantDefinitionId`
+
+:   &mdash;
+
+`public Sprite TokenSprite`
+
+:   &mdash;
 
 ---
 
@@ -2635,6 +2719,18 @@ public sealed class VfxBinding
 
 `TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeController.cs</small>
 
+Nested in `TurnGauge.Runtime.BattleRuntimeController`.
+
 Maps one presentation VFX key to an optional pooled prototype.
+
+**Fields**
+
+`public string Key`
+
+:   The presentation recipe's VFX key.
+
+`public GameObject Prototype`
+
+:   The pooled GameObject prototype, or null for a diagnostic no-op.
 
 ---

@@ -421,8 +421,8 @@ The types a new project meets first.
 | [`StableId`](numerics-and-determinism.md#stableid) | struct | Numerics and determinism | The identifier every piece of content, state, and event in the simulation is named by: 1 to 128 characters drawn from a-z, 0-9, and the three punctuation characters '.', '_' and '-... |
 | [`BattleSkinBrowserWindow`](editor-tools.md#battleskinbrowserwindow) | class | Editor tools | Browse the shipped skins, preview them with the real shader, and turn any of them into an editable asset in one click. |
 | [`CombatStudioSampleBuilder`](editor-tools.md#combatstudiosamplebuilder) | class | Editor tools | Creates editable starter profiles and native view prefabs using Unity's asset APIs. |
-| [`AudioArtBinding`](other.md#audioartbinding) | class | Other | Binds a recipe audio key (an sfx-* clip name) to art. |
-| [`AudioBinding`](other.md#audiobinding) | class | Other | Maps one presentation audio key to a Unity audio clip. |
+| [`TurnGaugeDemoBootstrap.AudioArtBinding`](other.md#audioartbinding) | class | Other | Binds a recipe audio key (an sfx-* clip name) to art. |
+| [`BattleRuntimeController.AudioBinding`](other.md#audiobinding) | class | Other | Maps one presentation audio key to a Unity audio clip. |
 | [`BattleCancelRelay`](other.md#battlecancelrelay) | class | Other | Routes the active input module's cancel event without depending on a particular input package. |
 | [`BattleFeedbackLayout`](other.md#battlefeedbacklayout) | class | Other | Computes a deterministic clear rectangle for presentation feedback. |
 | [`BattleLayoutIdentity`](other.md#battlelayoutidentity) | enum | Other | Visual family used for starter palettes and default stage reservations. |
@@ -466,7 +466,7 @@ The types a new project meets first.
 | [`CustomShieldEffectResolver`](other.md#customshieldeffectresolver) | class | Other | Creates a shield equal to a configured fraction of missing health. |
 | [`DemoIdleSheet`](other.md#demoidlesheet) | class | Other | Reads the sample character art, which ships as a grid of idle frames rather than as a single still so combatants breathe instead of standing frozen. |
 | [`DisplayStringTableAsset`](other.md#displaystringtableasset) | class | Other | The shipped serialized string-table asset the demo driver supplies to the presenter (specification section 3: display text comes from an explicit table, never from compiled snapsho... |
-| [`Entry`](other.md#entry) | class | Other | One stable-id-to-display-name pair. |
+| [`DisplayStringTableAsset.Entry`](other.md#entry) | class | Other | One stable-id-to-display-name pair. |
 | [`ForecastRequest`](other.md#forecastrequest) | class | Other | The three caps that bound one `BattleForecast.Run` call: how far ahead it may look, and how much work and evidence it may collect before stopping. |
 | [`ForecastResult`](other.md#forecastresult) | class | Other | Immutable outcome of one `BattleForecast.Run` call: where the lookahead stopped, the state and events of the throwaway clone it ran, and the non-authoritative evidence it produced. |
 | [`ForecastStopReason`](other.md#forecaststopreason) | enum | Other | Why one `BattleForecast.Run` call stopped. |
@@ -478,16 +478,16 @@ The types a new project meets first.
 | [`IBattleView`](other.md#ibattleview) | interface | Other | Renderer-neutral contract for rendering state and forwarding intents. |
 | [`IInteractiveBattleView`](other.md#iinteractivebattleview) | interface | Other | Optional interaction surface used by a world-space presentation bridge. |
 | [`LowestHealthAllyTargetResolver`](other.md#lowesthealthallytargetresolver) | class | Other | Chooses the living targetable ally with the lowest health ratio. |
-| [`ParticleArtBinding`](other.md#particleartbinding) | class | Other | Binds a recipe VFX key (a particle-* sprite name) to art. |
-| [`SessionEndState`](other.md#sessionendstate) | enum | Other | Typed end-of-session states surfaced by the driver. |
+| [`TurnGaugeDemoBootstrap.ParticleArtBinding`](other.md#particleartbinding) | class | Other | Binds a recipe VFX key (a particle-* sprite name) to art. |
+| [`TurnGaugeDemoBootstrap.SessionEndState`](other.md#sessionendstate) | enum | Other | Typed end-of-session states surfaced by the driver. |
 | [`TargetCandidateQuery`](other.md#targetcandidatequery) | class | Other | Asks a skill's registered target resolver who it may legally hit right now, and whether one particular pick would be accepted. |
 | [`TargetPreview`](other.md#targetpreview) | class | Other | Turns a resolver into the way its affected set should be shown, and a device into the way a pick should be expressed. |
 | [`TargetTreatment`](other.md#targettreatment) | enum | Other | The visual language one target shape is previewed in. |
 | [`TargetingPreset`](other.md#targetingpreset) | enum | Other | How a pick is expressed. |
-| [`TokenArtBinding`](other.md#tokenartbinding) | class | Other | Binds a starter combatant definition id to its generated token sprite (the token-* art keys from the art manifest). |
+| [`TurnGaugeDemoBootstrap.TokenArtBinding`](other.md#tokenartbinding) | class | Other | Binds a starter combatant definition id to its generated token sprite (the token-* art keys from the art manifest). |
 | [`ToolkitBattleView`](other.md#toolkitbattleview) | class | Other | A replaceable UXML surface. |
 | [`TurnGaugeDemoBootstrap`](other.md#turngaugedemobootstrap) | class | Other | The runtime demo driver (specification section 9). |
 | [`UguiBattleView`](other.md#uguibattleview) | class | Other | Prefab-authored uGUI surface. |
-| [`VfxBinding`](other.md#vfxbinding) | class | Other | Maps one presentation VFX key to an optional pooled prototype. |
+| [`BattleRuntimeController.VfxBinding`](other.md#vfxbinding) | class | Other | Maps one presentation VFX key to an optional pooled prototype. |
 
 </div>

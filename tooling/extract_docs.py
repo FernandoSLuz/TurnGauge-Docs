@@ -151,6 +151,47 @@ def strip_line_comment(code):
     return code
 
 
+def strip_leading_attributes(code):
+    """Remove inline attribute blocks before matching a declaration.
+
+    Unity-facing fields commonly use ``[SerializeField] public ...`` on one
+    line.  The attribute is source syntax, not part of the declaration regex;
+    leaving it in place makes an otherwise public field disappear.
+    """
+    index = 0
+    length = len(code)
+    while True:
+        while index < length and code[index].isspace():
+            index += 1
+        if index >= length or code[index] != '[':
+            return code[index:]
+        depth = 0
+        quote = None
+        escaped = False
+        end = index
+        while end < length:
+            char = code[end]
+            if quote:
+                if escaped:
+                    escaped = False
+                elif char == '\\':
+                    escaped = True
+                elif char == quote:
+                    quote = None
+            elif char in ('"', "'"):
+                quote = char
+            elif char == '[':
+                depth += 1
+            elif char == ']':
+                depth -= 1
+                if depth == 0:
+                    index = end + 1
+                    break
+            end += 1
+        else:
+            return code
+
+
 def declaration_line(lines, index, code):
     """Coalesce a declaration's multiline parameter list without consuming its body."""
     if parenthesis_delta(code) <= 0:
@@ -265,6 +306,11 @@ def parse_file(path, display, out):
             continue
 
         code = strip_line_comment(raw)
+        # Attributes are source syntax, not part of declaration matching. Unity
+        # authoring fields commonly use `[SerializeField] public ...` inline;
+        # strip them before matching while the existing visibility checks still
+        # decide whether the declaration belongs to the public surface.
+        code = strip_leading_attributes(code)
         stripped = raw.strip()
 
         # A declaration may put each parameter on its own line.  Coalesce only
@@ -295,7 +341,12 @@ def parse_file(path, display, out):
         if t:
             modifiers, kind, name, tail = (
                 t.group(1).strip(), t.group(2), t.group(3), t.group(4).strip())
-            key = namespace + '.' + name
+            # A public nested type belongs to the public outer type's qualified
+            # namespace. Keeping only `namespace + name` makes a nested type
+            # look top-level and can also collide with an unrelated type of the
+            # same short name. The short `name` is retained for headings and
+            # anchors; the qualified key preserves the source relationship.
+            key = (current + '.' + name) if current is not None else (namespace + '.' + name)
             bases = ''
             if tail.startswith(':'):
                 bases = tail.lstrip(':').strip().rstrip('{').strip()
@@ -304,6 +355,7 @@ def parse_file(path, display, out):
                 'modifiers': modifiers,
                 'namespace': namespace,
                 'name': name,
+                'containing_type': current or '',
                 'bases': bases,
                 'file': display,
                 'doc': parse_doc(doc_buffer),
