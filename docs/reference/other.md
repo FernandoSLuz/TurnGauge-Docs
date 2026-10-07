@@ -1845,7 +1845,7 @@ non-authoritative data and never enters any battle hash.
 
 `public override DisplayStringTable Build()`
 
-:   Builds the runtime `DisplayStringTable`. Invalid ids and null entries and invalid ids are skipped defensively. A null label is stored as an empty string; lookups for missing ids fall back to the raw id text inside the table itself.
+:   Builds the runtime `DisplayStringTable`. Null entries and invalid ids are skipped defensively. A null label is stored as an empty string; lookups for missing ids fall back to the raw id text inside the table itself.
 
 ---
 
@@ -2174,7 +2174,7 @@ Chooses the living targetable ally with the lowest health ratio.
 
 `public TargetRequestContract RequestContract`
 
-:   Gets the request contract requiring one living, targetable ally and no manual picks.
+:   Gets the request contract for automatic selection of up to one living, targetable ally, including the actor, with no manual picks.
 
 `public StableId ResolverId`
 
@@ -2194,7 +2194,7 @@ Chooses the living targetable ally with the lowest health ratio.
 
 `public FrozenList<StableId> GetCandidates(TargetContext context, PropertySet properties)`
 
-:   Returns the lowest-health living, targetable ally of the acting combatant.
+:   Returns the living, targetable ally with the lowest Health/MaximumHealth ratio, breaking ties by stable ID.
 
     - `context` &mdash; Snapshot and actor context used to identify allies.
     - `properties` &mdash; Resolver properties, which must be empty.
