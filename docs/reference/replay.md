@@ -13,7 +13,7 @@
 public interface IReplayMigration
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayMigration.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayMigration.cs</small>
 
 One step of a replay upgrade: it takes the bytes of a replay written in
 `FromFormatVersion` and returns the same replay written in
@@ -57,7 +57,7 @@ whole run with `replay.migration.invalid-result`.
 public enum ReplayDivergenceHashKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayExecutor.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayExecutor.cs</small>
 
 Which pair of hashes disagreed when a replay diverged. It tells a caller
 what the expected and actual hashes on a failed
@@ -80,7 +80,7 @@ a divergence down to a cause.
 public sealed class ReplayEnvelope
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayEnvelope.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayEnvelope.cs</small>
 
 A complete, portable recording of one battle: the contract profile it ran under,
 the hashed compiled content and start request, the RNG seed, every recorded
@@ -230,7 +230,7 @@ machine. Obtain one from `Capture(BattleEngine)` or from
 public sealed class ReplayExecutionResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayExecutor.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayExecutor.cs</small>
 
 The verdict of one replay run: whether the recording reproduced, the
 state the run ended on, and, when it did not reproduce, the exact command
@@ -296,7 +296,7 @@ the failing state.
 public static class ReplayExecutor
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayExecutor.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayExecutor.cs</small>
 
 Re-runs a recorded battle from its seed and its recorded commands and
 reports whether it reproduced. Verification is exact: every recorded
@@ -343,7 +343,7 @@ read, never altered.
 public sealed class ReplayMigrationChain
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayMigration.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayMigration.cs</small>
 
 A validated set of single-version `IReplayMigration` steps that
 lifts replay bytes from the format version they were written in up to a
@@ -382,7 +382,7 @@ as a failed `ReplayMigrationResult` when a run needs them.
 public sealed class ReplayMigrationResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayMigration.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayMigration.cs</small>
 
 The outcome of one migration step, or of a whole
 `ReplayMigrationChain` run: either the rewritten replay bytes
@@ -426,7 +426,7 @@ array you read out can be used to edit the result afterwards.
 public sealed class ReplayReadResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplayEnvelope.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplayEnvelope.cs</small>
 
 The outcome of parsing a replay. Exactly one side is populated: on success
 `Replay` is set and `Diagnostic` is null, and on failure the
@@ -456,7 +456,7 @@ outside your build does not need a try/catch.
 public static class ReplaySerializer
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/ReplaySerializer.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/ReplaySerializer.cs</small>
 
 Writes and reads the portable replay document that carries a battle's compiled content, start
 request, seed, and recorded command history as UTF-8 JSON.
@@ -500,7 +500,7 @@ quietly loaded, which is what lets two machines agree that they are replaying th
 public sealed class ReplayWriteException : InvalidOperationException
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Replay/StrictJson.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Replay/StrictJson.cs</small>
 
 Thrown when a replay cannot be written out: its contract profile is unsupported or disagrees with
 the content it embeds, a field that profile requires is absent, the recorded history breaks a

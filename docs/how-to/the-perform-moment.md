@@ -39,7 +39,7 @@ the blow lands and the player reads what is coming rather than what already happ
 ## Tune the feel without touching code
 
 `PerformFeelPreset` holds how much of each effect, once, for the whole game. Create one with
-**Assets ▸ Create ▸ TurnGauge ▸ Perform Feel Preset** and assign it.
+**Assets > Create > TurnGauge > Perform Feel Preset** and assign it.
 
 Recipes say *what* happens on an event; the feel preset says *how hard*. That split is why
 tuning the punch of your whole game is a handful of sliders rather than an edit across every
@@ -132,7 +132,7 @@ will not, however, make your effect work.
 
 ## Post-processing, and what works where
 
-Effects that move a transform — the shakes and the zoom — work in every render pipeline.
+Effects that move a transform - the shakes and the zoom - work in every render pipeline.
 
 Image effects do not. `BattleStageBloom` is a Built-in render pipeline component: under URP or
 HDRP its callback is never invoked, so it detects the active pipeline, logs one explanatory
@@ -147,8 +147,8 @@ nothing, works everywhere, and cannot collide with post-processing you already r
 If you want the background genuinely out of focus, add `BattleStageBackdrop` to the battle
 camera and register `BackdropBlurPerformModule`.
 
-It uses a secondary camera rather than an image effect. It renders the scene a second time — with
-TurnGauge's own tokens and interface hidden for the duration of that render — into a
+It uses a secondary camera rather than an image effect. It renders the scene a second time - with
+TurnGauge's own tokens and interface hidden for the duration of that render - into a
 half-resolution `RenderTexture`, softens it through bilinear blits, and shows the result on a
 quad behind the stage. Verify capture and blit behavior in your project's render pipeline before
 enabling it.
@@ -164,7 +164,7 @@ Two consequences worth knowing:
 It composes with the focus tint rather than replacing it: run both and non-participants dim
 while the world behind them softens. Or drop the tint and keep only the blur.
 
-Anything else you would rather have is still a module you can write — which is the point of the
+Anything else you would rather have is still a module you can write - which is the point of the
 seam.
 
 ## Next

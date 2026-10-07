@@ -11,7 +11,7 @@
 public static partial class CanonicalBattleSerializer
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Canonical/CanonicalBattleSerializer.B3.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Canonical/CanonicalBattleSerializer.B3.cs</small>
 
 Encodes and decodes battle state as a canonical byte stream.
 
@@ -200,7 +200,7 @@ through here is one of only two ways to obtain one; the other is stepping a
 public readonly struct Chance64 : IEquatable<Chance64>, IComparable<Chance64>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Numerics/Chance64.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Numerics/Chance64.cs</small>
 
 A deterministic probability value where 1,000,000 raw units equal 100%.
 This type is deliberately distinct from Fixed64.
@@ -305,7 +305,7 @@ This type is deliberately distinct from Fixed64.
 public readonly struct DeterministicRng : IEquatable<DeterministicRng>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Numerics/DeterministicRng.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Numerics/DeterministicRng.cs</small>
 
 The simulation's random source: a 128-bit xorshift-rotate generator over
 four 32-bit words, computed with integer arithmetic only, so one seed
@@ -399,7 +399,7 @@ yields one sequence on every platform and on every replay.
 public readonly struct Diagnostic : IEquatable<Diagnostic>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Common/Diagnostic.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Common/Diagnostic.cs</small>
 
 One reported failure or warning: a stable id plus optional free-text
 detail.
@@ -463,7 +463,7 @@ on `MechanicsDiagnosticIds`.
 public readonly struct Fixed64 : IEquatable<Fixed64>, IComparable<Fixed64>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Numerics/Fixed64.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Numerics/Fixed64.cs</small>
 
 A signed fixed-point number carrying four decimal places, stored as a
 64-bit integer in which 10,000 raw units make 1.0.
@@ -626,7 +626,7 @@ decimal, because that text feeds canonical encoding. Use
 public sealed class FrozenList
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Common/FrozenList.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Common/FrozenList.cs</small>
 
 A list that copies what it is given once and then offers no way to change
 it, used throughout compiled content, snapshots, and events wherever a
@@ -680,7 +680,7 @@ rather than copying defensively at each hop.
 public readonly struct Sha256Digest : IEquatable<Sha256Digest>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Canonical/Sha256Digest.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Canonical/Sha256Digest.cs</small>
 
 An immutable 32-byte SHA-256 digest, used to fingerprint a canonical
 record so two runs can be compared for divergence. The default value is
@@ -766,7 +766,7 @@ difference.
 public readonly struct StableId : IEquatable<StableId>, IComparable<StableId>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Common/StableId.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Common/StableId.cs</small>
 
 The identifier every piece of content, state, and event in the simulation is
 named by: 1 to 128 characters drawn from a-z, 0-9, and the three punctuation

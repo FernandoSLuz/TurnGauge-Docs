@@ -11,7 +11,7 @@
 public static class BattleSkinDefaults
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinDefaults.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinDefaults.cs</small>
 
 The shipped skins, defined in code rather than as serialized assets.
 
@@ -338,7 +338,7 @@ The Skin Browser materializes any of these into an editable
 public sealed class BattleSkinPreset : ScriptableObject
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinPreset.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinPreset.cs</small>
 
 Every value the battle interface draws itself with, in one asset.
 Duplicate a shipped skin, edit it in the inspector, and the whole HUD
@@ -384,7 +384,7 @@ battle outcome.
 public sealed class CompiledBattleSkin
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinPreset.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinPreset.cs</small>
 
 The immutable skin the HUD reads. Built either from a
 `BattleSkinPreset` asset or from `BattleSkinDefaults`
@@ -485,7 +485,7 @@ assigned.
 public enum SkinAnchor
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 Where a HUD region attaches inside the safe area.
 
@@ -509,7 +509,7 @@ Where a HUD region attaches inside the safe area.
 public struct SkinBarTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 A value bar: health, shield, resource, cast, or gauge.
 
@@ -562,7 +562,7 @@ A value bar: health, shield, resource, cast, or gauge.
 public enum SkinEasing
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 The easing curve applied to a skinned transition.
 
@@ -582,7 +582,7 @@ The easing curve applied to a skinned transition.
 public enum SkinFillMode
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 How a skinned surface fills its rectangle.
 
@@ -600,7 +600,7 @@ How a skinned surface fills its rectangle.
 public struct SkinFloatingNumberTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 Rise-and-fade numbers for damage, healing, and shields.
 
@@ -645,7 +645,7 @@ Rise-and-fade numbers for damage, healing, and shields.
 public enum SkinLayoutProfile
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 Which band composition a layout is authored for. The three shipped
 profiles keep the same band heights and move only what has to move, so a
@@ -665,7 +665,7 @@ project does not re-author a HUD per device.
 public sealed class SkinMaterialPool : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/SkinSurfaceGraphic.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/SkinMaterialPool.cs</small>
 
 Reference-counted material pool for skinned surfaces, owned by a component
 rather than by static state.
@@ -732,7 +732,7 @@ which draws a plain quad instead of a magenta error surface.
 public struct SkinMotionTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 Transition timings. Every duration scales by `MotionScale`.
 
@@ -802,7 +802,7 @@ Transition timings. Every duration scales by `MotionScale`.
 public struct SkinPaletteTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 The semantic colour roles a skin assigns once and reuses everywhere.
 
@@ -876,7 +876,7 @@ The semantic colour roles a skin assigns once and reuses everywhere.
 public enum SkinRegionStretch
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 How a HUD region behaves on each axis: pinned at its authored size, or
 stretched to the full width or height of the safe area.
@@ -902,7 +902,7 @@ any aspect ratio without re-authoring an offset.
 public struct SkinRegionTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 Where one HUD region sits. Every region is independently placeable so a
 customer can move the whole interface without editing a prefab.
@@ -982,7 +982,7 @@ customer can move the whole interface without editing a prefab.
 public enum SkinShape
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 The silhouette a skinned surface draws.
 
@@ -1003,7 +1003,7 @@ The silhouette a skinned surface draws.
 public struct SkinStagePresenceTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 How the stage stages its combatants: the falloff between depth ranks, the
 contact shadow every body stands on, and the one warm key light.
@@ -1085,7 +1085,7 @@ all, which is the right answer for it.
 public struct SkinStatusPipTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 The status pip strip drawn above a combatant.
 
@@ -1126,7 +1126,7 @@ The status pip strip drawn above a combatant.
 public sealed class SkinSurfaceGraphic : MaskableGraphic
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/SkinSurfaceGraphic.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/SkinSurfaceGraphic.cs</small>
 
 Draws one `SkinSurfaceTokens` as a uGUI graphic through the
 TurnGauge skinned-surface shader. Every panel, button, bar, gauge, and
@@ -1189,7 +1189,7 @@ so a glowing widget still occupies exactly its `RectTransform`.
 public struct SkinSurfaceTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 Fill, stroke, and glow for one skinned surface. Every skinned widget
 resolves to one of these, so a customer restyles the whole HUD by editing
@@ -1289,7 +1289,7 @@ a handful of surfaces rather than hunting individual prefabs.
 public struct SkinTargetingTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 How a target pick is expressed. Two fields, because the interesting
 decision is not which of the four presets to use - it is whether to let the
@@ -1324,7 +1324,7 @@ accessibility setting, without touching content or invalidating a replay.
 public struct SkinTypographyTokens
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
 
 Type sizing and treatment. Fonts stay optional so no font is redistributed.
 

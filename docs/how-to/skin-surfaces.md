@@ -22,7 +22,7 @@ reused. Twelve are read live by widgets:
 
 !!! warning "`Background`, `Surface` and `Border` are seeds, not live colours"
     Those three generate the fills and strokes of the shipped looks, and the Skin
-    Browser shows them as swatches. Once a skin is an asset nothing reads them again —
+    Browser shows them as swatches. Once a skin is an asset nothing reads them again -
     the values they produced are already baked into each surface. To recolour a panel,
     edit that surface's own **Fill Color** and **Stroke Color**.
 
@@ -64,7 +64,7 @@ at draw time, so a large radius on a short bar rounds fully rather than distorti
 | ![Diamond](../assets/images/surface-shape-diamond.png){ width="130" } | `Diamond` | Inscribed in the rectangle. |
 
 Every shipped skin draws all seven surfaces as `RoundedRect`, and only the status pip
-shape varies between them — the other four wait for you to reach for one.
+shape varies between them - the other four wait for you to reach for one.
 
 ## Fill
 
@@ -99,8 +99,8 @@ why it reads as a halo rather than washing out the fill.
 
 A glow needs `GlowRadius`, `GlowIntensity` **and** the alpha of `GlowColor` all above
 zero. Any one of the three at zero draws nothing, which is the usual reason a glow
-appears to do nothing. Of the seven surfaces only two are authored with one —
-`PanelRaised` at half the skin's strength and `ButtonSelected` at full — and in
+appears to do nothing. Of the seven surfaces only two are authored with one -
+`PanelRaised` at half the skin's strength and `ButtonSelected` at full - and in
 Parchment Atlas and Minimal Mono that strength is zero.
 
 !!! tip "A glowing widget still occupies its rect"
@@ -115,7 +115,7 @@ Authoring all three is what makes a selection legible without any code:
 | --- | --- | --- |
 | ![Normal](../assets/images/surface-button-normal.png){ width="150" } | `Button` | A legal command, and every timeline chip that is not acting. |
 | ![Selected](../assets/images/surface-button-selected.png){ width="150" } | `ButtonSelected` | Applied on click, until the tray rebuilds or the selection is cleared. |
-| ![Disabled](../assets/images/surface-button-disabled.png){ width="150" } | `ButtonDisabled` | Concede — the only element drawn on it. |
+| ![Disabled](../assets/images/surface-button-disabled.png){ width="150" } | `ButtonDisabled` | Concede - the only element drawn on it. |
 
 Hovering a tray button raises the event that fills the tooltip and leaves the surface
 alone, so `ButtonSelected` marks a decision rather than a pointer position. The tray
@@ -129,7 +129,7 @@ The shader lives at
 It sits in a `Resources` folder on purpose, so it survives build shader stripping
 without you adding it to **Always Included Shaders**. If it cannot be loaded, the
 interface logs one warning naming that folder and every surface draws as a plain
-rectangle — never magenta. Reimport the folder to restore it.
+rectangle - never magenta. Reimport the folder to restore it.
 
 If the shader is loading and a surface still looks unfinished, one of its values is at
 zero: a stroke needs `StrokeWidth` and the alpha of `StrokeColor`, a shadow needs
@@ -137,6 +137,6 @@ zero: a stroke needs `StrokeWidth` and the alpha of `StrokeColor`, a shadow need
 
 ## Next
 
-- **[Bars, gauges and pips](skin-bars-and-pips.md)** — the five bar roles and the pip strip, built from these same surfaces.
-- **[What each interface region draws](interface-regions.md)** — which region will show your changes.
-- **[Restyle the interface](../tutorials/skinning-your-battle.md)** — turn a shipped skin into an asset you own, then swap skins at runtime.
+- **[Bars, gauges and pips](skin-bars-and-pips.md)** - the five bar roles and the pip strip, built from these same surfaces.
+- **[What each interface region draws](interface-regions.md)** - which region will show your changes.
+- **[Restyle the interface](../tutorials/skinning-your-battle.md)** - turn a shipped skin into an asset you own, then swap skins at runtime.

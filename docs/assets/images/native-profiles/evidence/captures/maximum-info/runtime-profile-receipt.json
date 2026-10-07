@@ -1,0 +1,169 @@
+{
+    "receipts": [
+        {
+            "profile": "Fantasy-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "maximum-info-preview",
+            "encounter": "",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 31100,
+            "brightPixels": 39153,
+            "nonBackgroundPixels": 1850079,
+            "bodyPixels": 99660,
+            "hudPixels": 673879,
+            "authoritativeEventCount": 0,
+            "seed": 0,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 47.800048828125,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": true,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.59094524383545
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 12.224828720092774
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 14.59094524383545
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "",
+            "eventChainHashBeforeConfirm": "",
+            "stateHashAfterConfirm": "",
+            "eventChainHashAfterConfirm": "",
+            "sha256": "48441c2038de5fbe6d1b9931d1e8d5ce2f9084065b2cbc0d3eff1dbee558acf3"
+        },
+        {
+            "profile": "Fantasy-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "maximum-info-preview",
+            "encounter": "",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 31262,
+            "brightPixels": 41577,
+            "nonBackgroundPixels": 2059027,
+            "bodyPixels": 92029,
+            "hudPixels": 743952,
+            "authoritativeEventCount": 0,
+            "seed": 0,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 127.00006103515625,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": true,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.59094524383545
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 12.460719108581543
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 13.575566291809082
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "",
+            "eventChainHashBeforeConfirm": "",
+            "stateHashAfterConfirm": "",
+            "eventChainHashAfterConfirm": "",
+            "sha256": "c27b0f39ab717d97190836e3442afb1616cc49fce95d3f1054c6ff2a95e7f9e2"
+        },
+        {
+            "profile": "Fantasy-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "maximum-info-preview",
+            "encounter": "",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 30615,
+            "brightPixels": 42796,
+            "nonBackgroundPixels": 1887668,
+            "bodyPixels": 102656,
+            "hudPixels": 725890,
+            "authoritativeEventCount": 0,
+            "seed": 0,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 48.0,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": true,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 9.889640808105469
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "",
+            "eventChainHashBeforeConfirm": "",
+            "stateHashAfterConfirm": "",
+            "eventChainHashAfterConfirm": "",
+            "sha256": "1b175f373d9b2918a527f5382482645ba0742c8cd9b36540a7398cbdf5594925"
+        },
+        {
+            "profile": "Fantasy-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "maximum-info-preview",
+            "encounter": "",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 30644,
+            "brightPixels": 42795,
+            "nonBackgroundPixels": 2098672,
+            "bodyPixels": 92029,
+            "hudPixels": 794948,
+            "authoritativeEventCount": 0,
+            "seed": 0,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 127.0,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": true,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 9.889640808105469
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "",
+            "eventChainHashBeforeConfirm": "",
+            "stateHashAfterConfirm": "",
+            "eventChainHashAfterConfirm": "",
+            "sha256": "33253f6a5a62e807d22aa259af844dac0bb46161d516887328a25b1d4a2249f9"
+        }
+    ],
+    "visualViolations": []
+}

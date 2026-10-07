@@ -4,10 +4,17 @@ Use this page to compare the two native HUD backends at the same decision state,
 screen shape. The comparison is a set of still captures from Unity 6.3 sessions. It is useful
 for checking hierarchy, reading order, safe spacing and the location of the decision controls.
 
-These current reference presets were captured in Unity 6000.3.25f1 with three combatants on
-each side. Fantasy uses side information cards; science fiction keeps its existing stage
-composition. The captures cover action choice and a selected target at both screen shapes.
-They demonstrate native rendering and the same authoritative command result across backends.
+These current reference presets were captured in one Unity 6000.3.25f1 editor with three
+combatants on each side, the Built-in render pipeline and OpenGLCore. Fantasy uses side
+information cards; science fiction keeps its existing stage composition. The gallery contains
+16 standard captures covering action choice and a selected target at both screen shapes, plus
+four maximum-information captures for the Fantasy profiles. The exact image bytes and capture
+scope are recorded in the [native profile image manifest](../assets/images/native-profiles/manifest.json).
+The source receipts report no visual violations. The English native-render gate passed 2/2 with
+zero skips; its source fingerprint is `2C78146A497927B592AD4AEDCEE641309F846DA587605A46C2FE1A8543BDB4E6`
+and its XML result hash is `D9C27CBDC2EA536A6D82118C40EB69CA6AF4A9740EC68DB5480BE972318636E6`.
+These stills demonstrate native rendering and the same authoritative command result across
+backends.
 The association between cards and bodies, science-fiction staging, larger formations and
 continuous motion still need their own review; these stills do not approve those aspects.
 
@@ -29,8 +36,8 @@ continuous motion still need their own review; these stills do not approve those
     </label>
     <label>Screen shape
       <select data-native-layout-aspect aria-label="Choose the capture aspect">
-        <option value="1920_1080">16:9 (1920 × 1080)</option>
-        <option value="1920_1200">16:10 (1920 × 1200)</option>
+        <option value="1920_1080">16:9 (1920 x 1080)</option>
+        <option value="1920_1200">16:10 (1920 x 1200)</option>
       </select>
     </label>
     <label>Decision state
@@ -44,17 +51,47 @@ continuous motion still need their own review; these stills do not approve those
     <a data-native-layout-full href="../../assets/images/native-profiles/initial-action-Fantasy-UGUI-1920_1080.png">
       <img class="off-glb" data-native-layout-image
         src="../../assets/images/native-profiles/initial-action-Fantasy-UGUI-1920_1080.png"
-        alt="Fantasy UGUI native HUD capture at initial action, 16:9 (1920 × 1080)">
+        alt="Fantasy UGUI native HUD capture at initial action, 16:9 (1920 x 1080)">
     </a>
     <figcaption class="native-layout-comparison__caption" data-native-layout-caption>
-      Still capture from a Unity 6.3 session: initial action · Fantasy · UGUI · 16:9 (1920 × 1080).
+      Still capture from a Unity 6.3 session: initial action  /  Fantasy  /  UGUI  /  16:9 (1920 x 1080).
       Motion is not demonstrated by this image. Open full-size capture.
     </figcaption>
   </figure>
   <p class="native-layout-comparison__status" data-native-layout-status aria-live="polite">
-    Selected initial action, Fantasy, UGUI, 16:9 (1920 × 1080).
+    Selected initial action, Fantasy, UGUI, 16:9 (1920 x 1080).
   </p>
 </div>
+
+### Maximum-information reference
+
+These four captures show the Fantasy profiles with the maximum information layout at both screen
+shapes. They are still composition evidence only; they do not approve art, motion, or the
+required real-mouse editor video workflow.
+
+<figure>
+  <img src="../../assets/images/native-profiles/maximum-info-Fantasy-UGUI-1920_1080.png"
+    alt="Fantasy UGUI maximum-information layout at 16:9 (1920 x 1080)">
+  <figcaption>Fantasy UGUI maximum-information layout, 16:9 (1920 x 1080).</figcaption>
+</figure>
+
+<figure>
+  <img src="../../assets/images/native-profiles/maximum-info-Fantasy-UGUI-1920_1200.png"
+    alt="Fantasy UGUI maximum-information layout at 16:10 (1920 x 1200)">
+  <figcaption>Fantasy UGUI maximum-information layout, 16:10 (1920 x 1200).</figcaption>
+</figure>
+
+<figure>
+  <img src="../../assets/images/native-profiles/maximum-info-Fantasy-UIToolkit-1920_1080.png"
+    alt="Fantasy UI Toolkit maximum-information layout at 16:9 (1920 x 1080)">
+  <figcaption>Fantasy UI Toolkit maximum-information layout, 16:9 (1920 x 1080).</figcaption>
+</figure>
+
+<figure>
+  <img src="../../assets/images/native-profiles/maximum-info-Fantasy-UIToolkit-1920_1200.png"
+    alt="Fantasy UI Toolkit maximum-information layout at 16:10 (1920 x 1200)">
+  <figcaption>Fantasy UI Toolkit maximum-information layout, 16:10 (1920 x 1200).</figcaption>
+</figure>
 
 
 The screen is read from the player's point of view. The roster and turn timeline establish who

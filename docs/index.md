@@ -1,6 +1,6 @@
 ---
 hide:
-  - navigation
+ - navigation
 ---
 
 <div class="hero" markdown>
@@ -138,8 +138,9 @@ report can be a seed and a replay file rather than a description. That holds str
 !!! note "Working name and evidence"
     TurnGauge is a working name pending legal, store and domain clearance. The current
     source guides describe editor workflows; they do not establish release approval or
-    native-editor support beyond the validated Unity 6.3 configuration above. Several new
-    workflows still need a fresh capture pass.
+    native-editor support beyond the validated Unity 6.3 configuration above. The native
+    runtime profile gallery has a fresh English capture pass; real-mouse editor workflow video
+    evidence remains a separate pending requirement.
 
 ## Next
 

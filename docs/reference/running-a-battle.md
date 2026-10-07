@@ -13,7 +13,7 @@
 public enum AdvanceTicksOutcome
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 Why one `BattleEngine.AdvanceTicks(int)` call stopped.
 `ReachedTarget` is the only value that means the requested target
@@ -39,7 +39,7 @@ outcome leaves the battle at or below it.
 public sealed class AdvanceTicksResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 Immutable result of one `BattleEngine.AdvanceTicks(int)`
 call: the outcome that stopped it, the absolute tick it was aiming for,
@@ -100,7 +100,7 @@ event-chain digest.
 public sealed partial class BattleEngine
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.B2.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.B2.cs</small>
 
 Owns immutable battle state and advances it through deterministic command, scheduler, action, event, and mechanics reduction boundaries.
 
@@ -397,7 +397,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 public sealed class BattleResultState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 The battle's outcome as of one snapshot: either nonterminal (`None`) or a
 terminal verdict naming the result and, for team outcomes, the surviving and eliminated
@@ -484,7 +484,7 @@ while the battle is still running.
 public sealed partial class BattleStartRequest
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/BattleStartV3.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/BattleStartV3.cs</small>
 
 The immutable opening state of one battle: the scheduler that will run it, the two
 opposing teams, and the health, resources, and statuses every combatant starts
@@ -584,7 +584,7 @@ before they return, so a request they produce is one the engine will accept.
 public enum CommandDisposition
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 How `BattleEngine.Submit(BattleCommand)` treated one
 command. Only `Accepted` queues execution work for the following
@@ -605,7 +605,7 @@ step.
 public sealed class CommandResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 Immutable result of one `BattleEngine.Submit(BattleCommand)`
 call: how the command was treated, the single command event validation
@@ -663,7 +663,7 @@ frames are still queued for the next step.
 public static class SimulationLimits
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Common/SimulationLimits.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Common/SimulationLimits.cs</small>
 
 Every hard ceiling the simulation enforces, as compile-time constants.
 
@@ -930,7 +930,7 @@ legal and what replays remain valid.
 public enum StepActionOutcome
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 Why one `BattleEngine.StepAction` call stopped. Only
 `ActionCompleted` means a root action reached its terminal
@@ -953,7 +953,7 @@ boundary.
 public sealed class StepActionResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 Immutable result of one `BattleEngine.StepAction` call: every
 event emitted while driving execution to the next action boundary, in
@@ -1003,7 +1003,7 @@ boundary through individual submit and step calls.
 public enum StepEventOutcome
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 Why one `BattleEngine.StepEvent` call stopped. Exactly one
 value is reported per call, and only `EventEmitted` means a new
@@ -1025,7 +1025,7 @@ gameplay event was appended to the authoritative event chain.
 public sealed class StepEventResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Engine/BattleEngine.cs</small>
 
 Immutable result of one `BattleEngine.StepEvent` reduction:
 why the call stopped, the single event it emitted, and the authoritative

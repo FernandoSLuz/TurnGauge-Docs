@@ -11,7 +11,7 @@
 public static class BattleEventNarrator
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleEventNarrator.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/BattleEventNarrator.cs</small>
 
 Turns one battle event into a sentence a player can read.
 
@@ -53,7 +53,7 @@ readable line rather than an empty one.
 public static class BattleNumberFormat
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleNumberFormat.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/BattleNumberFormat.cs</small>
 
 Turns the simulation's fixed-point types into player-facing text.
 
@@ -113,7 +113,7 @@ could be mistaken for an authoritative number.
 public readonly struct BattleUiCommandChoice
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleUiRoot.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/BattleUiRoot.cs</small>
 
 A player-chosen command the driver (not the UI) will submit.
 
@@ -155,7 +155,7 @@ A player-chosen command the driver (not the UI) will submit.
 public sealed class BattleUiRoot : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleUiRoot.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/BattleUiRoot.cs</small>
 
 The battle interface. It offers the pending actor's legal command shapes,
 surfaces the timeline, roster, feedback log, tooltips, and terminal
@@ -419,7 +419,7 @@ shipped default skin rather than rendering unstyled boxes.
 public sealed class DecisionOptions
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/DecisionShape.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/DecisionShape.cs</small>
 
 The complete set of legal command shapes for one pending decision:
 filtered granted skills plus whether concession is offered. This is a
@@ -465,7 +465,7 @@ display projection, never a submission.
 public static class DecisionShapeCompiler
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/DecisionShape.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/DecisionShape.cs</small>
 
 Pure compiler of legal command shapes from a snapshot and compiled
 catalog. It offers a granted skill only when the snapshot-visible
@@ -492,7 +492,7 @@ re-resolution and calls no engine mutator or preview API.
 public sealed class DisplayStringTable
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/DisplayStringTable.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/DisplayStringTable.cs</small>
 
 A non-authoritative map from stable id to display text. Compiled
 snapshots carry no labels (they are excluded from B3 compilation and
@@ -540,7 +540,7 @@ table never enters any hash and never affects a simulation output.
 public abstract class DisplayStringTableProvider : ScriptableObject
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/DisplayStringTableProvider.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/DisplayStringTableProvider.cs</small>
 
 Serialized, project-owned source of non-authoritative display labels.
 Runtime hosts request a fresh immutable table when a battle is bound;
@@ -561,7 +561,7 @@ labels never enter simulation state, hashes, checkpoints, or replays.
 public sealed class FeedbackLogView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/FeedbackLogView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/FeedbackLogView.cs</small>
 
 The rolling battle log. It shows the most recent lines newest-last and
 fades older entries so the newest line reads first.
@@ -596,7 +596,7 @@ enforced in exactly one place.
 public sealed class ResultBannerView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/ResultBannerView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/ResultBannerView.cs</small>
 
 The terminal result banner. It surfaces all five terminal kinds (victory,
 defeat, draw, concession, and the stalled result) and tints itself by
@@ -641,7 +641,7 @@ It displays the result it is handed and decides nothing about the outcome.
 public sealed class SafeAreaFitter : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/SafeAreaFitter.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/SafeAreaFitter.cs</small>
 
 Insets a `RectTransform` to the device safe area so HUD
 regions never land under a notch, a punch-hole camera, or a home
@@ -676,7 +676,7 @@ twice.
 public sealed class SkillCommandShape
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/DecisionShape.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/DecisionShape.cs</small>
 
 One legal skill command shape offered to the pending actor.
 
@@ -706,7 +706,7 @@ One legal skill command shape offered to the pending actor.
 public sealed class SkillTitleView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/SkillTitleView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/SkillTitleView.cs</small>
 
 The skill title card: the name of what is being performed, announced as it
 happens and gone again a moment later.
@@ -760,7 +760,7 @@ result banner, it displays what it is handed and decides nothing.
 public sealed class SkillTrayView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/SkillTrayView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/SkillTrayView.cs</small>
 
 The command tray offered to a pending human actor: one button per legal
 skill shape plus concede.
@@ -886,7 +886,7 @@ intact while still giving the player something clickable.
 public sealed class SkinnedTokenPlate : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Widgets/SkinnedTokenPlate.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Widgets/SkinnedTokenPlate.cs</small>
 
 The floating plate above one combatant: name, health, shield, cast
 progress, scheduler gauge, and status pips.
@@ -1031,7 +1031,7 @@ it reads no simulation state and computes nothing authoritative.
 public sealed class SkinnedValueBar : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Widgets/SkinnedValueBar.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Widgets/SkinnedValueBar.cs</small>
 
 A skinned value bar: track, an optional trailing ghost showing the value
 just lost, the live fill, and an optional numeric readout.
@@ -1111,7 +1111,7 @@ derives from the skin, so `Reduce Motion` or a zero
 public static class SkinnedWidgetFactory
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Widgets/SkinnedWidgetFactory.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Widgets/SkinnedWidgetFactory.cs</small>
 
 Builds the skinned uGUI primitives the HUD is assembled from. Centralising
 construction here is what lets the whole interface restyle from a
@@ -1195,7 +1195,7 @@ a font, and nothing depends on a shipped prefab.
 public sealed class StatusRosterView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/StatusRosterView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/StatusRosterView.cs</small>
 
 The combatant roster: one row per combatant with name, health bar, shield
 readout, and status count. Rows are pooled and reused, so a long battle
@@ -1269,7 +1269,7 @@ no simulation state.
 public sealed class TargetPickerView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/TargetPickerView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/TargetPickerView.cs</small>
 
 The target picker: one button per combatant the chosen skill may legally
 hit, plus confirm and back.
@@ -1371,7 +1371,7 @@ a button raises an event for the interface to act on.
 public readonly struct TargetShape
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/DecisionShape.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/DecisionShape.cs</small>
 
 The display-only shape of a skill's target request, taken from the
 compiled target contract. It describes what the player may pick; it is
@@ -1444,7 +1444,7 @@ never the engine's exact target resolution.
 public sealed class TimelineStripView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/TimelineStripView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/TimelineStripView.cs</small>
 
 The turn-order rail: one chip per upcoming actor, left to right, with the
 actor about to act raised, accented, and marked NOW.
@@ -1593,7 +1593,7 @@ the scheduler is.
 public readonly struct TooltipData
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/TooltipData.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/TooltipData.cs</small>
 
 A passive tooltip value computed by the DRIVER through the public preview
 surface (`BattleFormulaService.Preview` /
@@ -1678,7 +1678,7 @@ and displays it; it never invokes a simulation or preview API itself.
 public sealed class TooltipPanelView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/TooltipPanelView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/TooltipPanelView.cs</small>
 
 The skill tooltip: cost, timing, target shape, and the driver-computed
 preview figures.
@@ -1718,7 +1718,7 @@ of the presenter contract.
 public sealed class TransportBarView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/TransportBarView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/Regions/TransportBarView.cs</small>
 
 Scenario picker, seed field, and playback controls, drawn with the skin.
 
@@ -1799,7 +1799,7 @@ hashes.
 public readonly struct UiStatusEntry
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleUiRoot.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/BattleUiRoot.cs</small>
 
 One combatant's surfaced status-panel row.
 
@@ -1864,7 +1864,7 @@ One combatant's surfaced status-panel row.
 public readonly struct UiTimelineEntry
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleUiRoot.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/BattleUiRoot.cs</small>
 
 One chip on the turn-order rail: who acts, whose side they are on, how much
 of them is left, and whether they are still standing.

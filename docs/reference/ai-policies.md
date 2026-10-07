@@ -11,7 +11,7 @@
 public sealed class AiCandidateDescription
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/AI/AiContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/AI/AiContracts.cs</small>
 
 One action a policy puts forward for consideration: the authored rule it comes from, the
 skill to use, and the targets to request. Proposing a candidate does not commit it: the
@@ -59,7 +59,7 @@ and may reject it.
 public sealed class AiCandidatePlan
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/AI/AiContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/AI/AiContracts.cs</small>
 
 The candidates a policy returns for one decision opportunity, in preference order. Order is
 significant: for policies that do not draw randomly the engine takes the first candidate that
@@ -86,7 +86,7 @@ survives validation, so a policy expresses its ranking by how it orders this lis
 public sealed class AiCandidateTrace
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/AI/AiContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/AI/AiContracts.cs</small>
 
 Per-candidate record of why one proposed action was or was not eligible, including the
 conditions that were evaluated for it and the diagnostic that rejected it.
@@ -137,7 +137,7 @@ conditions that were evaluated for it and the diagnostic that rejected it.
 public readonly struct AiConditionTrace
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/AI/AiContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/AI/AiContracts.cs</small>
 
 Record of one authored condition being evaluated for a rule during an AI decision.
 
@@ -172,7 +172,7 @@ Record of one authored condition being evaluated for a rule during an AI decisio
 public sealed class AiContext
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/AI/AiContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/AI/AiContracts.cs</small>
 
 Read-only input handed to an `IAiPolicy` when the engine asks it to propose
 candidates for a single decision opportunity. The policy sees a projection of the battle
@@ -215,7 +215,7 @@ or mutate the simulation.
 public sealed class AiDecisionTrace
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/AI/AiContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/AI/AiContracts.cs</small>
 
 Complete audit record of one automatic decision: every candidate considered and why it was
 kept or dropped, every random draw consumed to choose among them and to resolve targets, and

@@ -1,6 +1,6 @@
 # API reference
 
-The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **436 types.**
+The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **420 types.**
 
 !!! info "What is not listed here"
     74 further types are public in the source but left out of this reference. They are public only because `internal` is per-assembly in C# and the package spans several assemblies -- plumbing, not API. They carry `[EditorBrowsable(Never)]` in the source to say so. Nothing you need is hidden: if a documented type exposes it, it is documented too.
@@ -460,9 +460,6 @@ The types a new project meets first.
 | [`BattleViewRoster`](other.md#battleviewroster) | class | Other | Pure grouping helpers for immutable presentation rosters. |
 | [`BattleViewSession`](other.md#battleviewsession) | class | Other | Shared interaction state survives visual tree reconstruction. |
 | [`BattleViewState`](other.md#battleviewstate) | class | Other | A complete read-only view; contains no scene objects or authority to change combat. |
-| [`CaptureStatus`](other.md#capturestatus) | class | Other | _Undocumented._ |
-| [`CharacterArtImporter`](other.md#characterartimporter) | class | Other | Applies the shipped import settings to the drawn character sprites under `Samples/Characters`, and is safe to re-run. |
-| [`CurrentEditorTestCapture`](other.md#currenteditortestcapture) | class | Other | _Undocumented._ |
 | [`CustomMechanicsRegistryProvider`](other.md#custommechanicsregistryprovider) | class | Other | _Undocumented._ |
 | [`CustomShieldEffectResolver`](other.md#customshieldeffectresolver) | class | Other | Creates a shield equal to a configured fraction of missing health. |
 | [`DemoIdleSheet`](other.md#demoidlesheet) | class | Other | Reads the sample character art, which ships as a grid of idle frames rather than as a single still so combatants breathe instead of standing frozen. |
@@ -471,7 +468,6 @@ The types a new project meets first.
 | [`ForecastRequest`](other.md#forecastrequest) | class | Other | The three caps that bound one `BattleForecast.Run` call: how far ahead it may look, and how much work and evidence it may collect before stopping. |
 | [`ForecastResult`](other.md#forecastresult) | class | Other | Immutable outcome of one `BattleForecast.Run` call: where the lookahead stopped, the state and events of the throwaway clone it ran, and the non-authoritative evidence it produced. |
 | [`ForecastStopReason`](other.md#forecaststopreason) | enum | Other | Why one `BattleForecast.Run` call stopped. |
-| [`GameViewResolution`](other.md#gameviewresolution) | class | Other | Sets the Game view to an exact pixel size. |
 | [`GeneratedUiText`](other.md#generateduitext) | class | Other | Marks adapter-owned text that participates in presentation themes. |
 | [`IBattlePointerBlocker`](other.md#ibattlepointerblocker) | interface | Other | Optional screen-space hit-test owned by a view. |
 | [`IBattleStageInformationLayout`](other.md#ibattlestageinformationlayout) | interface | Other | Optional presentation-only choice to group combatant information beside the action stage. |
@@ -480,9 +476,7 @@ The types a new project meets first.
 | [`IInteractiveBattleView`](other.md#iinteractivebattleview) | interface | Other | Optional interaction surface used by a world-space presentation bridge. |
 | [`LowestHealthAllyTargetResolver`](other.md#lowesthealthallytargetresolver) | class | Other | Chooses the living targetable ally with the lowest health ratio. |
 | [`ParticleArtBinding`](other.md#particleartbinding) | class | Other | Binds a recipe VFX key (a particle-* sprite name) to art. |
-| [`PresentationContentGenerator`](other.md#presentationcontentgenerator) | class | Other | Non-shipped internal generator for the B6 presentation content: the starter recipe library (In/Impact/Out beats wired to the generated art adapter keys), the explicit recipe set, t... |
 | [`SessionEndState`](other.md#sessionendstate) | enum | Other | Typed end-of-session states surfaced by the driver. |
-| [`StarterContentGenerator`](other.md#startercontentgenerator) | class | Other | Non-shipped internal generator that authors the complete B6 starter content library as B4 `.asset` definitions under `Assets/TurnGauge/Samples/StarterContent` and compiles the resu... |
 | [`TargetCandidateQuery`](other.md#targetcandidatequery) | class | Other | Asks a skill's registered target resolver who it may legally hit right now, and whether one particular pick would be accepted. |
 | [`TargetPreview`](other.md#targetpreview) | class | Other | Turns a resolver into the way its affected set should be shown, and a device into the way a pick should be expressed. |
 | [`TargetTreatment`](other.md#targettreatment) | enum | Other | The visual language one target shape is previewed in. |
@@ -490,16 +484,6 @@ The types a new project meets first.
 | [`TokenArtBinding`](other.md#tokenartbinding) | class | Other | Binds a starter combatant definition id to its generated token sprite (the token-* art keys from the art manifest). |
 | [`ToolkitBattleView`](other.md#toolkitbattleview) | class | Other | A replaceable UXML surface. |
 | [`TurnGaugeDemoBootstrap`](other.md#turngaugedemobootstrap) | class | Other | The runtime demo driver (specification section 9). |
-| [`TurnGaugeDemoCaptureRunner`](other.md#turngaugedemocapturerunner) | class | Other | Photographs the running demo so the idle loop and the interface can be checked as a player sees them, not as a file listing. |
-| [`TurnGaugeDemoVerification`](other.md#turngaugedemoverification) | class | Other | Two checks that a file listing cannot make: that the shipped character art really is the authored idle grid, and that the running demo really moves. |
-| [`TurnGaugeDependencyReporter`](other.md#turngaugedependencyreporter) | class | Other | Produces a deterministic, non-shipped dependency report from Unity's AssetDatabase. |
-| [`TurnGaugeNativeProfileMediaCapture`](other.md#turngaugenativeprofilemediacapture) | class | Other | Internal, native Unity capture of the four authored Combat Studio profiles. |
-| [`TurnGaugePackageExporter`](other.md#turngaugepackageexporter) | class | Other | Batch-mode entry point. |
-| [`TurnGaugePlaytest`](other.md#turngaugeplaytest) | class | Other | Entry point for the playtest harness: opens the demo, sizes the game view to the surface being questioned, and enters play mode with the runner attached. |
-| [`TurnGaugePlaytestRunner`](other.md#turngaugeplaytestrunner) | class | Other | Plays the demo the way a buyer plays it, and photographs what happened. |
-| [`TurnGaugeSkinFontSetup`](other.md#turngaugeskinfontsetup) | class | Other | Gives the runtime demo a skin preset whose only change from the shipped Ironlight defaults is the font. |
-| [`TurnGaugeTextResources`](other.md#turngaugetextresources) | class | Other | Puts TextMeshPro's essential resources into a host that has none. |
-| [`TurnGaugeVerificationBatch`](other.md#turngaugeverificationbatch) | class | Other | One command-line entry point for the checks that do not need play mode, so a verification pass is a single editor launch instead of three. |
 | [`UguiBattleView`](other.md#uguibattleview) | class | Other | Prefab-authored uGUI surface. |
 | [`VfxBinding`](other.md#vfxbinding) | class | Other | Maps one presentation VFX key to an optional pooled prototype. |
 

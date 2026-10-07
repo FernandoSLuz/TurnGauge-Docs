@@ -170,12 +170,24 @@ A referenced-but-missing image fails `--strict`. An existing-but-unreferenced im
 always a section someone left un-illustrated, or a capture that was superseded and should be
 deleted rather than left around to be reused by mistake.
 
+### Real-mouse workflow evidence
+
+The current supported-workflow inventory is [editor-workflow-video-inventory-v1.json](https://github.com/FernandoSLuz/TurnGauge/blob/rename/turngauge/Internal/Implementation/2026-10-07-productization/editor-workflow-video-inventory-v1.json).
+It records which mouse-operated editor operations require evidence; its current entries are
+pending video capture, so existing PNG and RenderTexture evidence does not claim that these
+workflows have been demonstrated.
+
+For every inventoried operation, record a video of the actual automated mouse or pointer input
+in an isolated desktop. The evidence must show the English functional UI text and identify the
+source commit and assets used. Include byte-level parity and playback proof for any generated or
+captured output. A screenshot or a render capture alone does not satisfy the video requirement.
+
 ## The API reference
 
 `docs/reference/` is generated. Editing it by hand is wasted work.
 
 ```bash
-python tooling/extract_docs.py <product>/Assets api.json
+python tooling/extract_docs.py <product>/Assets/TurnGauge api.json
 python tooling/generate_api.py api.json tooling/api-groups.json docs/reference TurnGauge tooling/api-tiers.json
 ```
 

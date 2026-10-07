@@ -11,7 +11,7 @@
 public readonly struct AspectRatio : IEquatable<AspectRatio>
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 The design aspect a formation was authored against, as an exact integer
 fraction where `Numerator` is the width term and
@@ -65,7 +65,7 @@ compile or projection diagnostic rather than rejected here.
 public sealed class CompiledEncounterFormationLayout
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 The compiled formation for a whole encounter: exactly two teams, plus a
 flattened and indexed view of every combatant's seat. This is the object
@@ -103,7 +103,7 @@ once.
 public sealed class CompiledEncounterFormationTeam
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 One team's half of a compiled encounter layout: the preset it stands in
 and which combatant holds which seat. Compilation only succeeds when every
@@ -136,7 +136,7 @@ one side of the field.
 public readonly struct CompiledFormationAnchor
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 One named attachment point on a compiled slot. Presentation resolves a
 beat's VFX position through these, so a slot can offer more than the one
@@ -162,7 +162,7 @@ slot's own position.
 public sealed class CompiledFormationPreset
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 A validated, immutable formation preset: the seats one team can occupy,
 plus the design aspect their coordinates were authored against. Only the
@@ -201,7 +201,7 @@ scanning.
 public sealed class CompiledFormationSlot
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 One validated seat in a compiled formation preset: where a combatant
 stands, which way it faces, how it sorts against the other seats, and
@@ -255,7 +255,7 @@ stage, an editor preview and a batch run at the same time.
 public enum FormationArrangement : byte
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationArrangements.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationArrangements.cs</small>
 
 The stage shapes a battle can be laid out in.
 
@@ -280,7 +280,7 @@ every seat by hand.
 public static class FormationArrangements
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationArrangements.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationArrangements.cs</small>
 
 Builds formation presets for the shipped stage arrangements.
 
@@ -335,7 +335,7 @@ overlap - by which point the art is in and the formation is hard to change.
 public enum FormationFacing : byte
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationDefinitions.cs</small>
 
 Which way the occupant of a formation slot is presented as facing. It
 reaches the battle through presentation only: the built-in 2D stage flips
@@ -357,7 +357,7 @@ rejects any slot carrying a value other than these two.
 public readonly struct FormationOccupancy
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 The resolved binding of one combatant to one seat, with the team, preset,
 row and side that seat belongs to copied in so a consumer never has to
@@ -399,7 +399,7 @@ share a slot.
 public readonly struct FormationPoint : IEquatable<FormationPoint>
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 A resolution-independent position inside a formation preset. Both
 components are integers from 0 to 1,000,000
@@ -456,7 +456,7 @@ on the same pixels on every platform.
 public sealed class FormationPresetDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationPresetDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationPresetDefinition.cs</small>
 
 Mutable Unity authoring data. Compilation snapshots every value and returns
 engine-independent immutable records; this object is never retained.
@@ -495,7 +495,7 @@ engine-independent immutable records; this object is never retained.
 public sealed class FormationSlotDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationDefinitions.cs</small>
 
 Mutable Unity authoring data for one seat in a formation preset: where a
 combatant stands, which way it faces, how it sorts against the other
@@ -581,7 +581,7 @@ compiling to a default.
 public sealed class FormationVfxAnchorDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationDefinitions.cs</small>
 
 Mutable Unity authoring data for one named point on a formation slot that
 a presentation beat can target instead of the slot itself. Compilation
@@ -623,7 +623,7 @@ validates every value and snapshots it into an immutable
 public readonly struct FormationViewport : IEquatable<FormationViewport>
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 The screen-space rectangle a formation is projected into, in pixels, with
 the origin at `Left`/`Bottom` and Y increasing
@@ -687,7 +687,7 @@ to the preset's design aspect and centres the result inside it.
 public readonly struct ProjectedFormationPoint : IEquatable<ProjectedFormationPoint>
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Formation/FormationModels.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationModels.cs</small>
 
 A formation point after projection, in the pixel space of the
 `FormationViewport` it was fitted into. It is a separate type

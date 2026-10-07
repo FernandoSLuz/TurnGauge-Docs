@@ -17,7 +17,7 @@ A recipe names one event type, narrows it with a selector, and carries three bea
 
 Recipes are collected in a **Presentation Recipe Set**: an explicit list of up to 1024 that
 resolution reads and never scans past. None of it is compiled and none of it enters a hash, so
-editing a recipe changes what a battle looks like and never what it does — see
+editing a recipe changes what a battle looks like and never what it does - see
 [Determinism](../explanation/determinism.md).
 
 ### One recipe wins per event
@@ -45,12 +45,12 @@ skill or status definition, so one tag selector covers every mechanic you tagged
 
 A mapped event plays **In**, then **Impact**, then **Out**, in that order. Each beat has its own
 duration and its own cues, and a beat with no cues is a pause. **Duration Raw Seconds** is a raw
-fixed-point value — **10,000 is one second** — clamped to the range 0 to 30 seconds, so a
+fixed-point value - **10,000 is one second** - clamped to the range 0 to 30 seconds, so a
 mistyped duration shortens or lengthens a beat and never stalls the queue.
 
 A beat fires its cues once, as it starts, then waits out its duration; a duration of `0` still
 fires them and moves straight on. An event with no matching recipe becomes an instant beat that
-fires nothing — which is what you see before authoring any recipes. Playback runs on the
+fires nothing - which is what you see before authoring any recipes. Playback runs on the
 presenter's visual clock, so `presenter.Speed` and `SkipAll()` change the pacing and never a
 simulation value: see [Draw the battle on screen](../tutorials/show-the-battle.md).
 
@@ -85,7 +85,7 @@ Size, rise, lifetime and easing come from the skin; the style picks the text and
 | `Heal` | `+40` | Positive |
 | `Shield` | `+25` | Shield |
 | `Resource` | `+3` | Accent Alt |
-| `Status` | the amount, or `●` when it is zero | Accent |
+| `Status` | the amount, or `&#9679;` when it is zero | Accent |
 
 !!! warning "A number needs an amount"
     One is spawned only when the event carries an `actual-delta` or `amount` integer. Resolution
@@ -103,7 +103,7 @@ public interface IAudioAdapter     { void Play(string audioKey); }
 ```
 
 A `PresentationCue` carries `WorldPosition`, `Facing`, an optional `Parent` and the beat's
-`SourceId` and `TargetId` — no engine reference and no authoritative value, so an adapter cannot
+`SourceId` and `TargetId` - no engine reference and no authoritative value, so an adapter cannot
 reach into the simulation. The package ships neutral implementations you bind art to:
 
 ```csharp
@@ -142,6 +142,6 @@ keys, camera shake on the damage impact only.
 
 ## Next
 
-- **[Draw the battle on screen](../tutorials/show-the-battle.md)** — bind the set and the adapters.
-- **[Place combatants with the Formation Editor](place-formations.md)** — author the points cues resolve to.
-- **[Palette and surfaces](skin-surfaces.md)** — the palette roles numbers are coloured from.
+- **[Draw the battle on screen](../tutorials/show-the-battle.md)** - bind the set and the adapters.
+- **[Place combatants with the Formation Editor](place-formations.md)** - author the points cues resolve to.
+- **[Palette and surfaces](skin-surfaces.md)** - the palette roles numbers are coloured from.

@@ -6,7 +6,7 @@ of those changes on screen, and how to build panels of your own from the same pr
 ## The five bar roles
 
 A skin carries five [`SkinBarTokens`](../reference/skinning-and-appearance.md#skinbartokens)
-sets — `skin.Bars.Health`, `.Shield`, `.Resource`, `.Cast` and `.SchedulerGauge` — each with its
+sets - `skin.Bars.Health`, `.Shield`, `.Resource`, `.Cast` and `.SchedulerGauge` - each with its
 own `Height`, `CornerRadius`, `Track` surface, `Fill` surface, delta ghost and segment ticks.
 
 | | Role | Draws | Shipped height |
@@ -64,11 +64,11 @@ the strip above a combatant's name.
 
 | Field | Range | What it changes |
 | --- | --- | --- |
-| `Size` | 4–48 | Pip edge length, and the height of the whole strip |
-| `Spacing` | 0–24 | Gap between pips |
-| `Surface` | — | Pip shape, corner radius, stroke and glow |
-| `MaximumVisible` | 1–24 | Pips drawn before the last one becomes an overflow pip |
-| `ShowStackCounts` | — | Draws `+N` on the overflow pip |
+| `Size` | 4-48 | Pip edge length, and the height of the whole strip |
+| `Spacing` | 0-24 | Gap between pips |
+| `Surface` | - | Pip shape, corner radius, stroke and glow |
+| `MaximumVisible` | 1-24 | Pips drawn before the last one becomes an overflow pip |
+| `ShowStackCounts` | - | Draws `+N` on the overflow pip |
 
 Every shipped skin uses 18, 4, six visible pips and counts on. The cap keeps a
 heavily-stacked combatant from pushing its plate wider than its token: with six visible and
@@ -140,9 +140,9 @@ widgets exactly as they do to the shipped ones.
 
 ## Next
 
-- **[Palette and surfaces](skin-surfaces.md)** — the colours, shapes, fills and glows these
+- **[Palette and surfaces](skin-surfaces.md)** - the colours, shapes, fills and glows these
   bars and pips are drawn from.
-- **[What each interface region draws](interface-regions.md)** — where they appear, and what
+- **[What each interface region draws](interface-regions.md)** - where they appear, and what
   each region refuses to do.
-- **[Fit the battle to your screen](interface-layout.md)** — place, resize or hide the regions
+- **[Fit the battle to your screen](interface-layout.md)** - place, resize or hide the regions
   that carry them.

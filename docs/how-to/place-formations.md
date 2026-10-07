@@ -21,7 +21,7 @@ Each slot owns three kinds of point:
 | Approach | Amber | A second point on the same slot that cues can resolve to |
 | VFX anchor | Violet | A named point an effect attaches to, such as a head or a chest |
 
-The preset also carries a **design aspect** — 16:9 unless you change it — and that is the ratio
+The preset also carries a **design aspect** - 16:9 unless you change it - and that is the ratio
 the runtime fits into your stage. See [How slots reach the screen](#how-slots-reach-the-screen).
 
 ## Open the editor
@@ -78,7 +78,7 @@ All five ID fields must be valid stable IDs: 1 to 128 characters of lowercase AS
 digits, `.`, `_` or `-`. None of them may be left empty.
 
 !!! note "Positions are dragged, not typed"
-    The panel deliberately omits the slot and approach coordinates — drag them in the preview,
+    The panel deliberately omits the slot and approach coordinates - drag them in the preview,
     or type them on the asset's Inspector. Anchor coordinates do appear, inside the
     **VFX Anchors** list. Adding or removing slots, and changing the design aspect, also happen
     on the Inspector; the window edits the slots that already exist.
@@ -109,7 +109,7 @@ sometimes deliberate.
 
 `BattleStage2D` projects each team's preset with **that preset's own design aspect**, fitted
 inside the viewport it was given and centred there; any leftover width or height stays empty.
-The aspect buttons in the editor change the preview only — they never change what ships.
+The aspect buttons in the editor change the preview only - they never change what ships.
 
 For every occupancy the stage spawns one token and takes its placement verbatim: position from
 the projected slot point converted to world units, `Facing = Left` flipping the sprite,
@@ -118,7 +118,7 @@ placement for your own code to read. Anchor and approach points are resolved on 
 presentation cue asks for them.
 
 Transforms are outputs here, not inputs. Moving a token in the scene changes nothing
-authoritative and is overwritten the next time the stage is built — which is also why a token
+authoritative and is overwritten the next time the stage is built - which is also why a token
 in the wrong place is a formation problem, not a scene problem.
 
 To change where the stage itself sits, add **TurnGauge > Battle Stage Frame** next to your
@@ -184,8 +184,8 @@ shipped preset.
 
 ## Next
 
-- **[Combatants, teams and encounters](author-combatants-and-encounters.md)** — assign
+- **[Combatants, teams and encounters](author-combatants-and-encounters.md)** - assign
   combatants to the slots you just placed.
-- **[Fit the battle to your screen](interface-layout.md)** — the stage rectangle the formation
+- **[Fit the battle to your screen](interface-layout.md)** - the stage rectangle the formation
   is projected into.
-- **[Turn events into visuals](presentation-recipes.md)** — what the anchors are for.
+- **[Turn events into visuals](presentation-recipes.md)** - what the anchors are for.

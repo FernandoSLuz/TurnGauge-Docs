@@ -1,0 +1,25 @@
+{
+    "executeGuid": "6d5534d6-08ae-47f7-bce6-c5f9c88716f7",
+    "completedAtUtc": "2026-10-07T14:28:05.0299670Z",
+    "unity": "6000.3.25f1",
+    "graphics": "OpenGLCore",
+    "resultState": "Passed",
+    "sourceFingerprint": "2C78146A497927B592AD4AEDCEE641309F846DA587605A46C2FE1A8543BDB4E6",
+    "xmlSha256": "D9C27CBDC2EA536A6D82118C40EB69CA6AF4A9740EC68DB5480BE972318636E6",
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0,
+    "duration": 4.3031939,
+    "sourcesUnchanged": true,
+    "scopeVerified": true,
+    "xmlVerified": true,
+    "executedNames": [
+        "TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests.FourAuthoredProfilesRenderAtBothRuntimeAspectsAndAcceptAuthoritativeCommand",
+        "TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests.MaximumPlateInformationPreviewKeepsTheStageClearOfFeedback"
+    ],
+    "allResultNames": [
+        "TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests.FourAuthoredProfilesRenderAtBothRuntimeAspectsAndAcceptAuthoritativeCommand",
+        "TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests.MaximumPlateInformationPreviewKeepsTheStageClearOfFeedback"
+    ]
+}

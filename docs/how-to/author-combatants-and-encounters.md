@@ -25,7 +25,7 @@ Stat values and resistance chances are scaled integers, shown unscaled in the in
 scale of 10 000, so `ValueRaw: 1200000` is 120 health; resistance chances use 1 000 000; resource
 values are plain integers. Compilation fails unless the combatant carries a positive value for the
 two stats your Battle Rules asset names as `MaximumHealthStat` and `SpeedStat`, and maximum health
-must be a whole number — a multiple of 10 000. Every other stat is optional and reads as zero.
+must be a whole number - a multiple of 10 000. Every other stat is optional and reads as zero.
 
 ## AI policies
 
@@ -46,7 +46,7 @@ creates the arguments the chosen one requires. Nothing here has to be typed from
 
 ![The Inspector on an authoring asset, showing the implementation dropdown, the one-line summary of the chosen implementation, and an Arguments section whose keys were created by choosing it](../assets/images/editor-implementation-picker.png){ .shot }
 
-Rules are the whole vocabulary. Four policy assets ship to copy — `ai.priority-brawler`,
+Rules are the whole vocabulary. Four policy assets ship to copy - `ai.priority-brawler`,
 `ai.conditional-healer`, `ai.weighted-caster` and `ai.weighted-random`.
 
 ### Rule conditions
@@ -59,7 +59,7 @@ a resource, status or skill operand. Counts include only living combatants, the 
 
 !!! note "Only weighted policies consume randomness"
     Priority and conditional selection draw nothing from the battle RNG. A weighted policy takes one
-    draw per decision, over the total weight of the legal rules — so switching a policy between
+    draw per decision, over the total weight of the legal rules - so switching a policy between
     weighted and priority changes every later number in a seeded battle.
 
 ## Reactions
@@ -77,7 +77,7 @@ decide when it fires.
 | `OncePerRoot` | Defaults to on. Limits the reaction to one firing per root action. |
 
 Reaction graphs are checked for cycles at compile time. A cycle fails the compile only when it is
-unbounded — no member is `OncePerRoot`, none consumes a required status, and none is finite by its
+unbounded - no member is `OncePerRoot`, none consumes a required status, and none is finite by its
 resolver's construction. Leaving `OncePerRoot` on keeps a chain terminating.
 
 ## Teams
@@ -96,7 +96,7 @@ participant in one battle.
 | `InitialAtbGauge` | Head start on the ATB gauge. |
 | `InitialStatuses` | Statuses applied before the first tick, with a stack count and optional source member. |
 
-An `Automatic` member must resolve to a policy — its override, or the combatant's `DefaultAiPolicy`.
+An `Automatic` member must resolve to a policy - its override, or the combatant's `DefaultAiPolicy`.
 If neither exists the compile fails rather than the battle stalling. A `Human` member makes
 `AdvanceTicks` return `AwaitingCommand` when its turn arrives, and the engine waits until your driver
 submits. Every shipped sample team is fully `Automatic`, which is why the demo runs unattended.
@@ -111,11 +111,11 @@ submits. Every shipped sample team is fully `Automatic`, which is why the demo r
 **Assets > Create > TurnGauge > Battle Rules**. One rules asset serves a whole catalog: it hangs
 off the catalog's `Rules` field, not off an encounter, so every encounter in that catalog shares it.
 
-It names which of your Stat assets fill the seven semantic roles — maximum health, power, magic,
-spirit, defense, speed, critical chance — and the five formula implementations for damage, healing,
+It names which of your Stat assets fill the seven semantic roles - maximum health, power, magic,
+spirit, defense, speed, critical chance - and the five formula implementations for damage, healing,
 defense, criticals and status chance. `CriticalMultiplierRaw`, the two variance bounds and the two
 formula bounds are all scaled by 10 000. The shipped `rules.starter` uses a critical multiplier of
-`15000` (×1.5) and equal variance bounds of `10000` (×1.0), removing damage variance entirely.
+`15000` (x1.5) and equal variance bounds of `10000` (x1.0), removing damage variance entirely.
 
 `MaximumReactionDepth` and `MaximumReactionCount` cap a reaction chain; `MaximumRootActions` and
 `MaximumBattleTicks` cap the battle. `ResultPolicy` has one legal value, `LastLivingTeam`: no
@@ -145,6 +145,6 @@ consumes and the `FormationLayout` the presenter draws.
 
 ## Next
 
-- **[Place combatants with the Formation Editor](place-formations.md)** — the slots your assignments point at.
-- **[Run a battle from your own code](../tutorials/run-a-battle-from-code.md)** — the compiled encounter as a live engine.
-- **[Author content in the right order](author-content.md)** — the layers below this one, and the diagnostics that name the asset at fault.
+- **[Place combatants with the Formation Editor](place-formations.md)** - the slots your assignments point at.
+- **[Run a battle from your own code](../tutorials/run-a-battle-from-code.md)** - the compiled encounter as a live engine.
+- **[Author content in the right order](author-content.md)** - the layers below this one, and the diagnostics that name the asset at fault.

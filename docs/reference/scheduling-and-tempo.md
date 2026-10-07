@@ -11,7 +11,7 @@
 public enum ActionCostPaymentPolicy : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 When an action's resource costs are debited. `Acceptance` is the only
 supported policy: costs are spent as the command is accepted, before any
@@ -30,7 +30,7 @@ cast window, and come back only under
 public sealed class ActionOrderScheduler : IBattleScheduler, ISchedulerStateCodecProvider
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/ActionOrderScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/ActionOrderScheduler.cs</small>
 
 The built-in round-based scheduler: every eligible combatant is offered
 one opportunity per round, in ready-tick order, and the round closes once
@@ -107,7 +107,7 @@ per round.
 public sealed class ActionOrderSchedulerStateCodec : ISchedulerStateCodec
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
 
 The canonical state codec for the built-in Action Order scheduler, covering the
 decision queue, each actor's next ready tick, and the round bookkeeping.
@@ -163,7 +163,7 @@ since the codec is stateless and has no public constructor.
 public sealed class ActionOrderState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
 
 The Action Order payload of a `SchedulerState`: per-actor ready
 ticks plus the round they are being spent in. Present only when the state's
@@ -208,7 +208,7 @@ tag is `SchedulerStateTag.ActionOrder`.
 public sealed class AtbScheduler : IBattleScheduler, ISchedulerStateCodecProvider
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/AtbScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/AtbScheduler.cs</small>
 
 The built-in gauge-based scheduler: each combatant accrues its raw
 effective speed in gauge units per tick, and becomes ready when the gauge
@@ -286,7 +286,7 @@ decision is outstanding.
 public sealed class AtbSchedulerStateCodec : ISchedulerStateCodec
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
 
 The canonical state codec for the built-in ATB scheduler, covering the decision
 queue, the gauge threshold and input-pause policy, and each actor's gauge units
@@ -342,7 +342,7 @@ scheduler by hand, since the codec is stateless and has no public constructor.
 public sealed class AtbState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
 
 The ATB payload of a `SchedulerState`: the gauge threshold, the
 input-pause policy in force, and every actor's gauge. Present only when the
@@ -387,7 +387,7 @@ state's tag is `SchedulerStateTag.Atb`.
 public static class BattleForecast
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Forecast/BattleForecast.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Forecast/BattleForecast.cs</small>
 
 Read-only lookahead over a live battle. It clones the source engine at
 its exact current state and advances only the clone, so calling it cannot
@@ -415,7 +415,7 @@ than being guessed.
 public sealed class BattleSchedulerRegistry
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
 
 The immutable set of turn-order schedulers a battle may use, keyed by scheduler
 ID and contract version, each stored with its canonical state codec and its
@@ -483,7 +483,7 @@ shared base registry can be extended per game without being copied defensively.
 public sealed class CompiledActionCost
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 One resource cost of an action: which resource is spent, and how much. The
 amount is always positive, and it is debited when the command is accepted
@@ -519,7 +519,7 @@ rather than when the action resolves.
 public sealed class CompiledSkillTiming
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 The compiled timing, cooldown, cost, and target-count contract for one
 skill. The engine reads it when it accepts a command and again when the
@@ -539,7 +539,7 @@ instance that exists has already passed the simulation's structural limits.
     - `maximumRequestedTargets` &mdash; Most target IDs a command for this skill may carry; may not be below `minimumRequestedTargets`.
     - `costs` &mdash; Resource costs. They are copied and sorted by resource ID, and a repeated resource ID is rejected.
     - `cooldownClockKind` &mdash; Clock domain in which `cooldownAmount` is measured; undefined values are rejected.
-    - `cooldownStartPolicy` &mdash; Event—acceptance or resolution—that starts the skill's cooldown.
+    - `cooldownStartPolicy` &mdash; Event - acceptance or resolution - that starts the skill's cooldown.
     - `interruptRefundPolicy` &mdash; Whether an interrupted cast restores costs already paid at acceptance.
     - `skillId` &mdash; Valid stable identifier of the skill whose timing contract is being compiled.
     - `timingResolutionKind` &mdash; Extra timing-layer operation performed at resolution, such as interrupting the first locked cast.
@@ -602,7 +602,7 @@ instance that exists has already passed the simulation's structural limits.
 public enum CooldownClockKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 The clock a cooldown counts down on. `ElapsedTicks` counts simulation
 ticks; `OwnerOpportunities` counts the owner's later finished
@@ -623,7 +623,7 @@ on one clock only, and the other remaining counter on
 public enum CooldownStartPolicy : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 When a skill's cooldown clock starts. `Queue` starts it as the command
 is accepted, before any cast window; `Resolve` starts it only once the
@@ -642,7 +642,7 @@ action resolves, so a cast interrupted before that point starts none.
 public sealed class GaugeEntry
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
 
 One ATB actor's gauge: how far it has filled toward the scheduler's
 threshold, plus the tick until which filling stays suppressed after the
@@ -682,7 +682,7 @@ crossing is converted into a decision entry and only the remainder kept.
 public interface IBattleScheduler
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 The pure turn-order contract. An implementation decides only when an actor
 may act; the engine keeps ownership of time, events, commands, and battle
@@ -752,7 +752,7 @@ Order and ATB schedulers.
 public interface ISchedulerAdjustmentAdapter
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
 
 Lets an effect retime one actor inside a scheduler's state - hasten it, delay it,
 or push its ATB gauge - without the effect knowing how that scheduler measures
@@ -816,7 +816,7 @@ needs one.
 public interface ISchedulerAdjustmentAdapterProvider
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
 
 Implemented by a scheduler that carries its own adjustment adapter, so
 `BattleSchedulerRegistry.Register(IBattleScheduler)` picks it up
@@ -843,7 +843,7 @@ without the caller naming it separately.
 public interface ISchedulerStateCodec
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
 
 The canonical byte form of one scheduler's state. Every canonical battle-state
 write and read routes `SchedulerState` through the codec registered
@@ -908,7 +908,7 @@ replayable, and hashable.
 public interface ISchedulerStateCodecProvider
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/BattleSchedulerRegistry.cs</small>
 
 Implemented by a scheduler that carries its own canonical state codec, so it can
 be handed to `BattleSchedulerRegistry.Register(IBattleScheduler)`
@@ -932,7 +932,7 @@ without the caller naming the codec separately.
 public enum InputPausePolicy : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 What the ATB scheduler does with time while a human decision is pending.
 `Active` keeps gauges filling, so a second combatant can become ready
@@ -955,7 +955,7 @@ Action Order definition must leave it unset.
 public enum InterruptRefundPolicy : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 What happens to the costs already paid for an action whose cast is
 interrupted. `None` keeps them spent; `Full` restores them, each
@@ -975,7 +975,7 @@ partial when the resource has meanwhile refilled.
 public sealed class ReadyTickEntry
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
 
 The earliest tick at which one Action Order actor may next be offered an
 opportunity. Eligible idle combatants start at tick 0; a finished actor
@@ -1007,7 +1007,7 @@ receives a fresh entry whose delay is scaled by its effective speed.
 public sealed class RoundState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
 
 One Action Order round: the participants snapshotted when the round began
 and the subset that has already resolved. The round is complete once the
@@ -1059,7 +1059,7 @@ start the next one.
 public sealed class SchedulerAdjustmentContext
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
 
 Immutable input to `ISchedulerAdjustmentAdapter.Apply`: which actor
 is being retimed, whether its ready tick or its ATB gauge moves, and by how
@@ -1112,7 +1112,7 @@ order and nothing else.
 public sealed class SchedulerAdjustmentResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerAdjustment.cs</small>
 
 Outcome of `ISchedulerAdjustmentAdapter.Apply`: the scheduler state
 after the adjustment, how much of the requested delta survived clamping, and any
@@ -1167,7 +1167,7 @@ was.
 public sealed class SchedulerAdvanceContext
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Immutable input to `IBattleScheduler.Advance`: the current
 tick, one timing view per combatant, the next opportunity sequence the
@@ -1224,7 +1224,7 @@ earliest due timer or the ceiling.
 public sealed class SchedulerAdvanceResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Outcome of `IBattleScheduler.Advance`: the next scheduler state,
 the ordered work for the engine to translate, and why the transition stopped.
@@ -1277,7 +1277,7 @@ advance can never leave the battle partly advanced.
 public enum SchedulerAdvanceStopReason : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Why `IBattleScheduler.Advance` stopped. The engine turns this
 into caller control flow, so the value decides whether stepping continues,
@@ -1299,7 +1299,7 @@ returns to the caller, or reports a stalled battle.
 public sealed class SchedulerCombatantTimingView
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Immutable per-actor timing input the engine builds for one scheduler
 transition. It exposes only what turn order may depend on, so a scheduler
@@ -1351,7 +1351,7 @@ can neither read nor change authoritative battle state through it.
 public sealed class SchedulerCreateContext
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Immutable input to `IBattleScheduler.Create`: the compiled
 definition to honour, the tick the state is created at, and one timing
@@ -1389,7 +1389,7 @@ creation happens at battle start and never mid-battle.
 public sealed class SchedulerCreateResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Outcome of `IBattleScheduler.Create`. Success carries the initial
 `SchedulerState` and no diagnostic; failure carries the diagnostic
@@ -1431,7 +1431,7 @@ and no state, and the engine refuses to start the battle.
 public static class SchedulerDiagnosticIds
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 The stable diagnostic IDs the registry and the built-in schedulers report.
 The string values are part of the published contract, so tests and tooling can
@@ -1496,7 +1496,7 @@ parallel IDs for the same failures.
 public sealed class SchedulerDueTimer
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 One engine-owned boundary the scheduler must stop at. The identity fields
 exist so the engine can pair the boundary back to its own record; a
@@ -1543,7 +1543,7 @@ scheduler normally needs only `DueTick` and `Kind`.
 public enum SchedulerDueTimerKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 The engine-owned timer categories a scheduler must not advance past. When
 several fall on the same tick they are ordered cast completion first, then
@@ -1563,7 +1563,7 @@ elapsed status boundary, then elapsed cooldown expiry.
 public sealed class SchedulerOpportunityContext
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Immutable input to `IBattleScheduler.OnOpportunityAccepted`,
 naming the queued decision the engine is about to consume. The sequence and
@@ -1606,7 +1606,7 @@ state-invalid failure.
 public enum SchedulerOpportunityOutcome : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 How an opportunity ended, as reported to
 `IBattleScheduler.OnOpportunityFinished`. Recovery is charged
@@ -1626,7 +1626,7 @@ for all three outcomes, so no outcome lets an actor act again for free.
 public sealed class SchedulerOpportunityResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Immutable report that one opportunity has finished, and the input to
 `IBattleScheduler.OnOpportunityFinished`. This is where an
@@ -1679,7 +1679,7 @@ the same actor consecutive turns.
 public sealed class SchedulerState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
 
 The authoritative scheduler half of a battle snapshot: the ordered decision
 queue plus exactly one family payload chosen by `StateTag`.
@@ -1769,7 +1769,7 @@ transition returns a new instance instead of editing this one.
 public sealed class SchedulerStateDecodeResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerStateCodec.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerStateCodec.cs</small>
 
 The outcome of rebuilding a `SchedulerState` from payload
 bytes: either the state, or the diagnostic saying it could not be read.
@@ -1814,7 +1814,7 @@ middle of a restore.
 public enum SchedulerStateTag : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 Discriminates which payload a `SchedulerState` carries. Exactly
 one of the Action Order or ATB payloads is populated, and it must match the
@@ -1833,7 +1833,7 @@ tag; a mismatched pair is rejected at construction.
 public sealed class SchedulerTransitionResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 Outcome of an opportunity transition, either
 `IBattleScheduler.OnOpportunityAccepted` or
@@ -1883,7 +1883,7 @@ opportunity has already been committed.
 public sealed class SchedulerWork
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 One ordered unit of scheduler output: a closed union whose payload the engine
 copies into execution frames. Only the members belonging to
@@ -1963,7 +1963,7 @@ factories, so an ill-formed record cannot be built.
 public enum SchedulerWorkTag : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/IBattleScheduler.cs</small>
 
 The closed set of work a scheduler can return, and the tag that says which
 payload of `SchedulerWork` is populated. The engine translates
@@ -1985,7 +1985,7 @@ each record into execution frames; a scheduler never emits events itself.
 public enum TimingResolutionKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 Timing-layer work a skill performs as it resolves, on top of its own
 effects. `InterruptFirstLockedCast` interrupts the interruptible cast

@@ -22,7 +22,7 @@ Tokens come from the pool adapter under one key,
 and must be registered before `Bind`, because the stage spawns its tokens inside that call.
 
 Order matters twice over. `PresenterBinding` takes the pool as a constructor argument, so build the
-pool first, register into it, and only then construct the binding — passing a different
+pool first, register into it, and only then construct the binding - passing a different
 `IPoolAdapter` to the binding than the one you registered the prototype on is the easiest way to get
 placeholder tokens back with no error to explain them.
 
@@ -42,7 +42,7 @@ presenter.Bind(binding);   // the stage clones the prototype once per occupied s
 Each clone is parented under the stage, given the
 [`CombatantTokenView`](../reference/stage-and-tokens.md#combatanttokenview) on its **root** (the
 stage looks only there, and adds one when the root carries none), then moved to the projected slot
-position with `localScale` reset to `Vector3.one` — so bake scale into a child rather than the
+position with `localScale` reset to `Vector3.one` - so bake scale into a child rather than the
 prefab root, and keep the view on the root or the stage will configure a second copy beside it.
 
 <figure aria-label="Engineering map of token pooling and formation anchors">
@@ -59,9 +59,9 @@ prefab root, and keep the view on the root or the stage will configure a second 
   .tg-art-flow .tg-flow-choice { min-width:0; padding:0.65em; border:2px solid #8db7c8; border-radius:0.55rem; background:#18212b; overflow-wrap:anywhere; }
   .tg-art-flow .tg-flow-choice span { display:block; margin-top:0.25rem; color:#c7d6de; font-family:ui-monospace,SFMono-Regular,monospace; font-size:1em; }
   .tg-art-flow .tg-flow-merge { margin-top:0.65rem; color:#e4ad62; font-size:1.5em; font-weight:700; }
-  .tg-art-flow .tg-flow-inline::before { content:"→"; }
+  .tg-art-flow .tg-flow-inline::before { content:"\2192"; }
   @media (max-width:700px) {
-    .tg-art-flow .tg-flow-inline::before { content:"↓"; }
+    .tg-art-flow .tg-flow-inline::before { content:"\2193"; }
     .tg-art-flow .tg-flow-step { grid-template-columns:minmax(0,1fr); }
     .tg-art-flow .tg-flow-arrow { min-height:1.5rem; }
     .tg-art-flow .tg-flow-choices { grid-template-columns:minmax(0,1fr); }
@@ -73,18 +73,18 @@ prefab root, and keep the view on the root or the stage will configure a second 
     <div class="tg-flow-arrow tg-flow-inline" aria-hidden="true"></div>
     <div class="tg-flow-node"><strong>BattleStage2D</strong><span>one occupied slot</span></div>
   </div>
-  <div class="tg-flow-arrow" aria-hidden="true">↓</div>
+  <div class="tg-flow-arrow" aria-hidden="true">&#8595;</div>
   <div class="tg-flow-branch">
     <strong>Select the pool key for that occupied slot</strong>
     <div class="tg-flow-choices">
       <div class="tg-flow-choice"><strong>specific key</strong><span>TokenPoolKeyFor(id), when HasPrototype is true</span></div>
       <div class="tg-flow-choice"><strong>shared fallback</strong><span>TokenPoolKey, presentation.token, otherwise</span></div>
     </div>
-    <div class="tg-flow-merge" aria-hidden="true">↓ both paths converge</div>
+    <div class="tg-flow-merge" aria-hidden="true">&#8595; both paths converge</div>
   </div>
-  <div class="tg-flow-arrow" aria-hidden="true">↓</div>
+  <div class="tg-flow-arrow" aria-hidden="true">&#8595;</div>
   <div class="tg-flow-node"><strong>clone root</strong><span>CombatantTokenView, then project the occupied slot</span></div>
-  <div class="tg-flow-arrow" aria-hidden="true">↓</div>
+  <div class="tg-flow-arrow" aria-hidden="true">&#8595;</div>
   <div class="tg-flow-node"><strong>formation compiled anchor</strong><span>TryGetAnchorWorld(..., VfxAnchorId)</span></div>
 </div>
 <figcaption>Engineering map of the verified extension seams. This is an authored diagram, not a runtime capture or art approval.</figcaption>
@@ -101,7 +101,7 @@ the VFX adapter receives the resulting stage-space position.
 `CombatantTokenView` takes a serialized `SpriteRenderer`, falls back to `GetComponent` in `Awake`,
 and works without either, so a rigged 2D prefab, an `Animator`-driven model and a full 3D character
 are all valid prototypes. What that renderer would have done is then yours, from a component that
-reads the view in `LateUpdate` — never `OnEnable`, which runs before the stage configures a token.
+reads the view in `LateUpdate` - never `OnEnable`, which runs before the stage configures a token.
 
 | Without a `SpriteRenderer` | Read instead |
 | --- | --- |
@@ -173,7 +173,7 @@ binding and set the renderer, which is what the shipped demo does.
 [`BuiltInAnimationAdapter.Register(animationKey, handler)`](../reference/presentation-adapters-and-recipes.md#builtinanimationadapter)
 binds one key to one `Action<PresentationCue>`. The
 [cue](../reference/presentation-adapters-and-recipes.md#presentationcue) carries `WorldPosition`,
-`Facing`, `Parent`, `SourceId` and `TargetId` — never a token — so look the token up on the stage.
+`Facing`, `Parent`, `SourceId` and `TargetId` - never a token - so look the token up on the stage.
 An animation cue always resolves against the beat's **source**, never its target.
 
 ```csharp
@@ -196,7 +196,7 @@ returns required rather than defensive.
 
 ## Keep a looping idle alive across beats
 
-A beat is three phases — In, Impact, Out. Each fires its cues **once, as it starts**, then waits out
+A beat is three phases - In, Impact, Out. Each fires its cues **once, as it starts**, then waits out
 its duration on the visual clock; after Out the beat is dropped. Nothing fires when a phase or a
 beat *ends* and no callback reports one finishing, so a loop your handler starts runs until you stop
 it. Poll `presenter.IsIdle`, true when no beat is playing and none are queued, after `Tick`:
@@ -209,7 +209,7 @@ foreach (var combatantId in myCombatantIds)
 ```
 
 `SkipAll()` fires every remaining phase of every queued beat at once and a raised `presenter.Speed`
-can consume several beats in one `Tick`, so restart a loop idempotently — a bool or
+can consume several beats in one `Tick`, so restart a loop idempotently - a bool or
 `CrossFadeInFixedTime`, not counted `SetTrigger` calls.
 
 ## Use a VideoPlayer as an idle loop
@@ -256,7 +256,7 @@ vfx.RegisterKey("vfx.slash");                       // stops the key warning
 
 The anchor resolves on the beat's **target**, or its source when the event has no target. Only an
 empty or malformed `VfxAnchorId` falls back to the slot position; an id that parses but names no
-anchor on that slot resolves to the world origin `(0,0,0)` — a silent success, not a failure, so an
+anchor on that slot resolves to the world origin `(0,0,0)` - a silent success, not a failure, so an
 effect that lands in the corner of the screen means a typo in the id rather than a missing anchor.
 [`BuiltInVfxAdapter`](../reference/presentation-adapters-and-recipes.md#builtinvfxadapter) sets
 position and parents the instance under the stage: no rotation is applied and nothing follows a
@@ -280,10 +280,10 @@ audio.Register("sfx.hit", hitClip);
 `Play` is a `PlayOneShot` on that one shared source, so playback is non-positional: `IAudioAdapter`
 receives a key and no cue. A key registered with a null clip counts as bound and is silent without
 warning, an adapter with no source is silent for every key, and a skip can deliver many calls in one
-frame — implement `IAudioAdapter` yourself for voice limiting or positional audio.
+frame - implement `IAudioAdapter` yourself for voice limiting or positional audio.
 
 ## Next
 
-- **[Turn events into visuals](presentation-recipes.md)** — the keys, anchors and beats this page binds art to.
-- **[Place combatants with the Formation Editor](place-formations.md)** — authoring the slot, approach and anchor points.
-- **[Presentation adapters and recipes](../reference/presentation-adapters-and-recipes.md)** — every adapter type in full.
+- **[Turn events into visuals](presentation-recipes.md)** - the keys, anchors and beats this page binds art to.
+- **[Place combatants with the Formation Editor](place-formations.md)** - authoring the slot, approach and anchor points.
+- **[Presentation adapters and recipes](../reference/presentation-adapters-and-recipes.md)** - every adapter type in full.

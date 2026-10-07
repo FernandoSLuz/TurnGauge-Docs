@@ -1,0 +1,661 @@
+{
+    "receipts": [
+        {
+            "profile": "Fantasy-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 30738,
+            "brightPixels": 39152,
+            "nonBackgroundPixels": 1850079,
+            "bodyPixels": 91700,
+            "hudPixels": 665919,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 121.800048828125,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.59094524383545
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 12.224828720092774
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 14.59094524383545
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "18fe4969b689de7f23a462147994ba0be168420e80d185d9c381578f502f9c07"
+        },
+        {
+            "profile": "Fantasy-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 30845,
+            "brightPixels": 41577,
+            "nonBackgroundPixels": 2059027,
+            "bodyPixels": 91749,
+            "hudPixels": 743672,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 201.0001220703125,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.59094524383545
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 12.460719108581543
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 13.575566291809082
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "9afaaaa4c2a15174488dd728b361baef01cdd9fd3dffa46348841a66ac31a26f"
+        },
+        {
+            "profile": "Fantasy-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 28634,
+            "brightPixels": 41076,
+            "nonBackgroundPixels": 1849878,
+            "bodyPixels": 91718,
+            "hudPixels": 665919,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 9.471232414245606,
+            "minimumPlateFeedbackClearance": 121.800048828125,
+            "minimumRingPlateClearance": 353.9998779296875,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 9.471232414245606
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 14.59094524383545
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 14.59094524383545
+                }
+            ],
+            "confirmVisualDiagnostic": "uGUI Confirm sprite=<none>; material=Default UI Material; color=RGBA(1.000, 1.000, 1.000, 1.000)",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "1f0a2df24c855c83df754fe0d77171e28d80f1029f4b0e49ae2f3cb349c29813"
+        },
+        {
+            "profile": "Fantasy-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 28772,
+            "brightPixels": 43051,
+            "nonBackgroundPixels": 2058826,
+            "bodyPixels": 91752,
+            "hudPixels": 743672,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 9.471232414245606,
+            "minimumPlateFeedbackClearance": 201.0001220703125,
+            "minimumRingPlateClearance": 331.999755859375,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 9.471232414245606
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 14.59094524383545
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 14.59094524383545
+                }
+            ],
+            "confirmVisualDiagnostic": "uGUI Confirm sprite=<none>; material=Default UI Material; color=RGBA(1.000, 1.000, 1.000, 1.000)",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "e8663acc8d5c85b8c92127e64eb57943f85e59926756ab843e12dab646b766d2"
+        },
+        {
+            "profile": "Fantasy-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 30239,
+            "brightPixels": 42795,
+            "nonBackgroundPixels": 1887668,
+            "bodyPixels": 91700,
+            "hudPixels": 714802,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 122.0,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 9.889640808105469
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "2acba6ec2b4b6bca1686cfbad2afd0c9af670bd4959f88044b8196f12a03606f"
+        },
+        {
+            "profile": "Fantasy-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 30213,
+            "brightPixels": 42795,
+            "nonBackgroundPixels": 2098672,
+            "bodyPixels": 91749,
+            "hudPixels": 794668,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 201.00006103515626,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 9.889640808105469
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "46b2873593690fce5773f2a1d09d3b16b97d0b0edfeba8169f270a38efc8b430"
+        },
+        {
+            "profile": "Fantasy-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 28228,
+            "brightPixels": 48670,
+            "nonBackgroundPixels": 1887467,
+            "bodyPixels": 91718,
+            "hudPixels": 714802,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 9.471232414245606,
+            "minimumPlateFeedbackClearance": 122.0,
+            "minimumRingPlateClearance": 353.9998779296875,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 9.471232414245606
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 14.266785621643067
+                }
+            ],
+            "confirmVisualDiagnostic": "UITK generated confirm; background=RGBA(0.860, 0.680, 0.320, 1.000); material/sprite=style-resolved",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "267f88db74dddafcf5f1dd1dce1e4bc2909353a2565cefeda7a39bc5d0f4ce1e"
+        },
+        {
+            "profile": "Fantasy-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 28202,
+            "brightPixels": 48670,
+            "nonBackgroundPixels": 2098471,
+            "bodyPixels": 91752,
+            "hudPixels": 794668,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 9.471232414245606,
+            "minimumPlateFeedbackClearance": 201.00006103515626,
+            "minimumRingPlateClearance": 331.999755859375,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 9.471232414245606
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 14.266785621643067
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 14.266785621643067
+                }
+            ],
+            "confirmVisualDiagnostic": "UITK generated confirm; background=RGBA(0.860, 0.680, 0.320, 1.000); material/sprite=style-resolved",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "6c2803e65da1f099486e56927a73002d8ffd5b06e736123934ca6f278aaded75"
+        },
+        {
+            "profile": "ScienceFiction-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 20123,
+            "brightPixels": 27350,
+            "nonBackgroundPixels": 2007224,
+            "bodyPixels": 47399,
+            "hudPixels": 619275,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 126.4686279296875,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 16.210355758666993
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 14.69545841217041
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 16.210355758666993
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "dc01043f02b744706874d4dca672b2d1f88e061c53dbfc486cdfad9a004bbaf5"
+        },
+        {
+            "profile": "ScienceFiction-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 20169,
+            "brightPixels": 29426,
+            "nonBackgroundPixels": 2231266,
+            "bodyPixels": 47320,
+            "hudPixels": 691270,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 178.26861572265626,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 16.210355758666993
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 13.504056930541993
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 14.400130271911621
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "857b96d672dccc6baadbf150cc4a832134f28521d3876563a23c6402a38f47f0"
+        },
+        {
+            "profile": "ScienceFiction-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 19391,
+            "brightPixels": 29976,
+            "nonBackgroundPixels": 2007115,
+            "bodyPixels": 47397,
+            "hudPixels": 619275,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 11.730177879333496,
+            "minimumPlateFeedbackClearance": 126.4686279296875,
+            "minimumRingPlateClearance": 7.5999755859375,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 11.730177879333496
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 16.210355758666993
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 16.210355758666993
+                }
+            ],
+            "confirmVisualDiagnostic": "uGUI Confirm sprite=<none>; material=Default UI Material; color=RGBA(1.000, 1.000, 1.000, 1.000)",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "b7ff394373e7f5a452770c42fa094251fd4be79a897425ba3a3783d63736ebbe"
+        },
+        {
+            "profile": "ScienceFiction-UGUI(Clone)",
+            "technology": "UGUI",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 19561,
+            "brightPixels": 31547,
+            "nonBackgroundPixels": 2231158,
+            "bodyPixels": 47312,
+            "hudPixels": 691270,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 11.730177879333496,
+            "minimumPlateFeedbackClearance": 178.26861572265626,
+            "minimumRingPlateClearance": 7.5999755859375,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 11.730177879333496
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 16.210355758666993
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 16.210355758666993
+                }
+            ],
+            "confirmVisualDiagnostic": "uGUI Confirm sprite=<none>; material=Default UI Material; color=RGBA(1.000, 1.000, 1.000, 1.000)",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "cf43fd34beb019c25b8f995ec7818a0d7a03e68bbe936b01cdb7f0d653a50c61"
+        },
+        {
+            "profile": "ScienceFiction-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 19750,
+            "brightPixels": 30629,
+            "nonBackgroundPixels": 2009488,
+            "bodyPixels": 47399,
+            "hudPixels": 676260,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 126.2686767578125,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 16.192060470581056
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 16.192060470581056
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 14.814984321594239
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "1b44a64cef58c99537b0b00b1c403162c93bd197b51b111bd04592f97d046cc0"
+        },
+        {
+            "profile": "ScienceFiction-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "initial-action",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "",
+            "selectedTargets": "",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 19653,
+            "brightPixels": 30644,
+            "nonBackgroundPixels": 2234044,
+            "bodyPixels": 47320,
+            "hudPixels": 753108,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 0.0,
+            "minimumPlateFeedbackClearance": 178.26861572265626,
+            "minimumRingPlateClearance": 0.0,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "action-skill.power-blow",
+                    "ratio": 16.192060470581056
+                },
+                {
+                    "control": "action-skill.rally",
+                    "ratio": 16.192060470581056
+                },
+                {
+                    "control": "action-skill.strike",
+                    "ratio": 14.814984321594239
+                }
+            ],
+            "confirmVisualDiagnostic": "",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "a814b77dd1445b96a4a53f0975f48e13c581496757f26baef26f8906c71c87be"
+        },
+        {
+            "profile": "ScienceFiction-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1080,
+            "uniqueColors": 18977,
+            "brightPixels": 36700,
+            "nonBackgroundPixels": 2009379,
+            "bodyPixels": 47397,
+            "hudPixels": 676260,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 11.730177879333496,
+            "minimumPlateFeedbackClearance": 126.2686767578125,
+            "minimumRingPlateClearance": 7.5999755859375,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 11.730177879333496
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 16.192060470581056
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 16.192060470581056
+                }
+            ],
+            "confirmVisualDiagnostic": "UITK generated confirm; background=RGBA(0.180, 0.850, 0.950, 1.000); material/sprite=style-resolved",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "82ad2de4f83e8f30c3dcb07bb74f37f7ff9fbf4331c048c7f5fc536618de5cc9"
+        },
+        {
+            "profile": "ScienceFiction-UIToolkit(Clone)",
+            "technology": "UIToolkit",
+            "phase": "selected-target",
+            "encounter": "encounter.playable-battle",
+            "selectedAction": "skill.power-blow",
+            "selectedTargets": "unit.rival-band.1",
+            "width": 1920,
+            "height": 1200,
+            "uniqueColors": 18930,
+            "brightPixels": 36715,
+            "nonBackgroundPixels": 2233936,
+            "bodyPixels": 47312,
+            "hudPixels": 753108,
+            "authoritativeEventCount": 7,
+            "seed": 12345,
+            "confirmRasterContrast": 11.730177879333496,
+            "minimumPlateFeedbackClearance": 178.26861572265626,
+            "minimumRingPlateClearance": 7.5999755859375,
+            "syntheticPlatePreview": false,
+            "choiceRasterContrasts": [
+                {
+                    "control": "target-unit.rival-band.1",
+                    "ratio": 11.730177879333496
+                },
+                {
+                    "control": "target-unit.rival-band.2",
+                    "ratio": 16.192060470581056
+                },
+                {
+                    "control": "target-unit.rival-band.3",
+                    "ratio": 16.192060470581056
+                }
+            ],
+            "confirmVisualDiagnostic": "UITK generated confirm; background=RGBA(0.180, 0.850, 0.950, 1.000); material/sprite=style-resolved",
+            "stateHashBeforeConfirm": "cc3d76d7a0fea86d6b614de1a79cd337152443afede56cb3c8a6c6dd452fa1aa",
+            "eventChainHashBeforeConfirm": "6a2441cda2a332386846e4b81597b265c866b8b779f766f36c5984472e9bb9cb",
+            "stateHashAfterConfirm": "0f3920819576bcb19d445f836212e5bbbe800f7bca53d6638492a7e5b8cbcc98",
+            "eventChainHashAfterConfirm": "bf4806c619840c9f87f944f65079efd6ef2b9f66c48f8f2a7f9ef35ea906afa5",
+            "sha256": "cf7e89d5ed55b77de144d24ce9034b9775fb97e20c4e2e31bc31d61427f1a74f"
+        }
+    ],
+    "visualViolations": []
+}

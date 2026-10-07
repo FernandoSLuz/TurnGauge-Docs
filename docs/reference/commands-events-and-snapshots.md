@@ -11,7 +11,7 @@
 public sealed class ActionCostState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 One line of an action's resource ledger: how much of one resource was paid, or refunded.
 Zero-amount entries do not exist - a cost that was not charged is simply absent.
@@ -42,7 +42,7 @@ Zero-amount entries do not exist - a cost that was not charged is simply absent.
 public sealed class ActiveActionState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 One action that has been accepted and has not finished resolving: its actor, skill, locked
 targets, cost ledger, and cast window. A snapshot carries at most one of these per actor, so
@@ -124,7 +124,7 @@ this doubles as the answer to "what is that combatant doing right now".
 public sealed class ActiveCastState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 The cast window of an in-flight action. While the action is active the battle tick sits inside
 `StartTick`..`EndTick`, and the action resolves on the tick that
@@ -163,7 +163,7 @@ reaches `EndTick`.
 public sealed class BattleCommand
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleCommand.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleCommand.cs</small>
 
 One immutable decision handed to a battle: which combatant acts, on which
 tick, under which command type, and against what. Commands are the only way
@@ -241,7 +241,7 @@ it rather than holding one across ticks.
 public sealed class BattleEvent
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleEvent.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleEvent.cs</small>
 
 One immutable gameplay event emitted by the battle engine: what happened, on
 which tick, in what order, and under which root action. An event carries plain
@@ -297,7 +297,7 @@ event-chain hash, so a dropped or reordered event is detectable.
 public static class BattleIds
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleEvent.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleEvent.cs</small>
 
 The stable identifiers the battle simulation emits and reads: command types,
 event types, the reason and outcome identifiers those events reference, and the
@@ -644,7 +644,7 @@ compiles cleanly and then silently matches nothing at runtime.
 public sealed class BattleSnapshot
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 Immutable snapshot of an entire battle at one tick: teams, combatants, resources, cooldowns,
 statuses, in-flight actions, the pending work queue, and the outcome so far. Reading it cannot
@@ -838,7 +838,7 @@ and comparing two moments possible. It has no public constructor: snapshots come
 public sealed class CombatantState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 Immutable per-combatant state held by a `BattleSnapshot`: identity, team,
 health bounds, target eligibility, and formation placement. Nothing on a combatant can
@@ -913,7 +913,7 @@ be edited in place; the engine replaces the instance when any of it changes.
 public sealed class CooldownState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 One skill still on cooldown for one combatant. Presence is the whole signal: the engine drops
 the entry as soon as the cooldown expires, so any entry in a snapshot is still blocking. A
@@ -965,7 +965,7 @@ snapshot holds at most one entry per owner-and-skill pair.
 public enum DecisionControlKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerDefinitions.cs</small>
 
 Who fills a scheduled decision. `Human` holds the opportunity open for
 an externally submitted command; `Automatic` has the combatant's AI
@@ -985,7 +985,7 @@ known AI policy or the battle fails to start.
 public sealed class DecisionEntry
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Scheduling/SchedulerSnapshot.cs</small>
 
 One queued decision opportunity: an actor that became ready at a known
 tick and is waiting for its command. The queue holding these is ordered
@@ -1028,7 +1028,7 @@ entry is served, so that ordering is what decides turn order.
 public readonly struct PropertyEntry
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/TaggedValue.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/TaggedValue.cs</small>
 
 One key and one tagged value, the element type of a PropertySet. Both
 halves are required: neither an invalid key nor a null value can be stored.
@@ -1061,7 +1061,7 @@ halves are required: neither an invalid key nor a null value can be stored.
 public sealed class PropertySet : IReadOnlyList<PropertyEntry>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/TaggedValue.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/TaggedValue.cs</small>
 
 The immutable, sorted, bounded property bag every mechanics extension is
 configured with: a formula, effect resolver, target resolver, AI policy, or
@@ -1122,7 +1122,7 @@ identically, so content and replays can be compared byte for byte.
 public sealed class ResourceState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 One combatant's pool for one resource, such as mana or stamina. A snapshot holds at most one
 entry per owner-and-resource pair, so this is the whole of that pool's state.
@@ -1163,7 +1163,7 @@ entry per owner-and-resource pair, so this is the whole of that pool's state.
 public sealed class StartTeam
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/CompiledBattleContent.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/CompiledBattleContent.cs</small>
 
 One side as a battle begins: its id and the combatants it fields.
 
@@ -1206,7 +1206,7 @@ contract version during restore and is not the way to author a new one.
 public sealed class TaggedValue
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/TaggedValue.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/TaggedValue.cs</small>
 
 One immutable value carrying exactly one of the tagged payloads; it is the
 value half of a PropertySet and so the unit every mechanics extension is
@@ -1414,7 +1414,7 @@ holder.
 public enum TaggedValueTag : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/TaggedValue.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/TaggedValue.cs</small>
 
 Which payload a TaggedValue carries, and therefore the one accessor on it
 that may be read. The tag byte is written verbatim into canonical output,
@@ -1450,7 +1450,7 @@ renumbered.
 public sealed class TeamState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Model/BattleSnapshot.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Model/BattleSnapshot.cs</small>
 
 Immutable state of one team in a `BattleSnapshot`. A battle carries exactly
 two of these.

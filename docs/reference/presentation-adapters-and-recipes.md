@@ -11,7 +11,7 @@
 public sealed class BuiltInAnimationAdapter : IAnimationAdapter
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
 
 Neutral built-in animation adapter. Customers bind a stable-id key to a
 handler (their own flip-book, Animator trigger, etc.). Out of the box no
@@ -47,7 +47,7 @@ no-op, never a gameplay effect. Fully replaceable per B6-08.
 public sealed class BuiltInAudioAdapter : IAudioAdapter
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
 
 Neutral built-in audio adapter. Registered keys map to a clip played
 through an optional shared `AudioSource`; unknown keys
@@ -82,7 +82,7 @@ degrade to a single warning and a no-op.
 public sealed class BuiltInPoolAdapter : IPoolAdapter, IPoolPrototypeQuery
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
 
 Simple keyed GameObject pool. Instances are reused across acquire/release
 cycles so open/close loops leak nothing. Each key is capped at
@@ -148,7 +148,7 @@ to a single warning and a null result rather than allocating forever.
 public sealed class BuiltInVfxAdapter : IVfxAdapter
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/BuiltInPresentationAdapters.cs</small>
 
 Neutral built-in VFX adapter. Registered keys spawn a pooled instance of
 a prototype at the cue position through the shared pool; unknown keys
@@ -183,7 +183,7 @@ degrade to a single warning and a no-op.
 public enum FloatingNumberStyle
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
 
 Floating-number presentation style; purely cosmetic.
 
@@ -212,7 +212,7 @@ Floating-number presentation style; purely cosmetic.
 public interface IAnimationAdapter
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
 
 Plays a keyed animation for a beat phase. Implementations bind the
 stable-id key to their own art; a missing key must degrade silently.
@@ -239,7 +239,7 @@ byte-identical.
 public interface IAudioAdapter
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
 
 Plays a keyed one-shot sound. Timing is presentation-only. Implementations
 must degrade an unknown key to a no-op instead of throwing, and must not
@@ -262,7 +262,7 @@ touch battle state: audio can never change a battle outcome.
 public interface IPoolAdapter
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
 
 Keyed instance pool for token views, floating numbers, and pooled VFX.
 `Acquire` returns null when a key exceeds its structural
@@ -298,7 +298,7 @@ leaking instances and without destroying them.
 public interface IPoolPrototypeQuery
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
 
 An optional capability a pool may add: answering whether it holds a
 prototype for a key, without acquiring one.
@@ -331,7 +331,7 @@ per-combatant art existed.
 public interface IVfxAdapter
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
 
 Plays a keyed one-shot visual effect at the cue position. Implementations
 bind the key to their own art and must treat an unknown key as a no-op,
@@ -354,7 +354,7 @@ cosmetic only and must never feed back into anything authoritative.
 public sealed class PresentationBeatSpec
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
 
 One of the three fixed beats (In / Impact / Out) of a recipe. Timing is
 a raw Fixed64 seconds value bounded to the section 10 cap; every field is
@@ -463,7 +463,7 @@ non-authoritative and never enters any battle hash.
 public readonly struct PresentationCue
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
 
 Immutable spatial context handed to a visual adapter. It carries the
 world placement resolved by the stage plus the participant identifiers
@@ -510,7 +510,7 @@ for the beat, never any authoritative value or engine reference.
 public sealed class PresentationLog
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Adapters/PresentationAdapters.cs</small>
 
 Non-authoritative, log-once warning ledger shared by the presenter and
 its adapters. A missing adapter key degrades to a single warning per
@@ -551,7 +551,7 @@ key so a render frame never spams the console or throws.
 public sealed class PresentationRecipeDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
 
 A stable-id presentation recipe (In / Impact / Out beats) authored as a
 B4-style ScriptableObject. Recipes are excluded from B3 compilation and
@@ -616,7 +616,7 @@ output. Selectors bind an event type plus an optional mechanic id or tag.
 public sealed class PresentationRecipeSet : StableIdDefinition
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Recipes/PresentationRecipeSet.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Recipes/PresentationRecipeSet.cs</small>
 
 An explicit, ordered list of presentation recipes. Resolution reads only
 this list and never scans the project, so a set is a closed, reviewable
@@ -656,7 +656,7 @@ any battle hash.
 public enum PresentationSelectorKind
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
 
 How a recipe selector narrows an event to a specific mechanic. The
 deterministic specificity ordering is exact id > tag > event
@@ -679,7 +679,7 @@ default, matching `PresentationRecipeResolver`.
 public enum PresentationVfxAnchorKind
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Recipes/PresentationRecipeDefinition.cs</small>
 
 Where a beat's VFX anchors, resolved through the compiled slot.
 

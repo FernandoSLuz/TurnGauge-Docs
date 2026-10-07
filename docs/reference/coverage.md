@@ -4,10 +4,10 @@ Generated from source alongside the reference itself, so it cannot quietly drift
 
 | Scope | Documented | Total | Coverage |
 | --- | --- | --- | --- |
-| Public types | 433 | 436 | 99% |
-| Public members | 2708 | 2887 | 94% |
+| Public types | 419 | 420 | 100% |
+| Public members | 2695 | 2789 | 97% |
 
-Measured over the 436 types this reference publishes.
+Measured over the 420 types this reference publishes.
 
 ## What is excluded, and why
 
@@ -37,7 +37,7 @@ Coverage is reported over the published surface for the same reason: documenting
 | [Analysis and balancing](analysis-and-balancing.md) | 13 | 13 | 100% |
 | [Numerics and determinism](numerics-and-determinism.md) | 8 | 8 | 100% |
 | [Editor tools](editor-tools.md) | 2 | 2 | 100% |
-| [Other](other.md) | 82 | 79 | 96% |
+| [Other](other.md) | 66 | 65 | 98% |
 
 ## How to read this
 

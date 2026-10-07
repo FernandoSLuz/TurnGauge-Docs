@@ -3,7 +3,7 @@
 Every region of the battle interface renders values it is handed and calls nothing
 back. Read what each one draws, and what it refuses to do, before you decide which
 regions to keep. There are no prefabs to open: each region is built from the skin at
-runtime, and one whose layout token is not visible is never created at all — see
+runtime, and one whose layout token is not visible is never created at all - see
 [Fit the battle to your screen](interface-layout.md) for placing and hiding them. Each
 shot below is one region, built by its own public API and nothing else.
 
@@ -14,7 +14,7 @@ shot below is one region, built by its own public API and nothing else.
 One row per combatant: name, a health bar carrying a `health / maximum` readout, and a
 caption that folds shield amount and status count onto a single line so the region
 stays narrow on a phone. A downed combatant keeps its row, loses its raised plate,
-drops its name to the muted role and reads `Down` in its caption — defeated, not
+drops its name to the muted role and reads `Down` in its caption - defeated, not
 merely faint.
 
 [`StatusRosterView`](../reference/interface-and-widgets.md#statusrosterview) mirrors
@@ -52,8 +52,8 @@ validates or submits. It draws the
 was given and raises a plain C# event with the choice; a skill that is unaffordable,
 restricted or on cooldown is not in that value, so it is not on screen. Concede
 appears only when the value says concession is offered. At most twelve skill buttons
-are drawn (`SkillTrayView.MaximumButtons`). When the pending decision has no actor —
-an AI turn, or no decision at all — the whole tray hides itself.
+are drawn (`SkillTrayView.MaximumButtons`). When the pending decision has no actor -
+an AI turn, or no decision at all - the whole tray hides itself.
 
 !!! note "Clicking marks the selection, hovering does not"
     A click applies the `ButtonSelected` surface to that button until the tray is
@@ -66,7 +66,7 @@ an AI turn, or no decision at all — the whole tray hides itself.
 
 Name, damage range, hit chance, crit and status chance, cost, timing, and target
 shape. Rows with nothing to say are deactivated rather than blanked, so the panel
-shrinks to whatever the skill actually has — and, like the roster, sizes its height
+shrinks to whatever the skill actually has - and, like the roster, sizes its height
 to its rows.
 
 Every figure comes from a
@@ -75,7 +75,7 @@ computes from the preview API and hands over.
 [`TooltipPanelView`](../reference/interface-and-widgets.md#tooltippanelview) runs no
 preview itself, which is what keeps it on the passive side of the presenter contract.
 The panel appears when the pointer enters a tray button for which you supplied a
-tooltip, and hides when the pointer leaves — supply nothing and hovering shows
+tooltip, and hides when the pointer leaves - supply nothing and hovering shows
 nothing. It stays where its layout region puts it and does not follow the pointer.
 
 ## Feedback log
@@ -88,7 +88,7 @@ Seven lines are on screen at once (`FeedbackLogView.VisibleLines`) while
 grow without bound.
 Each line is the event's display name plus the acting combatant in brackets, both
 looked up in the display string table you pass in. Anything with no entry there prints
-its raw id — a log full of ids means missing display names, not a broken log. See
+its raw id - a log full of ids means missing display names, not a broken log. See
 [Take a decision from the player](../tutorials/take-player-input.md) for filling it.
 
 ## Result banner
@@ -108,9 +108,9 @@ its raw id — a log full of ids means missing display names, not a broken log. 
 </div>
 
 [`ResultBannerView`](../reference/interface-and-widgets.md#resultbannerview) colours
-its headline from the result id against the palette — victory `Positive`, defeat
+its headline from the result id against the palette - victory `Positive`, defeat
 `Negative`, concession `Warning`, a stalled battle `TextMuted`, anything else
-`Accent` — and glows the panel in that same colour. A new skin therefore restyles
+`Accent` - and glows the panel in that same colour. A new skin therefore restyles
 every outcome without touching a string, and a terminal result you added yourself
 still displays instead of throwing.
 The detail line is drawn only when the result carries a winning team. The banner fades
@@ -128,7 +128,7 @@ as the state justifies:
 - The shield bar appears only while shield remains, scaled against maximum health.
 - The cast bar appears only while an action is casting.
 - The gauge appears only when your driver supplies one, and brightens to `AccentAlt`
-  when it fills — you can see who is next without reading the timeline.
+  when it fills - you can see who is next without reading the timeline.
 
 Pips collapse into a final overflow pip once the status count passes
 `StatusPips.MaximumVisible` (six in every shipped skin), which stops a heavily-stacked
@@ -139,12 +139,12 @@ is unaffected by the layout regions above.
 
 !!! note "Character art is yours"
     The plate is everything TurnGauge draws over a combatant. It ships no character
-    art and invents none — you assign your own sprite to the token's
+    art and invents none - you assign your own sprite to the token's
     `SpriteRenderer`, and the plate reads on top of it. A downed token desaturates
     toward the muted role rather than only dropping alpha.
 
 ## Next
 
-- **[Fit the battle to your screen](interface-layout.md)** — place, resize or hide each region.
-- **[Palette and surfaces](skin-surfaces.md)** — the colours and shapes they are drawn from.
-- **[Bars, gauges and pips](skin-bars-and-pips.md)** — style the bars and pips used above.
+- **[Fit the battle to your screen](interface-layout.md)** - place, resize or hide each region.
+- **[Palette and surfaces](skin-surfaces.md)** - the colours and shapes they are drawn from.
+- **[Bars, gauges and pips](skin-bars-and-pips.md)** - style the bars and pips used above.

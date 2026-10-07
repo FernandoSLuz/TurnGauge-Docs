@@ -1,9 +1,9 @@
 # Other
 
-82 types in this area.
+66 types in this area.
 
 !!! abstract "On this page"
-    [AudioArtBinding](#audioartbinding) &middot; [AudioBinding](#audiobinding) &middot; [BattleCancelRelay](#battlecancelrelay) &middot; [BattleLayoutIdentity](#battlelayoutidentity) &middot; [BattlePresentationLabel](#battlepresentationlabel) &middot; [BattlePresentationProfile](#battlepresentationprofile) &middot; [BattleProfileCatalog](#battleprofilecatalog) &middot; [BattleRulesPreset](#battlerulespreset) &middot; [BattleRuntimeCheckpoint](#battleruntimecheckpoint) &middot; [BattleRuntimeController](#battleruntimecontroller) &middot; [BattleRuntimeEndReason](#battleruntimeendreason) &middot; [BattleRuntimeEndedEvent](#battleruntimeendedevent) &middot; [BattleRuntimeEventsEvent](#battleruntimeeventsevent) &middot; [BattleRuntimeFailedEvent](#battleruntimefailedevent) &middot; [BattleRuntimeFailure](#battleruntimefailure) &middot; [BattleRuntimeHumanControlRequirement](#battleruntimehumancontrolrequirement) &middot; [BattleRuntimeOperationResult](#battleruntimeoperationresult) &middot; [BattleRuntimePacing](#battleruntimepacing) &middot; [BattleRuntimeSeedPolicy](#battleruntimeseedpolicy) &middot; [BattleRuntimeSnapshotCause](#battleruntimesnapshotcause) &middot; [BattleRuntimeSnapshotEvent](#battleruntimesnapshotevent) &middot; [BattleRuntimeStartedEvent](#battleruntimestartedevent) &middot; [BattleRuntimeState](#battleruntimestate) &middot; [BattleRuntimeUnityEvent](#battleruntimeunityevent) &middot; [BattleRuntimeValueResult](#battleruntimevalueresult) &middot; [BattleStageBounds](#battlestagebounds) &middot; [BattleTheme](#battletheme) &middot; [BattleUiCommandTranslationResult](#battleuicommandtranslationresult) &middot; [BattleUiCommandTranslator](#battleuicommandtranslator) &middot; [BattleUiTechnology](#battleuitechnology) &middot; [BattleViewAction](#battleviewaction) &middot; [BattleViewBehaviour](#battleviewbehaviour) &middot; [BattleViewCombatant](#battleviewcombatant) &middot; [BattleViewCommand](#battleviewcommand) &middot; [BattleViewIntent](#battleviewintent) &middot; [BattleViewIntentKind](#battleviewintentkind) &middot; [BattleViewProjection](#battleviewprojection) &middot; [BattleViewRoster](#battleviewroster) &middot; [BattleViewSession](#battleviewsession) &middot; [BattleViewState](#battleviewstate) &middot; [CaptureStatus](#capturestatus) &middot; [CharacterArtImporter](#characterartimporter) &middot; [CurrentEditorTestCapture](#currenteditortestcapture) &middot; [CustomMechanicsRegistryProvider](#custommechanicsregistryprovider) &middot; [CustomShieldEffectResolver](#customshieldeffectresolver) &middot; [DemoIdleSheet](#demoidlesheet) &middot; [DisplayStringTableAsset](#displaystringtableasset) &middot; [Entry](#entry) &middot; [ForecastRequest](#forecastrequest) &middot; [ForecastResult](#forecastresult) &middot; [ForecastStopReason](#forecaststopreason) &middot; [GameViewResolution](#gameviewresolution) &middot; [GeneratedUiText](#generateduitext) &middot; [IBattlePointerBlocker](#ibattlepointerblocker) &middot; [IBattleStageInformationLayout](#ibattlestageinformationlayout) &middot; [IBattleStageLayout](#ibattlestagelayout) &middot; [IBattleView](#ibattleview) &middot; [IInteractiveBattleView](#iinteractivebattleview) &middot; [LowestHealthAllyTargetResolver](#lowesthealthallytargetresolver) &middot; [ParticleArtBinding](#particleartbinding) &middot; [PresentationContentGenerator](#presentationcontentgenerator) &middot; [SessionEndState](#sessionendstate) &middot; [StarterContentGenerator](#startercontentgenerator) &middot; [TargetCandidateQuery](#targetcandidatequery) &middot; [TargetPreview](#targetpreview) &middot; [TargetTreatment](#targettreatment) &middot; [TargetingPreset](#targetingpreset) &middot; [TokenArtBinding](#tokenartbinding) &middot; [ToolkitBattleView](#toolkitbattleview) &middot; [TurnGaugeDemoBootstrap](#turngaugedemobootstrap) &middot; [TurnGaugeDemoCaptureRunner](#turngaugedemocapturerunner) &middot; [TurnGaugeDemoVerification](#turngaugedemoverification) &middot; [TurnGaugeDependencyReporter](#turngaugedependencyreporter) &middot; [TurnGaugeNativeProfileMediaCapture](#turngaugenativeprofilemediacapture) &middot; [TurnGaugePackageExporter](#turngaugepackageexporter) &middot; [TurnGaugePlaytest](#turngaugeplaytest) &middot; [TurnGaugePlaytestRunner](#turngaugeplaytestrunner) &middot; [TurnGaugeSkinFontSetup](#turngaugeskinfontsetup) &middot; [TurnGaugeTextResources](#turngaugetextresources) &middot; [TurnGaugeVerificationBatch](#turngaugeverificationbatch) &middot; [UguiBattleView](#uguibattleview) &middot; [VfxBinding](#vfxbinding)
+    [AudioArtBinding](#audioartbinding) &middot; [AudioBinding](#audiobinding) &middot; [BattleCancelRelay](#battlecancelrelay) &middot; [BattleLayoutIdentity](#battlelayoutidentity) &middot; [BattlePresentationLabel](#battlepresentationlabel) &middot; [BattlePresentationProfile](#battlepresentationprofile) &middot; [BattleProfileCatalog](#battleprofilecatalog) &middot; [BattleRulesPreset](#battlerulespreset) &middot; [BattleRuntimeCheckpoint](#battleruntimecheckpoint) &middot; [BattleRuntimeController](#battleruntimecontroller) &middot; [BattleRuntimeEndReason](#battleruntimeendreason) &middot; [BattleRuntimeEndedEvent](#battleruntimeendedevent) &middot; [BattleRuntimeEventsEvent](#battleruntimeeventsevent) &middot; [BattleRuntimeFailedEvent](#battleruntimefailedevent) &middot; [BattleRuntimeFailure](#battleruntimefailure) &middot; [BattleRuntimeHumanControlRequirement](#battleruntimehumancontrolrequirement) &middot; [BattleRuntimeOperationResult](#battleruntimeoperationresult) &middot; [BattleRuntimePacing](#battleruntimepacing) &middot; [BattleRuntimeSeedPolicy](#battleruntimeseedpolicy) &middot; [BattleRuntimeSnapshotCause](#battleruntimesnapshotcause) &middot; [BattleRuntimeSnapshotEvent](#battleruntimesnapshotevent) &middot; [BattleRuntimeStartedEvent](#battleruntimestartedevent) &middot; [BattleRuntimeState](#battleruntimestate) &middot; [BattleRuntimeUnityEvent](#battleruntimeunityevent) &middot; [BattleRuntimeValueResult](#battleruntimevalueresult) &middot; [BattleStageBounds](#battlestagebounds) &middot; [BattleTheme](#battletheme) &middot; [BattleUiCommandTranslationResult](#battleuicommandtranslationresult) &middot; [BattleUiCommandTranslator](#battleuicommandtranslator) &middot; [BattleUiTechnology](#battleuitechnology) &middot; [BattleViewAction](#battleviewaction) &middot; [BattleViewBehaviour](#battleviewbehaviour) &middot; [BattleViewCombatant](#battleviewcombatant) &middot; [BattleViewCommand](#battleviewcommand) &middot; [BattleViewIntent](#battleviewintent) &middot; [BattleViewIntentKind](#battleviewintentkind) &middot; [BattleViewProjection](#battleviewprojection) &middot; [BattleViewRoster](#battleviewroster) &middot; [BattleViewSession](#battleviewsession) &middot; [BattleViewState](#battleviewstate) &middot; [CustomMechanicsRegistryProvider](#custommechanicsregistryprovider) &middot; [CustomShieldEffectResolver](#customshieldeffectresolver) &middot; [DemoIdleSheet](#demoidlesheet) &middot; [DisplayStringTableAsset](#displaystringtableasset) &middot; [Entry](#entry) &middot; [ForecastRequest](#forecastrequest) &middot; [ForecastResult](#forecastresult) &middot; [ForecastStopReason](#forecaststopreason) &middot; [GeneratedUiText](#generateduitext) &middot; [IBattlePointerBlocker](#ibattlepointerblocker) &middot; [IBattleStageInformationLayout](#ibattlestageinformationlayout) &middot; [IBattleStageLayout](#ibattlestagelayout) &middot; [IBattleView](#ibattleview) &middot; [IInteractiveBattleView](#iinteractivebattleview) &middot; [LowestHealthAllyTargetResolver](#lowesthealthallytargetresolver) &middot; [ParticleArtBinding](#particleartbinding) &middot; [SessionEndState](#sessionendstate) &middot; [TargetCandidateQuery](#targetcandidatequery) &middot; [TargetPreview](#targetpreview) &middot; [TargetTreatment](#targettreatment) &middot; [TargetingPreset](#targetingpreset) &middot; [TokenArtBinding](#tokenartbinding) &middot; [ToolkitBattleView](#toolkitbattleview) &middot; [TurnGaugeDemoBootstrap](#turngaugedemobootstrap) &middot; [UguiBattleView](#uguibattleview) &middot; [VfxBinding](#vfxbinding)
 
 ## AudioArtBinding
 
@@ -11,7 +11,7 @@
 public sealed class AudioArtBinding
 ```
 
-`TurnGauge.Presentation.Demo` &middot; <small>TurnGauge/Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
+`TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
 Binds a recipe audio key (an sfx-* clip name) to art.
 
@@ -23,7 +23,7 @@ Binds a recipe audio key (an sfx-* clip name) to art.
 public sealed class AudioBinding
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeController.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeController.cs</small>
 
 Maps one presentation audio key to a Unity audio clip.
 
@@ -35,7 +35,7 @@ Maps one presentation audio key to a Unity audio clip.
 public sealed class BattleCancelRelay : MonoBehaviour, ICancelHandler
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUGUI/BattleCancelRelay.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUGUI/BattleCancelRelay.cs</small>
 
 Routes the active input module's cancel event without depending on a particular input package.
 
@@ -54,7 +54,7 @@ Routes the active input module's cancel event without depending on a particular 
 public enum BattleLayoutIdentity
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
 
 Visual family used for starter palettes and default stage reservations.
 
@@ -71,7 +71,7 @@ Visual family used for starter palettes and default stage reservations.
 public sealed class BattlePresentationLabel
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
 
 One display text override owned by a presentation profile.
 
@@ -93,7 +93,7 @@ One display text override owned by a presentation profile.
 public sealed class BattlePresentationProfile : ScriptableObject
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
 
 Authored references only. Runtime and preview never write to this asset.
 
@@ -159,7 +159,7 @@ Authored references only. Runtime and preview never write to this asset.
 public sealed class BattleProfileCatalog : IDisposable
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattleProfileCatalog.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattleProfileCatalog.cs</small>
 
 Owns the partial runtime catalog required by a presentation profile.
 The catalog clone, selected scheduler, and encounters rewired to that
@@ -195,7 +195,7 @@ remain shared with the source and must be treated as read-only.
 public enum BattleRulesPreset
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
 
 Choice of Action Order rounds or paused ATB when deriving a profile's runtime catalog.
 
@@ -212,7 +212,7 @@ Choice of Action Order rounds or paused ATB when deriving a profile's runtime ca
 public sealed class BattleRuntimeCheckpoint
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Persistable battle restore point. The battle state is canonical bytes and
 the three hashes pin it to one compiled encounter.
@@ -266,7 +266,7 @@ the three hashes pin it to one compiled encounter.
 public sealed partial class BattleRuntimeController
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeController.Presentation.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeController.Presentation.cs</small>
 
 Coordinates authored presentation profiles, runtime views and optional stage presentation.
 
@@ -517,7 +517,7 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 public enum BattleRuntimeEndReason
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Why a normally driven battle stopped advancing.
 
@@ -535,7 +535,7 @@ Why a normally driven battle stopped advancing.
 public sealed class BattleRuntimeEndedEvent
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Payload raised when driving reaches a clean end.
 
@@ -557,7 +557,7 @@ Payload raised when driving reaches a clean end.
 public sealed class BattleRuntimeEventsEvent
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Payload raised for a non-empty event batch.
 
@@ -575,7 +575,7 @@ Payload raised for a non-empty event batch.
 public sealed class BattleRuntimeFailedEvent
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Payload raised for fail-closed runtime failures.
 
@@ -597,7 +597,7 @@ Payload raised for fail-closed runtime failures.
 public enum BattleRuntimeFailure
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Typed reasons a facade operation can fail without throwing.
 
@@ -630,7 +630,7 @@ Typed reasons a facade operation can fail without throwing.
 public enum BattleRuntimeHumanControlRequirement
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Optional fail-closed check over the control kinds authored into an
 encounter. The controller never rewrites the compiled start request.
@@ -649,7 +649,7 @@ encounter. The controller never rewrites the compiled start request.
 public class BattleRuntimeOperationResult
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Common typed result returned by controller operations.
 
@@ -687,7 +687,7 @@ Common typed result returned by controller operations.
 public enum BattleRuntimePacing
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 How the controller decides when the battle clock may advance. It changes
 pacing only: the same encounter and seed still reach the same result
@@ -706,7 +706,7 @@ through the same ticks either way.
 public enum BattleRuntimeSeedPolicy
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 How the no-argument StartBattle operation chooses its seed.
 
@@ -723,7 +723,7 @@ How the no-argument StartBattle operation chooses its seed.
 public enum BattleRuntimeSnapshotCause
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Why a snapshot was published through SnapshotChanged.
 
@@ -743,7 +743,7 @@ Why a snapshot was published through SnapshotChanged.
 public sealed class BattleRuntimeSnapshotEvent
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Payload raised whenever the authoritative snapshot changes.
 
@@ -765,7 +765,7 @@ Payload raised whenever the authoritative snapshot changes.
 public sealed class BattleRuntimeStartedEvent
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Payload raised when a battle starts or is restored.
 
@@ -795,7 +795,7 @@ Payload raised when a battle starts or is restored.
 public enum BattleRuntimeState
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 The runtime facade's externally visible lifecycle.
 
@@ -816,7 +816,7 @@ The runtime facade's externally visible lifecycle.
 public sealed class BattleRuntimeUnityEvent : UnityEvent
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 Parameterless inspector event paired with the typed C# events.
 
@@ -828,7 +828,7 @@ Parameterless inspector event paired with the typed C# events.
 public sealed class BattleRuntimeValueResult
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeContracts.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeContracts.cs</small>
 
 An operation result that also returns an immutable value.
 
@@ -846,7 +846,7 @@ An operation result that also returns an immutable value.
 public readonly struct BattleStageBounds
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 A presentation-only rectangle in normalized screen space, with a bottom-left origin.
 
@@ -890,7 +890,7 @@ A presentation-only rectangle in normalized screen space, with a bottom-left ori
 public sealed class BattleTheme
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
 
 Serializable visual values copied by views before they render.
 
@@ -965,7 +965,7 @@ Serializable visual values copied by views before they render.
 public sealed class BattleUiCommandTranslationResult
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Runtime/BattleUiCommandTranslator.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Runtime/BattleUiCommandTranslator.cs</small>
 
 Typed result of translating a presentation choice into a command.
 
@@ -991,7 +991,7 @@ Typed result of translating a presentation choice into a command.
 public static class BattleUiCommandTranslator
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Runtime/BattleUiCommandTranslator.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Runtime/BattleUiCommandTranslator.cs</small>
 
 Turns a UI choice into the exact command shape the engine expects. When
 the caller supplies no explicit targets for a resolver that requires
@@ -1020,7 +1020,7 @@ authoritative engine validation.
 public enum BattleUiTechnology
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattlePresentationProfile.cs</small>
 
 Native UI backend required by a profile's view prefab.
 
@@ -1037,7 +1037,7 @@ Native UI backend required by a profile's view prefab.
 public sealed class BattleViewAction
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 A legal action and the candidate IDs supplied by its actual resolver.
 
@@ -1092,7 +1092,7 @@ A legal action and the candidate IDs supplied by its actual resolver.
 public abstract class BattleViewBehaviour : MonoBehaviour, IInteractiveBattleView, IBattlePointerBlocker, IBattleStageLayout, IBattleStageInformationLayout
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUnity/BattleViewBehaviour.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUnity/BattleViewBehaviour.cs</small>
 
 Unity lifecycle shell. Native adapters share selection and command semantics.
 
@@ -1192,7 +1192,7 @@ Unity lifecycle shell. Native adapters share selection and command semantics.
 public sealed class BattleViewCombatant
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Immutable, renderer-independent information shown for one combatant.
 
@@ -1262,7 +1262,7 @@ Immutable, renderer-independent information shown for one combatant.
 public readonly struct BattleViewCommand
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Immutable command choice forwarded for authoritative validation.
 
@@ -1302,7 +1302,7 @@ Immutable command choice forwarded for authoritative validation.
 public readonly struct BattleViewIntent
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 A UI gesture; the host still validates the resulting command.
 
@@ -1332,7 +1332,7 @@ A UI gesture; the host still validates the resulting command.
 public enum BattleViewIntentKind
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Interaction intents understood by a battle view session.
 
@@ -1352,7 +1352,7 @@ Interaction intents understood by a battle view session.
 public static class BattleViewProjection
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Runtime/BattleViewProjection.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Runtime/BattleViewProjection.cs</small>
 
 The single snapshot-to-UI projection for every native or customer renderer.
 
@@ -1376,7 +1376,7 @@ The single snapshot-to-UI projection for every native or customer renderer.
 public static class BattleViewRoster
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewRoster.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewRoster.cs</small>
 
 Pure grouping helpers for immutable presentation rosters.
 
@@ -1388,6 +1388,13 @@ Pure grouping helpers for immutable presentation rosters.
     - `combatants` &mdash; Source projections; a null source or null entries produces no members.
     - `capacity` &mdash; Positive maximum members per page.
     - **Returns** &mdash; Frozen pages of combatant projections.
+
+`public static int FindActorPage(FrozenList<FrozenList<BattleViewCombatant>> pages, StableId? actorId)`
+
+:   Finds the page containing an actor by exact stable ID, or returns the first page.
+    - `pages` &mdash; Roster pages produced by `BuildPages`.
+    - `actorId` &mdash; Current decision actor, when one is available.
+    - **Returns** &mdash; The zero-based page containing the actor, or zero when no exact match exists.
 
 `public static FrozenList<BattleViewCombatant> ForTeam(BattleViewState state, StableId teamId)`
 
@@ -1404,7 +1411,7 @@ Pure grouping helpers for immutable presentation rosters.
 public sealed class BattleViewSession
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewSession.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewSession.cs</small>
 
 Shared interaction state survives visual tree reconstruction. Never owns an engine.
 
@@ -1475,7 +1482,7 @@ Shared interaction state survives visual tree reconstruction. Never owns an engi
 public sealed class BattleViewState
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 A complete read-only view; contains no scene objects or authority to change combat.
 
@@ -1545,181 +1552,13 @@ A complete read-only view; contains no scene objects or authority to change comb
 
 ---
 
-## CaptureStatus
-
-```csharp
-public sealed class CaptureStatus
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugeNativeProfileMediaCapture.cs</small>
-
-!!! warning "Not yet documented"
-    This type has no summary comment in the source. Its name and signature are accurate; the description is missing.
-
-**Fields**
-
-`public string completionPath`
-
-:   &mdash;
-
-`public string error`
-
-:   &mdash;
-
-`public string finishedAtUtc`
-
-:   &mdash;
-
-`public int frameCount`
-
-:   &mdash;
-
-`public string graphics`
-
-:   &mdash;
-
-`public string outputDirectory`
-
-:   &mdash;
-
-`public string phase`
-
-:   &mdash;
-
-`public string profilePath`
-
-:   &mdash;
-
-`public string startedAtUtc`
-
-:   &mdash;
-
-`public string unity`
-
-:   &mdash;
-
----
-
-## CharacterArtImporter
-
-```csharp
-public static class CharacterArtImporter
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/CharacterArtImporter.cs</small>
-
-Applies the shipped import settings to the drawn character sprites under
-`Samples/Characters`, and is safe to re-run.
-
-These are hand-authored, so unlike everything under `Samples/Art` they
-are not produced by the Internal generator and carry no seed. Their import
-settings therefore have to be set deliberately rather than emitted with the
-asset, which is what this does.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Fields**
-
-`public const SpriteAlignment CharacterPivot`
-
-:   Where a character's pivot sits. Bottom-centre, so a combatant stands on its formation slot instead of being centred on it. The nameplate reads the sprite's lower bound to find the ground line, so this is what puts the plate at a character's feet rather than across their chest.
-
-`public const float CharacterPixelsPerUnit`
-
-:   Pixels per unit for the drawn characters. These drawings are around 900-984 px, so 300 PPU stands them about 3.2 world units tall - roughly 320 reference pixels at the stage's usual 0.01 units per pixel. That is the size a combatant has to be to read as a character rather than as an icon; at the previous 750 they matched the 128 px role tokens and occupied about a tenth of the stage's height. The real height differences between them are preserved either way, so the Brawler stays shorter than the Knight rather than every character being normalised to one size.
-
-**Methods**
-
-`public static void ApplyCharacterImportSettings()`
-
-:   &mdash;
-
-`public static void WireCharacterArt()`
-
-:   Command-line entry point: applies the import settings and then rewrites the demo's serialized art bindings so the characters actually reach the stage. Fails loudly, because a batch run that half-succeeds is worse than one that stops.
-
----
-
-## CurrentEditorTestCapture
-
-```csharp
-public static class CurrentEditorTestCapture
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/CurrentEditorTestCapture.cs</small>
-
-!!! warning "Not yet documented"
-    This type has no summary comment in the source. Its name and signature are accurate; the description is missing.
-
-**Fields**
-
-`public string[] executedNames, allResultNames`
-
-:   &mdash;
-
-`public double duration`
-
-:   &mdash;
-
-`public int passed, failed, skipped, inconclusive`
-
-:   &mdash;
-
-`public string directory, filter, executeGuid, unity, graphics, startedAtUtc, sourceFingerprint, phase`
-
-:   &mdash;
-
-`public string executeGuid, completedAtUtc, unity, graphics, resultState, sourceFingerprint, xmlSha256`
-
-:   &mdash;
-
-`public bool sourcesUnchanged, scopeVerified, xmlVerified`
-
-:   &mdash;
-
-**Methods**
-
-`public static void AbandonFailedCapture(string reason)`
-
-:   &mdash;
-
-`public static object GetPendingCapture()`
-
-:   &mdash;
-
-`public void OnError(string message)`
-
-:   &mdash;
-
-`public void RunFinished(ITestResultAdaptor result)`
-
-:   &mdash;
-
-`public static object RunFixture(string filter, string label)`
-
-:   &mdash;
-
-`public void RunStarted(ITestAdaptor tests)`
-
-:   &mdash;
-
-`public void TestFinished(ITestResultAdaptor result)`
-
-:   &mdash;
-
-`public void TestStarted(ITestAdaptor test)`
-
-:   &mdash;
-
----
-
 ## CustomMechanicsRegistryProvider
 
 ```csharp
 public sealed class CustomMechanicsRegistryProvider : BattleRegistryProvider
 ```
 
-`TurnGauge.Samples.CustomMechanics` &middot; <small>TurnGauge/Samples/CustomMechanics/CustomMechanicsRegistryProvider.cs</small>
+`TurnGauge.Samples.CustomMechanics` &middot; <small>Samples/CustomMechanics/CustomMechanicsRegistryProvider.cs</small>
 
 !!! warning "Not yet documented"
     This type has no summary comment in the source. Its name and signature are accurate; the description is missing.
@@ -1732,7 +1571,7 @@ public sealed class CustomMechanicsRegistryProvider : BattleRegistryProvider
 public sealed class CustomShieldEffectResolver : IEffectResolver
 ```
 
-`TurnGauge.Samples.CustomMechanics` &middot; <small>TurnGauge/Samples/CustomMechanics/CustomShieldEffectResolver.cs</small>
+`TurnGauge.Samples.CustomMechanics` &middot; <small>Samples/CustomMechanics/CustomShieldEffectResolver.cs</small>
 
 Creates a shield equal to a configured fraction of missing health.
 
@@ -1794,7 +1633,7 @@ Creates a shield equal to a configured fraction of missing health.
 public static class DemoIdleSheet
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Samples/RuntimeDemo/DemoIdleSheet.cs</small>
+`TurnGauge.Presentation` &middot; <small>Samples/RuntimeDemo/DemoIdleSheet.cs</small>
 
 Reads the sample character art, which ships as a grid of idle frames rather than
 as a single still so combatants breathe instead of standing frozen.
@@ -1863,7 +1702,7 @@ documentation capture both call.
 public sealed class DisplayStringTableAsset : DisplayStringTableProvider
 ```
 
-`TurnGauge.Presentation.Demo` &middot; <small>TurnGauge/Samples/RuntimeDemo/DisplayStringTableAsset.cs</small>
+`TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/DisplayStringTableAsset.cs</small>
 
 The shipped serialized string-table asset the demo driver supplies to the
 presenter (specification section 3: display text comes from an explicit
@@ -1893,7 +1732,7 @@ non-authoritative data and never enters any battle hash.
 public sealed class Entry
 ```
 
-`TurnGauge.Presentation.Demo` &middot; <small>TurnGauge/Samples/RuntimeDemo/DisplayStringTableAsset.cs</small>
+`TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/DisplayStringTableAsset.cs</small>
 
 One stable-id-to-display-name pair.
 
@@ -1905,7 +1744,7 @@ One stable-id-to-display-name pair.
 public sealed class ForecastRequest
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Forecast/BattleForecast.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Forecast/BattleForecast.cs</small>
 
 The three caps that bound one `BattleForecast.Run` call: how
 far ahead it may look, and how much work and evidence it may collect
@@ -1944,7 +1783,7 @@ are reported by `BattleForecast.Run` as
 public sealed class ForecastResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Forecast/BattleForecast.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Forecast/BattleForecast.cs</small>
 
 Immutable outcome of one `BattleForecast.Run` call: where the
 lookahead stopped, the state and events of the throwaway clone it ran,
@@ -2002,7 +1841,7 @@ the engine it was forecast from.
 public enum ForecastStopReason : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Forecast/BattleForecast.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Forecast/BattleForecast.cs</small>
 
 Why one `BattleForecast.Run` call stopped. Caps are
 evaluated only at complete emitted boundaries, so a forecast never stops
@@ -2020,39 +1859,13 @@ part-way through an event.
 
 ---
 
-## GameViewResolution
-
-```csharp
-public static class GameViewResolution
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/GameViewResolution.cs</small>
-
-Sets the Game view to an exact pixel size.
-
-This exists because a capture that configures its own camera measures the harness,
-not the build: the demo frames itself from `Screen`, so a screenshot is only
-evidence if `Screen` really is the size being photographed. Unity has no public
-API for the Game view size, hence the reflection; every step is guarded so a version
-that moved these internals degrades to "size unchanged" rather than throwing.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Methods**
-
-`public static bool TrySet(int width, int height, out string report)`
-
-:   &mdash;
-
----
-
 ## GeneratedUiText
 
 ```csharp
 public sealed class GeneratedUiText : MonoBehaviour
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUGUI/GeneratedUiText.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUGUI/GeneratedUiText.cs</small>
 
 Marks adapter-owned text that participates in presentation themes.
 
@@ -2067,7 +1880,7 @@ Marks adapter-owned text that participates in presentation themes.
 public interface IBattlePointerBlocker
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Optional screen-space hit-test owned by a view.
 
@@ -2094,7 +1907,7 @@ Optional screen-space hit-test owned by a view.
 public interface IBattleStageInformationLayout
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Optional presentation-only choice to group combatant information beside the action stage.
 
@@ -2112,7 +1925,7 @@ Optional presentation-only choice to group combatant information beside the acti
 public interface IBattleStageLayout
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Optional authored stage reservation. Custom views may retain the host's framing.
 
@@ -2132,7 +1945,7 @@ Optional authored stage reservation. Custom views may retain the host's framing.
 public interface IBattleView
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Renderer-neutral contract for rendering state and forwarding intents.
 
@@ -2162,7 +1975,7 @@ Renderer-neutral contract for rendering state and forwarding intents.
 public interface IInteractiveBattleView : IBattleView
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationCore/BattleViewState.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
 
 Optional interaction surface used by a world-space presentation bridge.
 It is deliberately separate from `IBattleView` so existing
@@ -2182,7 +1995,7 @@ adapters and custom views do not acquire a new implementation burden.
 public sealed class LowestHealthAllyTargetResolver : ITargetResolver
 ```
 
-`TurnGauge.Samples.CustomMechanics` &middot; <small>TurnGauge/Samples/CustomMechanics/LowestHealthAllyTargetResolver.cs</small>
+`TurnGauge.Samples.CustomMechanics` &middot; <small>Samples/CustomMechanics/LowestHealthAllyTargetResolver.cs</small>
 
 Chooses the living targetable ally with the lowest health ratio.
 
@@ -2244,63 +2057,9 @@ Chooses the living targetable ally with the lowest health ratio.
 public sealed class ParticleArtBinding
 ```
 
-`TurnGauge.Presentation.Demo` &middot; <small>TurnGauge/Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
+`TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
 Binds a recipe VFX key (a particle-* sprite name) to art.
-
----
-
-## PresentationContentGenerator
-
-```csharp
-public static class PresentationContentGenerator
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/PresentationContentGenerator.cs</small>
-
-Non-shipped internal generator for the B6 presentation content: the
-starter recipe library (In/Impact/Out beats wired to the generated art
-adapter keys), the explicit recipe set, the shipped display string
-table, and the runtime demo scene. It is invoked head-lessly via
-`-executeMethod TurnGauge.InternalTools.Editor.PresentationContentGenerator.GeneratePresentationContent`
-and always exits the editor explicitly so batch runs never hold the
-project lock.
-
-**Fields**
-
-`public PresentationVfxAnchorKind AnchorKind`
-
-:   &mdash;
-
-`public string Animation`
-
-:   &mdash;
-
-`public string Audio`
-
-:   &mdash;
-
-`public long Duration`
-
-:   &mdash;
-
-`public bool Shake`
-
-:   &mdash;
-
-`public FloatingNumberStyle Style`
-
-:   &mdash;
-
-`public string Vfx`
-
-:   &mdash;
-
-**Methods**
-
-`public static void GeneratePresentationContent()`
-
-:   &mdash;
 
 ---
 
@@ -2310,7 +2069,7 @@ project lock.
 public enum SessionEndState
 ```
 
-`TurnGauge.Presentation.Demo` &middot; <small>TurnGauge/Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
+`TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
 Typed end-of-session states surfaced by the driver.
 
@@ -2323,51 +2082,13 @@ Typed end-of-session states surfaced by the driver.
 
 ---
 
-## StarterContentGenerator
-
-```csharp
-public static class StarterContentGenerator
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/StarterContentGenerator.cs</small>
-
-Non-shipped internal generator that authors the complete B6 starter
-content library as B4 `.asset` definitions under
-`Assets/TurnGauge/Samples/StarterContent` and compiles the result
-through the real B4 authoring pipeline. It is invoked head-lessly via
-`-executeMethod TurnGauge.InternalTools.Editor.StarterContentGenerator.GenerateStarterContent`.
-The generator writes shipped content but itself lives outside the shipped
-product root, so it uses `UnityEditor` freely.
-
-**Fields**
-
-`public int Diagnostics`
-
-:   &mdash;
-
-`public int Errors`
-
-:   &mdash;
-
-`public bool Success`
-
-:   &mdash;
-
-**Methods**
-
-`public static void GenerateStarterContent()`
-
-:   &mdash;
-
----
-
 ## TargetCandidateQuery
 
 ```csharp
 public static class TargetCandidateQuery
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Runtime/TargetCandidateQuery.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Runtime/TargetCandidateQuery.cs</small>
 
 Asks a skill's registered target resolver who it may legally hit right
 now, and whether one particular pick would be accepted.
@@ -2412,7 +2133,7 @@ RNG is drawn, so consulting it can never change a battle.
 public static class TargetPreview
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Runtime/TargetPreview.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Runtime/TargetPreview.cs</small>
 
 Turns a resolver into the way its affected set should be shown, and a
 device into the way a pick should be expressed.
@@ -2483,7 +2204,7 @@ already agrees with the engine. Eight looks, one data source.
 public enum TargetTreatment
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Runtime/TargetPreview.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Runtime/TargetPreview.cs</small>
 
 The visual language one target shape is previewed in.
 
@@ -2512,7 +2233,7 @@ at all for the other nine.
 public enum TargetingPreset
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Runtime/TargetPreview.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Runtime/TargetPreview.cs</small>
 
 How a pick is expressed. It never changes what is legal: legality stays
 with the resolver, so a project can swap presets - or offer the choice to
@@ -2534,7 +2255,7 @@ invalidating a replay.
 public sealed class TokenArtBinding
 ```
 
-`TurnGauge.Presentation.Demo` &middot; <small>TurnGauge/Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
+`TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
 Binds a starter combatant definition id to its generated
 token sprite (the token-* art keys from the art manifest).
@@ -2547,7 +2268,7 @@ token sprite (the token-* art keys from the art manifest).
 public sealed class ToolkitBattleView : BattleViewBehaviour
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUIToolkit/ToolkitBattleView.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUIToolkit/ToolkitBattleView.cs</small>
 
 A replaceable UXML surface. All decision state lives outside the visual tree.
 
@@ -2622,7 +2343,7 @@ A replaceable UXML surface. All decision state lives outside the visual tree.
 public sealed class TurnGaugeDemoBootstrap : MonoBehaviour
 ```
 
-`TurnGauge.Presentation.Demo` &middot; <small>TurnGauge/Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
+`TurnGauge.Presentation.Demo` &middot; <small>Samples/RuntimeDemo/TurnGaugeDemoBootstrap.cs</small>
 
 The runtime demo driver (specification section 9). It compiles the
 starter catalog with built-in registries explicitly at load, offers the
@@ -2761,461 +2482,13 @@ result surface as typed end-of-session states without an exception loop.
 
 ---
 
-## TurnGaugeDemoCaptureRunner
-
-```csharp
-public sealed class TurnGaugeDemoCaptureRunner : MonoBehaviour
-```
-
-`TurnGauge.InternalTools` &middot; <small>TurnGauge.InternalTools/Runtime/TurnGaugeDemoCaptureRunner.cs</small>
-
-Photographs the running demo so the idle loop and the interface can be checked
-as a player sees them, not as a file listing.
-
-The capture mirrors the documentation tool: the interface canvas is bound to the
-scene camera and the camera is rendered into a render texture, which is the only
-way an overlay canvas ends up in the same image as the stage.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Fields**
-
-`public float[] Delays`
-
-:   Seconds between shots; the authored idle loop is two seconds long.
-
-`public int Height`
-
-:   &mdash;
-
-`public string OutputDirectory`
-
-:   &mdash;
-
-`public int WarmupFrames`
-
-:   &mdash;
-
-`public int Width`
-
-:   &mdash;
-
----
-
-## TurnGaugeDemoVerification
-
-```csharp
-public static class TurnGaugeDemoVerification
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugeDemoVerification.cs</small>
-
-Two checks that a file listing cannot make: that the shipped character art really
-is the authored idle grid, and that the running demo really moves.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Methods**
-
-`public static void CaptureRunningDemo()`
-
-:   Opens the demo and photographs it while it runs. Must be launched WITHOUT -batchmode: batch mode ends the editor as soon as the executed method returns, which kills play mode before the first frame is drawn.
-
-`public static void VerifyAtlases()`
-
-:   Checks the atlases only; safe in batch mode.
-
----
-
-## TurnGaugeDependencyReporter
-
-```csharp
-public static class TurnGaugeDependencyReporter
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugeDependencyReporter.cs</small>
-
-Produces a deterministic, non-shipped dependency report from Unity's
-AssetDatabase. The report is subsequently reviewed and hash-attested.
-
-**Fields**
-
-`public int approvedPackageDependencyCount`
-
-:   &mdash;
-
-`public string[] approvedPackageIds`
-
-:   &mdash;
-
-`public int builtInDependencyCount`
-
-:   &mdash;
-
-`public string classification`
-
-:   &mdash;
-
-`public DependencyEntry[] dependencies`
-
-:   &mdash;
-
-`public int dependencyCount`
-
-:   &mdash;
-
-`public string guid`
-
-:   &mdash;
-
-`public int internalDependencyCount`
-
-:   &mdash;
-
-`public string packageId`
-
-:   &mdash;
-
-`public string path`
-
-:   &mdash;
-
-`public string product`
-
-:   &mdash;
-
-`public string productRoot`
-
-:   &mdash;
-
-`public string[] requestedBy`
-
-:   &mdash;
-
-`public int schemaVersion`
-
-:   &mdash;
-
-`public string shippedAggregate`
-
-:   &mdash;
-
-`public long shippedBytes`
-
-:   &mdash;
-
-`public int shippedFileCount`
-
-:   &mdash;
-
-`public string unityVersion`
-
-:   &mdash;
-
-`public int unknownDependencyCount`
-
-:   &mdash;
-
-**Methods**
-
-`public static void Run()`
-
-:   &mdash;
-
----
-
-## TurnGaugeNativeProfileMediaCapture
-
-```csharp
-public static class TurnGaugeNativeProfileMediaCapture
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugeNativeProfileMediaCapture.cs</small>
-
-Internal, native Unity capture of the four authored Combat Studio profiles.
-This writes an image sequence and receipts; video encoding is deliberately
-owned by the external evidence pipeline.
-
-**Fields**
-
-`public int actualFrameCount`
-
-:   &mdash;
-
-`public int frame`
-
-:   &mdash;
-
-`public string kind, instruction, utc, pixelHash, frameHash`
-
-:   &mdash;
-
-`public string postConfirmSnapshotHash, postConfirmEventChainHash`
-
-:   &mdash;
-
-`public string profilePath, unity, graphics, profileBeforeHash, profileAfterHash`
-
-:   &mdash;
-
-`public double actualSeconds, scheduledSeconds`
-
-:   &mdash;
-
-`public string assetBeforeHash, assetAfterHash, snapshotHash, eventChainHash, selectionHash`
-
-:   &mdash;
-
-`public double requestedFps, timelineSeconds`
-
-:   &mdash;
-
-`public bool sourceAssetPreserved, timestampsAreEditorClock`
-
-:   &mdash;
-
-`public string timingNote`
-
-:   &mdash;
-
-**Methods**
-
-`public static CaptureStatus GetStatus()`
-
-:   &mdash;
-
-`public static CaptureStatus Launch(string profilePath, string outputDirectory)`
-
-:   &mdash;
-
----
-
-## TurnGaugePackageExporter
-
-```csharp
-public static class TurnGaugePackageExporter
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugePackageExporter.cs</small>
-
-Batch-mode entry point. It intentionally accepts no asset-root argument:
-the only exportable root is the constant Assets/TurnGauge.
-
-**Methods**
-
-`public static void Run()`
-
-:   &mdash;
-
----
-
-## TurnGaugePlaytest
-
-```csharp
-public static class TurnGaugePlaytest
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugePlaytest.cs</small>
-
-Entry point for the playtest harness: opens the demo, sizes the game view to
-the surface being questioned, and enters play mode with the runner attached.
-
-Must be launched WITHOUT -batchmode. Batch mode ends the editor as soon as the
-executed method returns, so play mode dies before the first frame is drawn and
-the run reports success having photographed nothing.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Methods**
-
-`public static void Run()`
-
-:   Runs one playtest, configured entirely through environment variables.
-
----
-
-## TurnGaugePlaytestRunner
-
-```csharp
-public sealed class TurnGaugePlaytestRunner : MonoBehaviour
-```
-
-`TurnGauge.InternalTools` &middot; <small>TurnGauge.InternalTools/Runtime/TurnGaugePlaytestRunner.cs</small>
-
-Plays the demo the way a buyer plays it, and photographs what happened.
-
-The capture tool this sits beside photographs the first two seconds of an
-untouched screen, which is why an interface whose command deck runs off the
-bottom edge and whose enemies resolve four actions in one blur passed every
-gate that ever ran. This one opens a decision, picks a skill, picks a target,
-confirms, waits for the action to land, and shoots each of those moments -
-then writes the screen rectangle of every region and every combatant so a
-claim about the layout can be checked against a number rather than a memory.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Fields**
-
-`public readonly List<string> Findings`
-
-:   &mdash;
-
-`public int Height`
-
-:   Capture height; must already match the game view or the shot lies.
-
-`public int MaximumDecisions`
-
-:   How many human decisions to play before stopping.
-
-`public string Moment`
-
-:   &mdash;
-
-`public string Name`
-
-:   &mdash;
-
-`public string Name`
-
-:   &mdash;
-
-`public string OutputDirectory`
-
-:   Where the frames, the report, and the done marker are written.
-
-`public readonly List<NamedRect> Regions`
-
-:   &mdash;
-
-`public Rect Screen`
-
-:   &mdash;
-
-`public float StageInkFraction`
-
-:   &mdash;
-
-`public float StageLuminance`
-
-:   &mdash;
-
-`public float Time`
-
-:   &mdash;
-
-`public float TimeBudgetSeconds`
-
-:   Wall-clock ceiling, so a stalled battle still writes a report.
-
-`public readonly List<NamedRect> Tokens`
-
-:   &mdash;
-
-`public int WarmupFrames`
-
-:   Frames to let the scene settle before the first shot.
-
-`public int Width`
-
-:   Capture size; must already match the game view or the shot lies.
-
----
-
-## TurnGaugeSkinFontSetup
-
-```csharp
-public static class TurnGaugeSkinFontSetup
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugeSkinFontSetup.cs</small>
-
-Gives the runtime demo a skin preset whose only change from the shipped Ironlight
-defaults is the font.
-
-The preset's serialized fields are initialised from `BattleSkinDefaults`, so a
-freshly created asset is already the shipped look; writing one field to it is a far
-smaller change than editing the defaults themselves, and it is deleted by deleting
-the asset and clearing one scene reference.
-
-It builds a TextMeshPro font asset from each TTF first. That step is the whole point:
-`SkinTypographyTokens.Font` is a `TMP_FontAsset`, and this tool used
-to load the TTF as a legacy `UnityEngine.Font` and assign THAT. Unity serialized
-the mismatched reference without complaining -- the asset file showed a populated Font
-field -- and the typed property resolved to null every time it was read at runtime.
-The result was a demo whose type sizes matched the approved visual direction exactly
-while every letterform on screen came from Unity's fallback, which is most of why a
-build screenshot never looked like the mockup.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Methods**
-
-`public static void Apply()`
-
-:   &mdash;
-
----
-
-## TurnGaugeTextResources
-
-```csharp
-public static class TurnGaugeTextResources
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugeTextResources.cs</small>
-
-Puts TextMeshPro's essential resources into a host that has none.
-
-Publisher-only, and outside the shipped root: a buyer gets the same
-resources from Unity's own first-use prompt, and nothing here is
-redistributed. It exists because a verification host has no one to answer
-that prompt - and without the resources every label in the package draws
-with a null font asset, which renders nothing at all while every
-data-asserting test still passes.
-
-**Fields**
-
-`public const string DefaultFontAssetPath`
-
-:   Where the imported font asset lands.
-
-**Methods**
-
-`public static void EnsureEssentials()`
-
-:   Imports the essential resources unless they are already present, then reports what the host ended up with. Must be launched WITHOUT -quit. `AssetDatabase.ImportPackage` only queues the import and returns; the assets land on a later editor tick. Under -quit the editor exits first, the refresh below finds nothing, and the run reports success with no font asset on disk.
-
----
-
-## TurnGaugeVerificationBatch
-
-```csharp
-public static class TurnGaugeVerificationBatch
-```
-
-`TurnGauge.InternalTools.Editor` &middot; <small>TurnGauge.InternalTools/Editor/TurnGaugeVerificationBatch.cs</small>
-
-One command-line entry point for the checks that do not need play mode, so a
-verification pass is a single editor launch instead of three.
-
-Internal tooling: it lives outside the shipped root and is never exported.
-
-**Methods**
-
-`public static void RunHeadlessChecks()`
-
-:   Atlas geometry plus the cross-resolution layout audit.
-
----
-
 ## UguiBattleView
 
 ```csharp
 public sealed class UguiBattleView : BattleViewBehaviour
 ```
 
-`TurnGauge.UI` &middot; <small>TurnGauge/Runtime/PresentationUGUI/UguiBattleView.cs</small>
+`TurnGauge.UI` &middot; <small>Runtime/PresentationUGUI/UguiBattleView.cs</small>
 
 Prefab-authored uGUI surface. Named slots may appear anywhere in the authored tree.
 
@@ -3260,7 +2533,7 @@ Prefab-authored uGUI surface. Named slots may appear anywhere in the authored tr
 public sealed class VfxBinding
 ```
 
-`TurnGauge.Runtime` &middot; <small>TurnGauge/Runtime/Integration/BattleRuntimeController.cs</small>
+`TurnGauge.Runtime` &middot; <small>Runtime/Integration/BattleRuntimeController.cs</small>
 
 Maps one presentation VFX key to an optional pooled prototype.
 

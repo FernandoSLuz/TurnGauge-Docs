@@ -8,7 +8,7 @@
 public sealed class BattleSkinBrowserWindow : EditorWindow
 ```
 
-`TurnGauge.Editor` &middot; <small>TurnGauge/Editor/Skins/BattleSkinBrowserWindow.cs</small>
+`TurnGauge.Editor` &middot; <small>Editor/Skins/BattleSkinBrowserWindow.cs</small>
 
 Browse the shipped skins, preview them with the real shader, and turn any
 of them into an editable asset in one click.
@@ -50,7 +50,7 @@ point for authoring a custom skin.
 public static class CombatStudioSampleBuilder
 ```
 
-`TurnGauge.Editor.CombatStudio` &middot; <small>TurnGauge/Editor/CombatStudio/CombatStudioSampleBuilder.cs</small>
+`TurnGauge.Editor.CombatStudio` &middot; <small>Editor/CombatStudio/CombatStudioSampleBuilder.cs</small>
 
 Creates editable starter profiles and native view prefabs using
 Unity's asset APIs. No serialized YAML is authored by the tool.

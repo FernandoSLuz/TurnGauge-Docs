@@ -16,7 +16,7 @@ because a skill is a list of effects with timing attached.
 That range is a validation range, not a runtime clamp. A combatant whose base value sits outside it
 fails to compile; a status modifier may still push the effective value past either end mid-battle.
 
-**Assets > Create > TurnGauge > Resource** defines a spendable pool — energy, focus — in whole
+**Assets > Create > TurnGauge > Resource** defines a spendable pool - energy, focus - in whole
 units. Skill costs and `effect.resource.v1` both reference one.
 
 | Field | What it does |
@@ -29,7 +29,7 @@ the delta actually applied. A `Minimum` below zero, or a `Maximum` of zero or le
 creation rather than at compile.
 
 Keep this set small: your Battle Rules asset names one stat for each of seven roles, and every
-combatant needs a positive maximum-health and speed value — see
+combatant needs a positive maximum-health and speed value - see
 [Combatants, teams and encounters](author-combatants-and-encounters.md). Fields whose names end in
 `Raw` hold scaled integers: a value field uses 10,000 = 1.0, a chance field 1,000,000 = 100%.
 
@@ -71,7 +71,7 @@ Damage and healing also accept `potency`, `source-stat-id`, `hit-chance` and `al
 alone accepts `bypass-defense`, `bypass-shield` and `bypass-incoming-modifiers`. The shield effect
 accepts an optional `linked-status-id`: the shield is then removed with that status instance, and does
 nothing unless the same action applied the status. `effect.dispel.v1` removes up to `maximum-count`
-statuses, oldest first, that are marked `Dispellable` and match `polarity` exactly — `1` neutral, `2`
+statuses, oldest first, that are marked `Dispellable` and match `polarity` exactly - `1` neutral, `2`
 buff, `3` debuff. An empty `tags` array matches any tag, but the key must still be present.
 
 !!! warning "Scheduler adjustments are family-specific"
@@ -146,6 +146,6 @@ Resistance and immunity are authored on the combatant, not on the status. A resi
 
 ## Next
 
-- **[Skills, targets and timing](author-skills-and-targets.md)** — wrap these effects in something a combatant can use.
-- **[Combatants, teams and encounters](author-combatants-and-encounters.md)** — stat values, resistances and immunities.
-- **[Step a battle in the Workbench](balance-with-the-workbench.md)** — read the trace that shows each modifier stage in order.
+- **[Skills, targets and timing](author-skills-and-targets.md)** - wrap these effects in something a combatant can use.
+- **[Combatants, teams and encounters](author-combatants-and-encounters.md)** - stat values, resistances and immunities.
+- **[Step a battle in the Workbench](balance-with-the-workbench.md)** - read the trace that shows each modifier stage in order.

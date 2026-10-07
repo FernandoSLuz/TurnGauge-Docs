@@ -13,7 +13,7 @@
 public sealed class BattlePresenter : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattlePresenter.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattlePresenter.cs</small>
 
 The pure presentation consumer. It owns a FIFO of presentation beats
 derived deterministically from engine events and drives the visual
@@ -182,7 +182,7 @@ event chain, a replay, or a result.
 public sealed class BattleStage2D : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStage2D.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStage2D.cs</small>
 
 A neutral 2D battle stage. It maps normalized formation space to stage
 space with the documented aspect-fit rule by reusing
@@ -360,7 +360,7 @@ transform ever feeds back into anything authoritative.
 public sealed class BattleStageBackdrop : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageBackdrop.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageBackdrop.cs</small>
 
 Optional background blur for the perform moment. **Off by default and never required.**
 
@@ -403,7 +403,7 @@ register a `BackdropBlurPerformModule` to have it ride the perform beat.
 public sealed class BattleStageBloom : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageBloom.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageBloom.cs</small>
 
 Optional stage bloom and vignette. **Off by default and never required.**
 
@@ -456,7 +456,7 @@ the package adds it for you.
 public sealed class BattleStageFrame : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageFrame.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageFrame.cs</small>
 
 Controls where the battle stage sits on screen and how large it is.
 
@@ -507,7 +507,7 @@ whenever the screen, safe area, or any field changes.
 public sealed class BattleStageInformationBank
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
 
 A side rail. Entries are never discarded when the pilot capacity is exceeded.
 
@@ -533,7 +533,7 @@ A side rail. Entries are never discarded when the pilot capacity is exceeded.
 public enum BattleStageInformationBankSide
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
 
 Which side of the information rail receives a team.
 
@@ -550,7 +550,7 @@ Which side of the information rail receives a team.
 public sealed class BattleStageInformationBanks : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
 
 Optional, renderer-independent composition information for the two side
 rails. It is inert until a presenter calls `Configure`.
@@ -600,6 +600,10 @@ rails. It is inert until a presenter calls `Configure`.
 :   &mdash;
 
 `public const int FirstTopPixels`
+
+:   &mdash;
+
+`public const int MinimumHudWidthPixels`
 
 :   &mdash;
 
@@ -653,6 +657,10 @@ rails. It is inert until a presenter calls `Configure`.
 
 :   Returns one pilot cell in full-HUD pixel coordinates.
 
+`public static RectInt PilotCell()`
+
+:   Returns one pilot cell in full-HUD pixel coordinates.
+
 `public void SetSelection(StableId actor, IReadOnlyList<StableId> targets)`
 
 :   Marks the actor and selected targets for a legible plate highlight.
@@ -665,7 +673,7 @@ rails. It is inert until a presenter calls `Configure`.
 public readonly struct BattleStageInformationEntry
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
 
 One combatant retained by a side bank, including overflow entries.
 
@@ -721,7 +729,7 @@ One combatant retained by a side bank, including overflow entries.
 public readonly struct BattleStageInformationSide
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageInformationBanks.cs</small>
 
 Maps a caller-owned team identity to a rail side without naming assumptions.
 
@@ -749,7 +757,7 @@ Maps a caller-owned team identity to a rail side without naming assumptions.
 public static class BeatDeriver
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BeatDeriver.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BeatDeriver.cs</small>
 
 Pure event-to-beat derivation. Every gameplay event maps to exactly one
 beat: the resolved recipe when one matches, otherwise an instant
@@ -781,7 +789,7 @@ engine reference.
 public sealed class CombatantTokenView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/CombatantTokenView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/CombatantTokenView.cs</small>
 
 A neutral 2D token view for one combatant. It mirrors compiled slot data
 (facing, sorting) and snapshot/event state (health, shield, status pips,
@@ -810,7 +818,7 @@ It reads values only; it never computes or mutates anything authoritative.
 
 `public FormationFacing Facing`
 
-:   The facing recorded from the compiled slot. `FormationFacing.Left` is what flips the sprite renderer horizontally, so one sprite serves both sides of the field.
+:   The facing recorded from the compiled slot. The sprite is mirrored when this differs from the direction set by `SetSourceArtFacing`, so one sprite serves both sides of the field.
 
 `public int Health`
 
@@ -896,7 +904,7 @@ It reads values only; it never computes or mutates anything authoritative.
 `public void Configure()`
 
 :   Places the token from its compiled slot projection.
-    - `facing` &mdash; Compiled slot facing; Left flips the sprite horizontally.
+    - `facing` &mdash; Compiled slot facing; the sprite is mirrored when this differs from its source art direction.
     - `sortingLayerKey` &mdash; Recorded for the caller to apply; only `sortingOrder` reaches the sprite renderer.
     - `slotProjected` &mdash; Projected rest position, in reference pixels, that the token is moved to.
     - `approachProjected` &mdash; Projected approach point, recorded for callers that animate a step-in; Configure does not move the token to it.
@@ -935,6 +943,11 @@ It reads values only; it never computes or mutates anything authoritative.
 :   Updates set plate identity on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
     - `label` &mdash; The resolved display string; ignored when the token is unskinned.
     - `teamTint` &mdash; Tint that distinguishes ally from enemy, replacing the skin default.
+
+`public void SetSourceArtFacing(FormationFacing value)`
+
+:   Sets the direction painted into the source sprite, independently of its compiled slot facing.
+    - `value` &mdash; The source illustration's unmirrored direction. It persists when the stage reconfigures this token.
 
 `public void SetStagePresence(SkinStagePresenceTokens presence, int rank)`
 
@@ -976,7 +989,7 @@ It reads values only; it never computes or mutates anything authoritative.
 public sealed class PresentationBeat
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresentationBeat.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresentationBeat.cs</small>
 
 One immutable presentation beat: the event context plus the resolved
 recipe. A null recipe is an instant, no-visual beat (an unmapped event).
@@ -1021,7 +1034,7 @@ back into any authoritative hash.
 public readonly struct PresentationBeatContext
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresentationBeat.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresentationBeat.cs</small>
 
 The non-authoritative, immutable data a beat needs, extracted entirely
 from one gameplay event's property set. It carries participants and an
@@ -1116,7 +1129,7 @@ optional amount for floating numbers; it performs no simulation math.
 public sealed class PresentationStagePreset : ScriptableObject
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
 
 Closed, neutral presentation content for a battle stage. This asset is
 visual-only and is never read by simulation or included in its hashes.
@@ -1160,7 +1173,7 @@ visual-only and is never read by simulation or included in its hashes.
 public sealed class PresenterBinding
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresenterBinding.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresenterBinding.cs</small>
 
 The explicit dependency bundle a driver hands to a
 `BattlePresenter`. It carries compiled content, the
@@ -1239,7 +1252,7 @@ binding contains no engine and no authoritative mutator.
 public sealed class StageAnimationBinding
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
 
 Authored key to neutral source/target pulse binding.
 
@@ -1261,7 +1274,7 @@ Authored key to neutral source/target pulse binding.
 public enum StageAnimationSource
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
 
 Where a neutral sample animation is anchored.
 
@@ -1278,7 +1291,7 @@ Where a neutral sample animation is anchored.
 public sealed class StageAudioBinding
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
 
 Authored key to a one-shot audio clip.
 
@@ -1300,7 +1313,7 @@ Authored key to a one-shot audio clip.
 public enum StageFrameMode
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/BattleStageFrame.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/BattleStageFrame.cs</small>
 
 How the stage rectangle is derived from the screen.
 
@@ -1318,7 +1331,7 @@ How the stage rectangle is derived from the screen.
 public sealed class StagePresentationPlayback : IPerformBeatModule, IDisposable
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/StagePresentationPlayback.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/StagePresentationPlayback.cs</small>
 
 Owns a preset's isolated presentation copies and transient stage effects.
 All objects are parented below the supplied owner; no camera or scene scan
@@ -1446,7 +1459,7 @@ is used. Missing and malformed bindings degrade with one warning each.
 public sealed class StageVfxBinding
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/PresentationStagePreset.cs</small>
 
 Authored key to a stage VFX prototype.
 
@@ -1492,7 +1505,7 @@ Authored key to a stage VFX prototype.
 public sealed class TargetPreviewView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/TargetPreviewView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/TargetPreviewView.cs</small>
 
 Draws what a skill is about to hit, on the stage, before the player
 commits.
@@ -1574,7 +1587,7 @@ the engine. Eight looks, one data source, no new simulation code.
 public sealed class TargetingReticleView : MonoBehaviour
 ```
 
-`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Stage/TargetingReticleView.cs</small>
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/Stage/TargetingReticleView.cs</small>
 
 The cursor that lives on one candidate: a marker hanging over whoever is
 currently pointed at, with that candidate's position in the list beside it.

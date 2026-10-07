@@ -118,11 +118,11 @@ holding one from an earlier tick to diff against a later one is safe and cheap.
 
 The snapshot is the authority on the battle's state, and only that:
 
-- **Combat state** — teams, combatants, stats, statuses, shields, resources, cooldowns and
+- **Combat state** - teams, combatants, stats, statuses, shields, resources, cooldowns and
   actions in flight.
-- **Timing state** — the tick, the scheduler's state, and the decision queue head-first.
-- **Outcome** — `Result`, including which team won and why.
-- **Identity** — the RNG position, the content manifest hash, the event chain hash and
+- **Timing state** - the tick, the scheduler's state, and the decision queue head-first.
+- **Outcome** - `Result`, including which team won and why.
+- **Identity** - the RNG position, the content manifest hash, the event chain hash and
   `StateHash`.
 
 It holds nothing about presentation: no skin, no animation, no camera. That is why
@@ -135,8 +135,8 @@ so a mismatched replay fails loudly rather than playing back wrongly.
 
 ## Next
 
-- **[Schedulers and tempo](schedulers.md)** — what decides who is at the head of that
+- **[Schedulers and tempo](schedulers.md)** - what decides who is at the head of that
   decision queue.
-- **[Determinism](determinism.md)** — the properties the loop above is protecting.
-- **[Running a battle](../reference/running-a-battle.md)** — the full API surface for every
+- **[Determinism](determinism.md)** - the properties the loop above is protecting.
+- **[Running a battle](../reference/running-a-battle.md)** - the full API surface for every
   type named here.

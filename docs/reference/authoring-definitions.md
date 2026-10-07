@@ -11,7 +11,7 @@
 public sealed class AiConditionDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
 
 One gate on an `AiRuleDefinition`. `Kind` selects which
 single operand below is read and leaves the rest ignored, so only the operand the
@@ -27,7 +27,7 @@ consideration.
 public enum AiConditionKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3Definitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3Definitions.cs</small>
 
 The tests an AI rule may gate itself on. Each kind reads only the operands it
 needs from the condition: some take an id, some a threshold, and
@@ -51,7 +51,7 @@ needs from the condition: some take an id, some a threshold, and
 public sealed class AiPolicyDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/AiPolicyDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/AiPolicyDefinition.cs</small>
 
 One reusable answer to "what does this combatant do when it gets an
 opportunity": the registered AI policy that decides, the authored configuration
@@ -77,7 +77,7 @@ compile rather than the battle.
 public sealed class AiRuleDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
 
 One candidate action inside an `AiPolicyDefinition`: the skill to use,
 the conditions that must all hold before it may be chosen, and the ordering data
@@ -93,7 +93,7 @@ built-in priority and conditional policies read `Priority` and ignore
 public enum AuthoringValueTag : byte
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/PropertyDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/PropertyDefinitions.cs</small>
 
 Which of a `PropertyEntryDefinition`'s value slots is the live one.
 An entry carries exactly one value, and its tag names both that value's type and,
@@ -131,7 +131,7 @@ captures no value, and is reported as an invalid property tag when compiled.
 public sealed class BattleContentCatalog : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/BattleContentCatalog.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/BattleContentCatalog.cs</small>
 
 The sole root of a closed authoring graph. Compilation never searches the
 project, Resources, Addressables, folders, or loaded assemblies, so an asset
@@ -145,7 +145,7 @@ that no list here can reach does not exist to a battle.
 public enum BattleResultPolicyKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 How a battle's terminal result is decided. This schema defines only the
 last-living-team rule, and compiled battle rules reject any other value,
@@ -166,7 +166,7 @@ teams.
 public sealed class BattleRulesDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/BattleRulesDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/BattleRulesDefinition.cs</small>
 
 The one set of rules every battle compiled from a catalog runs under: which stat
 assets carry the meanings the engine needs, which registered formulas it calls
@@ -193,7 +193,7 @@ leave the battle running.
 public sealed class BattleTemplate
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Templates/BattleTemplates.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Templates/BattleTemplates.cs</small>
 
 One starting point for a battle: the turn model it runs under and the stage
 shape it is fought on, named and described together.
@@ -280,7 +280,7 @@ combatants at once. Each shipped template is a pair that works.
 public static class BattleTemplateDefaults
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Templates/BattleTemplates.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Templates/BattleTemplates.cs</small>
 
 The shipped battle templates, defined in code rather than as serialized
 assets, for the same reason the shipped skins are: no asset is redistributed,
@@ -348,7 +348,7 @@ assets. Nothing here is loaded at runtime.
 public sealed class CombatantDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/CombatantDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/CombatantDefinition.cs</small>
 
 One reusable template for a fighter: the stats and resources it carries in, the
 skills it may use, the AI policy that drives it, and what it shrugs off. It is
@@ -374,7 +374,7 @@ asset referenced from here must be reachable from the same catalog.
 public sealed class CombatantResourceEntryDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
 
 One entry in a `CombatantDefinition`'s resource default list: the resource, and how
 much of it the combatant starts with unless an encounter's team member entry overrides that
@@ -388,7 +388,7 @@ resource. Amounts here are plain integer units, not the fixed-point raw values a
 public sealed class CombatantStatEntryDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
 
 One entry in a `CombatantDefinition`'s base stat list: the stat, and the value that
 combatant carries into battle. A stat the list omits has no base value at all, so the stats a
@@ -403,7 +403,7 @@ compilation fails with a missing reference.
 public sealed class CompiledAiCondition
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3Definitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3Definitions.cs</small>
 
 One gate on an AI rule. Immutable, and evaluated against the battle state without
 changing it, so a condition can never advance or mutate a battle.
@@ -439,7 +439,7 @@ changing it, so a condition can never advance or mutate a battle.
 public sealed class CompiledAiPolicyDefinition
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3Definitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3Definitions.cs</small>
 
 One AI policy after compilation: the policy implementation to run and the rules it
 chooses between. Immutable; the engine hands it to the implementation each time an
@@ -482,7 +482,7 @@ candidates, which the engine then validates before any of them can act.
 public sealed class CompiledAiRule
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3Definitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3Definitions.cs</small>
 
 One candidate action inside an AI policy: a skill to use, the conditions that must
 all hold first, and the ordering data the policy selects with. Immutable.
@@ -535,7 +535,7 @@ all hold first, and the ordering data the policy selects with. Immutable.
 public sealed partial class CompiledBattleContent
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/CompiledBattleContent.B3.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/CompiledBattleContent.B3.cs</small>
 
 The validated, read-only content a battle runs on: rules, stats, resources,
 combatants, skills, statuses, reactions, AI policies, schedulers, and the
@@ -791,7 +791,7 @@ changes after construction, so the same content can back many battles.
 public sealed class CompiledCombatantDefinition
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3BattleRules.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3BattleRules.cs</small>
 
 The compiled, immutable archetype a combatant is spawned from: its base
 stats, starting resources, granted skills, tags, status resistances,
@@ -871,7 +871,7 @@ the order they were authored: by identifier, except
 public sealed class CompiledEffectEntry
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3Definitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3Definitions.cs</small>
 
 One authored effect slot on a skill, status, or reaction: which registered
 effect resolver runs and with which authored arguments. Immutable, and planned
@@ -914,7 +914,7 @@ multi-target skill produces one plan per target.
 public sealed class CompiledSkillDefinition
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3Definitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3Definitions.cs</small>
 
 One usable skill after compilation: its timing, how it picks and keeps targets,
 and the ordered effect entries it runs. Immutable, and looked up by id from the
@@ -976,7 +976,7 @@ compiled catalog each time the skill resolves, so a skill in flight cannot drift
 public sealed class CompiledStatusDefinition
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3Definitions.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3Definitions.cs</small>
 
 One status after compilation: how it stacks, how long it lasts, what it modifies
 while resident, and what it costs its owner. Immutable, and re-read by id on every
@@ -1091,7 +1091,7 @@ bookkeeping (stacks, remaining duration, next periodic tick) and never these rul
 public sealed class EffectDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/EffectDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/EffectDefinition.cs</small>
 
 One reusable thing that happens to a target: the registered effect resolver that
 plans the work, the authored arguments handed to it, and the tags the effect
@@ -1114,7 +1114,7 @@ effect can never set a reaction off.
 public sealed class EffectUseDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
 
 One slot in an owner's effect list: the effect to run, plus an id that names the
 slot inside that owner. `SkillDefinition`,
@@ -1132,7 +1132,7 @@ appear in the inspector is the order the effects run in.
 public sealed class EncounterDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/EncounterDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/EncounterDefinition.cs</small>
 
 One playable fight: the two sides that meet, the formation each stands in, and
 the scheduler that decides who acts when. It is what compilation turns into a
@@ -1152,7 +1152,7 @@ defeat, since the engine has no other notion of which side the player is on.
 public sealed class EncounterTeamDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
 
 One of the two sides of an `EncounterDefinition`: the roster that
 fights, the formation it fights in, and where each of its members stands. An
@@ -1167,7 +1167,7 @@ teams.
 public sealed class FormationAssignmentDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
 
 Places one team member in one formation slot. Placement is never inferred:
 every member of the team needs exactly one assignment, and no two assignments
@@ -1181,7 +1181,7 @@ in the encounter may name the same slot, even across the two teams.
 public sealed class InitialStatusApplicationDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
 
 One status already applied to a team member when the battle starts, before the
 first tick is simulated. At most one entry per status definition per member:
@@ -1195,7 +1195,7 @@ the compiler rejects a repeated status rather than merging the two entries.
 public enum InvalidTargetPolicy : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 What the engine does when a locked target is no longer valid at
 resolution. SkipInvalid drops that target and continues with the rest,
@@ -1217,7 +1217,7 @@ that is not already locked. Revalidation never consumes a random draw.
 public readonly struct MechanicsImplementationReference : IEquatable<MechanicsImplementationReference>
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 An immutable pointer from compiled content to one registered mechanics
 implementation: its stable ID plus the contract version the content was
@@ -1270,7 +1270,7 @@ content invalid instead of silently binding to it.
 public sealed class MechanicsImplementationReferenceDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
 
 The inspector form of a pointer to one registered mechanics implementation. It appears wherever
 authored content hands work to code -- the formulas on `BattleRulesDefinition`,
@@ -1287,7 +1287,7 @@ found by ID and contract version together, never by ID alone.
 public enum ModifierStage : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 Which step of the deterministic stat and formula pipeline a status
 modifier joins. FlatStat and MultiplicativeStat are the only stages that
@@ -1315,7 +1315,7 @@ application sequence, then authored index.
 public sealed class PropertyEntryDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/PropertyDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/PropertyDefinitions.cs</small>
 
 One authored property: a key, a tag saying which value slot is live, and that value.
 Every slot is serialized separately, so changing the tag in the inspector leaves the
@@ -1461,7 +1461,7 @@ copy their input, and a null array becomes an empty one.
 public sealed class PropertySetDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/PropertyDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/PropertyDefinitions.cs</small>
 
 The serialized bag of authored key/value properties on a definition: the arguments
 handed to whichever mechanics implementation that definition points at.
@@ -1505,7 +1505,7 @@ diagnostic when the owning catalog is compiled.
 public sealed class ReactionDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/ReactionDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/ReactionDefinition.cs</small>
 
 One rule that lets a combatant act out of turn: the registered reaction rule that
 judges each candidate, when in a triggering effect's resolution it is offered,
@@ -1531,7 +1531,7 @@ budgets that suppress a reaction once it would cross one.
 public enum ReactionTriggerPhase : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 Whether a reaction rule is offered before or after the primitive that
 triggers it. Before-effect reactions are fully drained before that
@@ -1552,7 +1552,7 @@ primitive.
 public enum ResistanceMatchKind : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 Whether a combatant's resistance entry is keyed by a status definition ID
 or by a status tag. Every entry that matches an incoming status
@@ -1574,7 +1574,7 @@ a tag entry for the same status both count.
 public sealed class ResourceDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/ResourceDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/ResourceDefinition.cs</small>
 
 One spendable pool a combatant carries - mana, rage, ammunition, whatever the
 game calls it - defined only by the range it may hold. It has no regeneration and
@@ -1598,7 +1598,7 @@ units, not the fixed-point raw values a stat uses.
 public sealed class SchedulerDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/SchedulerDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/SchedulerDefinition.cs</small>
 
 The turn order one encounter runs under: which scheduling model hands out
 opportunities to act, and the timing values that model reads. An
@@ -1636,7 +1636,7 @@ shape; switching to ATB requires choosing an input policy and positive threshold
 public sealed class SkillCostDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
 
 One resource a skill spends to be used. The compiler sorts a skill's cost list by
 resource, so the order entries appear in the inspector never changes the compiled
@@ -1653,7 +1653,7 @@ action resolves.
 public sealed class SkillDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/SkillDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/SkillDefinition.cs</small>
 
 One action a combatant can take: how long it takes to cast and recover, what it
 costs, who it is allowed to hit, and the ordered effects it runs on each target it
@@ -1676,7 +1676,7 @@ command is accepted, not when the action finally resolves.
 public abstract class StableIdDefinition : ScriptableObject
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/StableIdDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/StableIdDefinition.cs</small>
 
 Base class for authoring assets whose identity survives file, folder, label,
 and localization changes. Identity is never generated or repaired at runtime.
@@ -1713,7 +1713,7 @@ and localization changes. Identity is never generated or repaired at runtime.
 public sealed class StartCombatantV3
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/BattleStartV3.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/BattleStartV3.cs</small>
 
 The opening state of one combatant: the compiled definition it is built from,
 who decides for it, and the health, resources, statuses, and formation slot it
@@ -1802,7 +1802,7 @@ skills are not set here; they come from the compiled combatant definition.
 public readonly struct StartResourceV3
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/BattleStartV3.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/BattleStartV3.cs</small>
 
 One resource pool a combatant holds at the first tick, as a definition id and
 an amount. Only the pools a start combatant lists exist for it during the
@@ -1835,7 +1835,7 @@ never from here.
 public sealed class StartStatusApplicationV3
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/BattleStartV3.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/BattleStartV3.cs</small>
 
 One status a combatant already carries when the battle opens. How
 `StackCount` is realised depends on the status definition's stack
@@ -1873,7 +1873,7 @@ any other policy becomes one instance holding that many stacks.
 public sealed class StartTeamV3
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/BattleStartV3.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/BattleStartV3.cs</small>
 
 One side of a battle: a team id and the combatants fighting under it. The member
 list is sorted by combatant id, so the order it is passed in cannot change the
@@ -1905,7 +1905,7 @@ battle, and at least one member must start with health above zero.
 public enum StartingHealthMode : byte
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
 
 Chooses where a team member's starting current health comes from. The values
 start at one deliberately: a zero byte is not a mode, so an asset that lost
@@ -1926,7 +1926,7 @@ the field fails validation instead of silently meaning full health.
 public sealed class StatDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/StatDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/StatDefinition.cs</small>
 
 One named number a combatant can carry, described only by the range it may hold.
 Stats are anonymous to the engine: nothing is a health or a speed stat by name, it
@@ -1949,7 +1949,7 @@ it, so a stat asset nothing references affects no battle.
 public sealed class StatusDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/StatusDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/StatusDefinition.cs</small>
 
 One condition that rides on a combatant for a while: how it stacks, how long it
 lasts, what it modifies while resident, and what it does on its own clock. Effects
@@ -1972,7 +1972,7 @@ allows exactly one stack.
 public enum StatusDurationClock : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 Which clock decrements a status instance's remaining duration: the
 owner's action start, the owner's action end, the owner's scheduler
@@ -1995,7 +1995,7 @@ only ElapsedTicks measures the authored amount in ticks.
 public sealed class StatusModifierDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/ActionDefinitions.cs</small>
 
 One adjustment a `StatusDefinition` applies for as long as it is
 active. `Stage` decides where in the deterministic stat and formula
@@ -2012,7 +2012,7 @@ order equally.
 public enum StatusPeriodicPhase : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 When a status's periodic effects fire. Owner-action ticks run immediately
 before or after the owner's own skill effects; an elapsed boundary fires
@@ -2035,7 +2035,7 @@ status has no periodic effects, and authoring any is then invalid.
 public enum StatusPolarity : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 Whether a status reads as helpful, harmful, or neither. The engine uses
 it to select instances for dispel effects, which match exactly one
@@ -2055,7 +2055,7 @@ polarity and only remove statuses their definition marks dispellable.
 public sealed class StatusResistanceDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/CoreDefinitions.cs</small>
 
 One resistance entry on a `CombatantDefinition`, cutting the chance that a status
 lands on it. `MatchKind` selects which key field below is read and leaves the other
@@ -2071,7 +2071,7 @@ and a tag entry for the same status both count.
 public enum StatusStackPolicy : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 How a fresh application of a status interacts with an instance the target
 already carries. Refresh keeps the single instance and resets its clocks,
@@ -2099,7 +2099,7 @@ the greater Strength.
 public sealed class TargetDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TargetDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TargetDefinition.cs</small>
 
 One reusable answer to "who may this skill hit": the registered target resolver that
 picks and validates targets, plus the authored configuration handed to it. A
@@ -2120,7 +2120,7 @@ the authored properties itself, with any error failing the whole compile.
 public enum TargetLockPolicy : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Content/B3DefinitionPrimitives.cs</small>
 
 When a skill captures the target IDs it will act on. This schema defines
 only lock-at-acceptance: a compiled skill locks its targets when the
@@ -2141,7 +2141,7 @@ time it is used is decided by `InvalidTargetPolicy`.
 public sealed class TeamDefinition : StableIdDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TeamDefinition.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TeamDefinition.cs</small>
 
 One reusable roster: the members that fight as a single side, each entry a combatant
 definition plus the state it starts the battle in. The team carries no formation and no
@@ -2162,7 +2162,7 @@ in the inspector never changes the compiled encounter.
 public sealed class TeamMemberDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
 
 One roster entry of a `TeamDefinition`: which combatant definition
 is instantiated and the state it starts the battle in. The compiler sorts
@@ -2177,7 +2177,7 @@ the inspector never changes the compiled encounter.
 public sealed class TeamMemberResourceOverrideDefinition
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Definitions/TeamEncounterDefinitions.cs</small>
 
 Overrides the starting amount of one resource for a single team member. It
 replaces the default the combatant definition already declares for that

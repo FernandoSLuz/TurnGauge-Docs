@@ -15,7 +15,7 @@ an asset edit.
 | Field | What it does |
 | --- | --- |
 | **Visible** | Whether the region exists at all. See [Hide what you replace](#hide-what-you-replace) |
-| **Anchor** | Which corner or edge the region attaches to — nine values, from `TopLeft` to `BottomRight` ([`SkinAnchor`](../reference/skinning-and-appearance.md#skinanchor)) |
+| **Anchor** | Which corner or edge the region attaches to - nine values, from `TopLeft` to `BottomRight` ([`SkinAnchor`](../reference/skinning-and-appearance.md#skinanchor)) |
 | **Offset** | Distance from that anchor in reference pixels. Positive values move the region inward, so the same offset reads the same way on every anchor |
 | **Size** | Width and height in reference pixels. Zero on an axis leaves that axis to the region's own content, which is how the roster and tooltip grow to fit their rows |
 | **Scale** | Extra scale for this region alone, 0 to 2. A value of 0 resolves to 1, so scaling is not a way to hide a region |
@@ -38,8 +38,8 @@ All four shipped skins share these values, and a new preset starts from them.
 | Transport | `TopRight` | 24, 24 | 360 x 118 |
 | Tooltip | `BottomRight` | 24, 160 | 360 wide, sized to content |
 
-Those numbers are in the skin's **Reference Resolution** — 1920 x 1080 by default, never smaller
-than 320 x 240 — which drives the interface canvas scaler along with **Match Width Or Height**,
+Those numbers are in the skin's **Reference Resolution** - 1920 x 1080 by default, never smaller
+than 320 x 240 - which drives the interface canvas scaler along with **Match Width Or Height**,
 where 0 matches width, 1 matches height and the default is 0.5.
 
 !!! warning "The Skin Browser preview is not a layout preview"
@@ -60,7 +60,7 @@ separately, by its own **Respect Safe Area** field below.
 
 Set **Visible** to false on any region you are drawing yourself. A hidden region is never created,
 so it costs nothing, and the interface calls that would have fed it become no-ops rather than
-errors — you can keep forwarding snapshots and decisions while you replace one panel at a time.
+errors - you can keep forwarding snapshots and decisions while you replace one panel at a time.
 
 For a shipping build, hide the transport region or tick **Hide Transport Controls** on
 `BattleUiRoot`. That tick forces the region invisible whichever skin is assigned, which makes it
@@ -68,13 +68,13 @@ the safer switch. The scenario, seed and playback controls are development tools
 
 !!! note "TransportMount follows the transport region"
     `BattleUiRoot.TransportMount` is the rect your own controls can be parented to, and it exists
-    only while the transport region is visible. A skin swap destroys and rebuilds it — see
+    only while the transport region is visible. A skin swap destroys and rebuilds it - see
     [Restyle the interface](../tutorials/skinning-your-battle.md#what-a-swap-rebuilds).
 
 ## Frame the stage
 
 Without a frame component the presenter uses a fixed 1920 x 1080 viewport at the screen origin, so
-on any other resolution the formation is cropped or floats in dead space. Add **TurnGauge ▸
+on any other resolution the formation is cropped or floats in dead space. Add **TurnGauge >
 Battle Stage Frame** to the presenter's own object to derive the rectangle from the real screen.
 
 | Field | What it does |
@@ -123,9 +123,9 @@ if (presenter.Stage.TryGetToken(combatantId, out var token))
 
 ## Optional bloom
 
-The shipped look needs no post-processing — glow is drawn inside the interface shader, which is why
+The shipped look needs no post-processing - glow is drawn inside the interface shader, which is why
 the package depends on no post-processing package and cannot conflict with your volumes.
-**TurnGauge ▸ Battle Stage Bloom (Optional)** exists only for projects that want a softer bloom
+**TurnGauge > Battle Stage Bloom (Optional)** exists only for projects that want a softer bloom
 and vignette over the whole stage and are not already running a post stack. Nothing adds it for
 you; put it on the battle camera yourself.
 
@@ -140,8 +140,8 @@ shader cannot be loaded the frame is copied through untouched rather than going 
 
 ## Next
 
-- **[What each interface region draws](interface-regions.md)** — what you are placing, and what each
+- **[What each interface region draws](interface-regions.md)** - what you are placing, and what each
   region refuses to do.
-- **[Place combatants with the Formation Editor](place-formations.md)** — the slot layout projected
+- **[Place combatants with the Formation Editor](place-formations.md)** - the slot layout projected
   into the stage rectangle you just framed.
-- **[Palette and surfaces](skin-surfaces.md)** — the colours and shapes regions are drawn from.
+- **[Palette and surfaces](skin-surfaces.md)** - the colours and shapes regions are drawn from.

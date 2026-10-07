@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-07 14:28:00Z" end-time="2026-10-07 14:28:04Z" duration="4.3031939">
+  <test-suite type="TestSuite" id="1000" name="TurnGauge" fullname="TurnGauge" runstate="Runnable" testcasecount="1483" result="Passed" start-time="2026-10-07 14:28:00Z" end-time="2026-10-07 14:28:04Z" duration="4.303194" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2720" name="TurnGauge.Tests.EditMode.dll" fullname="/work/unity/AssetStore/TurnGauge/TurnGauge/Library/ScriptAssemblies/TurnGauge.Tests.EditMode.dll" runstate="Runnable" testcasecount="1480" result="Passed" start-time="2026-10-07 14:28:00Z" end-time="2026-10-07 14:28:04Z" duration="4.214742" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="137502" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2721" name="TurnGauge" fullname="TurnGauge" runstate="Runnable" testcasecount="1480" result="Passed" start-time="2026-10-07 14:28:00Z" end-time="2026-10-07 14:28:04Z" duration="4.212611" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2722" name="Tests" fullname="TurnGauge.Tests" runstate="Runnable" testcasecount="1480" result="Passed" start-time="2026-10-07 14:28:00Z" end-time="2026-10-07 14:28:04Z" duration="4.112682" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2723" name="EditMode" fullname="TurnGauge.Tests.EditMode" runstate="Runnable" testcasecount="623" result="Passed" start-time="2026-10-07 14:28:00Z" end-time="2026-10-07 14:28:04Z" duration="4.108556" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2532" name="NativeUiRuntimeRenderTests" fullname="TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests" classname="TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-07 14:28:00Z" end-time="2026-10-07 14:28:04Z" duration="4.007764" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties>
+                <property name="ParallelScope" value="None" />
+              </properties>
+              <test-case id="2533" name="FourAuthoredProfilesRenderAtBothRuntimeAspectsAndAcceptAuthoritativeCommand" fullname="TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests.FourAuthoredProfilesRenderAtBothRuntimeAspectsAndAcceptAuthoritativeCommand" methodname="FourAuthoredProfilesRenderAtBothRuntimeAspectsAndAcceptAuthoritativeCommand" classname="TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests" runstate="Runnable" seed="533568082" result="Passed" start-time="2026-10-07 14:27:33Z" end-time="2026-10-07 14:27:56Z" duration="22.759497" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                </properties>
+              </test-case>
+              <test-case id="2534" name="MaximumPlateInformationPreviewKeepsTheStageClearOfFeedback" fullname="TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests.MaximumPlateInformationPreviewKeepsTheStageClearOfFeedback" methodname="MaximumPlateInformationPreviewKeepsTheStageClearOfFeedback" classname="TurnGauge.Tests.EditMode.NativeUiRuntimeRenderTests" runstate="Runnable" seed="1846625118" result="Passed" start-time="2026-10-07 14:27:56Z" end-time="2026-10-07 14:28:04Z" duration="8.098045" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /work/unity/AssetStore/TurnGauge/TurnGauge/Internal/Implementation/2026-10-03-studio-design/evidence/live-gates/productization-ui-english-v14-20261007-20261007-142730-511-170cc0fa449848cfa946d2c2a62cb55d/results.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

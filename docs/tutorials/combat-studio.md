@@ -2,21 +2,22 @@
 
 Combat Studio previews semantic battle-interface slots while keeping rules and
 simulation separate. Its native workflow is currently validated on Unity 6000.3.25f1
-(Unity 6.3) with the Built-in render pipeline. A fresh capture pass is still required for
-the new Studio states, so this guide describes the steps and gates without claiming
-native-current or release approval beyond that validation.
+(Unity 6.3) with the Built-in render pipeline. The runtime profile gallery has a fresh
+English capture pass for the rendered states; editor workflow video and release approval
+remain separate requirements, so this guide describes the steps and gates without claiming
+approval beyond that validation.
 
 ## Open a profile
 
 1. Confirm that the verified editor configuration is available. If the Studio menu is
    missing, stop here and resolve the editor/package mismatch.
 2. Choose **Tools > TurnGauge > Combat Studio > Open**.
-3. Select a preset, then choose **Create Copy** to save a profile you own.
+3. Select a preset, then choose **Create copy** to save a profile you own.
 4. Choose `uGUI` for Canvas, Button, Animator and prefab workflows, or `UI Toolkit`
    for UXML, USS and UI Builder workflows.
 5. Choose the **Fantasy** or **Science Fiction** identity.
 
-In the composition section, **Dados da equipe nas laterais** is the `UseSideInformationBanks`
+In the composition section, **Side team information** is the `UseSideInformationBanks`
 presentation-only toggle. New profiles default to disabled; the supplied Fantasy uGUI and
 Fantasy UI Toolkit profiles enable it. It groups the team information beside the stage and
 never changes formation or simulation coordinates. The four starting combinations are only

@@ -16,7 +16,7 @@ The current source workflow also expects the package's editor menus to be presen
 validated native configuration. If a menu or field named below is absent, stop at that
 step and check the editor/package version. This page records the source workflow; it is
 not evidence of native support in another editor or a release approval.
-A new profile starts with **Dados da equipe nas laterais** disabled. This presentation-only
+A new profile starts with **Side team information** disabled. This presentation-only
 option is the `UseSideInformationBanks` field. The supplied Fantasy uGUI and Fantasy UI
 Toolkit sample profiles enable it; other new profiles keep the default disabled until you
 choose it.

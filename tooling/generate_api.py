@@ -25,6 +25,19 @@ KIND_BADGE = {
 MEMBER_ORDER = {'constructor': 0, 'property': 1, 'field': 2, 'event': 3, 'method': 4}
 
 
+def ascii_markdown(text):
+    """Keep generated files readable in the package's ASCII-only doc workflow."""
+    replacements = {
+        '\u2014': ' - ', '\u2013': '-', '\u2026': '...',
+        '\u2018': "'", '\u2019': "'", '\u201c': '"', '\u201d': '"',
+        '\u00d7': 'x', '\u00b7': ' / ', '\u2192': '->', '\u2193': 'v',
+        '\u25b8': '>', '\u25cf': '&#9679;',
+    }
+    result = ''.join(replacements.get(character, character) for character in text)
+    result.encode('ascii')
+    return result
+
+
 def slugify(text):
     return re.sub(r'[^a-z0-9]+', '-', text.lower()).strip('-')
 
@@ -354,9 +367,9 @@ def main(api_path, config_path, out_dir, product, tiers_path=None):
 
     total_types = sum(len(v) for v in groups.values())
     io.open(os.path.join(out_dir, 'index.md'), 'w', encoding='utf-8', newline='\n').write(
-        render_index(groups, order, product, total_types, tiers, excluded))
+        ascii_markdown(render_index(groups, order, product, total_types, tiers, excluded)))
     io.open(os.path.join(out_dir, 'coverage.md'), 'w', encoding='utf-8', newline='\n').write(
-        render_coverage(groups, order, product, api, excluded))
+        ascii_markdown(render_coverage(groups, order, product, api, excluded)))
 
     for group in order:
         entries = groups.get(group)
@@ -364,7 +377,7 @@ def main(api_path, config_path, out_dir, product, tiers_path=None):
             continue
         path = os.path.join(out_dir, slugify(group) + '.md')
         io.open(path, 'w', encoding='utf-8', newline='\n').write(
-            render_group(group, entries, product))
+            ascii_markdown(render_group(group, entries, product)))
 
     print('%s: %d types across %d areas (%d excluded as non-public-facing)' % (
         product, total_types, len([g for g in order if groups.get(g)]), excluded))

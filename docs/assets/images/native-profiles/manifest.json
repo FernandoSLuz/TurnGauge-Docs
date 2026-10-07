@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "captureSet": "runtime-profile-captures",
+  "capturedAtUtc": "2026-10-07T14:27:41Z",
+  "unity": "6000.3.25f1",
+  "renderPipeline": "Built-in",
+  "graphics": "OpenGLCore",
+  "scope": {
+    "standardFrames": 16,
+    "maximumInformationFrames": 4,
+    "identities": [
+      "Fantasy",
+      "ScienceFiction"
+    ],
+    "backends": [
+      "UGUI",
+      "UIToolkit"
+    ],
+    "aspects": [
+      "1920x1080",
+      "1920x1200"
+    ],
+    "states": [
+      "initial-action",
+      "selected-target"
+    ]
+  },
+  "sourceReceipts": [
+    {
+      "path": "evidence/captures/normal/runtime-profile-receipt.json",
+      "sourcePath": "Internal/Implementation/2026-10-03-studio-design/evidence/runtime-profile-captures/20261007-142741-506-bcbcf2061e1f41e59ba22755bf83d1df/runtime-profile-receipt.json",
+      "sha256": "9d3f0af1467db5bb6f97f529e366a95a40e7355e6743f59b962cedb5553e76e0",
+      "imageCount": 16
+    },
+    {
+      "path": "evidence/captures/maximum-info/runtime-profile-receipt.json",
+      "sourcePath": "Internal/Implementation/2026-10-03-studio-design/evidence/runtime-profile-captures/20261007-142800-815-maximum-info-790e7dc2293e4bceb5a29cb831c7b1b6/runtime-profile-receipt.json",
+      "sha256": "08d02f71fcdfc4d51c73a30e2dd1711e2e4dc2423e1edaa07b6cb2ea2f709ec4",
+      "imageCount": 4
+    }
+  ],
+  "nativeUiEnglishGate": {
+    "result": "passed",
+    "tests": "2/2",
+    "skipped": 0,
+    "sourceFingerprint": "2C78146A497927B592AD4AEDCEE641309F846DA587605A46C2FE1A8543BDB4E6",
+    "xmlSha256": "D9C27CBDC2EA536A6D82118C40EB69CA6AF4A9740EC68DB5480BE972318636E6",
+    "unity": "6000.3.25f1",
+    "graphics": "OpenGLCore",
+    "evidencePath": "evidence/native-ui-english-v14",
+    "observationRecovery": "Pipeline launch response timed out during Domain Reload; native launch GUID/completion/XML matched independently. Editor remained live; run was never restarted."
+  },
+  "visualViolations": [],
+  "images": [
+    {
+      "path": "native-profiles/initial-action-Fantasy-UGUI-1920_1080.png",
+      "sha256": "18fe4969b689de7f23a462147994ba0be168420e80d185d9c381578f502f9c07",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/initial-action-Fantasy-UGUI-1920_1200.png",
+      "sha256": "9afaaaa4c2a15174488dd728b361baef01cdd9fd3dffa46348841a66ac31a26f",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-Fantasy-UGUI-1920_1080.png",
+      "sha256": "1f0a2df24c855c83df754fe0d77171e28d80f1029f4b0e49ae2f3cb349c29813",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-Fantasy-UGUI-1920_1200.png",
+      "sha256": "e8663acc8d5c85b8c92127e64eb57943f85e59926756ab843e12dab646b766d2",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/initial-action-Fantasy-UIToolkit-1920_1080.png",
+      "sha256": "2acba6ec2b4b6bca1686cfbad2afd0c9af670bd4959f88044b8196f12a03606f",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/initial-action-Fantasy-UIToolkit-1920_1200.png",
+      "sha256": "46b2873593690fce5773f2a1d09d3b16b97d0b0edfeba8169f270a38efc8b430",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-Fantasy-UIToolkit-1920_1080.png",
+      "sha256": "267f88db74dddafcf5f1dd1dce1e4bc2909353a2565cefeda7a39bc5d0f4ce1e",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-Fantasy-UIToolkit-1920_1200.png",
+      "sha256": "6c2803e65da1f099486e56927a73002d8ffd5b06e736123934ca6f278aaded75",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/initial-action-ScienceFiction-UGUI-1920_1080.png",
+      "sha256": "dc01043f02b744706874d4dca672b2d1f88e061c53dbfc486cdfad9a004bbaf5",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/initial-action-ScienceFiction-UGUI-1920_1200.png",
+      "sha256": "857b96d672dccc6baadbf150cc4a832134f28521d3876563a23c6402a38f47f0",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-ScienceFiction-UGUI-1920_1080.png",
+      "sha256": "b7ff394373e7f5a452770c42fa094251fd4be79a897425ba3a3783d63736ebbe",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-ScienceFiction-UGUI-1920_1200.png",
+      "sha256": "cf43fd34beb019c25b8f995ec7818a0d7a03e68bbe936b01cdb7f0d653a50c61",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/initial-action-ScienceFiction-UIToolkit-1920_1080.png",
+      "sha256": "1b44a64cef58c99537b0b00b1c403162c93bd197b51b111bd04592f97d046cc0",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/initial-action-ScienceFiction-UIToolkit-1920_1200.png",
+      "sha256": "a814b77dd1445b96a4a53f0975f48e13c581496757f26baef26f8906c71c87be",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-ScienceFiction-UIToolkit-1920_1080.png",
+      "sha256": "82ad2de4f83e8f30c3dcb07bb74f37f7ff9fbf4331c048c7f5fc536618de5cc9",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/selected-target-ScienceFiction-UIToolkit-1920_1200.png",
+      "sha256": "cf7e89d5ed55b77de144d24ce9034b9775fb97e20c4e2e31bc31d61427f1a74f",
+      "sourcePhase": "normal"
+    },
+    {
+      "path": "native-profiles/maximum-info-Fantasy-UGUI-1920_1080.png",
+      "sha256": "48441c2038de5fbe6d1b9931d1e8d5ce2f9084065b2cbc0d3eff1dbee558acf3",
+      "sourcePhase": "maximum-info"
+    },
+    {
+      "path": "native-profiles/maximum-info-Fantasy-UGUI-1920_1200.png",
+      "sha256": "c27b0f39ab717d97190836e3442afb1616cc49fce95d3f1054c6ff2a95e7f9e2",
+      "sourcePhase": "maximum-info"
+    },
+    {
+      "path": "native-profiles/maximum-info-Fantasy-UIToolkit-1920_1080.png",
+      "sha256": "1b175f373d9b2918a527f5382482645ba0742c8cd9b36540a7398cbdf5594925",
+      "sourcePhase": "maximum-info"
+    },
+    {
+      "path": "native-profiles/maximum-info-Fantasy-UIToolkit-1920_1200.png",
+      "sha256": "33253f6a5a62e807d22aa259af844dac0bb46161d516887328a25b1d4a2249f9",
+      "sourcePhase": "maximum-info"
+    }
+  ]
+}

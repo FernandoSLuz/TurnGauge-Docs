@@ -11,7 +11,7 @@
 public sealed class AuthoringCompileOptions
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/AuthoringCompileOptions.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/AuthoringCompileOptions.cs</small>
 
 The two knobs a compile takes: how it can be stopped, and whether warnings
 are reported alongside errors. Neither changes the compiled output, so two
@@ -50,7 +50,7 @@ content and the same hashes.
 public sealed class AuthoringCompileRequest
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
 
 Everything `BattleContentCompiler` needs for one compile: the
 catalog root to read, the scheduler and mechanics registries that authored
@@ -107,7 +107,7 @@ diagnostic on the result instead of an exception here.
 public sealed class AuthoringCompileResult
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
 
 The outcome of one compile: either a published `CatalogSnapshot`
 or the diagnostics that stopped it, never both and never neither. The
@@ -141,7 +141,7 @@ compiler faults arrive here as failed results too, not as exceptions.
 public sealed class AuthoringDiagnostic : IEquatable<AuthoringDiagnostic>
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Validation/AuthoringDiagnostics.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Validation/AuthoringDiagnostics.cs</small>
 
 One problem found in authored content: which problem it is
 (`DiagnosticId`), how serious it is (`Severity`), and where in
@@ -223,7 +223,7 @@ into one however differently their text reads.
 public enum AuthoringDiagnosticSeverity : byte
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Validation/AuthoringDiagnostics.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Validation/AuthoringDiagnostics.cs</small>
 
 How serious an `AuthoringDiagnostic` is. A single error is decisive:
 compilation stops at the stage that produced it and returns no compiled catalog.
@@ -246,7 +246,7 @@ only values a diagnostic will accept.
 public static class AuthoringLimits
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Validation/AuthoringLimits.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Validation/AuthoringLimits.cs</small>
 
 The structural ceilings authoring compilation enforces: how many definitions one
 catalog may reference, how many teams, encounters, and formation presets it may
@@ -336,7 +336,7 @@ combatant - live on `TurnGauge.Simulation.SimulationLimits`.
 public sealed class AuthoringValidationReport
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
 
 The diagnostics half of a compile, returned by
 `BattleContentCompiler.Validate`. Validation runs the same full
@@ -367,7 +367,7 @@ reports exactly the diagnostics a compile would.
 public sealed partial class BattleContentCompiler
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/BattleContentCompiler.B4ContentMapping.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/BattleContentCompiler.B4ContentMapping.cs</small>
 
 The B4 mapping path converts captured authoring snapshots into the established B3 compiled-content model.
 
@@ -393,7 +393,7 @@ The B4 mapping path converts captured authoring snapshots into the established B
 public abstract class BattleRegistryProvider : ScriptableObject
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/BattleRegistryProvider.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/BattleRegistryProvider.cs</small>
 
 Project-owned extension point for custom schedulers and mechanics. The
 runtime controller and Battle Workbench both consume this same asset, so
@@ -415,7 +415,7 @@ registrations. TurnGauge never scans assemblies for implementations.
 public sealed class BattleRegistrySet
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/BattleRegistryProvider.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/BattleRegistryProvider.cs</small>
 
 One matched scheduler/mechanics registry pair. Keeping the pair together
 prevents a catalog from being compiled with one set and started with
@@ -456,7 +456,7 @@ another by accident.
 public sealed class CompiledAuthoringCatalog
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
 
 The published output of a successful compile: the compiled battle content,
 the registries it was resolved against, the encounters that can be started,
@@ -517,7 +517,7 @@ same catalog drive a live battle, a headless batch, and an editor preview.
 public sealed class CompiledEncounterSnapshot
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/AuthoringCompileContracts.cs</small>
 
 One authored encounter compiled into the exact inputs a battle starts from:
 the start request, the formation layout the stage is built from, and the
@@ -560,7 +560,7 @@ any number of differently seeded battles.
 public sealed class FrozenSortedIndex
 ```
 
-`TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/FrozenSortedIndex.cs</small>
+`TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Compilation/FrozenSortedIndex.cs</small>
 
 A defensively copied, key-sorted immutable index.
 

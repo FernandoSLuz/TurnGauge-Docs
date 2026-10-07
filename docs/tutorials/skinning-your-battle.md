@@ -107,9 +107,9 @@ snapshot has to be replayed and no command is affected. Passing `null` returns t
 interface to the shipped default.
 
 !!! warning "Two things a swap does not carry across"
-    - Anything you parented to `TransportMount` is destroyed with the region tree.
+   - Anything you parented to `TransportMount` is destroyed with the region tree.
       Re-parent your own controls after the swap.
-    - Token plates on the stage keep the skin they were dressed with.
+   - Token plates on the stage keep the skin they were dressed with.
       `BattlePresenter` reads `BattleUiRoot.Skin` when you call `Bind`, so re-bind the
       presenter and adopt the current snapshot again to re-dress the tokens. Floating
       numbers pick the new skin up on their next spawn.

@@ -11,7 +11,7 @@
 public sealed class CombatantStatState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Statuses/MechanicsState.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Statuses/MechanicsState.cs</small>
 
 One combatant's base value for one stat, as carried by a snapshot. The engine seeds these from
 the compiled combatant definition when the battle starts and does not rewrite them afterwards:
@@ -49,7 +49,7 @@ stat. This is therefore the base value, not the effective one.
 public sealed class ReactionContext
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Reactions/ReactionContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Reactions/ReactionContracts.cs</small>
 
 Everything a reaction rule may look at while deciding one candidate: the triggering effect tag
 and phase, the two combatants involved, the compiled catalog, and a read-only view of battle
@@ -112,7 +112,7 @@ mutate the battle.
 public sealed class ReactionEvaluation
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Reactions/ReactionContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Reactions/ReactionContracts.cs</small>
 
 A reaction rule's verdict on one candidate: whether it fires, and the source and target it will
 use if it does. Declining is a normal outcome, but an ineligible evaluation must name its reason
@@ -154,7 +154,7 @@ with a diagnostic.
 public sealed class ReactionSignature
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Reactions/ReactionContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Reactions/ReactionContracts.cs</small>
 
 The static contract an `IReactionRule` publishes: which effect tags may trigger it
 and which effect tags it can go on to emit. Content compilation builds a graph from these
@@ -192,7 +192,7 @@ signature is what buys bounded reaction chains before a battle ever runs.
 public sealed class ShieldState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Statuses/MechanicsState.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Statuses/MechanicsState.cs</small>
 
 One shield absorbing damage for a combatant. A combatant's shields are held in ascending
 `Priority` order and damage is absorbed from the front of that order, so the lowest
@@ -260,7 +260,7 @@ which is why `RemainingAmount` is always positive.
 public sealed class StatusInstanceState
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Statuses/MechanicsState.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Statuses/MechanicsState.cs</small>
 
 One live status application on one combatant: where it came from, how many stacks it carries, how
 much duration is left, and when it next ticks. Instances are immutable, so the engine replaces
@@ -343,7 +343,7 @@ the entry whenever a status is refreshed, stacked, or ticked, and it is
 public sealed class TargetContext
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Targeting/TargetContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Targeting/TargetContracts.cs</small>
 
 Everything a target resolver is given about the situation it is choosing
 for: the compiled catalog, who is acting, which skill is being used, and a
@@ -386,7 +386,7 @@ reachable from here, so a resolver cannot alter the battle it inspects.
 public enum TargetLifeState : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Targeting/TargetContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Targeting/TargetContracts.cs</small>
 
 Which life state a combatant must be in to be an eligible target. This is
 declared eligibility rather than a filter the engine reapplies on every
@@ -407,7 +407,7 @@ engine applies it when it has to re-pick a target whose lock went stale.
 public sealed class TargetRequestContract
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Targeting/TargetContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Targeting/TargetContracts.cs</small>
 
 The declared shape of one target resolver's requests: how many target IDs
 a command may carry, whether an empty request means the resolver selects,
@@ -482,7 +482,7 @@ resolver anything, so a resolver must report the same shape on every call.
 public sealed class TargetRequestResult
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Targeting/TargetContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Targeting/TargetContracts.cs</small>
 
 A target resolver's verdict on one request: either the set of targets to
 lock, or the diagnostic explaining the refusal. A rejection is an ordinary
@@ -535,7 +535,7 @@ leaves the battle untouched.
 public enum TargetTeamRelation : byte
 ```
 
-`TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Targeting/TargetContracts.cs</small>
+`TurnGauge.Simulation` &middot; <small>Runtime/Simulation/Targeting/TargetContracts.cs</small>
 
 Which combatants a target request may reach, relative to the acting
 combatant's team. `TargetTeamRelation.Ally` is "same team as
