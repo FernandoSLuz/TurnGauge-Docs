@@ -1,9 +1,49 @@
 # Interface and widgets
 
-24 types in this area.
+26 types in this area.
 
 !!! abstract "On this page"
-    [BattleNumberFormat](#battlenumberformat) &middot; [BattleUiCommandChoice](#battleuicommandchoice) &middot; [BattleUiRoot](#battleuiroot) &middot; [DecisionOptions](#decisionoptions) &middot; [DecisionShapeCompiler](#decisionshapecompiler) &middot; [DisplayStringTable](#displaystringtable) &middot; [DisplayStringTableProvider](#displaystringtableprovider) &middot; [FeedbackLogView](#feedbacklogview) &middot; [ResultBannerView](#resultbannerview) &middot; [SafeAreaFitter](#safeareafitter) &middot; [SkillCommandShape](#skillcommandshape) &middot; [SkillTitleView](#skilltitleview) &middot; [SkillTrayView](#skilltrayview) &middot; [SkinnedTokenPlate](#skinnedtokenplate) &middot; [SkinnedValueBar](#skinnedvaluebar) &middot; [SkinnedWidgetFactory](#skinnedwidgetfactory) &middot; [StatusRosterView](#statusrosterview) &middot; [TargetPickerView](#targetpickerview) &middot; [TargetShape](#targetshape) &middot; [TimelineStripView](#timelinestripview) &middot; [TooltipData](#tooltipdata) &middot; [TooltipPanelView](#tooltippanelview) &middot; [TransportBarView](#transportbarview) &middot; [UiStatusEntry](#uistatusentry)
+    [BattleEventNarrator](#battleeventnarrator) &middot; [BattleNumberFormat](#battlenumberformat) &middot; [BattleUiCommandChoice](#battleuicommandchoice) &middot; [BattleUiRoot](#battleuiroot) &middot; [DecisionOptions](#decisionoptions) &middot; [DecisionShapeCompiler](#decisionshapecompiler) &middot; [DisplayStringTable](#displaystringtable) &middot; [DisplayStringTableProvider](#displaystringtableprovider) &middot; [FeedbackLogView](#feedbacklogview) &middot; [ResultBannerView](#resultbannerview) &middot; [SafeAreaFitter](#safeareafitter) &middot; [SkillCommandShape](#skillcommandshape) &middot; [SkillTitleView](#skilltitleview) &middot; [SkillTrayView](#skilltrayview) &middot; [SkinnedTokenPlate](#skinnedtokenplate) &middot; [SkinnedValueBar](#skinnedvaluebar) &middot; [SkinnedWidgetFactory](#skinnedwidgetfactory) &middot; [StatusRosterView](#statusrosterview) &middot; [TargetPickerView](#targetpickerview) &middot; [TargetShape](#targetshape) &middot; [TimelineStripView](#timelinestripview) &middot; [TooltipData](#tooltipdata) &middot; [TooltipPanelView](#tooltippanelview) &middot; [TransportBarView](#transportbarview) &middot; [UiStatusEntry](#uistatusentry) &middot; [UiTimelineEntry](#uitimelineentry)
+
+## BattleEventNarrator
+
+```csharp
+public static class BattleEventNarrator
+```
+
+`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleEventNarrator.cs</small>
+
+Turns one battle event into a sentence a player can read.
+
+The feedback log used to render an event's raw type id followed by the
+actor in brackets - `scheduler.combatant-ready [Clockwork Rival]` -
+which is an engineer's log line shown to a customer as if it were game
+text. The values needed to say it properly were always there: the event
+carries the actor, the target, the skill, and the amount, and the display
+string table has names for all of them.
+
+Nothing here is authoritative. It reads an event that has already
+happened and produces text; it resolves nothing, computes nothing, and
+cannot change a hash. An event shape it does not recognise falls back to
+the labelled type id, so a project that adds its own events still gets a
+readable line rather than an empty one.
+
+**Methods**
+
+`public static string Describe(BattleEvent battleEvent, DisplayStringTable labels)`
+
+:   Writes one log line for `battleEvent`.
+    - `battleEvent` &mdash; The event to describe. Null returns an empty string.
+    - `labels` &mdash; Display names for the ids in the event. Null, or an id the table does not carry, falls back to the raw id text, which is what keeps an unlabelled project readable rather than blank.
+    - **Returns** &mdash; One sentence, already capitalised and punctuated. Never null.
+
+`public static bool IsPlayerFacing(BattleEvent battleEvent)`
+
+:   Whether an event belongs in the log a PLAYER reads. The engine emits its own bookkeeping alongside the things that happen in the fiction, and the log printed all of it. Roughly two lines in five were "command.accepted - Ember Vanguard", "reaction.suppressed - Pale Adept", or "Action Completed - Sable Ranger" -- engine vocabulary shown to a customer, burying the four lines that actually told them they were losing. Everything filtered here is still in the event stream, still in replays, and still shown in full by the Workbench; it is only kept out of the player's log.
+    - `battleEvent` &mdash; The event to judge. Null is not player-facing.
+    - **Returns** &mdash; True when the event is worth a line in the battle log.
+
+---
 
 ## BattleNumberFormat
 
@@ -37,33 +77,33 @@ could be mistaken for an authoritative number.
 `public static string Amount(Fixed64 value)`
 
 :   Formats a fixed-point amount, trimming trailing zeros: 5, 5.5, 5.25.
-    - `value` &mdash; The value to validate and apply.
-    - **Returns** &mdash; The validated result of the operation.
+    - `value` &mdash; Signed fixed-point battle amount to render without culture-dependent separators.
+    - **Returns** &mdash; Invariant decimal text with insignificant fractional zeroes removed.
 
 `public static string AmountRange(Fixed64 minimum, Fixed64 maximum)`
 
 :   Formats a range as "12" when both ends match, otherwise "10-14".
-    - `maximum` &mdash; The maximum value used by this operation.
-    - `minimum` &mdash; The minimum value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `maximum` &mdash; Upper fixed-point preview bound.
+    - `minimum` &mdash; Lower fixed-point preview bound.
+    - **Returns** &mdash; One rounded amount when bounds match, otherwise a hyphenated minimum-to-maximum range.
 
 `public static string Percent(Chance64 value)`
 
 :   Formats a chance as a percentage, trimming trailing zeros: 100%, 87.5%, 0.05%.
-    - `value` &mdash; The value to validate and apply.
-    - **Returns** &mdash; The validated result of the operation.
+    - `value` &mdash; Million-scale probability to convert into percentage units.
+    - **Returns** &mdash; Invariant percentage text with up to four fractional digits and no trailing zeroes.
 
 `public static string Ticks(int ticks)`
 
 :   Formats a tick count as a short duration, "12t".
-    - `ticks` &mdash; The ticks value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `ticks` &mdash; Signed simulation tick count.
+    - **Returns** &mdash; Invariant integer text followed by the `t` tick suffix.
 
 `public static string WholeAmount(Fixed64 value)`
 
 :   Formats a fixed-point amount rounded to a whole number, which is what damage and healing readouts usually want.
-    - `value` &mdash; The value to validate and apply.
-    - **Returns** &mdash; The validated result of the operation.
+    - `value` &mdash; Signed fixed-point battle amount to round to the nearest integer.
+    - **Returns** &mdash; Invariant whole-number text rounded with the simulation value's integer conversion.
 
 ---
 
@@ -133,6 +173,10 @@ shipped default skin rather than rendering unstyled boxes.
 
 **Properties**
 
+`public CompiledSkinLayout ActiveLayout`
+
+:   The layout actually in use, which is the skin's layout adapted to the current screen shape. Read this rather than `Skin.Layout` when you need to know where the interface really is, because a portrait screen stacks the bands and drops the side cells.
+
 `public DecisionOptions CurrentDecision`
 
 :   The decision currently on offer, or `DecisionOptions.None` when there is nothing to decide. Never null, so it can be read without a guard between battles.
@@ -185,6 +229,10 @@ shipped default skin rather than rendering unstyled boxes.
 
 :   The picks made so far, in pick order. A live view of the interface's own list, emptied as soon as the pick is committed or abandoned.
 
+`public bool PresentationVisible`
+
+:   Shows only this view's owned visuals without disabling a shared host object.
+
 `public StableId? ResultId`
 
 :   The id of the surfaced result, or null while none is shown. This is the simulation's own result id, not a display string; use the label table to turn it into text.
@@ -196,6 +244,10 @@ shipped default skin rather than rendering unstyled boxes.
 `public CompiledBattleSkin Skin`
 
 :   The resolved skin this interface draws with.
+
+`public Vector2 StageInsets`
+
+:   The share of the screen the interface's full-width bands claim, as a (top, bottom) pair of fractions. This is what makes the protected stage a fact rather than an intention: `BattleStageFrame` reads it instead of carrying its own margins, so a skin that grows its rail cannot silently start drawing over the combatants.
 
 `public IReadOnlyList<UiStatusEntry> StatusEntries`
 
@@ -212,6 +264,11 @@ shipped default skin rather than rendering unstyled boxes.
 `public RectTransform TransportMount`
 
 :   A mount point for host-supplied controls such as the sample's scenario picker, placed by the skin's transport region.
+
+`public Vector2 ViewportSize`
+
+:   The size the interface is actually being drawn into. This is deliberately not `Screen`. A canvas can be smaller than the screen, can belong to a camera rendering into a texture, and in batch mode reports 640x480 whatever the render target really is - so a layout that switches on Screen switches on the wrong thing and cannot be checked at any resolution but the one the window happens to be. The canvas's own rect follows the real target, so it is what decides.
+    - **Returns** &mdash; The canvas rect when it has one, then the camera's pixel rect, and only then the screen - each fallback used only when the one before it has not been established yet.
 
 **Fields**
 
@@ -244,6 +301,11 @@ shipped default skin rather than rendering unstyled boxes.
     - `skillId` &mdash; The offered skill to pick targets for.
     - **Returns** &mdash; True when the picker is now on screen.
 
+`public void BindStage(BattleStage2D stage)`
+
+:   Hands the interface the stage the reticle should sit on. The presenter calls this when it binds; a project driving the interface without a presenter can call it too, and leaving it unset simply means the cursor treatment falls back to the button row.
+    - `stage` &mdash; The stage whose tokens the reticle points at.
+
 `public void CancelTargeting()`
 
 :   Abandons the pick in progress and puts the skill tray back. Safe to call when no target is being chosen.
@@ -274,10 +336,30 @@ shipped default skin rather than rendering unstyled boxes.
 
 :   Builds the uGUI tree. Explicit so EditMode tests can call it. Awake already calls it, and a second call does nothing.
 
+`public void MoveReticle(int delta)`
+
+:   Steps the reticle to the next or previous candidate, wrapping at both ends. Does nothing under a preset that has no cursor.
+    - `delta` &mdash; How many candidates to move; negative steps back.
+
+`public void PickPointedTarget()`
+
+:   Picks whoever the reticle is currently over. This is the confirm half of the cursor treatment; the direction keys are the other half.
+
 `public void PickTarget(StableId combatantId)`
 
 :   Picks or unpicks one combatant. Ignored unless a target is being chosen and the id is one of the offered candidates, so it is safe to wire straight to a click on a stage token. A single-target skill commits on the pick itself; a multi-target skill accumulates picks until `ConfirmTargets` is called.
     - `combatantId` &mdash; The combatant the player pointed at.
+
+`public void SetCombatantPortrait(StableId combatantId, Sprite portrait)`
+
+:   Supplies the portrait a combatant's rail chip crops its face from.
+    - `combatantId` &mdash; Combatant the art belongs to.
+    - `portrait` &mdash; The sprite to crop, or null to drop one already supplied. The interface never loads art itself, so a combatant with no portrait draws a chip with a plain surface instead.
+
+`public void SetPlayerTeam(StableId teamId)`
+
+:   Names the team the rail and the health bars should read as "ours". Presentation only: it decides a colour and nothing else.
+    - `teamId` &mdash; The player's team. The default id makes every combatant read as an opponent, which is the honest answer when no perspective was supplied.
 
 `public void SetTargetCandidates(StableId skillId, IReadOnlyList<StableId> candidates)`
 
@@ -310,7 +392,7 @@ shipped default skin rather than rendering unstyled boxes.
 
 :   Returns the tooltip previously supplied for a skill.
     - `tooltip` &mdash; The stored tooltip, or the default value when none was supplied.
-    - `skillId` &mdash; The skill id value used by this operation.
+    - `skillId` &mdash; Skill identity previously supplied to `SetTooltip`.
     - **Returns** &mdash; True when `SetTooltip` has stored data for this skill.
 
 `public void UpdateStatus(BattleSnapshot snapshot, DisplayStringTable labels)`
@@ -323,6 +405,11 @@ shipped default skin rather than rendering unstyled boxes.
 
 :   Mirrors the currently-ready decision entries as the timeline.
     - `decisions` &mdash; Ready entries to mirror, kept in the order supplied; null or empty clears the strip. Only each entry's actor is read.
+
+`public void UpdateTimeline(IReadOnlyList<StableId> order)`
+
+:   Mirrors a full turn order onto the rail, soonest first.
+    - `order` &mdash; Actors in the order they will act. Null or empty clears the rail. The order is drawn exactly as given: the interface neither sorts it nor asks a scheduler anything.
 
 ---
 
@@ -435,14 +522,14 @@ table never enters any hash and never affects a simulation output.
 `public string GetOrId(StableId id)`
 
 :   Returns the label for an id, or the raw id text as a fallback.
-    - `id` &mdash; The id value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `id` &mdash; Content identity to resolve, with its canonical text serving as the fallback.
+    - **Returns** &mdash; The mapped non-empty label, or the raw stable-ID text when no label is available.
 
 `public bool TryGet(StableId id, out string text)`
 
 :   Looks up the label for an id without falling back to it.
     - `text` &mdash; The label, or null when the id is invalid or unlabelled.
-    - `id` &mdash; The id value used by this operation.
+    - `id` &mdash; Valid content identity whose localized or authored label is requested.
     - **Returns** &mdash; True when a label was found.
 
 ---
@@ -464,7 +551,7 @@ labels never enter simulation state, hashes, checkpoints, or replays.
 `public abstract DisplayStringTable Build()`
 
 :   Derives build from the supplied immutable context. Missing or illegal inputs produce the contract's typed empty/failure result.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; An immutable ID-to-label table assembled from this provider's serialized source.
 
 ---
 
@@ -539,12 +626,12 @@ It displays the result it is handed and decides nothing about the outcome.
 :   Shows a terminal result. `headlineText` and `detailText` are already-localized display strings.
     - `resultId` &mdash; Terminal result id. It only picks the tint; an id the package does not ship still displays, in the neutral accent.
     - `detailText` &mdash; Second line; when null or empty the line is hidden rather than left blank.
-    - `headlineText` &mdash; The headline text value used by this operation.
+    - `headlineText` &mdash; Primary result line, such as Victory or Defeat; null displays an empty headline.
 
 `public void Tick(float deltaSeconds)`
 
 :   Advances the fade-in by a visual delta.
-    - `deltaSeconds` &mdash; The delta seconds value used by this operation.
+    - `deltaSeconds` &mdash; Positive visual-frame duration consumed by the remaining fade time.
 
 ---
 
@@ -576,10 +663,10 @@ twice.
 `public bool Apply(int screenWidth, int screenHeight, Rect safeAreaPixels)`
 
 :   Applies a safe area explicitly. Public and parameterised so EditMode tests can verify inset maths without a device.
-    - `safeAreaPixels` &mdash; The safe area pixels value used by this operation.
-    - `screenHeight` &mdash; The screen height value used by this operation.
-    - `screenWidth` &mdash; The screen width value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `safeAreaPixels` &mdash; Device-safe rectangle expressed in bottom-left-origin screen pixels.
+    - `screenHeight` &mdash; Full render-target height in pixels.
+    - `screenWidth` &mdash; Full render-target width in pixels.
+    - **Returns** &mdash; after valid normalized anchors are applied; otherwise for zero screen dimensions or an empty area.
 
 ---
 
@@ -598,8 +685,8 @@ One legal skill command shape offered to the pending actor.
 `public SkillCommandShape(StableId skillId, TargetShape target)`
 
 :   Pairs a skill with the target shape its resolver declares.
-    - `skillId` &mdash; The skill id value used by this operation.
-    - `target` &mdash; The target value used by this operation.
+    - `skillId` &mdash; Valid compiled skill identity represented by this command option.
+    - `target` &mdash; Targeting rule the skill resolver requires before command submission.
 
 **Properties**
 
@@ -699,19 +786,51 @@ intact while still giving the player something clickable.
 
 :   The clickable component. Its listener is wired once when the entry is created and reads `SkillId` at click time, so rebinding the entry to another skill needs no rewiring.
 
-`public Text Caption`
+`public TMP_Text Caption`
 
-:   The short target description under the name, such as "one enemy".
+:   The short target description in the card's footer, such as "ONE ENEMY".
+
+`public const float CardHeight`
+
+:   Height of one skill card in reference pixels. The command deck is 280 tall, a 46-pixel log strip caps it, and the actor prompt takes a line above the cards, which is what leaves 196 rather than the 216 a card would take if it had the band to itself.
+
+`public const float CardIconSize`
+
+:   Edge of the icon plate in a card's top-left corner.
+
+`public const float CardWidth`
+
+:   Width of one skill card in reference pixels.
+
+`public const float ConcedeCardWidth`
+
+:   Width of the narrower concede card in reference pixels.
+
+`public TMP_Text Cost`
+
+:   The cost in the card's top-right corner. Always in the same place, so a player learns to look there once rather than reading each card.
+
+`public LayoutElement Element`
+
+:   The card's layout element, kept so the tray can re-measure the card against how many are being offered rather than pinning every deck to one fixed width.
 
 `public GameObject Host`
 
 :   The button's root object. Entries are pooled rather than destroyed, so this is deactivated when the tray offers fewer skills than it has already built.
 
+`public SkinSurfaceGraphic Icon`
+
+:   The icon plate in the card's top-left corner. It is recoloured per card rather than carrying art, so the deck ships no icon set and a project can drop its own sprite in without a layout change.
+
 `public const int MaximumButtons`
 
 :   Buttons drawn before the tray stops adding more.
 
-`public Text Name`
+`public const float MaximumCardWidth`
+
+:   Widest a single card is allowed to grow when few skills are offered, in reference pixels. Without a ceiling a one-skill decision would hand the whole deck to one button.
+
+`public TMP_Text Name`
 
 :   The skill's display name, resolved through the display-string table and falling back to the raw ID text.
 
@@ -743,7 +862,7 @@ intact while still giving the player something clickable.
 
 :   Offers exactly the shapes in `options`. An empty or non-human decision hides the tray entirely. Does nothing before `Build` has run, and never offers more than `MaximumButtons` skills however many are legal.
     - `labels` &mdash; Display names for the actor and skill ids; null, or an id the table does not carry, falls back to the raw id text.
-    - `options` &mdash; The options value used by this operation.
+    - `options` &mdash; Current actor's legal skill and target shapes used to populate the tray.
 
 `public void Build(CompiledBattleSkin battleSkin)`
 
@@ -757,7 +876,7 @@ intact while still giving the player something clickable.
 `public void SetSelected(StableId skillId)`
 
 :   Highlights the button for `skillId`.
-    - `skillId` &mdash; The skill id value used by this operation.
+    - `skillId` &mdash; Skill identity whose pooled button receives the selected visual state.
 
 ---
 
@@ -779,6 +898,10 @@ it reads no simulation state and computes nothing authoritative.
 
 **Properties**
 
+`public bool HasWorldTopOverride`
+
+:   True when a caller has supplied a world-space top edge.
+
 `public bool IsBuilt`
 
 :   True once `Build` has run.
@@ -788,6 +911,17 @@ it reads no simulation state and computes nothing authoritative.
 :   Status pips currently visible.
 
 **Fields**
+
+`public const float CriticalHealthFraction`
+
+:   Health fraction below which a combatant reads as in danger. The bar does not change colour there, because colour already means which side you are on. Instead its border lights and its fill pulses, which is a second channel rather than an overloaded one.
+
+`public const int DefaultSortingOrder`
+
+:   Builds the plate. Explicit so EditMode tests can construct one with no scene and no camera.
+    - `battleSkin` &mdash; Skin the plate is dressed from; null falls back to the package default.
+    - `unitsPerPixel` &mdash; World units one reference pixel is worth. It scales the whole plate, so `PlateWidth` only means 132 world units at a value of one.
+    - `verticalOffsetPixels` &mdash; Height above the token in reference pixels. It is scaled by `unitsPerPixel` too, so the plate keeps its distance as the plate is resized.
 
 `public const float PlateWidth`
 
@@ -806,10 +940,14 @@ it reads no simulation state and computes nothing authoritative.
 
 `public void Build(CompiledBattleSkin battleSkin, float unitsPerPixel, float verticalOffsetPixels)`
 
-:   Builds the plate. Explicit so EditMode tests can construct one with no scene and no camera.
-    - `battleSkin` &mdash; Skin the plate is dressed from; null falls back to the package default.
-    - `unitsPerPixel` &mdash; World units one reference pixel is worth. It scales the whole plate, so `PlateWidth` only means 132 world units at a value of one.
-    - `verticalOffsetPixels` &mdash; Height above the token in reference pixels. It is scaled by `unitsPerPixel` too, so the plate keeps its distance as the plate is resized.
+:   Creates the plate's world-space canvas, backing, labels and bars once. Later calls retain the existing hierarchy and replace only the stored skin reference.
+    - `battleSkin` &mdash; Skin used for initial typography and styling, or null for the default skin.
+    - `unitsPerPixel` &mdash; Local world-space scale applied to each canvas pixel during the first build.
+    - `verticalOffsetPixels` &mdash; Initial vertical offset from the parent origin, in canvas pixels scaled by unitsPerPixel.
+
+`public void ClearWorldTopOverride()`
+
+:   Restores the last ground-relative placement after a world-top override.
 
 `public void Pulse(Transform target)`
 
@@ -819,29 +957,71 @@ it reads no simulation state and computes nothing authoritative.
 `public void SetCast(float fraction, bool visible)`
 
 :   Shows cast progress in [0,1], or hides the bar.
-    - `fraction` &mdash; The fraction value used by this operation.
-    - `visible` &mdash; The visible value used by this operation.
+    - `fraction` &mdash; Normalized cast completion forwarded to the cast bar when visible.
+    - `visible` &mdash; Whether the cast-progress row participates in layout.
 
 `public void SetGauge(float fraction, bool visible)`
 
 :   Shows the scheduler gauge in [0,1], or hides it.
-    - `fraction` &mdash; The fraction value used by this operation.
-    - `visible` &mdash; The visible value used by this operation.
+    - `fraction` &mdash; Normalized scheduler readiness forwarded to the gauge bar.
+    - `visible` &mdash; Whether the scheduler gauge participates in layout.
+
+`public void SetGroundPlacement()`
+
+:   Moves the plate to a combatant's ground line and sizes it to their art. A nameplate pinned to a fixed offset above the token origin worked only while every combatant was the same 84-pixel square. Once they are painted illustrations of different heights, the plate has to follow the body it belongs to or it ends up across somebody's chest.
+    - `widthPixels` &mdash; Width to draw at, in reference pixels. It is widened to 1.4 times the art so the name has room beside the readout, and floored at `PlateWidth` so a narrow combatant still gets a legible plate. Zero or less keeps the current width.
+    - `groundLinePixels` &mdash; Where the combatant's feet are, relative to the token origin, in reference pixels. Art pivoted at its feet reports zero here.
+    - `overlapPixels` &mdash; How far the plate's top edge rises above that ground line. A small positive value tucks the plate under the body it belongs to.
+    - `unitsPerPixel` &mdash; World units one reference pixel is worth.
+
+`public void SetGroundPlacement()`
+
+:   Places the plate using the visual ground line and its horizontal centre, both relative to the token root. The four-argument overload remains the compatibility path for callers that use the token origin.
+    - `widthPixels` &mdash; Width to draw in reference pixels; zero keeps the current width.
+    - `groundLinePixels` &mdash; Visual ground line relative to the token origin.
+    - `overlapPixels` &mdash; How far the plate rises over the visual ground line.
+    - `unitsPerPixel` &mdash; World units per reference pixel.
+    - `centreXPixels` &mdash; Visual ground centre relative to the token origin.
 
 `public void SetLabel(string text)`
 
 :   Updates set label on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
-    - `text` &mdash; The text value used by this operation.
+    - `text` &mdash; Combatant display name written to the plate; null becomes empty.
+
+`public void SetSelectionHighlight(bool actor, bool target)`
+
+:   Highlights this plate for actor or target selection without changing its authored type scale.
+
+`public void SetSortingOrder(int order)`
+
+:   Puts this plate on a specific order, still above the bodies.
+    - `order` &mdash; Canvas sorting order to draw the plate at.
 
 `public void SetTeamTint(Color tint)`
 
 :   Tints the plate for a team. Keeps ally and enemy readable at a glance without requiring per-combatant art.
     - `tint` &mdash; Colour applied to the combatant's name label; the bars keep the colours the skin gave them.
 
+`public void SetWorldTopOverride(Vector3? worldTop)`
+
+:   Pins the plate's top edge to a world-space point. The authored canvas size and typography remain unchanged; only the plate position moves. Pass `null` to restore the normal ground-relative placement.
+    - `worldTop` &mdash; World-space position of the plate top edge, or null to cancel the override.
+
+`public void SetWorldTopOverride(Vector3? worldTop, float unitsPerPixel, float widthPixels)`
+
+:   Sets a world-top override while cancelling token scale for authored plate sizing.
+    - `worldTop` &mdash; World-space top edge, or null to restore ground placement.
+    - `unitsPerPixel` &mdash; World units per authored pixel. Parent scaling is cancelled on both axes.
+    - `widthPixels` &mdash; Optional authored width; zero preserves the current width.
+
+`public void StopPulse()`
+
+:   Cancels this plate's neutral pulse and restores its resting scale.
+
 `public void Tick(float deltaSeconds)`
 
 :   Advances plate animation. Driven by the presenter's visual clock so pause and speed apply, and so tests can step it deterministically.
-    - `deltaSeconds` &mdash; The delta seconds value used by this operation.
+    - `deltaSeconds` &mdash; Positive presentation-clock duration applied to all bars and the impact pulse.
 
 ---
 
@@ -871,7 +1051,7 @@ derives from the skin, so `Reduce Motion` or a zero
 
 :   True while the fill is still moving toward its target.
 
-`public Text Readout`
+`public TMP_Text Readout`
 
 :   The numeric readout, or null when the bar was built without one.
 
@@ -884,34 +1064,44 @@ derives from the skin, so `Reduce Motion` or a zero
 `public void Build(CompiledBattleSkin skin, SkinBarTokens barTokens, bool withReadout)`
 
 :   Builds the bar's children. Explicit rather than done in Awake so EditMode tests can construct and drive a bar with no scene.
-    - `barTokens` &mdash; The bar tokens value used by this operation.
-    - `skin` &mdash; The skin value used by this operation.
-    - `withReadout` &mdash; The with readout value used by this operation.
+    - `barTokens` &mdash; Fill, ghost, track, border, glow, and animation tokens for this bar role.
+    - `skin` &mdash; Compiled surface, typography, and motion tokens shared by the widget hierarchy.
+    - `withReadout` &mdash; Whether to create centered numeric text over the fill.
+
+`public void SetFillAlpha(float alpha)`
+
+:   Fades the fill without changing its colour, which is what lets a critical bar breathe while still reading as its team's colour.
+    - `alpha` &mdash; Opacity in zero to one applied to the fill graphic only.
 
 `public void SetFillColor(Color primary)`
 
 :   Replaces the fill colour, keeping shape, glow, and geometry.
-    - `primary` &mdash; The primary value used by this operation.
+    - `primary` &mdash; Replacement primary and secondary fill color.
 
 `public void SetFraction(float fraction)`
 
 :   Animates toward `fraction`. A decrease leaves a ghost at the previous value that catches up shortly after, so the player can see how much was just taken.
-    - `fraction` &mdash; The fraction value used by this operation.
+    - `fraction` &mdash; Target fill in normalized units; values outside zero to one are clamped.
 
 `public void SetFractionImmediate(float fraction)`
 
 :   Snaps to `fraction` with no animation.
-    - `fraction` &mdash; The fraction value used by this operation.
+    - `fraction` &mdash; Immediate fill and ghost value, clamped to zero through one.
 
 `public void SetReadout(string text)`
 
 :   Sets the numeric readout text, if the bar has one.
-    - `text` &mdash; The text value used by this operation.
+    - `text` &mdash; Numeric or status text to display; null becomes empty.
+
+`public void SetTrackStrokeColor(Color stroke)`
+
+:   Replaces the track's border colour, keeping every other value. This is the channel a bar uses to say "in danger" without touching its fill, which already means something else: on a team-coloured health bar the fill says whose side you are on, so the warning has to arrive somewhere other than the fill.
+    - `stroke` &mdash; Replacement border colour for the bar's track.
 
 `public void Tick(float deltaSeconds)`
 
 :   Advances the bar's animation. Driven by the presenter's visual clock rather than `Update` so pause and speed apply consistently and so tests can step it deterministically.
-    - `deltaSeconds` &mdash; The delta seconds value used by this operation.
+    - `deltaSeconds` &mdash; Positive presentation-clock duration applied to fill and delayed ghost transitions.
 
 ---
 
@@ -933,69 +1123,69 @@ a font, and nothing depends on a shipped prefab.
 `public static HorizontalLayoutGroup AddHorizontalLayout()`
 
 :   Adds a horizontal layout group with skin-consistent spacing.
-    - `alignment` &mdash; The alignment value used by this operation.
-    - `padding` &mdash; The padding value used by this operation.
-    - `rect` &mdash; The rect value used by this operation.
-    - `spacing` &mdash; The spacing value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `alignment` &mdash; Placement of the non-expanding child row within available space.
+    - `padding` &mdash; Left, right, top, and bottom content inset assigned to the group.
+    - `rect` &mdash; Rect receiving the new HorizontalLayoutGroup component.
+    - `spacing` &mdash; Reference-pixel gap between consecutive children.
+    - **Returns** &mdash; A non-expanding horizontal layout group using the requested alignment.
 
 `public static ContentSizeFitter AddVerticalFitter(RectTransform rect)`
 
 :   Adds a content-size fitter so a region can size to content. A fitter measures `ILayoutElement` components on its OWN object, so `rect` must already carry the layout group whose content it should follow. On a rect with no layout group the preferred height resolves to zero and the region collapses.
-    - `rect` &mdash; The rect value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `rect` &mdash; Rect already carrying the layout elements whose preferred height should drive it.
+    - **Returns** &mdash; A new ContentSizeFitter constrained only to vertical preferred size.
 
 `public static VerticalLayoutGroup AddVerticalLayout()`
 
 :   Adds a vertical layout group with skin-consistent spacing.
-    - `padding` &mdash; The padding value used by this operation.
-    - `rect` &mdash; The rect value used by this operation.
-    - `spacing` &mdash; The spacing value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `padding` &mdash; Left, right, top, and bottom content inset assigned to the group.
+    - `rect` &mdash; Rect receiving the new VerticalLayoutGroup component.
+    - `spacing` &mdash; Reference-pixel gap between consecutive children.
+    - **Returns** &mdash; A width-expanding, content-height vertical group aligned to the upper left.
 
 `public static void ApplyRegion(RectTransform rect, SkinRegionTokens region)`
 
 :   Anchors a rect inside its parent according to a skin region, so a customer can move any HUD block by editing the preset alone.
-    - `rect` &mdash; The rect value used by this operation.
-    - `region` &mdash; The region value used by this operation.
+    - `rect` &mdash; HUD region whose anchors, pivot, position, optional size, and scale are updated.
+    - `region` &mdash; Compiled safe-area anchor, inward offset, size, stretch, and visibility-independent scale.
 
-`public static Text CreateLabel()`
+`public static TMP_Text CreateLabel()`
 
 :   Creates a label using the skin's typography.
-    - `alignment` &mdash; The alignment value used by this operation.
-    - `color` &mdash; The color value used by this operation.
-    - `fontSize` &mdash; The font size value used by this operation.
-    - `name` &mdash; The name value used by this operation.
-    - `parent` &mdash; The parent value used by this operation.
-    - `skin` &mdash; The skin value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `alignment` &mdash; Horizontal and vertical text placement within the label rect.
+    - `color` &mdash; Initial text color.
+    - `fontSize` &mdash; Font size in reference pixels.
+    - `name` &mdash; Unity hierarchy name assigned to the label GameObject.
+    - `parent` &mdash; Transform that receives the new label child.
+    - `skin` &mdash; Compiled font, line spacing, and optional outline settings.
+    - **Returns** &mdash; A non-raycast, rich-text-disabled uGUI Text configured from the skin.
 
 `public static RectTransform CreateRect(string name, Transform parent)`
 
 :   Creates a child object with a `RectTransform`.
-    - `name` &mdash; The name value used by this operation.
-    - `parent` &mdash; The parent value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `name` &mdash; Unity hierarchy name assigned to the new child GameObject.
+    - `parent` &mdash; Transform that owns the new rect while preserving local coordinates.
+    - **Returns** &mdash; The RectTransform of a new child GameObject.
 
 `public static SkinSurfaceGraphic CreateSurface()`
 
 :   Creates the create surface asset/value from this template's explicit settings. The caller owns persistence and must supply any requested stable ID.
-    - `name` &mdash; The name value used by this operation.
-    - `parent` &mdash; The parent value used by this operation.
-    - `tokens` &mdash; The tokens value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `name` &mdash; Unity hierarchy name assigned to the surface GameObject.
+    - `parent` &mdash; Transform that receives the new non-raycast surface child.
+    - `tokens` &mdash; Shape, fill, stroke, glow, and shadow settings applied immediately.
+    - **Returns** &mdash; A new drawable surface with RectTransform, CanvasRenderer, and SkinSurfaceGraphic.
 
 `public static void Fill(RectTransform rect, float inset = 0f)`
 
 :   Stretches a rect to fill its parent with an optional uniform inset.
-    - `inset` &mdash; The inset value used by this operation.
-    - `rect` &mdash; The rect value used by this operation.
+    - `inset` &mdash; Uniform inward offset in reference pixels; zero reaches every parent edge.
+    - `rect` &mdash; Child rect whose anchors and offsets are rewritten to stretch.
 
 `public static LayoutElement IgnoreLayout(RectTransform rect)`
 
 :   Excludes `rect` from its parent's layout group, keeping the anchors it was given. Used for panel backgrounds that must stretch across a region whose children are otherwise laid out in a row or column.
-    - `rect` &mdash; The rect value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `rect` &mdash; Background or overlay rect to exempt from its parent's layout calculation.
+    - **Returns** &mdash; A new LayoutElement with `ignoreLayout` enabled.
 
 ---
 
@@ -1026,7 +1216,7 @@ no simulation state.
 
 :   The plate drawn behind the row. Hidden while the combatant is down, so a dead row reads as an empty slot rather than a live one.
 
-`public Text Detail`
+`public TMP_Text Detail`
 
 :   The caption line to the right of the name, carrying shield and status counts, or `Down` alone once the combatant is dead.
 
@@ -1038,7 +1228,11 @@ no simulation state.
 
 :   The row object itself. It is deactivated rather than destroyed when the roster shrinks, which is how the pool avoids reallocating.
 
-`public Text Name`
+`public const int MaximumRows`
+
+:   Rows drawn before the rest collapse into a count on the last one. The roster docks into a fixed cell of the command deck, and the stage above it is protected, so it has a real ceiling rather than a preference. Past this many combatants the last row reports how many are not shown, which is more honest than a list that quietly runs off the top of its own panel.
+
+`public TMP_Text Name`
 
 :   The combatant label. Falls back to the raw id when the display string table has no name, and is drawn muted once the combatant is down.
 
@@ -1050,6 +1244,13 @@ no simulation state.
     - `entries` &mdash; Rows to draw; null or empty hides every row.
     - `labels` &mdash; Name source; null falls back to `DisplayStringTable.Empty`, which shows raw ids.
 
+`public void Apply()`
+
+:   Rebuilds the roster, colouring each health bar by whether the combatant is on `allyTeamId`.
+    - `entries` &mdash; Rows to draw; null or empty hides every row.
+    - `labels` &mdash; Name source; null falls back to `DisplayStringTable.Empty`, which shows raw ids.
+    - `allyTeamId` &mdash; The team drawn as ours. The default id makes every row read as an opponent, which is the honest answer when no perspective was supplied.
+
 `public void Build(CompiledBattleSkin battleSkin)`
 
 :   Builds the panel. Explicit so EditMode tests can drive it.
@@ -1058,7 +1259,7 @@ no simulation state.
 `public void Tick(float deltaSeconds)`
 
 :   Advances row bar animation by a visual delta.
-    - `deltaSeconds` &mdash; The delta seconds value used by this operation.
+    - `deltaSeconds` &mdash; Non-negative visual-frame duration used to advance every pooled value bar.
 
 ---
 
@@ -1091,7 +1292,7 @@ a button raises an event for the interface to act on.
 
 :   The skinned surface behind the button, reskinned in place to show which candidates are currently picked.
 
-`public Text Caption`
+`public TMP_Text Caption`
 
 :   The health readout under the name.
 
@@ -1105,9 +1306,9 @@ a button raises an event for the interface to act on.
 
 `public const int MaximumButtons`
 
-:   Candidate buttons drawn before the picker stops adding more.
+:   Legacy compatibility constant. The picker no longer truncates its candidates; every supplied candidate is placed in the scrolling row.
 
-`public Text Name`
+`public TMP_Text Name`
 
 :   The candidate's display name.
 
@@ -1135,6 +1336,11 @@ a button raises an event for the interface to act on.
 `public void Hide()`
 
 :   Takes the picker down.
+
+`public void SetCandidatesVisible(bool visible)`
+
+:   Shows or hides the candidate buttons while leaving the prompt up. The Direct preset picks on the stage, so the row would be a second way to do the same thing taking up the deck. The prompt still has to be there: it is the part that tells the player where to point.
+    - `visible` &mdash; Whether the row of candidate buttons is drawn.
 
 `public void SetPicked(IReadOnlyList<StableId> picked)`
 
@@ -1184,6 +1390,18 @@ never the engine's exact target resolution.
     - `actorMayAppear` &mdash; Whether the acting combatant is itself a legal pick.
     - `automaticSelection` &mdash; Whether a command carrying no ids is legal, leaving the pick to the resolver.
 
+`public TargetShape()`
+
+:   Copies target-count limits and pick policy with the resolver identity used for stage previews. Values are retained without validation; this shape neither resolves targets nor authorizes a command.
+    - `relation` &mdash; Allowed team relation to the actor.
+    - `lifeState` &mdash; Allowed living/dead state.
+    - `minimumTargets` &mdash; Fewest ids a command must carry.
+    - `maximumTargets` &mdash; Most ids a command may carry.
+    - `maximumResolvedTargets` &mdash; Most combatants the resolver may finally reach.
+    - `actorMayAppear` &mdash; Whether the acting combatant is itself a legal pick.
+    - `automaticSelection` &mdash; Whether a command carrying no ids is legal.
+    - `resolverId` &mdash; The target resolver's implementation id. The interface uses it to pick how the affected set should be DRAWN -- a whole-team scrim reads differently from a row band or a single ring -- and for nothing else.
+
 **Properties**
 
 `public bool ActorMayAppear`
@@ -1214,6 +1432,10 @@ never the engine's exact target resolution.
 
 :   Which combatants the skill may reach, relative to the acting combatant's team. It is the resolver's declared eligibility copied verbatim, so it is sound for shading legal picks but is not the check the engine performs when the command arrives.
 
+`public StableId ResolverId`
+
+:   Which resolver produced this shape, or the default id when the shape was built without one. Presentation-only: it decides how the affected set is drawn and never what is legal.
+
 ---
 
 ## TimelineStripView
@@ -1224,14 +1446,25 @@ public sealed class TimelineStripView : MonoBehaviour
 
 `TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/Regions/TimelineStripView.cs</small>
 
-The turn-order strip: one chip per upcoming actor, left to right, with the
-actor about to act raised and accented.
+The turn-order rail: one chip per upcoming actor, left to right, with the
+actor about to act raised, accented, and marked NOW.
 
-Knowing who acts next is the single most important readout in a
-tempo-driven battle, which is why this is a first-class HUD region rather
-than a line of text. It mirrors the supplied decision order verbatim.
+This is the product's namesake and the one element present in every frame
+of every encounter, so it is a full-bleed band rather than a strip in a
+corner. A chip is a portrait, a team-coloured rim, a health underline, and
+up to three status pips: four answers in one glance, which is what makes
+the rail something a player plans against instead of something they
+occasionally read.
+
+Chips slide to their new positions rather than cutting. A chip that jumps
+reads as a bug in the scheduler; a chip that slides reads as the feature
+the scheduler is.
 
 **Properties**
+
+`public bool IsShifting`
+
+:   True while chips are still sliding toward a new order.
 
 `public int VisibleChipCount`
 
@@ -1239,38 +1472,118 @@ than a line of text. It mirrors the supplied decision order verbatim.
 
 **Fields**
 
+`public const float ActingChipSize`
+
+:   Edge of the acting chip in reference pixels.
+
 `public SkinSurfaceGraphic Background`
 
-:   The chip plate, re-dressed on every rebuild: the raised panel surface for the actor about to act and the button surface for the rest.
+:   The chip plate. Its stroke carries the team colour and its glow marks the actor about to act.
+
+`public const float ChipGap`
+
+:   Gap between chips in reference pixels.
+
+`public const float ChipSize`
+
+:   Edge of a resting chip in reference pixels.
+
+`public const int ComfortableChips`
+
+:   Chips past which the rail shrinks rather than wrapping.
+
+`public const float CrowdedChipSize`
+
+:   Edge of a chip once the rail is crowded, in reference pixels.
+
+`public GameObject DeadCross`
+
+:   The two struck diagonals shown once a combatant is down.
+
+`public const float HeaderGutter`
+
+:   Clearance held on the left of the band for the "TURN ORDER" title, in reference pixels. Named because the header, the chip row and the hairline all have to agree about it, and it used to be written out three times as a literal.
+
+`public SkinSurfaceGraphic Health`
+
+:   The health underline along the chip's bottom edge.
 
 `public GameObject Host`
 
 :   The chip object. Deactivated rather than destroyed when the order shortens, so the strip reuses its chips for the whole battle.
 
-`public Text Label`
+`public TMP_Text Label`
 
-:   The actor's display name, falling back to the raw identifier when the supplied table has no entry for it.
+:   The name under the chip. It is drawn for the acting chip only: at 96 pixels a face and a rim identify a combatant faster than a name set small enough to fit under one.
+
+`public const int MaximumChipPips`
+
+:   Status pips drawn on one chip before the rest are dropped.
 
 `public const int MaximumChips`
 
 :   Chips drawn before the strip stops adding more.
 
-`public Text Order`
+`public GameObject NowTag`
 
-:   The caption above the name: `NOW` on the leading chip, and the one-based position in the order on the rest.
+:   The NOW tag, shown on the leading chip only.
+
+`public Vector2 Origin`
+
+:   Where the chip started the current slide from.
+
+`public const float OverflowReachPixels`
+
+:   Room the trailing "+n" counter needs past the last chip, in reference pixels.
+
+`public readonly List<SkinSurfaceGraphic> Pips`
+
+:   The status pips riding the chip's top-right corner.
+
+`public Image Portrait`
+
+:   The cropped portrait, hidden when the host supplied no art.
+
+`public RectTransform PortraitFrame`
+
+:   The rect the portrait is cropped inside.
+
+`public RectTransform Rect`
+
+:   The chip's rect, moved directly rather than by a layout group.
+
+`public Vector2 Target`
+
+:   Where the chip is sliding to, in the row's local space.
+
+`public const float TransportGutter`
+
+:   Clearance held on the right of the band for the transport cluster, in reference pixels.
 
 **Methods**
 
 `public void Apply(IReadOnlyList<StableId> actors, DisplayStringTable labels)`
 
-:   Rebuilds the strip from the supplied actor order. Does nothing until `Build` has run.
-    - `actors` &mdash; Decision order as the simulation reported it, soonest first: index 0 is the chip raised and marked NOW. Entries past `MaximumChips` are not drawn, and null is treated as an empty order.
+:   Rebuilds the rail from the supplied actor order, with no side, health, or status information. Kept for hosts that only have an order to give.
+    - `actors` &mdash; Decision order as the simulation reported it, soonest first: index 0 is the chip raised and marked NOW. Entries past `MaximumChips` collapse into a trailing counter, and null is treated as an empty order.
     - `labels` &mdash; Display names for the actors. A missing entry falls back to the actor's identifier, and null is treated as an empty table.
+
+`public void Apply()`
+
+:   Rebuilds the rail from full chip entries.
+    - `entries` &mdash; Decision order, soonest first. Entries past `MaximumChips` collapse into a trailing counter rather than wrapping to a second line; null is an empty order.
+    - `labels` &mdash; Display names for the actors; a missing entry falls back to the raw identifier.
+    - `portraits` &mdash; Art to crop each chip's face from, keyed by combatant. Null, or a combatant with no entry, draws a chip with no face rather than a placeholder.
 
 `public void Build(CompiledBattleSkin battleSkin)`
 
-:   Builds the strip. Explicit so EditMode tests can drive it.
+:   Builds the rail. Explicit so EditMode tests can drive it.
     - `battleSkin` &mdash; Skin the chips are dressed from; null falls back to the package default.
+
+`public void Tick(float deltaSeconds)`
+
+:   Advances the slide that follows a reorder. Driven by the presenter's visual clock, so pause and speed apply to the rail exactly as they do to the stage, and a reduced-motion skin snaps instead.
+    - `deltaSeconds` &mdash; Positive presentation-clock duration. Non-positive values are ignored.
 
 ---
 
@@ -1294,15 +1607,15 @@ and displays it; it never invokes a simulation or preview API itself.
 
 :   Captures one already-computed tooltip. Null text arguments are stored as empty strings, so a consumer never needs a null check.
     - `hasPreview` &mdash; True when the driver ran a numeric preview. While it is false the shipped tooltip panel hides the amount range and the hit and critical figures, and shows only the status chance.
-    - `costText` &mdash; The cost text value used by this operation.
-    - `criticalChance` &mdash; The critical chance value used by this operation.
-    - `hitChance` &mdash; The hit chance value used by this operation.
-    - `previewMaximum` &mdash; The preview maximum value used by this operation.
-    - `previewMinimum` &mdash; The preview minimum value used by this operation.
-    - `skillId` &mdash; The skill id value used by this operation.
-    - `statusChance` &mdash; The status chance value used by this operation.
-    - `targetShapeText` &mdash; The target shape text value used by this operation.
-    - `timingText` &mdash; The timing text value used by this operation.
+    - `costText` &mdash; Driver-authored localized cost line; null hides the row.
+    - `criticalChance` &mdash; Conditional critical probability for a landed use.
+    - `hitChance` &mdash; Probability that the previewed use lands.
+    - `previewMaximum` &mdash; Highest amount a landed use can produce.
+    - `previewMinimum` &mdash; Lowest amount a landed use can produce.
+    - `skillId` &mdash; Skill identity this tooltip must remain associated with.
+    - `statusChance` &mdash; Probability that the accompanying status application succeeds.
+    - `targetShapeText` &mdash; Driver-authored localized target-rule line; null hides the row.
+    - `timingText` &mdash; Driver-authored localized timing line; null hides the row.
 
 **Properties**
 
@@ -1350,12 +1663,12 @@ and displays it; it never invokes a simulation or preview API itself.
 
 `public static TooltipData TextOnly()`
 
-:   Uses explicit inputs to perform text only for TooltipData. Expected validation misses return the documented typed result instead of selecting fallback content.
-    - `costText` &mdash; The cost text value used by this operation.
-    - `skillId` &mdash; The skill id value used by this operation.
-    - `targetShapeText` &mdash; The target shape text value used by this operation.
-    - `timingText` &mdash; The timing text value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   A skill with no numeric preview still carries its cost, timing, and targeting copy.
+    - `costText` &mdash; Driver-authored localized cost line.
+    - `skillId` &mdash; Skill identity associated with the text-only tooltip.
+    - `targetShapeText` &mdash; Driver-authored localized target-rule line.
+    - `timingText` &mdash; Driver-authored localized timing line.
+    - **Returns** &mdash; Tooltip data with numeric preview disabled and all amounts and chances set to zero.
 
 ---
 
@@ -1466,7 +1779,7 @@ hashes.
 `public void SetSeedText(string text)`
 
 :   Updates set seed text on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
-    - `text` &mdash; The text value used by this operation.
+    - `text` &mdash; Seed characters written into the transport's editable field without submitting them.
 
 `public void SetSpeed(float multiplier)`
 
@@ -1476,7 +1789,7 @@ hashes.
 `public void SetStatus(string text)`
 
 :   Updates set status on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
-    - `text` &mdash; The text value used by this operation.
+    - `text` &mdash; Runtime lifecycle message shown beside the transport controls; null becomes empty.
 
 ---
 
@@ -1495,12 +1808,23 @@ One combatant's surfaced status-panel row.
 `public UiStatusEntry()`
 
 :   Records one row exactly as the snapshot reported it.
-    - `combatantId` &mdash; The combatant id value used by this operation.
-    - `health` &mdash; The health value used by this operation.
-    - `isDead` &mdash; The is dead value used by this operation.
-    - `maximumHealth` &mdash; The maximum health value used by this operation.
-    - `shield` &mdash; The shield value used by this operation.
-    - `statusCount` &mdash; The status count value used by this operation.
+    - `combatantId` &mdash; Compiled combatant identity used for label and token lookup.
+    - `health` &mdash; Current authoritative health reported by the snapshot.
+    - `isDead` &mdash; Whether the snapshot marks the combatant as dead.
+    - `maximumHealth` &mdash; Positive health capacity used to calculate the roster-bar fraction.
+    - `shield` &mdash; Current shield amount displayed alongside health.
+    - `statusCount` &mdash; Number of active statuses represented by roster pips.
+
+`public UiStatusEntry()`
+
+:   Records one row, including the team that decides its colour.
+    - `combatantId` &mdash; Compiled combatant identity used for label and token lookup.
+    - `health` &mdash; Current authoritative health reported by the snapshot.
+    - `isDead` &mdash; Whether the snapshot marks the combatant as dead.
+    - `maximumHealth` &mdash; Positive health capacity used to calculate the roster-bar fraction.
+    - `shield` &mdash; Current shield amount displayed alongside health.
+    - `statusCount` &mdash; Number of active statuses represented by roster pips.
+    - `teamId` &mdash; Team the combatant belongs to, compared against the interface's player team to pick a bar colour.
 
 **Properties**
 
@@ -1527,6 +1851,61 @@ One combatant's surfaced status-panel row.
 `public int StatusCount`
 
 :   How many status entries the snapshot lists for this combatant.
+
+`public StableId TeamId`
+
+:   The team this combatant fights for, or the default id when the row was built without one. It carries no simulation meaning here: it exists so the health bar can read as ours or theirs before any text is parsed.
+
+---
+
+## UiTimelineEntry
+
+```csharp
+public readonly struct UiTimelineEntry
+```
+
+`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/UI/BattleUiRoot.cs</small>
+
+One chip on the turn-order rail: who acts, whose side they are on, how much
+of them is left, and whether they are still standing.
+
+The rail is the element the product is named after, and a chip carrying only
+a name answers one question out of four. This carries the other three, so a
+single glance at the rail tells a player what is coming and whether it
+matters.
+
+**Constructors**
+
+`public UiTimelineEntry()`
+
+:   Records one chip from values the interface was already given.
+    - `combatantId` &mdash; Combatant the chip stands for; also the portrait lookup key.
+    - `healthFraction` &mdash; Remaining health in zero to one, drawn as the chip's underline.
+    - `isAlly` &mdash; Whether the chip takes the ally rim or the enemy rim.
+    - `isDead` &mdash; Whether the chip is greyed and struck through rather than removed.
+    - `statusCount` &mdash; How many statuses ride the chip, capped when drawn.
+
+**Properties**
+
+`public StableId CombatantId`
+
+:   The combatant this chip stands for.
+
+`public float HealthFraction`
+
+:   Remaining health in zero to one, already clamped.
+
+`public bool IsAlly`
+
+:   True when the chip belongs to the player's team.
+
+`public bool IsDead`
+
+:   True when the combatant is down. The chip stays in place regardless.
+
+`public int StatusCount`
+
+:   Active status count, already floored at zero.
 
 ---
 

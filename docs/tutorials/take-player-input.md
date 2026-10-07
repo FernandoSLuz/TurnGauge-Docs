@@ -1,4 +1,4 @@
-# 5. Take a decision from the player
+# 6. Take a decision from the player
 
 A click in the skill tray becomes a command the battle accepts, a hover fills the tooltip with
 previewed numbers, and every id on screen reads as a name.
@@ -246,6 +246,6 @@ the controller for everything else.
 
 ## Next
 
-- **[6. Restyle the interface](skinning-your-battle.md)** -- make the tray and tooltip look like your game.
+- **[7. Restyle the interface](skinning-your-battle.md)** -- make the tray and tooltip look like your game.
 - **[What each interface region draws](../how-to/interface-regions.md)** -- what every region renders, and what it refuses to do.
 - **[Step a battle in the Workbench](../how-to/balance-with-the-workbench.md)** -- when a previewed number is not the number you expected.

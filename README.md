@@ -15,11 +15,15 @@ order. Each one ends where the next begins.
 
 | # | Tutorial | You will be able to |
 | --- | --- | --- |
-| 1 | **[Install and run the demo](docs/tutorials/first-battle.md)** | Run the shipped demo scene and prove the same seed replays |
-| 2 | **[Run a battle from your own code](docs/tutorials/run-a-battle-from-code.md)** | Compile a catalog, create an engine, pump it from a MonoBehaviour |
-| 3 | **[Draw the battle on screen](docs/tutorials/show-the-battle.md)** | Bind the presenter, forward events, frame the stage |
-| 4 | **[Take a decision from the player](docs/tutorials/take-player-input.md)** | Offer legal choices, submit the command, fill a tooltip |
-| 5 | **[Restyle the interface](docs/tutorials/skinning-your-battle.md)** | Make the interface look like *your* game |
+| 1 | **[Install and run the demo](docs/tutorials/first-battle.md)** | Create the 3 v 3 playable battle and prove the same seed replays |
+| 2 | **[Build your combat without code](docs/tutorials/build-without-code.md)** | Author a combatant, skill, target and encounter from the editor |
+| 3 | **[Put a battle in your scene](docs/tutorials/playable-battle-in-a-scene.md)** | Add the playable battle to your own scene |
+| 4 | **[Run a battle from your own code](docs/tutorials/run-a-battle-from-code.md)** | Compile a catalog, create an engine, pump it from a MonoBehaviour |
+| 5 | **[Draw the battle on screen](docs/tutorials/show-the-battle.md)** | Bind the presenter, forward events, frame the stage |
+| 6 | **[Take a decision from the player](docs/tutorials/take-player-input.md)** | Offer legal choices, submit the command, fill a tooltip |
+| 7 | **[Restyle the interface](docs/tutorials/skinning-your-battle.md)** | Make the interface look like *your* game |
+| 8 | **[Explore Combat Studio](docs/tutorials/combat-studio.md)** | Preview semantic UI layouts and connect a profile |
+| 9 | **[Add custom mechanics](docs/tutorials/custom-mechanics.md)** | Register deterministic effect and target extensions |
 
 Then work by task:
 
@@ -76,8 +80,11 @@ watched paused-and-stepped produce identical results.
 
 ## Requirements
 
-- Unity **2022.3 LTS** or newer.
-- Built-in render pipeline, URP, or HDRP. No render-pipeline package required.
+- The core engine and data assemblies are engine-free and designed for Unity 2022.3
+  compatibility.
+- Native presentation, Studio and adapters are currently validated on Unity **6000.3.25f1**
+  (Unity 6.3) with the Built-in render pipeline. Other editor versions and pipelines remain
+  pending verification.
 
 The interface is drawn with a signed-distance-field shader, so it stays crisp at any
 resolution and ships no textures. Glow is drawn in-shader, which is why the package needs

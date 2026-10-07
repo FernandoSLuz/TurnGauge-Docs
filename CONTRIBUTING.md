@@ -29,7 +29,7 @@ of here. `../DOCUMENTATION-HOME.md` in the AssetStore working tree records why.
 
 ## Publishing
 
-Push to `main`. The workflow runs `mkdocs build --strict` and only deploys if it passes, so a
+Push to `rename/turngauge`. The workflow runs `mkdocs build --strict` and only deploys if it passes, so a
 broken internal link or a missing image cannot reach the published site. Check it locally
 first:
 

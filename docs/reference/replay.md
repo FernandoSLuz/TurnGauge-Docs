@@ -31,6 +31,24 @@ return a new array; never return null, never report success without bytes,
 and never report failure without a diagnostic, or the chain aborts the
 whole run with `replay.migration.invalid-result`.
 
+**Properties**
+
+`public int FromFormatVersion`
+
+:   The replay format version this step reads. Must be 1 or greater.
+
+`public int ToFormatVersion`
+
+:   The replay format version this step writes. Must be exactly `FromFormatVersion` plus one.
+
+**Methods**
+
+`public ReplayMigrationResult Migrate(byte[] immutableInput)`
+
+:   Rewrites one replay from `FromFormatVersion` to `ToFormatVersion`.
+    - `immutableInput` &mdash; The replay bytes as they exist at `FromFormatVersion`. The caller owns this array; read it, do not write to it.
+    - **Returns** &mdash; A success carrying the rewritten bytes, or a failure carrying the diagnostic that explains the refusal. Never null.
+
 ---
 
 ## ReplayDivergenceHashKind
@@ -391,14 +409,14 @@ array you read out can be used to edit the result afterwards.
 `public static ReplayMigrationResult Failure(Diagnostic diagnostic)`
 
 :   Reports a migration that could not be performed. Throws `ArgumentException` for a default-constructed diagnostic, because a failure a caller cannot identify is worse than none.
-    - `diagnostic` &mdash; The diagnostic value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `diagnostic` &mdash; Valid machine-readable reason migration could not produce a complete target-version replay.
+    - **Returns** &mdash; A failed result carrying no byte payload and preserving the supplied diagnostic.
 
 `public static ReplayMigrationResult Success(byte[] bytes)`
 
 :   Reports a migration that produced `bytes`, which are copied into the result. Throws `ArgumentNullException` when they are null; a success can never carry a null buffer.
     - `bytes` &mdash; The canonical byte payload to read.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A successful result that owns a defensive copy of the non-null canonical target-version bytes.
 
 ---
 
@@ -451,7 +469,7 @@ quietly loaded, which is what lets two machines agree that they are replaying th
 
 `public const int MaximumReplayBytes`
 
-:   Bounded integer used for maximum replay bytes so malformed content cannot create unbounded simulation work.
+:   Largest accepted or emitted canonical replay document in UTF-8 bytes; readers reject larger input before parsing it.
 
 **Methods**
 

@@ -1,15 +1,15 @@
-# 3. Run a battle from your own code
+# 4. Run a battle from your own code
 
 Compile a catalog, create an engine from one encounter and a seed, and advance that battle from
 a `MonoBehaviour` you own. Nothing is drawn on screen yet: the stage and the interface arrive
-on [page 4](show-the-battle.md).
+on [page 5](show-the-battle.md).
 
 ---
 
 ## Do you need this page?
 
 Probably not yet. Everything below is what `BattleRuntimeController` already does for you, and
-[2. Put a battle in your scene](playable-battle-in-a-scene.md) sets that up from a menu item.
+[3. Put a battle in your scene](playable-battle-in-a-scene.md) sets that up from a menu item.
 These fields are the same three decisions the first listing makes in code.
 
 ![The BattleRuntimeController Inspector: Catalog, Encounter Id, seed policy and fixed seed, Ticks Per Second 30, and the Auto Start and Auto Advance checkboxes that hand the clock back to your own code](../assets/images/02-controller-inspector-battle.png){ .shot }
@@ -155,7 +155,7 @@ you watched in the demo, seen from the driver's side.
 
 ![A battle stopped at a human decision: the turn strip reads NOW Ember Vanguard and the skill tray waits for a choice, which is what AwaitingCommand looks like on screen](../assets/images/04-runtime-human-decision.png){ .shot }
 
-Building and submitting that command is [page 5](take-player-input.md).
+Building and submitting that command is [page 6](take-player-input.md).
 
 `Snapshot.Result` is the authority on how a battle ended. `IsTerminal` stays false until it does;
 then `ResultId` is one of `battle.victory`, `battle.defeat`, `battle.concession`, `battle.draw` or
@@ -165,6 +165,6 @@ neither. `step.Events` is the record of what happened and `step.Snapshot` is the
 
 ## Next
 
-- **[4. Draw the battle on screen](show-the-battle.md)** -- bind a presenter to the same compiled catalog.
+- **[5. Draw the battle on screen](show-the-battle.md)** -- bind a presenter to the same compiled catalog.
 - **[The engine loop](../explanation/engine-loop.md)** -- what one `AdvanceTicks` call does, outcome by outcome.
-- **[5. Take a decision from the player](take-player-input.md)** -- turn `AwaitingCommand` into a submitted command.
+- **[6. Take a decision from the player](take-player-input.md)** -- turn `AwaitingCommand` into a submitted command.

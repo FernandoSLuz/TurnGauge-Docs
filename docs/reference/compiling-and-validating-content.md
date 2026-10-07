@@ -369,7 +369,7 @@ public sealed partial class BattleContentCompiler
 
 `TurnGauge.Authoring` &middot; <small>TurnGauge/Runtime/Authoring/Compilation/BattleContentCompiler.B4ContentMapping.cs</small>
 
-Validates and freezes battle content compiler inputs while retaining typed, source-locatable diagnostics on failure.
+The B4 mapping path converts captured authoring snapshots into the established B3 compiled-content model.
 
 **Methods**
 
@@ -586,7 +586,7 @@ A defensively copied, key-sorted immutable index.
 `public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()`
 
 :   Walks the entries in ascending key order, which is not necessarily the order they were supplied in. Iteration is therefore stable across runs however the source collection was assembled.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; An enumerator that visits the frozen key-value pairs in ascending key order.
 
 `public bool TryGetValue(TKey key, out TValue value)`
 

@@ -1,0 +1,81 @@
+/* Native layout comparison: quiet controls, readable captions, no motion. */
+.native-layout-comparison {
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.45rem;
+  padding: 1rem;
+  margin: 1.2rem 0;
+}
+
+.native-layout-comparison__controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+
+.native-layout-comparison__controls[hidden] {
+  display: none;
+}
+
+.native-layout-comparison__controls legend {
+  padding: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.native-layout-comparison__controls label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.native-layout-comparison__controls select {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.35rem 0.5rem;
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.25rem;
+  font: inherit;
+}
+
+.native-layout-comparison__controls select:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+.native-layout-comparison__figure {
+  margin: 0;
+}
+
+.native-layout-comparison__figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.3rem;
+}
+
+.native-layout-comparison__caption,
+.native-layout-comparison__status {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.76rem;
+}
+
+.native-layout-comparison__status {
+  min-height: 1.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .native-layout-comparison * {
+    scroll-behavior: auto;
+    transition: none !important;
+  }
+}

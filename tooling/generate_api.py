@@ -1,8 +1,8 @@
 """Render an extracted API surface into MkDocs pages grouped by utility.
 
 Grouping is by *what a type is for*, not by namespace, because a namespace like
-BranchWeaver.Core holds 77 types spanning generation, traversal, and persistence --
-which is useless as a way to find anything.
+TurnGauge spans several assemblies, so namespace alone is not a useful way to find a
+type. Grouping by utility keeps the reference task-oriented.
 
 Emits:
   reference/index.md          a filterable table of every public type

@@ -23,9 +23,9 @@ stat. This is therefore the base value, not the effective one.
 `public CombatantStatState(StableId ownerId, StableId statId, Fixed64 value)`
 
 :   Creates a stat entry. Throws when either ID is invalid; the value itself is not range-checked against the stat definition here.
-    - `ownerId` &mdash; The owner id value used by this operation.
-    - `statId` &mdash; The stat id value used by this operation.
-    - `value` &mdash; The value to validate and apply.
+    - `ownerId` &mdash; Valid combatant identifier that scopes the stat entry within the battle snapshot.
+    - `statId` &mdash; Valid compiled stat identifier paired with `ownerId` for lookup.
+    - `value` &mdash; Deterministic base amount before live status modifiers; definition-specific bounds are not checked here.
 
 **Properties**
 
@@ -66,9 +66,9 @@ mutate the battle.
     - `sourceCombatantId` &mdash; The combatant that owns the reaction being offered.
     - `targetCombatantId` &mdash; The other combatant of the triggering primitive.
     - `triggeringEffectTag` &mdash; The tag that matched; always one of the rule's declared trigger tags.
-    - `content` &mdash; The content value used by this operation.
-    - `phase` &mdash; The phase value used by this operation.
-    - `snapshot` &mdash; The snapshot value used by this operation.
+    - `content` &mdash; Non-null compiled catalog used for deterministic definition lookups while the candidate is evaluated.
+    - `phase` &mdash; Before- or after-effect pass in which the triggering primitive offered this reaction.
+    - `snapshot` &mdash; Non-null immutable battle state projected into a read-only `BattleStateView` for the rule.
 
 **Properties**
 
@@ -212,7 +212,7 @@ which is why `RemainingAmount` is always positive.
     - `maximumAuthoredAmount` &mdash; The granted size this shield is measured against. See `MaximumAuthoredAmount`.
     - `linkedStatusApplicationSequence` &mdash; The status application that owns this shield, or `null` when it stands alone.
     - `sourceRootActionSequence` &mdash; The root action that created this application.
-    - `ownerId` &mdash; The owner id value used by this operation.
+    - `ownerId` &mdash; Valid combatant identifier whose incoming damage this shield absorbs.
 
 **Properties**
 
@@ -281,9 +281,9 @@ the entry whenever a status is refreshed, stacked, or ticked, and it is
     - `excludedOriginatingRootActionSequence` &mdash; The root action that must not tick this status down. See `ExcludedOriginatingRootActionSequence`.
     - `linkedShieldApplicationSequence` &mdash; The shield application this status owns, or `null` when it owns none.
     - `instanceConfiguration` &mdash; Per-application properties. Must not be null; pass `PropertySet.Empty` for none.
-    - `durationClock` &mdash; The duration clock value used by this operation.
-    - `ownerId` &mdash; The owner id value used by this operation.
-    - `statusDefinitionId` &mdash; The status definition id value used by this operation.
+    - `durationClock` &mdash; Boundary type that decrements `remainingDuration`: elapsed ticks, owner actions, or owner opportunities.
+    - `ownerId` &mdash; Valid combatant identifier receiving modifiers and periodic effects from this application.
+    - `statusDefinitionId` &mdash; Valid compiled definition identifier supplying stacking, duration, modifier, and periodic-effect rules.
 
 **Properties**
 

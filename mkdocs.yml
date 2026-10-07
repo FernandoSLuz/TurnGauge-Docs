@@ -18,7 +18,7 @@ validation:
 
 repo_url: https://github.com/FernandoSLuz/TurnGauge-Docs
 repo_name: TurnGauge-Docs
-edit_uri: edit/main/docs/
+edit_uri: edit/rename/turngauge/docs/
 copyright: Copyright &copy; Fernando Silva da Luz
 
 theme:
@@ -101,25 +101,30 @@ markdown_extensions:
 
 extra_css:
   - assets/css/extra.css
+  - assets/css/native-layout-comparison.css
 
 extra_javascript:
   - assets/js/api-filter.js
+  - assets/js/native-layout-comparison.js
 
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/FernandoSLuz/TurnGauge-Docs
-      name: BranchWeaver docs on GitHub
+      name: TurnGauge docs on GitHub
 
 nav:
   - Home: index.md
   - Tutorials:
       - 1. Install and run the demo: tutorials/first-battle.md
-      - 2. Put a battle in your scene: tutorials/playable-battle-in-a-scene.md
-      - 3. Run a battle from your own code: tutorials/run-a-battle-from-code.md
-      - 4. Draw the battle on screen: tutorials/show-the-battle.md
-      - 5. Take a decision from the player: tutorials/take-player-input.md
-      - 6. Restyle the interface: tutorials/skinning-your-battle.md
+      - 2. Build your combat without code: tutorials/build-without-code.md
+      - 3. Put a battle in your scene: tutorials/playable-battle-in-a-scene.md
+      - 4. Run a battle from your own code: tutorials/run-a-battle-from-code.md
+      - 5. Draw the battle on screen: tutorials/show-the-battle.md
+      - 6. Take a decision from the player: tutorials/take-player-input.md
+      - 7. Restyle the interface: tutorials/skinning-your-battle.md
+      - 8. Explore Combat Studio: tutorials/combat-studio.md
+      - 9. Add custom mechanics: tutorials/custom-mechanics.md
   - How-to:
       - Start from a battle template: how-to/start-from-a-template.md
       - Author content in the right order: how-to/author-content.md
@@ -131,6 +136,7 @@ nav:
       - Palette and surfaces: how-to/skin-surfaces.md
       - Bars, gauges and pips: how-to/skin-bars-and-pips.md
       - Fit the battle to your screen: how-to/interface-layout.md
+      - Compare native HUD layouts: how-to/compare-native-layouts.md
       - Turn events into visuals: how-to/presentation-recipes.md
       - Shape the perform moment: how-to/the-perform-moment.md
       - Use your own character art: how-to/use-your-own-art.md

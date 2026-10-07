@@ -1,6 +1,6 @@
 # API reference
 
-The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **370 types.**
+The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **436 types.**
 
 !!! info "What is not listed here"
     74 further types are public in the source but left out of this reference. They are public only because `internal` is per-assembly in C# and the package spans several assemblies -- plumbing, not API. They carry `[EditorBrowsable(Never)]` in the source to say so. Nothing you need is hidden: if a documented type exposes it, it is documented too.
@@ -11,10 +11,9 @@ The types a new project meets first.
 
 | Type | Area | What it is for |
 | --- | --- | --- |
-| [`BattleRuntimeController`](the-runtime-facade.md#battleruntimecontroller) | The runtime facade | Designer-first scene facade over BattleEngine. |
 | [`AdvanceTicksOutcome`](running-a-battle.md#advanceticksoutcome) | Running a battle | Why one `BattleEngine.AdvanceTicks(int)` call stopped. |
 | [`AdvanceTicksResult`](running-a-battle.md#advanceticksresult) | Running a battle | Immutable result of one `BattleEngine.AdvanceTicks(int)` call: the outcome that stopped it, the absolute tick it was aiming for, every event emitted on the way in strict tick and e... |
-| [`BattleEngine`](running-a-battle.md#battleengine) | Running a battle | Models battle engine within the deterministic simulation layer using explicit IDs and values rather than scene or global discovery. |
+| [`BattleEngine`](running-a-battle.md#battleengine) | Running a battle | Owns immutable battle state and advances it through deterministic command, scheduler, action, event, and mechanics reduction boundaries. |
 | [`BattleResultState`](running-a-battle.md#battleresultstate) | Running a battle | The battle's outcome as of one snapshot: either nonterminal (`None`) or a terminal verdict naming the result and, for team outcomes, the surviving and eliminated teams. |
 | [`BattleStartRequest`](running-a-battle.md#battlestartrequest) | Running a battle | The immutable opening state of one battle: the scheduler that will run it, the two opposing teams, and the health, resources, and statuses every combatant starts with. |
 | [`BattleCommand`](commands-events-and-snapshots.md#battlecommand) | Commands, events and snapshots | One immutable decision handed to a battle: which combatant acts, on which tick, under which command type, and against what. |
@@ -42,7 +41,7 @@ The types a new project meets first.
 | [`TeamDefinition`](authoring-definitions.md#teamdefinition) | Authoring definitions | One reusable roster: the members that fight as a single side, each entry a combatant definition plus the state it starts the battle in. |
 | [`AuthoringCompileRequest`](compiling-and-validating-content.md#authoringcompilerequest) | Compiling and validating content | Everything `BattleContentCompiler` needs for one compile: the catalog root to read, the scheduler and mechanics registries that authored references are resolved against, and the co... |
 | [`AuthoringCompileResult`](compiling-and-validating-content.md#authoringcompileresult) | Compiling and validating content | The outcome of one compile: either a published `CatalogSnapshot` or the diagnostics that stopped it, never both and never neither. |
-| [`BattleContentCompiler`](compiling-and-validating-content.md#battlecontentcompiler) | Compiling and validating content | Validates and freezes battle content compiler inputs while retaining typed, source-locatable diagnostics on failure. |
+| [`BattleContentCompiler`](compiling-and-validating-content.md#battlecontentcompiler) | Compiling and validating content | The B4 mapping path converts captured authoring snapshots into the established B3 compiled-content model. |
 | [`CompiledAuthoringCatalog`](compiling-and-validating-content.md#compiledauthoringcatalog) | Compiling and validating content | The published output of a successful compile: the compiled battle content, the registries it was resolved against, the encounters that can be started, and the hashes identifying al... |
 | [`FormationPresetDefinition`](formations.md#formationpresetdefinition) | Formations | Mutable Unity authoring data. |
 | [`BattleSkinPreset`](skinning-and-appearance.md#battleskinpreset) | Skinning and appearance | Every value the battle interface draws itself with, in one asset. |
@@ -67,28 +66,9 @@ The types a new project meets first.
 
 | Type | Kind | Area | What it is for |
 | --- | --- | --- | --- |
-| [`AudioBinding`](the-runtime-facade.md#audiobinding) | class | The runtime facade | Maps one presentation audio key to a Unity audio clip. |
-| [`BattleRuntimeCheckpoint`](the-runtime-facade.md#battleruntimecheckpoint) | class | The runtime facade | Persistable battle restore point. |
-| [`BattleRuntimeController`](the-runtime-facade.md#battleruntimecontroller) | class | The runtime facade | Designer-first scene facade over BattleEngine. |
-| [`BattleRuntimeEndReason`](the-runtime-facade.md#battleruntimeendreason) | enum | The runtime facade | Why a normally driven battle stopped advancing. |
-| [`BattleRuntimeEndedEvent`](the-runtime-facade.md#battleruntimeendedevent) | class | The runtime facade | Payload raised when driving reaches a clean end. |
-| [`BattleRuntimeEventsEvent`](the-runtime-facade.md#battleruntimeeventsevent) | class | The runtime facade | Payload raised for a non-empty event batch. |
-| [`BattleRuntimeFailedEvent`](the-runtime-facade.md#battleruntimefailedevent) | class | The runtime facade | Payload raised for fail-closed runtime failures. |
-| [`BattleRuntimeFailure`](the-runtime-facade.md#battleruntimefailure) | enum | The runtime facade | Typed reasons a facade operation can fail without throwing. |
-| [`BattleRuntimeHumanControlRequirement`](the-runtime-facade.md#battleruntimehumancontrolrequirement) | enum | The runtime facade | Optional fail-closed check over the control kinds authored into an encounter. |
-| [`BattleRuntimeOperationResult`](the-runtime-facade.md#battleruntimeoperationresult) | class | The runtime facade | Common typed result returned by controller operations. |
-| [`BattleRuntimePacing`](the-runtime-facade.md#battleruntimepacing) | enum | The runtime facade | How the controller decides when the battle clock may advance. |
-| [`BattleRuntimeSeedPolicy`](the-runtime-facade.md#battleruntimeseedpolicy) | enum | The runtime facade | How the no-argument StartBattle operation chooses its seed. |
-| [`BattleRuntimeSnapshotCause`](the-runtime-facade.md#battleruntimesnapshotcause) | enum | The runtime facade | Why a snapshot was published through SnapshotChanged. |
-| [`BattleRuntimeSnapshotEvent`](the-runtime-facade.md#battleruntimesnapshotevent) | class | The runtime facade | Payload raised whenever the authoritative snapshot changes. |
-| [`BattleRuntimeStartedEvent`](the-runtime-facade.md#battleruntimestartedevent) | class | The runtime facade | Payload raised when a battle starts or is restored. |
-| [`BattleRuntimeState`](the-runtime-facade.md#battleruntimestate) | enum | The runtime facade | The runtime facade's externally visible lifecycle. |
-| [`BattleRuntimeUnityEvent`](the-runtime-facade.md#battleruntimeunityevent) | class | The runtime facade | Parameterless inspector event paired with the typed C# events. |
-| [`BattleRuntimeValueResult`](the-runtime-facade.md#battleruntimevalueresult) | class | The runtime facade | An operation result that also returns an immutable value. |
-| [`VfxBinding`](the-runtime-facade.md#vfxbinding) | class | The runtime facade | Maps one presentation VFX key to an optional pooled prototype. |
 | [`AdvanceTicksOutcome`](running-a-battle.md#advanceticksoutcome) | enum | Running a battle | Why one `BattleEngine.AdvanceTicks(int)` call stopped. |
 | [`AdvanceTicksResult`](running-a-battle.md#advanceticksresult) | class | Running a battle | Immutable result of one `BattleEngine.AdvanceTicks(int)` call: the outcome that stopped it, the absolute tick it was aiming for, every event emitted on the way in strict tick and e... |
-| [`BattleEngine`](running-a-battle.md#battleengine) | class | Running a battle | Models battle engine within the deterministic simulation layer using explicit IDs and values rather than scene or global discovery. |
+| [`BattleEngine`](running-a-battle.md#battleengine) | class | Running a battle | Owns immutable battle state and advances it through deterministic command, scheduler, action, event, and mechanics reduction boundaries. |
 | [`BattleResultState`](running-a-battle.md#battleresultstate) | class | Running a battle | The battle's outcome as of one snapshot: either nonterminal (`None`) or a terminal verdict naming the result and, for team outcomes, the surviving and eliminated teams. |
 | [`BattleStartRequest`](running-a-battle.md#battlestartrequest) | class | Running a battle | The immutable opening state of one battle: the scheduler that will run it, the two opposing teams, and the health, resources, and statuses every combatant starts with. |
 | [`CommandDisposition`](running-a-battle.md#commanddisposition) | enum | Running a battle | How `BattleEngine.Submit(BattleCommand)` treated one command. |
@@ -284,7 +264,7 @@ The types a new project meets first.
 | [`AuthoringDiagnosticSeverity`](compiling-and-validating-content.md#authoringdiagnosticseverity) | enum | Compiling and validating content | How serious an `AuthoringDiagnostic` is. |
 | [`AuthoringLimits`](compiling-and-validating-content.md#authoringlimits) | class | Compiling and validating content | The structural ceilings authoring compilation enforces: how many definitions one catalog may reference, how many teams, encounters, and formation presets it may hold, the ranges no... |
 | [`AuthoringValidationReport`](compiling-and-validating-content.md#authoringvalidationreport) | class | Compiling and validating content | The diagnostics half of a compile, returned by `BattleContentCompiler.Validate`. |
-| [`BattleContentCompiler`](compiling-and-validating-content.md#battlecontentcompiler) | class | Compiling and validating content | Validates and freezes battle content compiler inputs while retaining typed, source-locatable diagnostics on failure. |
+| [`BattleContentCompiler`](compiling-and-validating-content.md#battlecontentcompiler) | class | Compiling and validating content | The B4 mapping path converts captured authoring snapshots into the established B3 compiled-content model. |
 | [`BattleRegistryProvider`](compiling-and-validating-content.md#battleregistryprovider) | class | Compiling and validating content | Project-owned extension point for custom schedulers and mechanics. |
 | [`BattleRegistrySet`](compiling-and-validating-content.md#battleregistryset) | class | Compiling and validating content | One matched scheduler/mechanics registry pair. |
 | [`CompiledAuthoringCatalog`](compiling-and-validating-content.md#compiledauthoringcatalog) | class | Compiling and validating content | The published output of a successful compile: the compiled battle content, the registries it was resolved against, the encounters that can be started, and the hashes identifying al... |
@@ -314,15 +294,20 @@ The types a new project meets first.
 | [`SkinEasing`](skinning-and-appearance.md#skineasing) | enum | Skinning and appearance | The easing curve applied to a skinned transition. |
 | [`SkinFillMode`](skinning-and-appearance.md#skinfillmode) | enum | Skinning and appearance | How a skinned surface fills its rectangle. |
 | [`SkinFloatingNumberTokens`](skinning-and-appearance.md#skinfloatingnumbertokens) | struct | Skinning and appearance | Rise-and-fade numbers for damage, healing, and shields. |
+| [`SkinLayoutProfile`](skinning-and-appearance.md#skinlayoutprofile) | enum | Skinning and appearance | Which band composition a layout is authored for. |
 | [`SkinMaterialPool`](skinning-and-appearance.md#skinmaterialpool) | class | Skinning and appearance | Reference-counted material pool for skinned surfaces, owned by a component rather than by static state. |
 | [`SkinMotionTokens`](skinning-and-appearance.md#skinmotiontokens) | struct | Skinning and appearance | Transition timings. |
 | [`SkinPaletteTokens`](skinning-and-appearance.md#skinpalettetokens) | struct | Skinning and appearance | The semantic colour roles a skin assigns once and reuses everywhere. |
+| [`SkinRegionStretch`](skinning-and-appearance.md#skinregionstretch) | enum | Skinning and appearance | How a HUD region behaves on each axis: pinned at its authored size, or stretched to the full width or height of the safe area. |
 | [`SkinRegionTokens`](skinning-and-appearance.md#skinregiontokens) | struct | Skinning and appearance | Where one HUD region sits. |
 | [`SkinShape`](skinning-and-appearance.md#skinshape) | enum | Skinning and appearance | The silhouette a skinned surface draws. |
+| [`SkinStagePresenceTokens`](skinning-and-appearance.md#skinstagepresencetokens) | struct | Skinning and appearance | How the stage stages its combatants: the falloff between depth ranks, the contact shadow every body stands on, and the one warm key light. |
 | [`SkinStatusPipTokens`](skinning-and-appearance.md#skinstatuspiptokens) | struct | Skinning and appearance | The status pip strip drawn above a combatant. |
 | [`SkinSurfaceGraphic`](skinning-and-appearance.md#skinsurfacegraphic) | class | Skinning and appearance | Draws one `SkinSurfaceTokens` as a uGUI graphic through the TurnGauge skinned-surface shader. |
 | [`SkinSurfaceTokens`](skinning-and-appearance.md#skinsurfacetokens) | struct | Skinning and appearance | Fill, stroke, and glow for one skinned surface. |
+| [`SkinTargetingTokens`](skinning-and-appearance.md#skintargetingtokens) | struct | Skinning and appearance | How a target pick is expressed. |
 | [`SkinTypographyTokens`](skinning-and-appearance.md#skintypographytokens) | struct | Skinning and appearance | Type sizing and treatment. |
+| [`BattleEventNarrator`](interface-and-widgets.md#battleeventnarrator) | class | Interface and widgets | Turns one battle event into a sentence a player can read. |
 | [`BattleNumberFormat`](interface-and-widgets.md#battlenumberformat) | class | Interface and widgets | Turns the simulation's fixed-point types into player-facing text. |
 | [`BattleUiCommandChoice`](interface-and-widgets.md#battleuicommandchoice) | struct | Interface and widgets | A player-chosen command the driver (not the UI) will submit. |
 | [`BattleUiRoot`](interface-and-widgets.md#battleuiroot) | class | Interface and widgets | The battle interface. |
@@ -342,22 +327,36 @@ The types a new project meets first.
 | [`StatusRosterView`](interface-and-widgets.md#statusrosterview) | class | Interface and widgets | The combatant roster: one row per combatant with name, health bar, shield readout, and status count. |
 | [`TargetPickerView`](interface-and-widgets.md#targetpickerview) | class | Interface and widgets | The target picker: one button per combatant the chosen skill may legally hit, plus confirm and back. |
 | [`TargetShape`](interface-and-widgets.md#targetshape) | struct | Interface and widgets | The display-only shape of a skill's target request, taken from the compiled target contract. |
-| [`TimelineStripView`](interface-and-widgets.md#timelinestripview) | class | Interface and widgets | The turn-order strip: one chip per upcoming actor, left to right, with the actor about to act raised and accented. |
+| [`TimelineStripView`](interface-and-widgets.md#timelinestripview) | class | Interface and widgets | The turn-order rail: one chip per upcoming actor, left to right, with the actor about to act raised, accented, and marked NOW. |
 | [`TooltipData`](interface-and-widgets.md#tooltipdata) | struct | Interface and widgets | A passive tooltip value computed by the DRIVER through the public preview surface (`BattleFormulaService.Preview` / `PreviewStatusApplication`, `FormulaPreview`, and `IEffectResolv... |
 | [`TooltipPanelView`](interface-and-widgets.md#tooltippanelview) | class | Interface and widgets | The skill tooltip: cost, timing, target shape, and the driver-computed preview figures. |
 | [`TransportBarView`](interface-and-widgets.md#transportbarview) | class | Interface and widgets | Scenario picker, seed field, and playback controls, drawn with the skin. |
 | [`UiStatusEntry`](interface-and-widgets.md#uistatusentry) | struct | Interface and widgets | One combatant's surfaced status-panel row. |
+| [`UiTimelineEntry`](interface-and-widgets.md#uitimelineentry) | struct | Interface and widgets | One chip on the turn-order rail: who acts, whose side they are on, how much of them is left, and whether they are still standing. |
 | [`BattlePresenter`](stage-and-tokens.md#battlepresenter) | class | Stage and tokens | The pure presentation consumer. |
 | [`BattleStage2D`](stage-and-tokens.md#battlestage2d) | class | Stage and tokens | A neutral 2D battle stage. |
 | [`BattleStageBackdrop`](stage-and-tokens.md#battlestagebackdrop) | class | Stage and tokens | Optional background blur for the perform moment. |
 | [`BattleStageBloom`](stage-and-tokens.md#battlestagebloom) | class | Stage and tokens | Optional stage bloom and vignette. |
 | [`BattleStageFrame`](stage-and-tokens.md#battlestageframe) | class | Stage and tokens | Controls where the battle stage sits on screen and how large it is. |
+| [`BattleStageInformationBank`](stage-and-tokens.md#battlestageinformationbank) | class | Stage and tokens | A side rail. |
+| [`BattleStageInformationBankSide`](stage-and-tokens.md#battlestageinformationbankside) | enum | Stage and tokens | Which side of the information rail receives a team. |
+| [`BattleStageInformationBanks`](stage-and-tokens.md#battlestageinformationbanks) | class | Stage and tokens | Optional, renderer-independent composition information for the two side rails. |
+| [`BattleStageInformationEntry`](stage-and-tokens.md#battlestageinformationentry) | struct | Stage and tokens | One combatant retained by a side bank, including overflow entries. |
+| [`BattleStageInformationSide`](stage-and-tokens.md#battlestageinformationside) | struct | Stage and tokens | Maps a caller-owned team identity to a rail side without naming assumptions. |
 | [`BeatDeriver`](stage-and-tokens.md#beatderiver) | class | Stage and tokens | Pure event-to-beat derivation. |
 | [`CombatantTokenView`](stage-and-tokens.md#combatanttokenview) | class | Stage and tokens | A neutral 2D token view for one combatant. |
 | [`PresentationBeat`](stage-and-tokens.md#presentationbeat) | class | Stage and tokens | One immutable presentation beat: the event context plus the resolved recipe. |
 | [`PresentationBeatContext`](stage-and-tokens.md#presentationbeatcontext) | struct | Stage and tokens | The non-authoritative, immutable data a beat needs, extracted entirely from one gameplay event's property set. |
+| [`PresentationStagePreset`](stage-and-tokens.md#presentationstagepreset) | class | Stage and tokens | Closed, neutral presentation content for a battle stage. |
 | [`PresenterBinding`](stage-and-tokens.md#presenterbinding) | class | Stage and tokens | The explicit dependency bundle a driver hands to a `BattlePresenter`. |
+| [`StageAnimationBinding`](stage-and-tokens.md#stageanimationbinding) | class | Stage and tokens | Authored key to neutral source/target pulse binding. |
+| [`StageAnimationSource`](stage-and-tokens.md#stageanimationsource) | enum | Stage and tokens | Where a neutral sample animation is anchored. |
+| [`StageAudioBinding`](stage-and-tokens.md#stageaudiobinding) | class | Stage and tokens | Authored key to a one-shot audio clip. |
 | [`StageFrameMode`](stage-and-tokens.md#stageframemode) | enum | Stage and tokens | How the stage rectangle is derived from the screen. |
+| [`StagePresentationPlayback`](stage-and-tokens.md#stagepresentationplayback) | class | Stage and tokens | Owns a preset's isolated presentation copies and transient stage effects. |
+| [`StageVfxBinding`](stage-and-tokens.md#stagevfxbinding) | class | Stage and tokens | Authored key to a stage VFX prototype. |
+| [`TargetPreviewView`](stage-and-tokens.md#targetpreviewview) | class | Stage and tokens | Draws what a skill is about to hit, on the stage, before the player commits. |
+| [`TargetingReticleView`](stage-and-tokens.md#targetingreticleview) | class | Stage and tokens | The cursor that lives on one candidate: a marker hanging over whoever is currently pointed at, with that candidate's position in the list beside it. |
 | [`BackdropBlurPerformModule`](the-perform-moment.md#backdropblurperformmodule) | class | The perform moment | Pulls focus for the whole perform: the background goes out of focus as the skill winds up and comes back as it closes. |
 | [`BloomPulsePerformModule`](the-perform-moment.md#bloompulseperformmodule) | class | The perform moment | Adds a burst of bloom on impact, over whatever the optional bloom component is resting at. |
 | [`BodyShakePerformModule`](the-perform-moment.md#bodyshakeperformmodule) | class | The perform moment | Jolts the combatant that was struck, so a hit reads on the body as well as in the numbers. |
@@ -365,6 +364,7 @@ The types a new project meets first.
 | [`CameraZoomPerformModule`](the-perform-moment.md#camerazoomperformmodule) | class | The perform moment | Pushes the camera in through the impact and releases it afterwards. |
 | [`FocusPerformModule`](the-perform-moment.md#focusperformmodule) | class | The perform moment | Dims everyone not taking part, so the eye goes to the combatants the action concerns. |
 | [`IPerformBeatModule`](the-perform-moment.md#iperformbeatmodule) | interface | The perform moment | One step of the perform moment: the announcement, the focus pull, the shake, the return, or anything a project invents. |
+| [`PerformBeatPhase`](the-perform-moment.md#performbeatphase) | enum | The perform moment | The parts of one impact, in the order a player reads them. |
 | [`PerformFeelPreset`](the-perform-moment.md#performfeelpreset) | class | The perform moment | One asset holding how the perform moment feels: how long the skill title holds, how far the camera pushes in, how hard the impact hits, how the world behind the action recedes. |
 | [`PerformModuleBase`](the-perform-moment.md#performmodulebase) | class | The perform moment | Shared plumbing for the shipped modules: a feel preset that is never null, and a decaying timer, which is the shape almost every piece of juice takes. |
 | [`PerformPhaseContext`](the-perform-moment.md#performphasecontext) | struct | The perform moment | Everything a perform module is told about the phase it is reacting to. |
@@ -419,24 +419,89 @@ The types a new project meets first.
 | [`Sha256Digest`](numerics-and-determinism.md#sha256digest) | struct | Numerics and determinism | An immutable 32-byte SHA-256 digest, used to fingerprint a canonical record so two runs can be compared for divergence. |
 | [`StableId`](numerics-and-determinism.md#stableid) | struct | Numerics and determinism | The identifier every piece of content, state, and event in the simulation is named by: 1 to 128 characters drawn from a-z, 0-9, and the three punctuation characters '.', '_' and '-... |
 | [`BattleSkinBrowserWindow`](editor-tools.md#battleskinbrowserwindow) | class | Editor tools | Browse the shipped skins, preview them with the real shader, and turn any of them into an editable asset in one click. |
+| [`CombatStudioSampleBuilder`](editor-tools.md#combatstudiosamplebuilder) | class | Editor tools | Creates editable starter profiles and native view prefabs using Unity's asset APIs. |
 | [`AudioArtBinding`](other.md#audioartbinding) | class | Other | Binds a recipe audio key (an sfx-* clip name) to art. |
+| [`AudioBinding`](other.md#audiobinding) | class | Other | Maps one presentation audio key to a Unity audio clip. |
+| [`BattleCancelRelay`](other.md#battlecancelrelay) | class | Other | Routes the active input module's cancel event without depending on a particular input package. |
+| [`BattleLayoutIdentity`](other.md#battlelayoutidentity) | enum | Other | Visual family used for starter palettes and default stage reservations. |
+| [`BattlePresentationLabel`](other.md#battlepresentationlabel) | class | Other | One display text override owned by a presentation profile. |
+| [`BattlePresentationProfile`](other.md#battlepresentationprofile) | class | Other | Authored references only. |
+| [`BattleProfileCatalog`](other.md#battleprofilecatalog) | class | Other | Owns the partial runtime catalog required by a presentation profile. |
+| [`BattleRulesPreset`](other.md#battlerulespreset) | enum | Other | Choice of Action Order rounds or paused ATB when deriving a profile's runtime catalog. |
+| [`BattleRuntimeCheckpoint`](other.md#battleruntimecheckpoint) | class | Other | Persistable battle restore point. |
+| [`BattleRuntimeController`](other.md#battleruntimecontroller) | class | Other | Coordinates authored presentation profiles, runtime views and optional stage presentation. |
+| [`BattleRuntimeEndReason`](other.md#battleruntimeendreason) | enum | Other | Why a normally driven battle stopped advancing. |
+| [`BattleRuntimeEndedEvent`](other.md#battleruntimeendedevent) | class | Other | Payload raised when driving reaches a clean end. |
+| [`BattleRuntimeEventsEvent`](other.md#battleruntimeeventsevent) | class | Other | Payload raised for a non-empty event batch. |
+| [`BattleRuntimeFailedEvent`](other.md#battleruntimefailedevent) | class | Other | Payload raised for fail-closed runtime failures. |
+| [`BattleRuntimeFailure`](other.md#battleruntimefailure) | enum | Other | Typed reasons a facade operation can fail without throwing. |
+| [`BattleRuntimeHumanControlRequirement`](other.md#battleruntimehumancontrolrequirement) | enum | Other | Optional fail-closed check over the control kinds authored into an encounter. |
+| [`BattleRuntimeOperationResult`](other.md#battleruntimeoperationresult) | class | Other | Common typed result returned by controller operations. |
+| [`BattleRuntimePacing`](other.md#battleruntimepacing) | enum | Other | How the controller decides when the battle clock may advance. |
+| [`BattleRuntimeSeedPolicy`](other.md#battleruntimeseedpolicy) | enum | Other | How the no-argument StartBattle operation chooses its seed. |
+| [`BattleRuntimeSnapshotCause`](other.md#battleruntimesnapshotcause) | enum | Other | Why a snapshot was published through SnapshotChanged. |
+| [`BattleRuntimeSnapshotEvent`](other.md#battleruntimesnapshotevent) | class | Other | Payload raised whenever the authoritative snapshot changes. |
+| [`BattleRuntimeStartedEvent`](other.md#battleruntimestartedevent) | class | Other | Payload raised when a battle starts or is restored. |
+| [`BattleRuntimeState`](other.md#battleruntimestate) | enum | Other | The runtime facade's externally visible lifecycle. |
+| [`BattleRuntimeUnityEvent`](other.md#battleruntimeunityevent) | class | Other | Parameterless inspector event paired with the typed C# events. |
+| [`BattleRuntimeValueResult`](other.md#battleruntimevalueresult) | class | Other | An operation result that also returns an immutable value. |
+| [`BattleStageBounds`](other.md#battlestagebounds) | struct | Other | A presentation-only rectangle in normalized screen space, with a bottom-left origin. |
+| [`BattleTheme`](other.md#battletheme) | class | Other | Serializable visual values copied by views before they render. |
 | [`BattleUiCommandTranslationResult`](other.md#battleuicommandtranslationresult) | class | Other | Typed result of translating a presentation choice into a command. |
 | [`BattleUiCommandTranslator`](other.md#battleuicommandtranslator) | class | Other | Turns a UI choice into the exact command shape the engine expects. |
+| [`BattleUiTechnology`](other.md#battleuitechnology) | enum | Other | Native UI backend required by a profile's view prefab. |
+| [`BattleViewAction`](other.md#battleviewaction) | class | Other | A legal action and the candidate IDs supplied by its actual resolver. |
+| [`BattleViewBehaviour`](other.md#battleviewbehaviour) | class | Other | Unity lifecycle shell. |
+| [`BattleViewCombatant`](other.md#battleviewcombatant) | class | Other | Immutable, renderer-independent information shown for one combatant. |
+| [`BattleViewCommand`](other.md#battleviewcommand) | struct | Other | Immutable command choice forwarded for authoritative validation. |
+| [`BattleViewIntent`](other.md#battleviewintent) | struct | Other | A UI gesture; the host still validates the resulting command. |
+| [`BattleViewIntentKind`](other.md#battleviewintentkind) | enum | Other | Interaction intents understood by a battle view session. |
+| [`BattleViewProjection`](other.md#battleviewprojection) | class | Other | The single snapshot-to-UI projection for every native or customer renderer. |
+| [`BattleViewRoster`](other.md#battleviewroster) | class | Other | Pure grouping helpers for immutable presentation rosters. |
+| [`BattleViewSession`](other.md#battleviewsession) | class | Other | Shared interaction state survives visual tree reconstruction. |
+| [`BattleViewState`](other.md#battleviewstate) | class | Other | A complete read-only view; contains no scene objects or authority to change combat. |
+| [`CaptureStatus`](other.md#capturestatus) | class | Other | _Undocumented._ |
 | [`CharacterArtImporter`](other.md#characterartimporter) | class | Other | Applies the shipped import settings to the drawn character sprites under `Samples/Characters`, and is safe to re-run. |
+| [`CurrentEditorTestCapture`](other.md#currenteditortestcapture) | class | Other | _Undocumented._ |
+| [`CustomMechanicsRegistryProvider`](other.md#custommechanicsregistryprovider) | class | Other | _Undocumented._ |
+| [`CustomShieldEffectResolver`](other.md#customshieldeffectresolver) | class | Other | Creates a shield equal to a configured fraction of missing health. |
+| [`DemoIdleSheet`](other.md#demoidlesheet) | class | Other | Reads the sample character art, which ships as a grid of idle frames rather than as a single still so combatants breathe instead of standing frozen. |
 | [`DisplayStringTableAsset`](other.md#displaystringtableasset) | class | Other | The shipped serialized string-table asset the demo driver supplies to the presenter (specification section 3: display text comes from an explicit table, never from compiled snapsho... |
 | [`Entry`](other.md#entry) | class | Other | One stable-id-to-display-name pair. |
 | [`ForecastRequest`](other.md#forecastrequest) | class | Other | The three caps that bound one `BattleForecast.Run` call: how far ahead it may look, and how much work and evidence it may collect before stopping. |
 | [`ForecastResult`](other.md#forecastresult) | class | Other | Immutable outcome of one `BattleForecast.Run` call: where the lookahead stopped, the state and events of the throwaway clone it ran, and the non-authoritative evidence it produced. |
 | [`ForecastStopReason`](other.md#forecaststopreason) | enum | Other | Why one `BattleForecast.Run` call stopped. |
+| [`GameViewResolution`](other.md#gameviewresolution) | class | Other | Sets the Game view to an exact pixel size. |
+| [`GeneratedUiText`](other.md#generateduitext) | class | Other | Marks adapter-owned text that participates in presentation themes. |
+| [`IBattlePointerBlocker`](other.md#ibattlepointerblocker) | interface | Other | Optional screen-space hit-test owned by a view. |
+| [`IBattleStageInformationLayout`](other.md#ibattlestageinformationlayout) | interface | Other | Optional presentation-only choice to group combatant information beside the action stage. |
+| [`IBattleStageLayout`](other.md#ibattlestagelayout) | interface | Other | Optional authored stage reservation. |
+| [`IBattleView`](other.md#ibattleview) | interface | Other | Renderer-neutral contract for rendering state and forwarding intents. |
+| [`IInteractiveBattleView`](other.md#iinteractivebattleview) | interface | Other | Optional interaction surface used by a world-space presentation bridge. |
+| [`LowestHealthAllyTargetResolver`](other.md#lowesthealthallytargetresolver) | class | Other | Chooses the living targetable ally with the lowest health ratio. |
 | [`ParticleArtBinding`](other.md#particleartbinding) | class | Other | Binds a recipe VFX key (a particle-* sprite name) to art. |
 | [`PresentationContentGenerator`](other.md#presentationcontentgenerator) | class | Other | Non-shipped internal generator for the B6 presentation content: the starter recipe library (In/Impact/Out beats wired to the generated art adapter keys), the explicit recipe set, t... |
 | [`SessionEndState`](other.md#sessionendstate) | enum | Other | Typed end-of-session states surfaced by the driver. |
-| [`StarterContentGenerator`](other.md#startercontentgenerator) | class | Other | Non-shipped internal generator that authors the complete B6 starter content library as B4 `.asset` definitions under `Assets/TurnGauge/Samples/StarterContent` and compiles the res... |
+| [`StarterContentGenerator`](other.md#startercontentgenerator) | class | Other | Non-shipped internal generator that authors the complete B6 starter content library as B4 `.asset` definitions under `Assets/TurnGauge/Samples/StarterContent` and compiles the resu... |
 | [`TargetCandidateQuery`](other.md#targetcandidatequery) | class | Other | Asks a skill's registered target resolver who it may legally hit right now, and whether one particular pick would be accepted. |
-| [`TurnGaugeDemoBootstrap`](other.md#turngaugedemobootstrap) | class | Other | The runtime demo driver (specification section 9). |
-| [`TurnGaugeDependencyReporter`](other.md#turngaugedependencyreporter) | class | Other | Produces a deterministic, non-shipped dependency report from Unity's AssetDatabase. |
-| [`TurnGaugePackageExporter`](other.md#turngaugepackageexporter) | class | Other | Batch-mode entry point. |
+| [`TargetPreview`](other.md#targetpreview) | class | Other | Turns a resolver into the way its affected set should be shown, and a device into the way a pick should be expressed. |
+| [`TargetTreatment`](other.md#targettreatment) | enum | Other | The visual language one target shape is previewed in. |
+| [`TargetingPreset`](other.md#targetingpreset) | enum | Other | How a pick is expressed. |
 | [`TokenArtBinding`](other.md#tokenartbinding) | class | Other | Binds a starter combatant definition id to its generated token sprite (the token-* art keys from the art manifest). |
+| [`ToolkitBattleView`](other.md#toolkitbattleview) | class | Other | A replaceable UXML surface. |
+| [`TurnGaugeDemoBootstrap`](other.md#turngaugedemobootstrap) | class | Other | The runtime demo driver (specification section 9). |
+| [`TurnGaugeDemoCaptureRunner`](other.md#turngaugedemocapturerunner) | class | Other | Photographs the running demo so the idle loop and the interface can be checked as a player sees them, not as a file listing. |
+| [`TurnGaugeDemoVerification`](other.md#turngaugedemoverification) | class | Other | Two checks that a file listing cannot make: that the shipped character art really is the authored idle grid, and that the running demo really moves. |
+| [`TurnGaugeDependencyReporter`](other.md#turngaugedependencyreporter) | class | Other | Produces a deterministic, non-shipped dependency report from Unity's AssetDatabase. |
+| [`TurnGaugeNativeProfileMediaCapture`](other.md#turngaugenativeprofilemediacapture) | class | Other | Internal, native Unity capture of the four authored Combat Studio profiles. |
+| [`TurnGaugePackageExporter`](other.md#turngaugepackageexporter) | class | Other | Batch-mode entry point. |
+| [`TurnGaugePlaytest`](other.md#turngaugeplaytest) | class | Other | Entry point for the playtest harness: opens the demo, sizes the game view to the surface being questioned, and enters play mode with the runner attached. |
+| [`TurnGaugePlaytestRunner`](other.md#turngaugeplaytestrunner) | class | Other | Plays the demo the way a buyer plays it, and photographs what happened. |
+| [`TurnGaugeSkinFontSetup`](other.md#turngaugeskinfontsetup) | class | Other | Gives the runtime demo a skin preset whose only change from the shipped Ironlight defaults is the font. |
+| [`TurnGaugeTextResources`](other.md#turngaugetextresources) | class | Other | Puts TextMeshPro's essential resources into a host that has none. |
+| [`TurnGaugeVerificationBatch`](other.md#turngaugeverificationbatch) | class | Other | One command-line entry point for the checks that do not need play mode, so a verification pass is a single editor launch instead of three. |
+| [`UguiBattleView`](other.md#uguibattleview) | class | Other | Prefab-authored uGUI surface. |
+| [`VfxBinding`](other.md#vfxbinding) | class | Other | Maps one presentation VFX key to an optional pooled prototype. |
 
 </div>
 

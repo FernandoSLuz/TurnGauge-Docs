@@ -30,8 +30,8 @@ no-op, never a gameplay effect. Fully replaceable per B6-08.
 `public void Play(string animationKey, PresentationCue cue)`
 
 :   Invokes the handler bound to `animationKey`. A null or empty key is ignored outright; an unbound key warns once through the log and then stays silent, so a render frame never throws.
-    - `animationKey` &mdash; The animation key value used by this operation.
-    - `cue` &mdash; The cue value used by this operation.
+    - `animationKey` &mdash; Ordinal key registered to an Animator trigger.
+    - `cue` &mdash; Resolved participant and stage placement supplied to custom bindings.
 
 `public void Register(string animationKey, Action<PresentationCue> handler)`
 
@@ -57,7 +57,7 @@ degrade to a single warning and a no-op.
 
 `public BuiltInAudioAdapter(AudioSource source = null, PresentationLog log = null)`
 
-:   Copies the supplied dependencies into a new BuiltInAudioAdapter instance. Optional services use their documented no-op fallback while required inputs reject null.
+:   The audio adapter routes registered phase keys through one optional non-positional AudioSource.
     - `source` &mdash; Voice every one-shot plays through; with no source the adapter stays silent even for bound keys.
     - `log` &mdash; Shared warning ledger; null gives this adapter its own, which routes to the Unity console.
 
@@ -66,7 +66,7 @@ degrade to a single warning and a no-op.
 `public void Play(string audioKey)`
 
 :   Plays the clip bound to `audioKey` as a one-shot on the shared source, so playback is non-positional. A null or empty key is ignored; an unbound key warns once and then stays silent.
-    - `audioKey` &mdash; The audio key value used by this operation.
+    - `audioKey` &mdash; Ordinal sound binding named by the presentation phase.
 
 `public void Register(string audioKey, AudioClip clip)`
 
@@ -93,7 +93,7 @@ to a single warning and a null result rather than allocating forever.
 
 `public BuiltInPoolAdapter(Transform root = null, PresentationLog log = null)`
 
-:   Copies the supplied dependencies into a new BuiltInPoolAdapter instance. Optional services use their documented no-op fallback while required inputs reject null.
+:   The built-in pool retains keyed prototypes, idle clones, live ownership, and per-key structural caps.
     - `root` &mdash; Parent given to freshly created instances and to anything released back; null leaves them at the scene root.
     - `log` &mdash; Shared warning ledger; null gives this pool its own, which routes to the Unity console.
 
@@ -108,26 +108,26 @@ to a single warning and a null result rather than allocating forever.
 `public GameObject Acquire(string key)`
 
 :   Hands out a live instance for `key`, reusing an idle one when there is one. A key with no registered prototype still succeeds: it yields a bare `GameObject` named after the key, which the caller has to give visuals of its own.
-    - `key` &mdash; The key to resolve or store.
+    - `key` &mdash; Pool channel to acquire from, reusing idle instances before cloning its prototype.
     - **Returns** &mdash; An active instance, or null when the key is null or empty or already holds `MaximumPerKey` live instances - hitting the cap warns once for that key.
 
 `public int ActiveCount(string key)`
 
 :   Instances handed out for a key and not yet released; zero for a null key or one that has never been acquired.
-    - `key` &mdash; The key to resolve or store.
-    - **Returns** &mdash; The validated result of the operation.
+    - `key` &mdash; Pool channel whose unreleased checkout count is requested.
+    - **Returns** &mdash; Live instance count for the key, or zero for null or unknown keys.
 
 `public bool HasPrototype(string key)`
 
 :   True when `RegisterPrototype` has bound a prototype to `key` and that prototype is still alive. A destroyed prototype reports false rather than true, so a scene teardown that took the source object with it degrades to the shared fallback instead of cloning a dead reference.
-    - `key` &mdash; The key to resolve or store.
-    - **Returns** &mdash; The validated result of the operation.
+    - `key` &mdash; Prototype identity to inspect without creating or acquiring an instance.
+    - **Returns** &mdash; when the exact key maps to a non-destroyed prototype.
 
 `public int IdleCount(string key)`
 
 :   Idle (recycled) instances retained for a key.
-    - `key` &mdash; The key to resolve or store.
-    - **Returns** &mdash; The validated result of the operation.
+    - `key` &mdash; Pool channel whose recycled-instance count is requested.
+    - **Returns** &mdash; Inactive retained instance count for the key, or zero for null or unknown keys.
 
 `public void RegisterPrototype(string key, GameObject prototype)`
 
@@ -138,7 +138,7 @@ to a single warning and a null result rather than allocating forever.
 `public void Release(GameObject instance)`
 
 :   Takes back an instance from `Acquire`: deactivates it, reparents it under the pool root, and keeps it for reuse rather than destroying it. A null instance, one this pool did not hand out, and a second release of the same instance are all ignored, so a duplicate release during teardown is harmless.
-    - `instance` &mdash; The instance value used by this operation.
+    - `instance` &mdash; Owned live checkout to deactivate, reparent, and return to its keyed idle stack.
 
 ---
 
@@ -158,7 +158,7 @@ degrade to a single warning and a no-op.
 
 `public BuiltInVfxAdapter(IPoolAdapter pool = null, PresentationLog log = null)`
 
-:   Copies the supplied dependencies into a new BuiltInVfxAdapter instance. Optional services use their documented no-op fallback while required inputs reject null.
+:   The effect adapter borrows keyed instances from the optional pool and shares a log-once warning ledger.
     - `pool` &mdash; Source of the spawned instances; with no pool a registered key resolves quietly to nothing, since only unregistered keys warn.
     - `log` &mdash; Shared warning ledger; null gives this adapter its own, which routes to the Unity console.
 
@@ -168,7 +168,7 @@ degrade to a single warning and a no-op.
 
 :   Spawns a pooled instance for `vfxKey` at the cue. An unregistered key warns once and no-ops; a registered key with no pool, or one the pool has capped, does nothing at all. This adapter never releases what it acquired, so whoever owns the pool decides when the instance goes back.
     - `cue` &mdash; Placement for the effect; its parent, when set, adopts the instance without moving it.
-    - `vfxKey` &mdash; The vfx key value used by this operation.
+    - `vfxKey` &mdash; Ordinal effect binding and pool key named by the presentation phase.
 
 `public void RegisterKey(string vfxKey)`
 
@@ -195,12 +195,12 @@ Floating-number presentation style; purely cosmetic.
 | Value | Meaning |
 | --- | --- |
 | `None` | No number spawns, even when the event carries an amount. |
-| `Damage` | Chooses the damage variant of floating number style in serialized or canonical state. |
-| `Heal` | Chooses the heal variant of floating number style in serialized or canonical state. |
-| `Shield` | Chooses the shield variant of floating number style in serialized or canonical state. |
-| `Resource` | Chooses the resource variant of floating number style in serialized or canonical state. |
-| `Status` | Chooses the status variant of floating number style in serialized or canonical state. |
-| `Critical` | Chooses the critical variant of floating number style in serialized or canonical state. |
+| `Damage` | Health loss is shown with the skin's damage color and unsigned magnitude. |
+| `Heal` | Restored health is shown with the skin's healing color and a positive prefix. |
+| `Shield` | Shield gain or loss is shown with the skin's shield color. |
+| `Resource` | Resource changes are shown with the skin's resource color. |
+| `Status` | Status application or removal uses the skin's status-event color. |
+| `Critical` | Critical impact uses enlarged text and the skin's critical color. |
 
 ---
 
@@ -221,6 +221,14 @@ an implementation must not throw and must not read or write battle state:
 swapping the adapter has to leave the state hash, event chain, and result
 byte-identical.
 
+**Methods**
+
+`public void Play(string animationKey, PresentationCue cue)`
+
+:   Starts the animation bound to `animationKey`. Fires once per beat phase that names a key, which can be several times in a single frame when the visual clock is scaled up or beats are skipped.
+    - `animationKey` &mdash; Authored key, never null or empty from the presenter; an unbound key must no-op rather than throw.
+    - `cue` &mdash; Placement for this beat, passed by value. Its position is the beat source's stage slot, or (0,0,0) when that combatant has no resolved placement.
+
 ---
 
 ## IAudioAdapter
@@ -236,6 +244,13 @@ public interface IAudioAdapter
 Plays a keyed one-shot sound. Timing is presentation-only. Implementations
 must degrade an unknown key to a no-op instead of throwing, and must not
 touch battle state: audio can never change a battle outcome.
+
+**Methods**
+
+`public void Play(string audioKey)`
+
+:   Plays the sound bound to `audioKey`. No cue is supplied, so playback is non-positional. A skip or a sped-up clock can deliver many calls in one frame, so an implementation that cares about voice count must cap itself.
+    - `audioKey` &mdash; Authored key, never null or empty from the presenter; an unbound key must no-op rather than throw.
 
 ---
 
@@ -255,6 +270,25 @@ cap so the caller degrades visibly rather than allocating without bound.
 The presenter and the stage release everything they acquired on teardown,
 so an implementation must survive repeated acquire/release cycles without
 leaking instances and without destroying them.
+
+**Methods**
+
+`public GameObject Acquire(string key)`
+
+:   Hands out a live instance for `key`, reusing a previously released one when there is one. An implementation must return null once the key is at its cap rather than allocate without bound; every caller in the package reads null as "skip this visual" and carries on.
+    - `key` &mdash; Pool channel or prototype identity to check out.
+    - **Returns** &mdash; An active instance the caller may reposition, reparent, and add components to, or null when the key is capped.
+
+`public int ActiveCount(string key)`
+
+:   Instances acquired for `key` and not yet released. A key that has never been acquired reports zero rather than throwing.
+    - `key` &mdash; Pool channel whose unreleased instance count is requested.
+    - **Returns** &mdash; The number of live checkouts for the key, or zero when the key is unknown.
+
+`public void Release(GameObject instance)`
+
+:   Takes back an instance from `Acquire`. An implementation must deactivate and retain it for reuse rather than destroy it, and must ignore a null instance or one it does not own, so a duplicate release during teardown is harmless.
+    - `instance` &mdash; Previously acquired object to deactivate and retain for reuse.
 
 ---
 
@@ -279,6 +313,14 @@ Implementing it is optional. A pool that does not is treated as holding
 nothing specific, which is exactly the behaviour every project had before
 per-combatant art existed.
 
+**Methods**
+
+`public bool HasPrototype(string key)`
+
+:   True when a prototype has been registered for `key`. Must not acquire, allocate, or mutate anything.
+    - `key` &mdash; Prototype identity to inspect without checking out an instance.
+    - **Returns** &mdash; only when a live registered prototype exists for the exact key.
+
 ---
 
 ## IVfxAdapter
@@ -295,6 +337,14 @@ Plays a keyed one-shot visual effect at the cue position. Implementations
 bind the key to their own art and must treat an unknown key as a no-op,
 never an exception, since the presenter calls this unguarded. Effects are
 cosmetic only and must never feed back into anything authoritative.
+
+**Methods**
+
+`public void Play(string vfxKey, PresentationCue cue)`
+
+:   Spawns the effect bound to `vfxKey`. Fires once per beat phase that names a key, and may fire several times in one frame when beats are skipped or the visual clock is scaled up.
+    - `vfxKey` &mdash; Authored key, never null or empty from the presenter; an unbound key must no-op rather than throw.
+    - `cue` &mdash; Anchor the phase asked for, resolved against the beat's target or its source when there is no target; the position is (0,0,0) when neither resolves.
 
 ---
 
@@ -427,8 +477,8 @@ for the beat, never any authoritative value or engine reference.
     - `parent` &mdash; Optional parent for spawned instances; null leaves them unparented.
     - `sourceId` &mdash; Beat source, or the default id when the beat has no source.
     - `targetId` &mdash; Beat target, or the default id when the beat has no target.
-    - `facing` &mdash; The facing value used by this operation.
-    - `worldPosition` &mdash; The world position value used by this operation.
+    - `facing` &mdash; Compiled formation direction the spawned visual should face.
+    - `worldPosition` &mdash; Resolved stage position where the adapter should play the cue.
 
 **Properties**
 
@@ -484,14 +534,14 @@ key so a render frame never spams the console or throws.
 `public bool HasWarnedFor(string key)`
 
 :   Reports whether a warning has already been recorded for `key`, without recording one.
-    - `key` &mdash; The key to resolve or store.
+    - `key` &mdash; Exact adapter or recipe key whose warning-ledger membership is queried.
     - **Returns** &mdash; True once `WarnOnce` has fired for that exact key; always false for a null key, which `WarnOnce` dedupes under the empty string instead.
 
 `public void WarnOnce(string key, string message)`
 
 :   Emits at most one warning per `key`. Subsequent calls with the same key are silently ignored (documented degrade).
-    - `key` &mdash; The key to resolve or store.
-    - `message` &mdash; The message value used by this operation.
+    - `key` &mdash; Ordinal deduplication key; null shares the empty-string ledger entry.
+    - `message` &mdash; Warning text sent only for the key's first occurrence; null falls back to the key.
 
 ---
 
@@ -594,9 +644,9 @@ any battle hash.
 `public static PresentationRecipeSet CreateTransient()`
 
 :   Creates a non-persistent recipe set for runtime composition. The caller owns and must destroy the returned ScriptableObject.
-    - `authoredRecipes` &mdash; The authored recipes value used by this operation.
-    - `stableIdRaw` &mdash; The stable id raw value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `authoredRecipes` &mdash; Recipe assets copied into serialized order; null produces an empty set.
+    - `stableIdRaw` &mdash; Unvalidated identity text assigned to the transient set.
+    - **Returns** &mdash; A caller-owned, unsaved ScriptableObject containing the supplied recipe references.
 
 ---
 

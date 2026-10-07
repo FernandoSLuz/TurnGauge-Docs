@@ -1,9 +1,9 @@
 # The perform moment
 
-12 types in this area.
+13 types in this area.
 
 !!! abstract "On this page"
-    [BackdropBlurPerformModule](#backdropblurperformmodule) &middot; [BloomPulsePerformModule](#bloompulseperformmodule) &middot; [BodyShakePerformModule](#bodyshakeperformmodule) &middot; [CameraShakePerformModule](#camerashakeperformmodule) &middot; [CameraZoomPerformModule](#camerazoomperformmodule) &middot; [FocusPerformModule](#focusperformmodule) &middot; [IPerformBeatModule](#iperformbeatmodule) &middot; [PerformFeelPreset](#performfeelpreset) &middot; [PerformModuleBase](#performmodulebase) &middot; [PerformPhaseContext](#performphasecontext) &middot; [SkillAnnouncementPerformModule](#skillannouncementperformmodule) &middot; [VignettePulsePerformModule](#vignettepulseperformmodule)
+    [BackdropBlurPerformModule](#backdropblurperformmodule) &middot; [BloomPulsePerformModule](#bloompulseperformmodule) &middot; [BodyShakePerformModule](#bodyshakeperformmodule) &middot; [CameraShakePerformModule](#camerashakeperformmodule) &middot; [CameraZoomPerformModule](#camerazoomperformmodule) &middot; [FocusPerformModule](#focusperformmodule) &middot; [IPerformBeatModule](#iperformbeatmodule) &middot; [PerformBeatPhase](#performbeatphase) &middot; [PerformFeelPreset](#performfeelpreset) &middot; [PerformModuleBase](#performmodulebase) &middot; [PerformPhaseContext](#performphasecontext) &middot; [SkillAnnouncementPerformModule](#skillannouncementperformmodule) &middot; [VignettePulsePerformModule](#vignettepulseperformmodule)
 
 ## BackdropBlurPerformModule
 
@@ -26,16 +26,16 @@ belongs across the whole moment rather than as a spike on impact. It ramps in on
 opening phase, holds, and eases out on the closing one, which is the same shape
 `FocusPerformModule` uses.
 
-Works in every render pipeline; `BattleStageBackdrop` renders a second
-camera rather than an image effect.
+`BattleStageBackdrop` uses a secondary camera rather than an image effect.
+Verify capture behavior in your project's render pipeline before enabling this module.
 
 **Constructors**
 
 `public BackdropBlurPerformModule(BattleStageBackdrop stageBackdrop, PerformFeelPreset performFeel = null)`
 
 :   Creates the module for a backdrop component; null makes it inert.
-    - `performFeel` &mdash; The perform feel value used by this operation.
-    - `stageBackdrop` &mdash; The stage backdrop value used by this operation.
+    - `performFeel` &mdash; Backdrop blur amount, transition, and hold tuning; null uses package defaults.
+    - `stageBackdrop` &mdash; Stage backdrop receiving the non-authoritative blur strength; null disables the module.
 
 **Properties**
 
@@ -80,8 +80,8 @@ pretending to work - use that pipeline's own volume overrides instead.
 `public BloomPulsePerformModule(BattleStageBloom stageBloom, PerformFeelPreset feel = null)`
 
 :   Creates the module for a bloom component; null makes it inert.
-    - `feel` &mdash; The feel value used by this operation.
-    - `stageBloom` &mdash; The stage bloom value used by this operation.
+    - `feel` &mdash; Bloom pulse amount and duration tuning; null uses package defaults.
+    - `stageBloom` &mdash; Pipeline-neutral stage bloom component to pulse and restore; null disables the module.
 
 **Methods**
 
@@ -110,8 +110,8 @@ and will not recompute it.
 
 `public BodyShakePerformModule(PerformFeelPreset feel = null)`
 
-:   Copies the supplied dependencies into a new BodyShakePerformModule instance. Optional services use their documented no-op fallback while required inputs reject null.
-    - `feel` &mdash; The feel value used by this operation.
+:   Impact phases shake the struck combatant token and restore its exact local position when playback settles.
+    - `feel` &mdash; Body-shake duration and strength tuning; null uses package defaults.
 
 **Methods**
 
@@ -141,12 +141,16 @@ only if that project does not move it during a shake.
 `public CameraShakePerformModule(Transform cameraTransform, PerformFeelPreset feel = null)`
 
 :   Creates the module for a camera transform; null makes it inert.
-    - `cameraTransform` &mdash; The camera transform value used by this operation.
-    - `feel` &mdash; The feel value used by this operation.
+    - `cameraTransform` &mdash; Camera transform displaced locally during authored shake phases; null disables the module.
+    - `feel` &mdash; Camera-shake duration and strength tuning; null uses package defaults.
 
 **Methods**
 
 `public override void OnPhaseBegin(PerformPhaseContext context)`
+
+:   &mdash;
+
+`public override void Reset()`
 
 :   &mdash;
 
@@ -170,12 +174,16 @@ camera is left alone rather than moved in a way the project did not ask for.
 `public CameraZoomPerformModule(Camera camera, PerformFeelPreset feel = null)`
 
 :   Creates the module for a camera; null, or a perspective camera, makes it inert.
-    - `camera` &mdash; The camera value used by this operation.
-    - `feel` &mdash; The feel value used by this operation.
+    - `camera` &mdash; Orthographic battle camera whose size is pulsed; null or perspective cameras disable the module.
+    - `feel` &mdash; Zoom amount and duration tuning; null uses package defaults.
 
 **Methods**
 
 `public override void OnPhaseBegin(PerformPhaseContext context)`
+
+:   &mdash;
+
+`public override void Reset()`
 
 :   &mdash;
 
@@ -206,7 +214,7 @@ the battle.
 
 `public FocusPerformModule(PerformFeelPreset performFeel = null)`
 
-:   Copies the supplied dependencies into a new FocusPerformModule instance. Optional services use their documented no-op fallback while required inputs reject null.
+:   The focus module uses the supplied feel tuning, or package defaults, to dim uninvolved combatants during opening and impact.
     - `performFeel` &mdash; Tuning; null uses the shipped defaults.
 
 **Properties**
@@ -253,6 +261,48 @@ decided the outcome, it may be skipped entirely when a player fast-forwards,
 and it must therefore never be the place where anything authoritative
 happens.
 
+**Methods**
+
+`public void OnPhaseBegin(PerformPhaseContext context)`
+
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
+
+`public void Reset()`
+
+:   Called when playback is torn down or fast-forwarded past. Put the world back: a module that has moved a camera or tinted a sprite must undo it here, or the effect leaks into the next battle.
+
+`public void Tick(float presentationDeltaSeconds)`
+
+:   Called every presentation tick while the battle is playing, already scaled by the presenter's speed. Use it to advance a shake, a zoom, or a fade; a module with nothing to advance can leave it empty.
+    - `presentationDeltaSeconds` &mdash; Elapsed presentation time, never negative.
+
+---
+
+## PerformBeatPhase
+
+```csharp
+public enum PerformBeatPhase
+```
+
+`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Perform/PerformFeelPreset.cs</small>
+
+The parts of one impact, in the order a player reads them.
+
+They are phases of a single beat rather than separate effects, which is the
+whole point: an impact that lands, is counted, and is booked in that order
+reads as one event, while the same five things on five independent timers
+read as five things that happened to coincide.
+
+| Value | Meaning |
+| --- | --- |
+| `Flash` | The hit itself: camera shake, bloom, vignette. |
+| `Body` | The struck body's jolt and settle, riding the flash. |
+| `NumberArc` | The number leaving the body, just after the hit registers. |
+| `BarDrain` | The bar travelling to its new value, trailing the number. |
+| `Banner` | The banner naming what happened, over the consequence. |
+| `ChipReorder` | The turn order re-sorting, last, once the damage has read. |
+
 ---
 
 ## PerformFeelPreset
@@ -292,11 +342,11 @@ no amount of tuning can change a battle's outcome or its event-chain digest.
 
 `public float BloomPulseSeconds`
 
-:   Seconds for the bloom pulse to decay.
+:   Seconds for the bloom pulse to decay, with the rest of the flash.
 
 `public float BodyShakeSeconds`
 
-:   Seconds for a struck body to settle.
+:   Seconds for a struck body to settle, riding the flash.
 
 `public float BodyShakeStrength`
 
@@ -304,11 +354,15 @@ no amount of tuning can change a battle's outcome or its event-chain digest.
 
 `public float CameraShakeSeconds`
 
-:   Seconds for a camera shake to decay to nothing.
+:   Seconds for a camera shake to decay to nothing. Choreographed: the camera, the bloom, and the vignette are one flash and decay together, because three decays of 0.28, 0.30 and 0.34 seconds is not three ideas - it is one idea arriving three times.
 
 `public float CameraShakeStrength`
 
 :   Camera shake amplitude in world units.
+
+`public bool ChoreographToBeat`
+
+:   Whether the impact effects are placed inside `ImpactBeatSeconds`. Off restores the pre-choreography behaviour, where each effect ran its own independent duration.
 
 `public float FocusDim`
 
@@ -317,6 +371,10 @@ no amount of tuning can change a battle's outcome or its event-chain digest.
 `public float FocusFadeSeconds`
 
 :   Seconds to reach full dim and to release it.
+
+`public float ImpactBeatSeconds`
+
+:   How long one whole impact lasts. Every phase is placed inside it, so this is the single number that retimes the choreography.
 
 `public float TitleFadeSeconds`
 
@@ -332,7 +390,7 @@ no amount of tuning can change a battle's outcome or its event-chain digest.
 
 `public float VignettePulseSeconds`
 
-:   Seconds for the vignette pulse to decay.
+:   Seconds for the vignette pulse to decay, with the rest of the flash.
 
 `public float ZoomAmount`
 
@@ -340,10 +398,22 @@ no amount of tuning can change a battle's outcome or its event-chain digest.
 
 **Methods**
 
+`public float BeatOnsetSeconds(PerformBeatPhase phase)`
+
+:   How far into the beat `phase` starts.
+    - `phase` &mdash; The phase to place. An unknown value starts at the downbeat.
+    - **Returns** &mdash; Seconds from the start of the beat, or zero when choreography is off.
+
+`public float BeatSpanSeconds(PerformBeatPhase phase)`
+
+:   How long `phase` runs for.
+    - `phase` &mdash; The phase to measure. An unknown value takes the whole beat.
+    - **Returns** &mdash; Seconds, or the whole beat when the phase is unknown. Choreography off returns the beat unchanged, because a caller asking for a span still needs a duration to animate over.
+
 `public static PerformFeelPreset CreateDefault()`
 
 :   The shipped defaults, as a throwaway instance. Used when a project wires no asset, so the modules still have sensible numbers rather than zeroes that would silently disable every effect.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A transient preset carrying the package's serialized field defaults.
 
 ---
 
@@ -397,12 +467,12 @@ and stages it, and can never change what happened.
 `public PerformPhaseContext()`
 
 :   Creates a phase context. The presenter builds these; a test may build one directly.
-    - `beat` &mdash; The beat value used by this operation.
-    - `phaseIndex` &mdash; The phase index value used by this operation.
-    - `presenter` &mdash; The presenter value used by this operation.
-    - `sourceWorld` &mdash; The source world value used by this operation.
-    - `spec` &mdash; The spec value used by this operation.
-    - `targetWorld` &mdash; The target world value used by this operation.
+    - `beat` &mdash; Simulation event context being staged by the current presentation beat.
+    - `phaseIndex` &mdash; Zero-based in, impact, or out phase index.
+    - `presenter` &mdash; Presenter whose stage resolves combatant tokens and anchors.
+    - `sourceWorld` &mdash; World position of the acting combatant, or zero when unresolved.
+    - `spec` &mdash; Authored timing, adapter keys, and shake settings for this phase.
+    - `targetWorld` &mdash; World position of the target, falling back to the source position.
 
 **Properties**
 
@@ -458,7 +528,7 @@ nothing, which makes a missing string visible instead of silent.
 
 `public SkillAnnouncementPerformModule()`
 
-:   Copies the supplied dependencies into a new SkillAnnouncementPerformModule instance. Optional services use their documented no-op fallback while required inputs reject null.
+:   The skill-title card is bound to opening phases, with raw skill IDs used when no display label exists.
     - `titleView` &mdash; Card to drive; null makes the module inert.
     - `displayStrings` &mdash; Table skill ids are resolved through; null falls back to raw ids.
     - `performFeel` &mdash; Tuning; null uses the shipped defaults.
@@ -509,8 +579,8 @@ override there.
 `public VignettePulsePerformModule(BattleStageBloom stageBloom, PerformFeelPreset feel = null)`
 
 :   Creates the module for a bloom component; null makes it inert.
-    - `feel` &mdash; The feel value used by this operation.
-    - `stageBloom` &mdash; The stage bloom value used by this operation.
+    - `feel` &mdash; Vignette pulse amount and duration tuning; null uses package defaults.
+    - `stageBloom` &mdash; Stage bloom component whose vignette strength is pulsed and restored.
 
 **Methods**
 

@@ -19,11 +19,24 @@ TYPE = re.compile(
     r'^\s*public\s+((?:sealed\s+|abstract\s+|static\s+|readonly\s+|partial\s+)*)'
     r'(class|struct|interface|enum)\s+([A-Za-z0-9_]+)([^{]*)')
 
+# The terminator alternatives are tried left to right, so `=>` has to precede the
+# bare `=` or every expression-bodied property would read as a field. `=` is in the
+# list because a field with an initializer -- `public const float X = 30f;`, and the
+# id tables' `public static readonly StableId Y = ...` -- never reaches its `;` on
+# the declaration line the parser sees, so without it those members are silently
+# dropped. That previously hid a large part of the documented member surface.
 MEMBER = re.compile(
     r'^\s*public\s+(?!class\b|struct\b|interface\b|enum\b)'
     r'((?:static\s+|virtual\s+|override\s+|readonly\s+|const\s+|abstract\s+|sealed\s+|'
     r'event\s+|async\s+|extern\s+|unsafe\s+|new\s+)*)'
-    r'([A-Za-z0-9_<>\[\],.?:\s]+?)\s+([A-Za-z0-9_]+)\s*(\(|\{|=>|;|$)')
+    r'([A-Za-z0-9_<>\[\],.?:\s]+?)\s+([A-Za-z0-9_]+)\s*(\(|\{|=>|;|=|$)')
+
+# Interface members are implicitly public and therefore have no `public` token.
+INTERFACE_MEMBER = re.compile(
+    r'^\s*(?!class\b|struct\b|interface\b|enum\b)'
+    r'((?:static\s+|virtual\s+|override\s+|readonly\s+|const\s+|abstract\s+|sealed\s+|'
+    r'event\s+|async\s+|extern\s+|unsafe\s+|new\s+)*)'
+    r'([A-Za-z0-9_<>\[\],.?:\s]+?)\s+([A-Za-z0-9_]+)\s*(\(|\{|=>|;|=|$)')
 
 # A constructor looks like `public TypeName(` with no return type.
 CTOR = re.compile(r'^\s*public\s+([A-Za-z0-9_]+)\s*\(')
@@ -36,7 +49,7 @@ DOC_LINE = re.compile(r'^\s*///\s?(.*)$')
 # gap, because the reference then prints a "not documented" warning over real prose.
 DIRECTIVE = re.compile(r'^\s*#\s*(if|else|elif|endif|region|endregion|pragma|nullable|define|undef|line|warning|error)\b')
 
-EXCLUDE_DIR_PARTS = ('Tests', 'InternalTools', 'Internal', 'Library', 'obj', 'Temp')
+EXCLUDE_DIR_PARTS = ('Tests', 'InternalTools', 'Internal', 'OptionalDemos', 'Library', 'obj', 'Temp')
 
 
 # --- XML doc comment parsing ---------------------------------------------
@@ -112,6 +125,12 @@ def parse_file(path, display, out):
     current = None
     depth_of_type = None
     entered_body = False
+    # Enclosing types, innermost last. Without a stack a nested type ends its
+    # parent rather than interrupting it, and every member declared after the
+    # nested type is dropped. `BattleRuntimeController` declares two small
+    # [Serializable] binding classes near the top of its body, so all forty of
+    # its own members -- the entire scene-facing API -- extracted as nothing.
+    enclosing = []
     brace = 0
     # Attributes such as [CreateAssetMenu(...)] often span several lines. While
     # one is open, intervening lines must not clear the pending doc comment.
@@ -155,6 +174,8 @@ def parse_file(path, display, out):
             # A partial type declared twice keeps the first non-empty doc.
             if not entry['doc']['summary'] and doc_buffer:
                 entry['doc'] = parse_doc(doc_buffer)
+            if current is not None:
+                enclosing.append((current, depth_of_type, entered_body))
             current = key
             depth_of_type = brace
             entered_body = False
@@ -177,6 +198,8 @@ def parse_file(path, display, out):
             else:
                 ctor = CTOR.match(code)
                 mm = MEMBER.match(code)
+                if not mm and entry['kind'] == 'interface':
+                    mm = INTERFACE_MEMBER.match(code)
                 if ctor and ctor.group(1) == entry['name']:
                     params = code.split('(', 1)[1]
                     entry['members'].append({
@@ -204,7 +227,7 @@ def parse_file(path, display, out):
                         kind = 'event'
                     elif tail == '(':
                         kind = 'method'
-                    elif tail == ';':
+                    elif tail == ';' or tail == '=':
                         kind = 'field'
                     else:
                         kind = 'property'
@@ -244,9 +267,12 @@ def parse_file(path, display, out):
                 if brace > depth_of_type:
                     entered_body = True
             elif brace <= depth_of_type:
-                current = None
-                depth_of_type = None
-                entered_body = False
+                if enclosing:
+                    current, depth_of_type, entered_body = enclosing.pop()
+                else:
+                    current = None
+                    depth_of_type = None
+                    entered_body = False
 
 
 def collect(root):

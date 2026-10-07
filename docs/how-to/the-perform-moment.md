@@ -27,7 +27,7 @@ beat begins. The shipped effects are simply the first entries in that list:
 | `CameraZoomPerformModule` | impact | Pushes an orthographic camera in | any |
 | `BloomPulsePerformModule` | impact | Flares the optional `BattleStageBloom` | Built-in only |
 | `VignettePulsePerformModule` | impact | Closes the optional `BattleStageBloom` vignette in | Built-in only |
-| `BackdropBlurPerformModule` | opening, released on closing | Pulls the optional `BattleStageBackdrop` out of focus | any |
+| `BackdropBlurPerformModule` | opening, released on closing | Pulls the optional `BattleStageBackdrop` out of focus | verify in project |
 
 The announcement fires on the **opening** phase rather than on impact, so the card is up before
 the blow lands and the player reads what is coming rather than what already happened.
@@ -142,16 +142,16 @@ goes quiet with it rather than pretending to work.
 That is also why the focus pull **tints renderers rather than blurring the frame**. A dim costs
 nothing, works everywhere, and cannot collide with post-processing you already run.
 
-### A background blur that works everywhere
+### A background blur that needs pipeline verification
 
 If you want the background genuinely out of focus, add `BattleStageBackdrop` to the battle
 camera and register `BackdropBlurPerformModule`.
 
-It is not an image effect, which is exactly why it has no pipeline restriction. It renders the
-scene a second time — with TurnGauge's own tokens and interface hidden for the duration of that
-render — into a half-resolution `RenderTexture`, softens it through a chain of bilinear blits,
-and shows the result on a quad behind the stage. A camera, a render target and `Graphics.Blit`
-behave identically under Built-in, URP and HDRP.
+It uses a secondary camera rather than an image effect. It renders the scene a second time — with
+TurnGauge's own tokens and interface hidden for the duration of that render — into a
+half-resolution `RenderTexture`, softens it through bilinear blits, and shows the result on a
+quad behind the stage. Verify capture and blit behavior in your project's render pipeline before
+enabling it.
 
 Two consequences worth knowing:
 

@@ -25,8 +25,8 @@ compile or projection diagnostic rather than rejected here.
 `public AspectRatio(int numerator, int denominator)`
 
 :   Copies the width and height terms without reducing or range-checking the fraction. Compilation reports components outside 1..10,000.
-    - `denominator` &mdash; The denominator value used by this operation.
-    - `numerator` &mdash; The numerator value used by this operation.
+    - `denominator` &mdash; Height term retained verbatim as the fraction's denominator.
+    - `numerator` &mdash; Width term retained verbatim as the fraction's numerator.
 
 **Properties**
 
@@ -324,8 +324,8 @@ overlap - by which point the art is in and the formation is hard to change.
 :   Builds a preset for `arrangement` with `slotsPerSide` seats on each side.
     - `stableIdRaw` &mdash; Stable id for the produced preset.
     - `slotsPerSide` &mdash; Seats per side, 1 to `MaximumSlotsPerSide`.
-    - `arrangement` &mdash; The arrangement value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `arrangement` &mdash; Rank, column, staggered-column, or perspective seat geometry to materialize.
+    - **Returns** &mdash; A new unsaved preset with deterministic seat coordinates, facing, and front-to-back sorting.
 
 ---
 
@@ -699,8 +699,8 @@ projected screen coordinates cannot be passed for one another by mistake.
 `public ProjectedFormationPoint(int x, int y)`
 
 :   Copies projected X/Y pixel coordinates for a concrete viewport. It carries no transform or scene reference.
-    - `x` &mdash; The x value used by this operation.
-    - `y` &mdash; The y value used by this operation.
+    - `x` &mdash; Absolute horizontal pixel coordinate in the destination viewport's space.
+    - `y` &mdash; Absolute vertical pixel coordinate in the destination viewport's space.
 
 **Properties**
 

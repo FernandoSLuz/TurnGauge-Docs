@@ -1,6 +1,6 @@
 # Editor tools
 
-1 types in this area.
+2 types in this area.
 
 ## BattleSkinBrowserWindow
 
@@ -41,6 +41,31 @@ point for authoring a custom skin.
 `public void Refresh()`
 
 :   Rebuilds the list from shipped skins plus project assets.
+
+---
+
+## CombatStudioSampleBuilder
+
+```csharp
+public static class CombatStudioSampleBuilder
+```
+
+`TurnGauge.Editor.CombatStudio` &middot; <small>TurnGauge/Editor/CombatStudio/CombatStudioSampleBuilder.cs</small>
+
+Creates editable starter profiles and native view prefabs using
+Unity's asset APIs. No serialized YAML is authored by the tool.
+
+**Methods**
+
+`public static void BuildSamples()`
+
+:   Creates missing editable fantasy/science-fiction profiles and native view prefabs, repairs missing references in existing examples, and saves the assets. Requires an idle EditMode Editor with a starter catalog and no compilation errors; authored profile choices are retained.
+
+`public static PresentationStagePreset GetOrCreateStagePreset(BattleLayoutIdentity identity)`
+
+:   Creates an editable example using the shipped recipes and neutral art. Repeated calls preserve existing assets and all authored values. Camera movement starts disabled until its composition is validated.
+    - `identity` &mdash; Fantasy or science-fiction example identity used to choose the native asset path.
+    - **Returns** &mdash; The preserved or newly created editable preset for this identity.
 
 ---
 

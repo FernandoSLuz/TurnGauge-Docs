@@ -16,17 +16,21 @@ run one seed twice and see for yourself that nothing about the battle moved.
 There is no fourth step.
 
 !!! note "What has been verified"
-    Unity 2022.3.62f1 on the Built-in render pipeline is the configuration with recorded
-    evidence, and Unity 2022.3 LTS is the floor. URP, HDRP, newer editor streams including
-    Unity 6, and every platform beyond the editor are pending rather than supported.
+    The core engine and data assemblies are engine-free and designed to remain compatible
+    with Unity 2022.3. Native presentation, Studio and adapter validation is currently
+    recorded against Unity 6000.3.25f1 (Unity 6.3). This page does not claim that the
+    native editor workflow is current or approved on Unity 2022.3, nor that other editor
+    streams, render pipelines or platforms are supported.
     TurnGauge is a working name pending legal clearance.
 
 Four things you might expect to set up and do not:
 
 - **No shader or material step.** Every panel, bar, plate and pip is drawn procedurally by one
   shader that ships inside a `Resources` folder, so it survives build shader stripping.
-- **No font asset.** With no font assigned on the skin, text falls back to Unity's built-in
-  `LegacyRuntime.ttf`.
+- **No font asset for this demo.** With no font assigned on the shipped Runtime Demo skin, text
+  falls back to Unity's built-in `LegacyRuntime.ttf`. Native uGUI/TMP profiles use a
+  `TMP_FontAsset`; import **Window > TextMeshPro > Import TMP Essential Resources** before
+  following the no-code profile workflow in [Build your combat without code](build-without-code.md).
 - **No Event System.** The demo scene holds a camera, the driver and the interface, and nothing
   else. uGUI needs an `EventSystem` before any element receives pointer input, so the demo
   creates one with a `StandaloneInputModule` when Play begins and the scene has none. Pointer,
@@ -39,11 +43,12 @@ Four things you might expect to set up and do not:
 
 ## Take the first turn
 
-Play compiles the two starter catalogs and starts the picker's first scenario, **Playable Duel**,
-on seed `12345`. One of its two combatants is authored as **Human**, so the battle is not an
-attract loop: it runs until your hero is asked what to do, and then waits for you.
+Play compiles the two starter catalogs and starts the picker's first scenario, **Playable Battle**,
+on seed `12345`. It is a 3 v 3 with the Vanguard, Ranger and Mender under human control against
+the opposing Duelist, Adept and Colossus. The battle runs until one of your heroes is asked what
+to do, and then waits for you.
 
-1. Press **Play** and watch the opening beats. **Clockwork Rival** is faster and moves first;
+1. Press **Play** and watch the opening beats. The turn-order strip shows which member moves first;
    the log in the bottom left names every event as it resolves.
 2. When **Ember Vanguard** comes up, the battle stops. The skill tray fills along the bottom with
    that hero's legal choices, and nothing advances until you pick one.
@@ -80,13 +85,33 @@ waiting, which is why the eight automated scenarios never show it.
 | Scenario picker, seed field, playback row, status line | Top right | the demo driver |
 | Result banner | Centre, at the end | the terminal result |
 
-### The nine scenarios
+### The ten scenarios
 
-The picker spans nine authored scenarios. **Playable Duel** is offered first because it is the
-one with a human combatant. Then come the seven automated showcases from the same catalog:
-Boss and Minions, DOT Pressure, Formation Showcase, Healer Check, Mirror Brawl, Reaction
-Showcase and Tutorial Duel. **ATB Rush** is last, and runs the ATB scheduler out of its own
-catalog.
+The picker spans ten authored scenarios. **Playable Battle** is offered first because it is the
+3 v 3 human-controlled opening. The other eight Action Order scenarios are **Playable Duel**,
+**Tutorial Duel**, **Mirror Brawl**, **Boss and Minions**, **Healer Check**, **DOT Pressure**,
+**Reaction Showcase** and **Formation Showcase**. **ATB Rush** is last and runs the ATB scheduler
+from its own catalog.
+
+Each scenario owns its scheduler and formation. Selecting a scenario therefore changes the
+authored battle variant; the demo does not swap a scheduler or formation into a running battle.
+
+| Scenario | Scheduler | Shape | What to look at |
+| --- | --- | --- | --- |
+| Playable Battle | Action Order | 3 v 3 | Human party control and the staggered party formation |
+| Playable Duel | Action Order | 1 v 1 | Target selection, keyboard/gamepad focus and decision pausing |
+| Tutorial Duel | Action Order | 1 v 1 | The smallest complete start request |
+| Mirror Brawl | Action Order | 3 v 3 | The same teams under a line formation |
+| Boss and Minions | Action Order | 6 v 6 | The largest Action Order layout and Colossus lead |
+| Healer Check | Action Order | 3 v 3 | Conditional healing decisions |
+| DOT Pressure | Action Order | 3 v 3 | Periodic statuses at action end |
+| Reaction Showcase | Action Order | 5 v 5 | Six reactions across both trigger phases |
+| Formation Showcase | Action Order | 6 v 6 | Row and side target selection from slot metadata |
+| ATB Rush | ATB | 5 v 5 | Gauge fill, pause-on-input and residual carry |
+
+The first nine scenarios use `scheduler.action-order.v1`. **ATB Rush** uses
+`scheduler.atb.v1`; its gauge threshold and input pause policy are ATB fields and are not
+available on Action Order content.
 
 `<` and `>` move the selection only. The running battle continues until you press **Start**.
 
@@ -100,7 +125,8 @@ Every other page rests on this property, so watch it happen once.
     2. Press Play and play the duel to its end. Read the last log lines and the result.
     3. Stop and press Play again. Make the same choices in the same order: the same events
        resolve in the same order with the same numbers, and the same side wins.
-    4. Change **Seed** by one and press Play. The battle diverges.
+    4. Change **Seed** by one and press Play. The random sequence may change the battle, but a
+       different seed does not guarantee a different result.
 
 === "From the transport bar"
 
@@ -160,8 +186,10 @@ region is then not built at all, so the picker and playback row cost nothing.
 
 ## Next
 
-- **[2. Put a battle in your scene](playable-battle-in-a-scene.md)** -- the same playable duel in
-  a scene of your own, with no code at all.
+- **[2. Build your combat without code](build-without-code.md)** -- author a playable battle and
+  its content from the editor.
+- **[3. Put a battle in your scene](playable-battle-in-a-scene.md)** -- place the authored battle
+  in a scene of your own, with no code at all.
 - **[Determinism](../explanation/determinism.md)** -- what reproduces a battle exactly, and
   which of your own choices can break it.
 - **[Troubleshooting](../how-to/troubleshooting.md#the-interface-looks-flat)** -- if the

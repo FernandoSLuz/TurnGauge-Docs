@@ -102,7 +102,7 @@ public sealed partial class BattleEngine
 
 `TurnGauge.Simulation` &middot; <small>TurnGauge/Runtime/Simulation/Engine/BattleEngine.B2.cs</small>
 
-Models battle engine within the deterministic simulation layer using explicit IDs and values rather than scene or global discovery.
+Owns immutable battle state and advances it through deterministic command, scheduler, action, event, and mechanics reduction boundaries.
 
 **Properties**
 
@@ -286,7 +286,7 @@ Models battle engine within the deterministic simulation layer using explicit ID
 `public BattleEngine Clone()`
 
 :   Returns a second engine positioned on the current snapshot and sharing the same content, start request, seed, scheduler, and registries.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; An independently step-able engine at the same immutable snapshot, with shared static dependencies and empty diagnostic trace buffers.
 
 `public static BattleEngine Create()`
 
@@ -318,17 +318,17 @@ Models battle engine within the deterministic simulation layer using explicit ID
 `public FrozenList<AiDecisionTrace> DrainAiDecisionTraces()`
 
 :   Removes and returns whatever AI decision evidence is still buffered on the engine.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; All currently buffered non-authoritative AI decision traces in recording order; the engine buffer is empty after the call.
 
 `public FormulaAttributionTraceBatch DrainFormulaAttributionTraces()`
 
 :   Removes and returns whatever formula attribution evidence is still buffered on the engine, on the same terms as `DrainAiDecisionTraces`. The returned batch also reports how many traces were dropped to stay inside the documented memory bound, so a caller can tell a quiet battle from a truncated one.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; All buffered formula traces plus their omitted count; taking the batch clears both values from the engine buffer.
 
 `public BattleSnapshot GetSnapshot()`
 
 :   Returns the current authoritative state. The returned snapshot is immutable and is never edited in place, so it stays valid after the engine steps; call again to see the state that followed.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The immutable authoritative snapshot currently owned by this engine; later reductions replace rather than mutate it.
 
 `public uint NextBelow(uint exclusiveUpperBound)`
 
@@ -448,31 +448,31 @@ while the battle is still running.
 :   A terminal `battle.concession`: the battle ended because one team conceded rather than because it was eliminated.
     - `winningTeamId` &mdash; The team that did not concede.
     - `losingTeamId` &mdash; The conceding team.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A terminal concession state naming the surviving and conceding teams.
 
 `public static BattleResultState Defeat()`
 
 :   A terminal `battle.defeat`: one team survived and it is not the perspective team.
     - `winningTeamId` &mdash; The surviving team - the perspective team's opponent.
     - `losingTeamId` &mdash; The eliminated perspective team.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A terminal defeat state carrying both distinct valid team identities.
 
 `public static BattleResultState Draw()`
 
 :   A terminal `battle.draw`: neither team has a living combatant left on an unconceded team, so there is no winner to name.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A terminal draw state with no winner or loser identity.
 
 `public static BattleResultState Stalled()`
 
 :   A terminal `battle.stalled`: both teams were still standing when the battle hit its configured root-action or tick limit, so the engine stopped without a winner.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A terminal stalled state with no winner or loser identity.
 
 `public static BattleResultState Victory()`
 
 :   A terminal `battle.victory`: one team survived and it is the start request's perspective team.
     - `winningTeamId` &mdash; The surviving perspective team.
     - `losingTeamId` &mdash; The opposing team, which must differ from the winner.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A terminal victory state carrying both distinct valid team identities.
 
 ---
 
@@ -540,7 +540,7 @@ before they return, so a request they produce is one the engine will accept.
     - `content` &mdash; Profile-2 compiled content. Every id in the start is looked up in it, and content compiled for another profile is refused.
     - `schedulerId` &mdash; The scheduler that will drive the battle. It has to name a scheduler definition present in `content`.
     - `teams` &mdash; Exactly two non-null teams with distinct ids, built through `StartTeam.CreateB2`. Combatant ids must not repeat across the pair, and the two teams together may hold at most `SimulationLimits.TotalCombatants` members.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A profile-2 start request whose teams and content references are ready for engine validation.
 
 `public static BattleStartRequest CreateB3()`
 
@@ -548,7 +548,7 @@ before they return, so a request they produce is one the engine will accept.
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
     - `schedulerId` &mdash; The compiled scheduler definition that will drive the battle.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A profile-3 start request whose default perspective is the first team in canonical order.
 
 `public static BattleStartRequest CreateB3()`
 
@@ -557,7 +557,7 @@ before they return, so a request they produce is one the engine will accept.
     - `schedulerId` &mdash; The compiled scheduler definition that will drive the battle.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.
     - `perspectiveTeamId` &mdash; The team results are reported from; must be one of the two teams supplied.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A profile-3 start request reporting results from `perspectiveTeamId`.
 
 `public static B3CreationResult<BattleStartRequest> TryCreateB3()`
 

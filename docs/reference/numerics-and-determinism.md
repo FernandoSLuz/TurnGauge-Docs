@@ -29,166 +29,166 @@ through here is one of only two ways to obtain one; the other is stepping a
 
 `public static Sha256Digest EmptyEventChain`
 
-:   Snapshot of empty event chain carried by CanonicalBattleSerializer; reading it has no side effect on simulation state.
+:   Gets the domain-separated hash that anchors an event chain before its first event.
 
 **Fields**
 
 `public const int MaximumCanonicalBattleStateBytes`
 
-:   Bounded integer used for maximum canonical battle state bytes so malformed content cannot create unbounded simulation work.
+:   Maximum byte length accepted for a canonical battle-state snapshot.
 
 `public const int MaximumCanonicalSnapshotBytes`
 
-:   Bounded integer used for maximum canonical snapshot bytes so malformed content cannot create unbounded simulation work.
+:   Maximum byte length accepted for a canonical compiled-content snapshot.
 
 `public const int MaximumCanonicalStartBytes`
 
-:   Bounded integer used for maximum canonical start bytes so malformed content cannot create unbounded simulation work.
+:   Maximum byte length accepted for a canonical battle-start request.
 
 **Methods**
 
 `public static Sha256Digest AdvanceEventChain(Sha256Digest previous, BattleEvent battleEvent)`
 
-:   Performs advance event chain against explicit deterministic state and reports a typed boundary or failure instead of choosing fallback content.
-    - `battleEvent` &mdash; The battle event value used by this operation.
-    - `previous` &mdash; The previous value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Appends one canonical event to a domain-separated hash chain.
+    - `battleEvent` &mdash; The next event whose canonical bytes are committed to the chain.
+    - `previous` &mdash; The valid digest at the current end of the event chain.
+    - **Returns** &mdash; The new chain digest covering the previous digest and appended event.
 
 `public static BattleSnapshot DecodeBattleState(byte[] bytes)`
 
 :   Strictly reads decode battle state and rejects malformed, trailing, unsupported, or incompatible data without a partial result.
     - `bytes` &mdash; The canonical byte payload to read.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The canonical battle snapshot reconstructed with built-in scheduler implementations.
 
 `public static BattleSnapshot DecodeBattleState()`
 
 :   Strictly reads decode battle state and rejects malformed, trailing, unsupported, or incompatible data without a partial result.
     - `bytes` &mdash; The canonical byte payload to read.
-    - `schedulerRegistry` &mdash; The scheduler registry value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `schedulerRegistry` &mdash; The registry used to decode and verify scheduler-specific state.
+    - **Returns** &mdash; The canonical battle snapshot reconstructed from the versioned payload.
 
 `public static CompiledBattleContent DecodeCompiledSnapshot(byte[] bytes)`
 
 :   Strictly reads decode compiled snapshot and rejects malformed, trailing, unsupported, or incompatible data without a partial result.
     - `bytes` &mdash; The canonical byte payload to read.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The compiled content reconstructed with the built-in mechanics registry.
 
 `public static CompiledBattleContent DecodeCompiledSnapshot()`
 
 :   Strictly reads decode compiled snapshot and rejects malformed, trailing, unsupported, or incompatible data without a partial result.
     - `bytes` &mdash; The canonical byte payload to read.
-    - `mechanicsRegistry` &mdash; The mechanics registry value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `mechanicsRegistry` &mdash; The registry used to resolve mechanics identities required by version-three content.
+    - **Returns** &mdash; The compiled content reconstructed from the versioned canonical payload.
 
 `public static BattleStartRequest DecodeStartRequest(byte[] bytes)`
 
 :   Strictly reads decode start request and rejects malformed, trailing, unsupported, or incompatible data without a partial result.
     - `bytes` &mdash; The canonical byte payload to read.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The battle-start request reconstructed from the versioned canonical payload.
 
 `public static byte[] EncodeBattleState(BattleSnapshot snapshot)`
 
-:   Produces deterministic encode battle state output with stable ordering and invariant numeric formatting.
-    - `snapshot` &mdash; The snapshot value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Serializes a battle snapshot using its profile and built-in scheduler implementations.
+    - `snapshot` &mdash; The complete deterministic battle state to encode.
+    - **Returns** &mdash; The unique canonical byte representation of the battle state.
 
 `public static byte[] EncodeBattleState()`
 
-:   Produces deterministic encode battle state output with stable ordering and invariant numeric formatting.
-    - `schedulerRegistry` &mdash; The scheduler registry value used by this operation.
-    - `snapshot` &mdash; The snapshot value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Serializes a battle snapshot while resolving B2 or B3 scheduler state through the supplied registry.
+    - `schedulerRegistry` &mdash; The registry that supplies codecs for scheduler identities present in the snapshot.
+    - `snapshot` &mdash; The complete deterministic battle state to encode.
+    - **Returns** &mdash; The unique canonical byte representation of the battle state.
 
 `public static byte[] EncodeCommand(BattleCommand command)`
 
-:   Produces deterministic encode command output with stable ordering and invariant numeric formatting.
-    - `command` &mdash; The command value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Serializes a battle command into the versioned envelope that commits its identity, actor, targets, skill, and properties.
+    - `command` &mdash; The command type, submission identity, actor, target, skill, and properties to encode.
+    - **Returns** &mdash; The unique canonical byte representation of the command.
 
 `public static byte[] EncodeCompiledSnapshot(CompiledBattleContent content)`
 
-:   Produces deterministic encode compiled snapshot output with stable ordering and invariant numeric formatting.
-    - `content` &mdash; The content value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Serializes compiled battle content using its B1, B2, or B3 canonical schema and rejects unsupported profiles.
+    - `content` &mdash; The validated compiled content whose profile determines the encoded schema version.
+    - **Returns** &mdash; The unique canonical byte representation of `content`.
 
 `public static byte[] EncodeEvent(BattleEvent battleEvent)`
 
-:   Produces deterministic encode event output with stable ordering and invariant numeric formatting.
-    - `battleEvent` &mdash; The battle event value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Serializes a battle event with its tick, sequence identities, type, and payload.
+    - `battleEvent` &mdash; The emitted event to place in the version-one canonical event envelope.
+    - **Returns** &mdash; The unique canonical byte representation of the event.
 
 `public static byte[] EncodeFormulaAttribution(FormulaAttribution attribution)`
 
 :   Produces deterministic encode formula attribution output with stable ordering and invariant numeric formatting.
-    - `attribution` &mdash; The attribution value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `attribution` &mdash; The formula identity, participants, inputs, intermediate values, and final result to encode.
+    - **Returns** &mdash; The canonical version-one formula-attribution payload.
 
 `public static byte[] EncodeStartRequest(BattleStartRequest start)`
 
-:   Produces deterministic encode start request output with stable ordering and invariant numeric formatting.
-    - `start` &mdash; The start value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Serializes a battle-start request using the canonical format selected by its profile.
+    - `start` &mdash; The complete initial battle configuration to encode.
+    - **Returns** &mdash; The unique canonical byte representation of the start request.
 
 `public static Sha256Digest HashBattleState(BattleSnapshot snapshot)`
 
-:   Produces deterministic hash battle state output with stable ordering and invariant numeric formatting.
-    - `snapshot` &mdash; The snapshot value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes the SHA-256 digest of a battle snapshot encoded with built-in schedulers.
+    - `snapshot` &mdash; The complete deterministic battle state to canonicalize.
+    - **Returns** &mdash; The digest identifying the canonical battle-state payload.
 
 `public static Sha256Digest HashBattleState()`
 
-:   Produces deterministic hash battle state output with stable ordering and invariant numeric formatting.
-    - `schedulerRegistry` &mdash; The scheduler registry value used by this operation.
-    - `snapshot` &mdash; The snapshot value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes the SHA-256 digest of battle state encoded through a supplied scheduler registry.
+    - `schedulerRegistry` &mdash; The registry that supplies codecs for scheduler identities present in the snapshot.
+    - `snapshot` &mdash; The complete deterministic battle state to canonicalize.
+    - **Returns** &mdash; The digest identifying the registry-compatible canonical state payload.
 
 `public static Sha256Digest HashCommand(BattleCommand command)`
 
-:   Produces deterministic hash command output with stable ordering and invariant numeric formatting.
-    - `command` &mdash; The command value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes the SHA-256 digest of a battle command's canonical bytes.
+    - `command` &mdash; The command to canonicalize, including its submission metadata and payload.
+    - **Returns** &mdash; The digest identifying the encoded command.
 
 `public static Sha256Digest HashCompiledSnapshot(CompiledBattleContent content)`
 
-:   Produces deterministic hash compiled snapshot output with stable ordering and invariant numeric formatting.
-    - `content` &mdash; The content value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes the SHA-256 digest of a compiled-content snapshot's canonical bytes.
+    - `content` &mdash; The compiled content to serialize according to its contract profile.
+    - **Returns** &mdash; The digest identifying the complete canonical compiled snapshot.
 
 `public static Sha256Digest HashContentManifest(CompiledBattleContent content)`
 
-:   Produces deterministic hash content manifest output with stable ordering and invariant numeric formatting.
-    - `content` &mdash; The content value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes a domain- and schema-versioned manifest digest for compiled battle content.
+    - `content` &mdash; The compiled content whose profile, schema version, and snapshot bytes enter the manifest.
+    - **Returns** &mdash; The digest used to identify the content manifest.
 
 `public static Sha256Digest HashEvent(BattleEvent battleEvent)`
 
-:   Produces deterministic hash event output with stable ordering and invariant numeric formatting.
-    - `battleEvent` &mdash; The battle event value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes the SHA-256 digest of a battle event's canonical bytes.
+    - `battleEvent` &mdash; The emitted event to canonicalize.
+    - **Returns** &mdash; The digest identifying the event envelope and payload.
 
 `public static Sha256Digest HashFormulaAttribution(FormulaAttribution attribution)`
 
 :   Produces deterministic hash formula attribution output with stable ordering and invariant numeric formatting.
-    - `attribution` &mdash; The attribution value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `attribution` &mdash; The complete formula evaluation trace to canonicalize.
+    - **Returns** &mdash; The SHA-256 digest of the canonical formula-attribution payload.
 
 `public static Sha256Digest HashPropertySet(PropertySet properties)`
 
-:   Produces deterministic hash property set output with stable ordering and invariant numeric formatting.
-    - `properties` &mdash; The properties value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes the canonical digest of a property set.
+    - `properties` &mdash; The property names and tagged values to canonicalize and hash.
+    - **Returns** &mdash; The SHA-256 digest of the property's unique canonical representation.
 
 `public static Sha256Digest HashReplayCheckpoint(ReplayCheckpoint checkpoint)`
 
-:   Produces deterministic hash replay checkpoint output with stable ordering and invariant numeric formatting.
-    - `checkpoint` &mdash; The checkpoint value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes a domain-separated digest over a replay checkpoint's position and integrity hashes.
+    - `checkpoint` &mdash; The replay command count, clock position, event sequence, state hash, and chain hash to commit.
+    - **Returns** &mdash; The digest identifying that exact replay checkpoint.
 
 `public static Sha256Digest HashStartRequest(BattleStartRequest start)`
 
-:   Produces deterministic hash start request output with stable ordering and invariant numeric formatting.
-    - `start` &mdash; The start value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+:   Computes the SHA-256 digest of a battle-start request's canonical bytes.
+    - `start` &mdash; The initial battle configuration to canonicalize.
+    - **Returns** &mdash; The digest identifying the complete canonical start request.
 
 ---
 
@@ -230,21 +230,21 @@ This type is deliberately distinct from Fixed64.
 
 `public static readonly Chance64 Guaranteed`
 
-:   Shared guaranteed constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Certain probability equal to `Scale`, also resolved without consuming an RNG draw.
 
 `public const long Scale`
 
-:   Shared scale constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Raw probability units spanning the closed interval from never to guaranteed; one million units equal 100%.
 
 `public static readonly Chance64 Zero`
 
-:   Shared zero constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Impossible probability, which short-circuits sampling without consuming an RNG draw.
 
 `public static bool operator`
 
 :   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-    - `left` &mdash; The left value used by this operation.
-    - `right` &mdash; The right value used by this operation.
+    - `left` &mdash; First probability compared by exact raw units.
+    - `right` &mdash; Second probability compared by exact raw units.
     - **Returns** &mdash; The value produced by applying the operator.
 
 **Methods**
@@ -295,7 +295,7 @@ This type is deliberately distinct from Fixed64.
 `public override string ToString()`
 
 :   Returns the raw units as invariant-culture digits, not a percentage: 50% prints as "500000". It is meant for logs, diagnostics, and canonical text, so format the value yourself for anything a player reads.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The raw probability units as invariant decimal digits, without percentage conversion or locale-dependent formatting.
 
 ---
 
@@ -496,25 +496,25 @@ decimal, because that text feeds canonical encoding. Use
 
 `public static readonly Fixed64 One`
 
-:   Shared one constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Multiplicative identity representing exactly 1.0000, or `Scale` raw units.
 
 `public static readonly Fixed64 OneHundredPercent`
 
-:   Shared one hundred percent constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Percentage-domain value representing exactly 100.0000 rather than the fractional ratio 1.0.
 
 `public const long Scale`
 
-:   Shared scale constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Raw units per whole unit; four decimal places are represented because one unit is exactly 10,000 raw ticks.
 
 `public static readonly Fixed64 Zero`
 
-:   Shared zero constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Additive identity with a raw representation of zero.
 
 `public static bool operator`
 
 :   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-    - `left` &mdash; The left value used by this operation.
-    - `right` &mdash; The right value used by this operation.
+    - `left` &mdash; First fixed-point value compared by its exact raw representation.
+    - `right` &mdash; Second fixed-point value compared by its exact raw representation.
     - **Returns** &mdash; The value produced by applying the operator.
 
 **Methods**
@@ -523,14 +523,14 @@ decimal, because that text feeds canonical encoding. Use
 
 :   Returns the magnitude of a value, dropping the sign.
     - `value` &mdash; The value to measure. As with `Negate`, the most negative raw value is refused instead of being returned unchanged, which is what a two's-complement absolute value would otherwise do.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The non-negative magnitude of `value`; the minimum raw value is outside the positive range and throws.
 
 `public static Fixed64 Add(Fixed64 left, Fixed64 right)`
 
 :   Adds two values exactly; no precision is lost and no rounding takes place. The `+` operator forwards here, so operator arithmetic is checked as well: a sum that leaves the raw range throws rather than wrapping into a wrong but plausible number that would then be hashed into a battle event.
     - `left` &mdash; First addend.
     - `right` &mdash; Second addend.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The exact fixed-point sum; raw overflow raises `OverflowException` instead of wrapping.
 
 `public int CompareTo(Fixed64 other)`
 
@@ -543,7 +543,7 @@ decimal, because that text feeds canonical encoding. Use
 :   Divides one value by another, rounding half away from zero. The dividend is scaled up before the division, so it is the dividend alone that limits the range: above roughly 92 billion in unit terms the operation throws even when the answer would be small. There is no infinity or NaN to fall back on, which is why a zero divisor is an exception rather than a value.
     - `left` &mdash; Dividend.
     - `right` &mdash; Divisor.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The fixed-point quotient rounded half away from zero; a zero divisor or out-of-range scaled dividend throws.
 
 `public bool Equals(Fixed64 other)`
 
@@ -561,7 +561,7 @@ decimal, because that text feeds canonical encoding. Use
 
 :   Scales a whole number up into fixed point, so 5 arrives as 5.0.
     - `value` &mdash; The whole number to convert. Every 32-bit value stays inside the raw range once scaled, so this conversion cannot overflow.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; An exact fixed-point value whose raw field equals `value` multiplied by 10,000.
 
 `public override int GetHashCode()`
 
@@ -573,13 +573,13 @@ decimal, because that text feeds canonical encoding. Use
 :   Multiplies two values and rescales the product back to four decimal places, rounding half away from zero. The raw factors are multiplied before the rescale, so the headroom is smaller than the type's range suggests: the two operands multiplied together must stay under roughly 92 billion in unit terms, or the intermediate product overflows and throws. Each multiplication rounds on its own, so the order of a chain of them can change the result.
     - `left` &mdash; First factor.
     - `right` &mdash; Second factor.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The rescaled product rounded half away from zero; an out-of-range intermediate product throws.
 
 `public static Fixed64 Negate(Fixed64 value)`
 
 :   Flips the sign, backing the unary `-` operator.
     - `value` &mdash; The value to negate. The most negative raw value has no positive counterpart and therefore cannot be negated.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The same magnitude with its sign reversed; the minimum raw value has no representable result and throws.
 
 `public static Fixed64 ParseInvariant(string text)`
 
@@ -592,14 +592,14 @@ decimal, because that text feeds canonical encoding. Use
 :   Subtracts one value from another exactly, backing the `-` operator.
     - `left` &mdash; Value subtracted from.
     - `right` &mdash; Value taken away.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The exact fixed-point difference; raw overflow raises `OverflowException` instead of wrapping.
 
 `public int ToInt32Clamped(int minimum, int maximum)`
 
 :   Rounds as `ToInt64Rounded` does and then confines the result to a 32-bit range. This is how an evaluated amount becomes the whole number the engine actually applies: the clamp is part of the conversion, so a value far outside the range is pulled to the nearest bound instead of throwing or wrapping at the call site.
     - `minimum` &mdash; Lowest value that may be returned. Pass 1 where zero would be a meaningless amount.
     - `maximum` &mdash; Highest value that may be returned.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The nearest whole number using half-away-from-zero rounding, then confined inclusively to `minimum` and `maximum`.
 
 `public long ToInt64Rounded()`
 
@@ -609,7 +609,7 @@ decimal, because that text feeds canonical encoding. Use
 `public override string ToString()`
 
 :   Writes the raw scaled integer in invariant culture, so 5.0 prints as `50000`. That is deliberate: this text feeds canonical encoding and hashing, and must never shift with a player's locale. It is not player-facing output - use `BattleNumberFormat` for that.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The signed raw integer in invariant decimal form, with no thousands separators or fixed-point decimal point.
 
 `public static bool TryParseInvariant(string text, out Fixed64 result)`
 
@@ -665,7 +665,7 @@ rather than copying defensively at each hop.
 `public IEnumerator<T> GetEnumerator()`
 
 :   Walks the elements in the order they were copied in. Nothing can change the list underneath, so an enumeration can never be invalidated part way through.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; An enumerator over the fixed membership in original copy order; it never observes later source-collection changes.
 
 `public T[] ToArray()`
 
@@ -704,8 +704,8 @@ difference.
 `public static bool operator`
 
 :   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-    - `left` &mdash; The left value used by this operation.
-    - `right` &mdash; The right value used by this operation.
+    - `left` &mdash; The digest on the left side of the equality comparison.
+    - `right` &mdash; The digest on the right side of the equality comparison.
     - **Returns** &mdash; The value produced by applying the operator.
 
 **Methods**
@@ -732,7 +732,7 @@ difference.
 
 :   Adopts a digest that was computed or stored elsewhere. The array is copied, so later writes to the caller's buffer cannot change this value.
     - `source` &mdash; Exactly 32 digest bytes; anything else throws.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A valid digest owning a defensive copy of the 32 input bytes.
 
 `public override int GetHashCode()`
 
@@ -742,12 +742,12 @@ difference.
 `public byte[] ToByteArray()`
 
 :   Copies the 32 bytes out. The caller owns the returned array, so mutating it cannot corrupt this digest. Throws for the default value.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A new array containing the digest's 32 bytes.
 
 `public override string ToString()`
 
 :   Renders the digest as 64 lowercase hex characters, the exact form `TryParse` reads back. The default value renders as the empty string rather than 64 zeros, so an absent digest stays distinguishable from the digest of all-zero bytes.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Sixty-four lowercase hexadecimal characters, or an empty string for the default digest.
 
 `public static bool TryParse(string text, out Sha256Digest digest)`
 
@@ -801,13 +801,13 @@ carries no text and is not a usable id; see `IsValid`.
 
 `public const int MaximumLength`
 
-:   Bounded integer used for maximum length so malformed content cannot create unbounded simulation work.
+:   Maximum accepted identifier length in ASCII characters, limiting serialized keys and lookup work to 128.
 
 `public static bool operator`
 
 :   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-    - `left` &mdash; The left value used by this operation.
-    - `right` &mdash; The right value used by this operation.
+    - `left` &mdash; First identifier compared by exact ordinal text, including the default invalid value.
+    - `right` &mdash; Second identifier compared by exact ordinal text, including the default invalid value.
     - **Returns** &mdash; The value produced by applying the operator.
 
 **Methods**
@@ -844,7 +844,7 @@ carries no text and is not a usable id; see `IsValid`.
 `public override string ToString()`
 
 :   Returns the identifier text, or an empty string for the default value. Unlike `Value` it never throws, which is what makes it the safe choice inside a log line or an exception message.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The exact identifier text, or an empty string for the invalid default struct value; this conversion never throws.
 
 `public static bool TryParse(string text, out StableId id)`
 

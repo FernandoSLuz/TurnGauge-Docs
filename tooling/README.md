@@ -4,8 +4,7 @@ Two capture paths, because Unity has two very different rendering surfaces.
 
 ## 1. Scene, map, and interface content -- reliable and headless
 
-`DocsCapture.MapStyleGallery` (BranchWeaver-ImportHost) and
-`DocsCapture.BattleSkinGallery` (TurnGauge-ImportHost) render through a throwaway
+`DocsCapture.BattleSkinGallery` (TurnGauge-ImportHost) renders through a throwaway
 camera into a `RenderTexture`.
 
 ```bash
@@ -52,14 +51,6 @@ BattleSkinBrowserWindow|editor-skin-browser|1180|620
 BattleTemplateBrowserWindow|editor-battle-template-browser|1200|910
 ```
 
-BranchWeaver-ImportHost:
-
-```
-MapStudioWindow|editor-map-studio|1300|860
-MapStyleBrowserWindow|editor-style-browser|1180|800
-MapSetupWizard|editor-setup-wizard|900|640
-```
-
 Heights are chosen so the window is filled rather than trailing dead space, which is a
 judgement about each panel's content and has to be re-made if that content changes. The
 Content Validator is the short one on purpose: with a valid catalog it draws a toolbar
@@ -91,7 +82,7 @@ output; if it ever says `UNAWARE`, every image from that run is cropped.
 ### Two checks, because the obvious one is not sufficient
 
 `ExpectPoints{Width,Height}` is the real guard and it is arithmetic, not judgement: a
-window of *W* points at scale *S* renders *W×S* pixels, so a smaller bitmap is a
+window of *W* points at scale *S* renders *W x S* pixels, so a smaller bitmap is a
 photograph of part of it. The driver passes the size Unity itself reports, so the check
 needs no agreement about frame or title-bar thickness.
 
@@ -164,12 +155,14 @@ child's own log before concluding anything about the API.
 ## 3. The API reference surface
 
 `extract_docs.py` reads the source, `generate_api.py` renders it. The third input is a
-**tiers** file (`tf-tiers.json`, `bw-tiers.json`):
+**tiers** file (`tooling/api-tiers.json`):
 
 ```bash
 python tooling/extract_docs.py <package>/Assets api.json
-python tooling/generate_api.py api.json tooling/tf-groups.json     TurnGauge-Docs/docs/reference TurnGauge tooling/tf-tiers.json
+python tooling/generate_api.py api.json tooling/api-groups.json docs/reference TurnGauge tooling/api-tiers.json
 ```
+
+The extractor excludes `OptionalDemos` by source path. Those optional demonstration modules are staged independently and are not part of the base TurnGauge API reference.
 
 Listing every public type lists the wrong things. Most of a Unity package's public surface is
 public only because `internal` is per-assembly and the package spans several assemblies. The
@@ -216,8 +209,8 @@ pass try to refute it. That refutation is the valuable part: of 258 types that l
 single-assembly and unreferenced, only **6** could actually be made `internal`. The rest
 failed on one of two things worth remembering:
 
-- BranchWeaver has **no `[InternalsVisibleTo]` anywhere**, so any test usage of a
-  BranchWeaver type blocks `internal`.
+- TurnGauge has no blanket friend assembly for its public surface, so test usage of a
+  type can block making that type internal.
 - Inconsistent accessibility cascades. Internalising a type that appears in a still-public
   signature is CS0050/CS0051/CS0053, and internalising its container in turn breaks the tests
   that use *that*.

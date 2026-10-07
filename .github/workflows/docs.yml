@@ -2,7 +2,7 @@ name: Publish documentation
 
 on:
   push:
-    branches: [main]
+    branches: [rename/turngauge]
   workflow_dispatch:
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-      - run: pip install mkdocs-material mkdocs-glightbox
+      - run: pip install -r requirements.txt
       # --strict fails the build on a broken internal link, so a bad cross-reference
       # cannot reach the published site.
       - run: mkdocs build --strict

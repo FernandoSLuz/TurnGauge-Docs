@@ -1,4 +1,4 @@
-# 2. Put a battle in your scene
+# 3. Put a battle in your scene
 
 The demo is a scene you were given. This page builds the same playable duel in a scene of your
 own, from a menu item and an Inspector, with no C# at all.
@@ -79,7 +79,7 @@ already filled the two that matter.
   runs with nothing drawn, which is how you would run one headlessly.
 - **Recipes** is where a `PresentationRecipeSet` goes when you want events to play animations,
   effects and sound. See [Turn events into visuals](../how-to/presentation-recipes.md).
-- **Skin** restyles every region. See [6. Restyle the interface](skinning-your-battle.md).
+- **Skin** restyles every region. See [7. Restyle the interface](skinning-your-battle.md).
 - **Inspector Events** at the bottom are UnityEvents. Drag any object in and call a method of
   your own when a battle starts, a snapshot changes, events are produced, a battle ends, or the
   runtime fails, without writing a listener.
@@ -95,7 +95,7 @@ pumping and the tray fills.
 Clicking a skill, and picking a target when that skill needs one, is all there is to it.
 `BattleUiRoot` raises the player's choice, the controller checks it against the pending actor and
 the compiled legal choices, and submits it. Nothing in that path is yours to write.
-[5. Take a decision from the player](take-player-input.md) covers what the controller checks, how
+[6. Take a decision from the player](take-player-input.md) covers what the controller checks, how
 the target picker decides who is on offer, and how to submit a choice from your own UI instead.
 
 ## When it does not start
@@ -124,9 +124,9 @@ Nothing above is specific to the starter catalog.
 
 ## Next
 
-- **[3. Run a battle from your own code](run-a-battle-from-code.md)** -- what the controller is
+- **[4. Run a battle from your own code](run-a-battle-from-code.md)** -- what the controller is
   doing for you, for the projects that need to own the loop.
 - **[Start from a battle template](../how-to/start-from-a-template.md)** -- a turn model and a
   stage shape that go together, written out as assets you own.
-- **[5. Take a decision from the player](take-player-input.md)** -- submitting a choice from your
+- **[6. Take a decision from the player](take-player-input.md)** -- submitting a choice from your
   own interface.

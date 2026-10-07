@@ -125,14 +125,21 @@ report can be a seed and a replay file rather than a description. That holds str
 
 | Requirement | Detail |
 | --- | --- |
-| Unity | 2022.3 LTS or newer |
-| Render pipeline | Built-in, URP or HDRP. No render-pipeline package required |
+| Core engine | Engine-free data and simulation assemblies are designed for Unity 2022.3 compatibility |
+| Native editor | Presentation, Studio and adapters are currently validated on Unity 6000.3.25f1 (Unity 6.3), Built-in |
+| Other pipelines/editors | Pending verification |
 | Dependencies | None. No DRM, no telemetry, no online activation |
 
 !!! note "What you still bring"
     TurnGauge draws the interface, the stage and the bars. Character art, animation and audio
     stay yours. The sample scene binds placeholder tokens, status icons and sound effects so you
     can see the presentation layer working before you replace them.
+
+!!! note "Working name and evidence"
+    TurnGauge is a working name pending legal, store and domain clearance. The current
+    source guides describe editor workflows; they do not establish release approval or
+    native-editor support beyond the validated Unity 6.3 configuration above. Several new
+    workflows still need a fresh capture pass.
 
 ## Next
 

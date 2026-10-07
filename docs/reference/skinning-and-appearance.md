@@ -1,9 +1,9 @@
 # Skinning and appearance
 
-17 types in this area.
+21 types in this area.
 
 !!! abstract "On this page"
-    [BattleSkinDefaults](#battleskindefaults) &middot; [BattleSkinPreset](#battleskinpreset) &middot; [CompiledBattleSkin](#compiledbattleskin) &middot; [SkinAnchor](#skinanchor) &middot; [SkinBarTokens](#skinbartokens) &middot; [SkinEasing](#skineasing) &middot; [SkinFillMode](#skinfillmode) &middot; [SkinFloatingNumberTokens](#skinfloatingnumbertokens) &middot; [SkinMaterialPool](#skinmaterialpool) &middot; [SkinMotionTokens](#skinmotiontokens) &middot; [SkinPaletteTokens](#skinpalettetokens) &middot; [SkinRegionTokens](#skinregiontokens) &middot; [SkinShape](#skinshape) &middot; [SkinStatusPipTokens](#skinstatuspiptokens) &middot; [SkinSurfaceGraphic](#skinsurfacegraphic) &middot; [SkinSurfaceTokens](#skinsurfacetokens) &middot; [SkinTypographyTokens](#skintypographytokens)
+    [BattleSkinDefaults](#battleskindefaults) &middot; [BattleSkinPreset](#battleskinpreset) &middot; [CompiledBattleSkin](#compiledbattleskin) &middot; [SkinAnchor](#skinanchor) &middot; [SkinBarTokens](#skinbartokens) &middot; [SkinEasing](#skineasing) &middot; [SkinFillMode](#skinfillmode) &middot; [SkinFloatingNumberTokens](#skinfloatingnumbertokens) &middot; [SkinLayoutProfile](#skinlayoutprofile) &middot; [SkinMaterialPool](#skinmaterialpool) &middot; [SkinMotionTokens](#skinmotiontokens) &middot; [SkinPaletteTokens](#skinpalettetokens) &middot; [SkinRegionStretch](#skinregionstretch) &middot; [SkinRegionTokens](#skinregiontokens) &middot; [SkinShape](#skinshape) &middot; [SkinStagePresenceTokens](#skinstagepresencetokens) &middot; [SkinStatusPipTokens](#skinstatuspiptokens) &middot; [SkinSurfaceGraphic](#skinsurfacegraphic) &middot; [SkinSurfaceTokens](#skinsurfacetokens) &middot; [SkinTargetingTokens](#skintargetingtokens) &middot; [SkinTypographyTokens](#skintypographytokens)
 
 ## BattleSkinDefaults
 
@@ -26,6 +26,10 @@ The Skin Browser materializes any of these into an editable
 
 **Fields**
 
+`public const float CommandDeckHeight`
+
+:   Height of the full-bleed command deck, in reference pixels.
+
 `public float CornerRadius`
 
 :   Corner radius every surface in the look starts from, in reference pixels. Bars clamp it to half their own height, so a generous value rounds a thin bar into a capsule instead of distorting it.
@@ -37,6 +41,10 @@ The Skin Browser materializes any of these into an editable
 `public SkinFillMode FillMode`
 
 :   Fill treatment for the look's surfaces. The stage backdrop ignores it and always uses a radial gradient, since it is the one surface that has to sit behind everything else.
+
+`public const float GaugeBandHeight`
+
+:   Height of the full-bleed turn-order band, in reference pixels.
 
 `public float GlowIntensity`
 
@@ -50,9 +58,21 @@ The Skin Browser materializes any of these into an editable
 
 :   How far the second gradient stop is darkened away from the fill colour. Zero leaves the two stops identical, which makes even a gradient fill read as flat.
 
+`public const float LogStripHeight`
+
+:   Height of the log strip that caps the command deck, in reference pixels.
+
 `public SkinShape PipShape`
 
 :   Silhouette of the status pips, the one shape that changes from look to look. It also decides whether a pip is given a corner radius at all, since only a rounded rectangle reads one.
+
+`public const string PreviousDefaultSkinId`
+
+:   Identity of the look that was the default before Ironlight. It is still shipped and still selectable; only the default moved, so a project that recorded this id keeps the look it chose.
+
+`public const float SafeMargin`
+
+:   Safe margin held clear at the screen edge, in reference pixels.
 
 `public float ShadowRadius`
 
@@ -62,148 +82,244 @@ The Skin Browser materializes any of these into an editable
 
 :   Border thickness the look's surfaces are stroked with. The stage backdrop is the exception and drops it to zero, since it draws no border behind the rest of the interface.
 
+`public SkinShape SurfaceShape`
+
+:   Silhouette every panel, button, and bar in the look is cut from. The four original skins are rounded rectangles; Ironlight is chamfered, which is most of what makes it read as machined metal rather than as soft plastic.
+
 **Methods**
 
 `public static IReadOnlyList<CompiledBattleSkin> All()`
 
 :   Every shipped skin, in browser order.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A fresh five-item list ordered Ironlight, Slate Nocturne, Parchment Atlas, Neon Circuit, then Minimal Mono.
+
+`public static CompiledSkinLayout BandLayout(SkinLayoutProfile profile)`
+
+:   The three-band region placement for one aspect profile.
+    - `profile` &mdash; Which composition to build. Wide and Ultrawide share their numbers on purpose - band heights are fixed, so a wider screen spends every extra pixel on the stage instead of inflating the interface.
+    - **Returns** &mdash; A complete layout whose regions all dock into a band edge or the safe margin.
 
 `public static CompiledBattleSkin Default()`
 
 :   The skin used when a scene assigns none.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A freshly compiled Ironlight skin used as the package fallback.
 
 `public static SkinFloatingNumberTokens DefaultFloatingNumbers()`
 
-:   Floating-number timing shared by every shipped skin.
-    - **Returns** &mdash; The validated result of the operation.
+:   Floating-number sizing and timing shared by every shipped skin. The rise, easing, and scatter are unchanged; only the sizes moved. A number spawned over the stage competes with a 300-pixel character, so 26 disappeared against it. Criticals land at 80 with the skin's warning colour and a halo, which is the one moment the interface is allowed to shout.
+    - **Returns** &mdash; Shared floating-number size, critical scale, rise, lifetime, easing, and scatter tokens.
 
 `public static CompiledSkinLayout DefaultLayout()`
 
 :   The region placement shared by every shipped skin.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; The wide-profile three-band region placement used by every built-in skin.
 
 `public static SkinMotionTokens DefaultMotion()`
 
 :   Transition timings shared by every shipped skin.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Shared bar, panel, pip, timeline, and pulse transition timings at full motion scale.
+
+`public static SkinStagePresenceTokens DefaultStagePresence()`
+
+:   Depth falloff, contact shadow, and key light shared by every shipped skin.
+    - **Returns** &mdash; Staging enabled, with a rank falloff and a shadow width in the middle of the windows the visual direction specifies, so a skin that edits neither still satisfies the composition audit.
 
 `public static SkinTypographyTokens DefaultTypography()`
 
-:   Type sizing shared by every shipped skin.
-    - **Returns** &mdash; The validated result of the operation.
+:   Type sizing shared by every shipped skin. The floor is 16, not 13. Thirteen reference pixels on a 27-inch monitor at arm's length is about a quarter of a degree of arc, which is fine for an inspector field and far too small for something a player has to read while deciding a turn. Everything above the floor is a step in the same four-size scale - caption, body, name, heading - so at most four sizes are ever on screen at once.
+    - **Returns** &mdash; Shared caption, body, tracked-label, name, heading, title, spacing, and dark-outline typography tokens.
+
+`public static CompiledBattleSkin Ironlight()`
+
+:   Dark iron lit by one warm lamp. The shipped default.
+    - **Returns** &mdash; A complete freshly compiled Ironlight skin with the band layout, chamfered surfaces, and team-coloured health.
+
+`public static SkinSurfaceTokens IronlightBackdrop()`
+
+:   Default-look stage backdrop drawn behind the combatants.
+    - **Returns** &mdash; Borderless radial Ironlight backdrop tokens for the combat stage.
+
+`public static SkinSurfaceTokens IronlightButton()`
+
+:   Default-look card surface: the resting skill card and rail chip.
+    - **Returns** &mdash; Ironlight resting button surface tokens.
+
+`public static SkinSurfaceTokens IronlightButtonDisabled()`
+
+:   Default-look card surface for a skill the actor cannot currently use.
+    - **Returns** &mdash; Ironlight disabled-button tokens with muted contrast.
+
+`public static SkinSurfaceTokens IronlightButtonSelected()`
+
+:   Default-look card surface for the selected or hovered entry.
+    - **Returns** &mdash; Ironlight selected-button tokens using the brass accent treatment.
+
+`public static SkinBarTokens IronlightCastBar()`
+
+:   Default-look cast bar. It carries no delta ghost, since progress only rises.
+    - **Returns** &mdash; Ironlight cast-progress tokens without a delayed ghost.
+
+`public static SkinBarTokens IronlightGauge()`
+
+:   Default-look scheduler gauge for the combatant plate; no delta ghost either.
+    - **Returns** &mdash; Ironlight scheduler-gauge tokens without a delayed ghost.
+
+`public static SkinBarTokens IronlightHealthBar()`
+
+:   Default-look health bar. Its fill is the ally team colour, not green.
+    - **Returns** &mdash; Ironlight health-bar track, fill, ghost, border, and timing tokens.
+
+`public static SkinPaletteTokens IronlightPalette()`
+
+:   Dark iron lit by one warm lamp. The default look. The single rule that separates it from the others is that health is team-coloured rather than green: allies read bone-steel, enemies read rust, and green is freed up to mean healing and nothing else. On a 6v6 board that is the difference between twelve identical bars and a picture of who is winning.
+    - **Returns** &mdash; Dark-iron palette tokens with a brass accent, steel alternate, and team-coloured health roles.
+
+`public static SkinSurfaceTokens IronlightPanel()`
+
+:   Default-look base panel: feedback log, tooltip, and band backings.
+    - **Returns** &mdash; Ironlight base-panel surface tokens derived from its palette and look profile.
+
+`public static SkinSurfaceTokens IronlightPanelRaised()`
+
+:   Default-look raised surface: the acting chip and hovered rows.
+    - **Returns** &mdash; Ironlight raised-panel tokens with stronger separation than the base panel.
+
+`public static SkinStatusPipTokens IronlightPips()`
+
+:   Default-look status pip strip drawn above each combatant.
+    - **Returns** &mdash; Ironlight status-pip shape, color, size, spacing, and pop-motion tokens.
+
+`public static SkinBarTokens IronlightResourceBar()`
+
+:   Default-look resource bar for the actor's spendable pools.
+    - **Returns** &mdash; Ironlight resource-bar tokens for spendable pools.
+
+`public static SkinBarTokens IronlightShieldBar()`
+
+:   Default-look shield bar, drawn as a second thinner rail under health.
+    - **Returns** &mdash; Thin Ironlight shield-bar tokens.
+
+`public static SkinSurfaceTokens IronlightTooltip()`
+
+:   Default-look tooltip and result banner backing.
+    - **Returns** &mdash; Ironlight elevated tooltip and result-banner surface tokens.
 
 `public static CompiledBattleSkin MinimalMono()`
 
 :   Light, flat, glowless; the neutral base to customize from.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A complete freshly compiled light skin with flat surfaces, no glow, and reduced pulse scale.
 
 `public static SkinPaletteTokens MinimalMonoPalette()`
 
 :   Light, flat, glowless. The neutral base to customize from.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Light neutral palette tokens intended as a glowless customization base.
 
 `public static CompiledBattleSkin NeonCircuit()`
 
 :   Deep indigo with saturated neon rims and heavy halos.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A complete freshly compiled neon skin with strong in-shader halos.
 
 `public static SkinPaletteTokens NeonCircuitPalette()`
 
 :   Deep indigo with saturated neon rims. The loudest look.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Deep-indigo palette tokens with saturated cyan, magenta, and violet accents.
 
 `public static CompiledBattleSkin ParchmentAtlas()`
 
 :   Warm paper and ink, no glow.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A complete freshly compiled parchment skin with outline-free sepia typography.
 
 `public static SkinPaletteTokens ParchmentAtlasPalette()`
 
 :   Warm paper and ink. Suits adventure and campaign framing.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Warm parchment palette tokens with sepia ink and muted red and green states.
 
 `public static CompiledBattleSkin Resolve(BattleSkinPreset preset)`
 
 :   Resolves the skin a component should draw with: the assigned asset when present, otherwise the shipped default. Never returns null, so callers need no null branch.
-    - `preset` &mdash; The preset value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `preset` &mdash; Assigned authored preset to compile, or null to select Slate Nocturne.
+    - **Returns** &mdash; The preset's compiled tokens when assigned; otherwise a non-null default skin.
 
 `public static CompiledBattleSkin SlateNocturne()`
 
 :   Dark slate with cyan and amber accents.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A complete freshly compiled dark-slate skin with default typography, motion, and layout.
 
 `public static SkinSurfaceTokens SlateNocturneBackdrop()`
 
 :   Default-look stage backdrop drawn behind the combatants.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Borderless radial Slate Nocturne backdrop tokens for the combat stage.
 
 `public static SkinSurfaceTokens SlateNocturneButton()`
 
 :   Default-look button surface: skill tray, timeline, and transport buttons.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne resting button surface tokens.
 
 `public static SkinSurfaceTokens SlateNocturneButtonDisabled()`
 
 :   Default-look button surface for a skill the actor cannot currently use.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne disabled-button tokens with muted contrast.
 
 `public static SkinSurfaceTokens SlateNocturneButtonSelected()`
 
 :   Default-look button surface for the selected or hovered entry.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne selected-button tokens using the active accent treatment.
 
 `public static SkinBarTokens SlateNocturneCastBar()`
 
 :   Default-look cast bar. It carries no delta ghost, since progress only rises.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne cast-progress tokens without a delayed ghost.
 
 `public static SkinBarTokens SlateNocturneGauge()`
 
 :   Default-look scheduler gauge for the combatant plate; no delta ghost either.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne scheduler-gauge tokens without a delayed ghost.
 
 `public static SkinBarTokens SlateNocturneHealthBar()`
 
 :   Default-look health bar for nameplates and roster rows.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne health-bar track, fill, ghost, border, and timing tokens.
 
 `public static SkinPaletteTokens SlateNocturnePalette()`
 
-:   Dark slate with cyan and amber accents. The default look.
-    - **Returns** &mdash; The validated result of the operation.
+:   Dark slate with cyan and amber accents. The previous default look.
+    - **Returns** &mdash; Dark slate palette tokens with cyan informational and amber selection accents.
 
 `public static SkinSurfaceTokens SlateNocturnePanel()`
 
-:   Default-look base panel: status roster, feedback log, timeline backing.
-    - **Returns** &mdash; The validated result of the operation.
+:   Previous-default base panel: status roster, feedback log, timeline backing.
+    - **Returns** &mdash; Slate Nocturne base-panel surface tokens derived from its palette and look profile.
 
 `public static SkinSurfaceTokens SlateNocturnePanelRaised()`
 
 :   Default-look raised surface: roster rows and the next timeline entry.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne raised-panel tokens with stronger separation than the base panel.
 
 `public static SkinStatusPipTokens SlateNocturnePips()`
 
 :   Default-look status pip strip drawn above each combatant.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne status-pip shape, color, size, spacing, and pop-motion tokens.
 
 `public static SkinBarTokens SlateNocturneResourceBar()`
 
 :   Default-look resource bar for the actor's spendable pools.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne resource-bar tokens for spendable pools.
 
 `public static SkinBarTokens SlateNocturneShieldBar()`
 
 :   Default-look shield bar, drawn thinner than the health bar.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Thin Slate Nocturne shield-bar tokens.
 
 `public static SkinSurfaceTokens SlateNocturneTooltip()`
 
 :   Default-look tooltip and result banner backing.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; Slate Nocturne elevated tooltip and result-banner surface tokens.
+
+`public static SkinSurfaceTokens StageGround(SkinPaletteTokens palette)`
+
+:   The lit ground a formation stands on: a soft, wide pool of light warmed towards the skin's accent, fading to nothing at its rim. Nothing like it existed. Without a ground plane every combatant hung in mid-air, which is most of why the shipped screenshots read as an unfinished scene rather than a battle. It is derived from the palette rather than stored on the skin asset, so every existing preset -- including one a buyer authored before this shipped -- gets a floor with no migration and no new serialized field.
+    - `palette` &mdash; The palette the ground is tinted from.
+    - **Returns** &mdash; Surface tokens for one team's ground pool.
 
 `public static bool TryFind(string stableId, out CompiledBattleSkin skin)`
 
@@ -280,17 +396,19 @@ assigned.
 `public CompiledBattleSkin()`
 
 :   Assembles a skin from finished token groups. Values are stored exactly as given; clamping is `BattleSkinPreset.Compile`'s job, not this constructor's. A null surface, bar, or layout group throws, because the interface has nothing to fall back to for those.
-    - `bars` &mdash; The bars value used by this operation.
-    - `description` &mdash; The description value used by this operation.
-    - `displayName` &mdash; The display name value used by this operation.
-    - `floatingNumbers` &mdash; The floating numbers value used by this operation.
-    - `layout` &mdash; The layout value used by this operation.
-    - `motion` &mdash; The motion value used by this operation.
-    - `palette` &mdash; The palette value used by this operation.
-    - `stableIdText` &mdash; The stable id text value used by this operation.
-    - `statusPips` &mdash; The status pips value used by this operation.
-    - `surfaces` &mdash; The surfaces value used by this operation.
-    - `typography` &mdash; The typography value used by this operation.
+    - `bars` &mdash; Complete styling for health, shield, resource, cast, and scheduler bars.
+    - `description` &mdash; Player-facing prose describing the skin, or for no description.
+    - `displayName` &mdash; Player-facing skin name, or for an empty name.
+    - `floatingNumbers` &mdash; Size, travel, and easing tokens for combat floating numbers.
+    - `layout` &mdash; Canvas scaling and placement for every HUD region; must not be .
+    - `motion` &mdash; Durations, easing, and reduced-motion policy shared by HUD animations.
+    - `palette` &mdash; Semantic colors consumed by surfaces, bars, text, and feedback.
+    - `stableIdText` &mdash; Persistence-safe skin identifier, or for an empty identifier.
+    - `statusPips` &mdash; Size, spacing, and count presentation for combatant status pips.
+    - `stagePresence` &mdash; Grounding, silhouette and selection-presence tokens for world-space combatant art.
+    - `surfaces` &mdash; Complete styling for panels, buttons, tooltips, and the stage backdrop; must not be .
+    - `typography` &mdash; Font reference, sizes, and text style shared across the HUD.
+    - `targeting` &mdash; Reticle and affected-area preview tokens used to show a pending target request.
 
 **Properties**
 
@@ -326,6 +444,10 @@ assigned.
 
 :   The skin's persistent identity, carried over from the asset it was compiled from. Renaming the asset does not change it, so this is what to record when saving a player's chosen look. Empty, never null, when the source supplied none.
 
+`public SkinStagePresenceTokens StagePresence`
+
+:   Depth falloff between ranks, the contact shadow under every combatant, and the key light they are tinted by. This is what separates a stage from a set of correctly-placed coordinates; turn `SkinStagePresenceTokens.Enabled` off for a flat stage.
+
 `public SkinStatusPipTokens StatusPips`
 
 :   Size, spacing and stack-count settings for the status pip strip drawn above each combatant.
@@ -333,6 +455,10 @@ assigned.
 `public CompiledSkinSurfaces Surfaces`
 
 :   Fills, strokes, glows and shadows for the panels, buttons, tooltip and stage backdrop. Never null.
+
+`public SkinTargetingTokens Targeting`
+
+:   How a target pick is expressed, and whether that choice adapts to the device. Never changes what is legal; see `TargetPreview`.
 
 `public SkinTypographyTokens Typography`
 
@@ -343,13 +469,13 @@ assigned.
 `public Color FloatingNumberColor(FloatingNumberStyle style)`
 
 :   The colour a floating number of `style` uses.
-    - `style` &mdash; The style value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `style` &mdash; Semantic event category whose palette role should be selected.
+    - **Returns** &mdash; The palette color assigned to the requested category, or primary text for an unknown enum value.
 
-`public Font ResolveFont()`
+`public TMP_FontAsset ResolveFont()`
 
-:   The font the skin draws text with, falling back to Unity's built-in runtime font so no third-party font ships with the package.
-    - **Returns** &mdash; The validated result of the operation.
+:   The font the skin draws text with. It always returns one, even in a project that has never imported TextMeshPro's resources, so the battle interface can never come up wordless or unbuilt.
+    - **Returns** &mdash; The configured font, TextMeshPro's default, the essential-resources font, or one built from Unity's own built-in typeface.
 
 ---
 
@@ -365,15 +491,15 @@ Where a HUD region attaches inside the safe area.
 
 | Value | Meaning |
 | --- | --- |
-| `TopLeft` | Chooses the top left variant of skin anchor in serialized or canonical state. |
-| `TopCenter` | Chooses the top center variant of skin anchor in serialized or canonical state. |
-| `TopRight` | Chooses the top right variant of skin anchor in serialized or canonical state. |
-| `MiddleLeft` | Chooses the middle left variant of skin anchor in serialized or canonical state. |
-| `MiddleCenter` | Chooses the middle center variant of skin anchor in serialized or canonical state. |
-| `MiddleRight` | Chooses the middle right variant of skin anchor in serialized or canonical state. |
-| `BottomLeft` | Chooses the bottom left variant of skin anchor in serialized or canonical state. |
-| `BottomCenter` | Chooses the bottom center variant of skin anchor in serialized or canonical state. |
-| `BottomRight` | Chooses the bottom right variant of skin anchor in serialized or canonical state. |
+| `TopLeft` | Top-left safe-area point with a matching pivot. |
+| `TopCenter` | Horizontal center of the safe area's top edge. |
+| `TopRight` | Top-right safe-area point with a matching pivot. |
+| `MiddleLeft` | Vertical center of the safe area's left edge. |
+| `MiddleCenter` | Center point of the safe area. |
+| `MiddleRight` | Vertical center of the safe area's right edge. |
+| `BottomLeft` | Bottom-left safe-area point with a matching pivot. |
+| `BottomCenter` | Horizontal center of the safe area's bottom edge. |
+| `BottomRight` | Bottom-right safe-area point with a matching pivot. |
 
 ---
 
@@ -513,6 +639,26 @@ Rise-and-fade numbers for damage, healing, and shields.
 
 ---
 
+## SkinLayoutProfile
+
+```csharp
+public enum SkinLayoutProfile
+```
+
+`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+
+Which band composition a layout is authored for. The three shipped
+profiles keep the same band heights and move only what has to move, so a
+project does not re-author a HUD per device.
+
+| Value | Meaning |
+| --- | --- |
+| `Wide` | 16:9 and wider-but-not-ultrawide. |
+| `Ultrawide` | 21:9 and wider. |
+| `Portrait` | Taller than it is wide. |
+
+---
+
 ## SkinMaterialPool
 
 ```csharp
@@ -561,7 +707,7 @@ which draws a plain quad instead of a magenta error surface.
 
 :   Returns a material for `request`, sharing an existing one when the parameters match exactly.
     - `request` &mdash; The immutable request to validate and execute.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A shared reference-counted material for the request, or null when the shader is unavailable.
 
 `public void Clear()`
 
@@ -570,13 +716,13 @@ which draws a plain quad instead of a magenta error surface.
 `public static SkinMaterialPool EnsureFor(Component owner)`
 
 :   Finds the pool owning `owner`, creating one on the nearest canvas root when absent. Returns null only when the owner is not in a scene.
-    - `owner` &mdash; The owner value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `owner` &mdash; Scene component whose nearest parent pool or Canvas host should own materials.
+    - **Returns** &mdash; The existing parent pool, a new pool on the Canvas or owner object, or null for a null owner.
 
 `public void Release(Material material)`
 
 :   Drops one reference to a pooled material.
-    - `material` &mdash; The material value used by this operation.
+    - `material` &mdash; Material previously acquired from this pool; foreign or null materials are ignored.
 
 ---
 
@@ -634,7 +780,7 @@ Transition timings. Every duration scales by `MotionScale`.
 
 :   Maps a normalized 0..1 progress value through the selected easing curve. Input and output are clamped for presentation use only.
     - `t` &mdash; Progress from 0 to 1; anything outside that range is clamped first.
-    - `easing` &mdash; The easing value used by this operation.
+    - `easing` &mdash; Linear, smooth-step, cubic-out, or back-out curve applied to normalized time.
     - **Returns** &mdash; Eased progress. Every curve stays within 0..1 except `SkinEasing.BackOut`, which rises above 1 near the end and is what gives it its overshoot, so a caller that lerps with this result must tolerate values past the target.
 
 `public SkinMotionTokens Sanitized()`
@@ -724,6 +870,32 @@ The semantic colour roles a skin assigns once and reuses everywhere.
 
 ---
 
+## SkinRegionStretch
+
+```csharp
+public enum SkinRegionStretch
+```
+
+`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+
+How a HUD region behaves on each axis: pinned at its authored size, or
+stretched to the full width or height of the safe area.
+
+Stretching is what makes a band. A pinned region floats at an anchor with
+a pixel offset, which is individually reasonable and collectively
+arbitrary; a stretched region shares an edge with the screen and with
+every other region docked into the same band, so the composition holds at
+any aspect ratio without re-authoring an offset.
+
+| Value | Meaning |
+| --- | --- |
+| `None` | Pinned at the authored size on both axes. |
+| `Horizontal` | Full-bleed across the safe-area width. |
+| `Vertical` | Full-bleed down the safe-area height, with the authored width kept and the vertical offset read as a top and bottom inset. |
+| `Both` | Full-bleed on both axes, inset by `SkinRegionTokens.Offset`. |
+
+---
+
 ## SkinRegionTokens
 
 ```csharp
@@ -753,6 +925,10 @@ customer can move the whole interface without editing a prefab.
 
 :   Region size in reference pixels. Zero on an axis leaves that axis alone, so the region sizes to its content.
 
+`public SkinRegionStretch Stretch`
+
+:   Whether the region is pinned at its authored size or stretched to the full width or height of the safe area. A stretched axis reads `Offset` as an inset from both edges of that axis and ignores `Size` on it. That is what turns a region into a band: it shares an edge with the screen, so panels docked into it line up with each other at every aspect ratio instead of drifting apart.
+
 `public bool Visible`
 
 :   Whether the interface builds this region. A hidden region is never created rather than created and disabled, so switching it off costs nothing at runtime and its view is simply skipped when the interface repaints. This is how a host drops a block of the HUD it does not want without editing a prefab.
@@ -762,7 +938,7 @@ customer can move the whole interface without editing a prefab.
 `public static Vector2 AnchorPoint(SkinAnchor anchor)`
 
 :   The normalized anchor point for `anchor`.
-    - `anchor` &mdash; The anchor value used by this operation.
+    - `anchor` &mdash; Named safe-area location to convert into normalized coordinates.
     - **Returns** &mdash; The matching point with (0,0) at the bottom left and (1,1) at the top right, ready to use as a RectTransform anchor and pivot. A value outside the enum falls back to the bottom right.
 
 `public static SkinRegionTokens At(SkinAnchor anchor, Vector2 offset, Vector2 size)`
@@ -770,8 +946,17 @@ customer can move the whole interface without editing a prefab.
 :   A visible region anchored at `anchor`.
     - `offset` &mdash; Inward distance from the anchor in reference pixels.
     - `size` &mdash; Size in reference pixels; zero on an axis sizes to content.
-    - `anchor` &mdash; The anchor value used by this operation.
+    - `anchor` &mdash; Safe-area edge or corner that fixes both region anchors and pivot.
     - **Returns** &mdash; A visible region at scale 1.
+
+`public static SkinRegionTokens Band()`
+
+:   A visible full-bleed horizontal band of `height` reference pixels, hung from the top or bottom of the safe area.
+    - `anchor` &mdash; Edge the band hangs from. Only the vertical half is read, so any of the three top anchors gives a top band and any of the three bottom anchors gives a bottom band.
+    - `height` &mdash; Band height in reference pixels.
+    - `sideInset` &mdash; Left and right inset in reference pixels. Zero is true full bleed, which is what the shipped gauge rail uses.
+    - `edgeOffset` &mdash; Distance inward from that edge in reference pixels. Zero sits the band flush against the edge; a positive value stacks it above a band that is already there, which is how the log strip caps the command deck.
+    - **Returns** &mdash; A visible, horizontally stretched region at scale 1.
 
 `public Vector2 InwardOffset()`
 
@@ -780,7 +965,13 @@ customer can move the whole interface without editing a prefab.
 
 `public SkinRegionTokens Sanitized()`
 
+:   Copies the region with nonnegative dimensions and a scale capped at two. A nonpositive scale becomes one; other fields are retained.
+    - **Returns** &mdash; A presentation copy with those clamps applied. This method does not validate finite values or modify the source region.
+
+`public SkinRegionTokens ScaledBand(float scale)`
+
 :   Clamps every token into its supported range.
+    - `scale` &mdash; Factor from `CompiledSkinLayout.BandScale`. One, or anything outside a sane range, returns this region untouched.
     - **Returns** &mdash; A clamped copy; this instance is unchanged. A zero or negative `Scale` becomes 1, and a negative `Size` axis becomes zero.
 
 ---
@@ -802,6 +993,89 @@ The silhouette a skinned surface draws.
 | `Capsule` | A capsule: fully rounded on the shorter axis. |
 | `Hexagon` | A hexagon inscribed in the rectangle. |
 | `Diamond` | A diamond inscribed in the rectangle. |
+| `Chamfer` | A rectangle with its corners cut off at 45 degrees rather than rounded. |
+
+---
+
+## SkinStagePresenceTokens
+
+```csharp
+public struct SkinStagePresenceTokens
+```
+
+`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+
+How the stage stages its combatants: the falloff between depth ranks, the
+contact shadow every body stands on, and the one warm key light.
+
+Draw order alone does not make a scene. A formation whose seats are at
+correct coordinates and correct sorting still reads as a diagram, because
+nothing tells the eye which body is near and which is far - every
+silhouette is the same size, the same brightness, and touches nothing.
+These tokens are what turn that arrangement into a photograph of a fight.
+
+Rank is depth, and it is read from the formation rather than authored:
+seats sharing a ground line share a rank, and rank rises going away from
+the camera. A flat arrangement therefore has one rank and no falloff at
+all, which is the right answer for it.
+
+**Fields**
+
+`public Color ContactShadowColor`
+
+:   Colour of the contact shadow. It is a colour rather than plain black because a shadow on a lit stage carries the bounce of whatever it sits on, and pure black on a coloured backdrop reads as a hole.
+
+`public float ContactShadowFlatness`
+
+:   The shadow's height as a fraction of its width. Low values read as a high camera looking down a shallow stage, which is the shipped framing; at 1 the shadow is a circle and the stage reads top-down.
+
+`public float ContactShadowOpacity`
+
+:   How opaque the contact shadow is against the backdrop.
+
+`public float ContactShadowWidth`
+
+:   Width of a combatant's contact shadow as a fraction of that combatant's own sprite width, so one value serves bodies of every size. Zero removes the shadow. Without one a painted character floats: there is no evidence it is standing on the same ground as anybody else, and no amount of correct positioning supplies that evidence.
+
+`public bool Enabled`
+
+:   Whether the stage stages at all. Off leaves every combatant at one size, one brightness, and no shadow - the pre-staging look - without the host having to neutralize four separate tokens to get there.
+
+`public Color KeyLightColor`
+
+:   The single key light every combatant is lit by, tinting bodies toward it most strongly at the front rank and falling off with depth. One light, deliberately. Two lights need a direction each and turn a skin into a lighting rig; one warm key against a cool backdrop is the whole of what this presentation needs to stop looking flat.
+
+`public float KeyLightStrength`
+
+:   How far the front rank is tinted toward `KeyLightColor`. Zero leaves art exactly as painted, which is what a project with its own lighting wants.
+
+`public float RankDarkening`
+
+:   How much luminance each rank loses against the one in front of it, compounding the same way `RankScale` does. Scale alone is ambiguous - a smaller silhouette can be a smaller character. Darkening is what makes it distance, because atmosphere takes light out of everything behind the front line.
+
+`public float RankScale`
+
+:   How much smaller each rank is than the one in front of it. Applied per rank, so the second rank back is this squared. Below about 0.8 the back rank stops reading as further away and starts reading as smaller creatures; at 1 there is no depth cue left. The shipped value sits in the middle of that window.
+
+**Methods**
+
+`public SkinStagePresenceTokens Sanitized()`
+
+:   Clamps every token into its supported range.
+    - **Returns** &mdash; A clamped copy; this instance is unchanged. `Enabled` and both colours are left as authored.
+
+`public float ScaleForRank(int rank)`
+
+:   The size multiplier for a combatant standing at `rank`.
+    - `rank` &mdash; Depth rank, 0 at the front. Negative values are treated as the front.
+    - **Returns** &mdash; `RankScale` raised to `rank`, or exactly 1 when staging is off, so a caller can multiply unconditionally.
+
+`public Color TintForRank(Color tint, int rank)`
+
+:   Lights and depth-fades one combatant's tint for its rank.
+    - `tint` &mdash; The combatant's own tint, normally white for unmodified art.
+    - `rank` &mdash; Depth rank, 0 at the front. Negative values are treated as the front.
+    - **Returns** &mdash; The tint pulled toward `KeyLightColor` and then darkened for depth. Alpha is carried through untouched, so this composes with a death fade rather than fighting it. Staging off returns `tint` unchanged.
 
 ---
 
@@ -886,26 +1160,26 @@ so a glowing widget still occupies exactly its `RectTransform`.
 `public void Apply(SkinSurfaceTokens value)`
 
 :   Updates apply on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
-    - `value` &mdash; The value to validate and apply.
+    - `value` &mdash; Shape, fill, stroke, glow, and shadow tokens to sanitize and draw.
 
 `public void ApplySegments(int count, Color color)`
 
 :   Applies segment ticks, used by segmented bars.
-    - `color` &mdash; The color value used by this operation.
-    - `count` &mdash; The number of values or operations requested.
+    - `color` &mdash; Shader color used for separators between filled segments.
+    - `count` &mdash; Requested segment count, clamped to zero through 32.
 
 `public void SetFillColors(Color primary, Color secondary)`
 
 :   Replaces only the fill colours, keeping shape and glow.
-    - `primary` &mdash; The primary value used by this operation.
-    - `secondary` &mdash; The secondary value used by this operation.
+    - `primary` &mdash; Replacement first gradient stop.
+    - `secondary` &mdash; Replacement second gradient stop.
 
 `public void SetGlow(Color color, float radius, float intensity)`
 
 :   Replaces only the glow, keeping shape and fill.
-    - `color` &mdash; The color value used by this operation.
-    - `intensity` &mdash; The intensity value used by this operation.
-    - `radius` &mdash; The radius value used by this operation.
+    - `color` &mdash; Replacement outer-glow color.
+    - `intensity` &mdash; Replacement glow multiplier sanitized to the supported shader range.
+    - `radius` &mdash; Replacement glow radius in reference pixels.
 
 ---
 
@@ -925,7 +1199,7 @@ a handful of surfaces rather than hunting individual prefabs.
 
 `public float CornerRadius`
 
-:   Corner radius in reference pixels. Only `SkinShape.RoundedRect` reads it, and the shader clamps it to half the shorter axis, so an over-large value settles into a capsule instead of distorting the shape.
+:   Corner treatment in reference pixels: the fillet radius under `SkinShape.RoundedRect` and the cut length under `SkinShape.Chamfer`. Every other shape ignores it. The shader clamps it to half the shorter axis, so an over-large value settles into a capsule or a diamond instead of distorting the shape.
 
 `public Color FillColor`
 
@@ -937,7 +1211,7 @@ a handful of surfaces rather than hunting individual prefabs.
 
 `public SkinFillMode FillMode`
 
-:   Carries fill mode for SkinSurfaceTokens with explicit ownership and deterministic validation semantics. It does not discover project or scene state.
+:   Flat, linear-gradient, or radial-gradient sampling used by the surface shader.
 
 `public Color GlowColor`
 
@@ -985,7 +1259,7 @@ a handful of surfaces rather than hunting individual prefabs.
 
 :   A flat, strokeless, glowless surface in `fill`.
     - `cornerRadius` &mdash; Corner radius in reference pixels; zero gives square corners.
-    - `fill` &mdash; The fill value used by this operation.
+    - `fill` &mdash; Single color assigned to both surface gradient stops.
     - **Returns** &mdash; A rounded-rect surface with no stroke, glow, or shadow, ready to be built on.
 
 `public SkinSurfaceTokens Sanitized()`
@@ -996,7 +1270,7 @@ a handful of surfaces rather than hunting individual prefabs.
 `public SkinSurfaceTokens WithFill(Color fill)`
 
 :   Returns this surface with its fill replaced by `fill`.
-    - `fill` &mdash; The fill value used by this operation.
+    - `fill` &mdash; Replacement color written to both gradient stops on the returned copy.
     - **Returns** &mdash; A copy with both gradient stops set to `fill`, so a gradient surface reads as flat until a second stop is set again.
 
 `public SkinSurfaceTokens WithGlow(Color color, float radius, float intensity)`
@@ -1004,8 +1278,43 @@ a handful of surfaces rather than hunting individual prefabs.
 :   Returns this surface with its glow replaced.
     - `radius` &mdash; Glow radius in reference pixels, measured outward from the silhouette.
     - `intensity` &mdash; Glow strength; above 1 the halo reads as bloom.
-    - `color` &mdash; The color value used by this operation.
+    - `color` &mdash; Replacement outer-glow color on the returned token copy.
     - **Returns** &mdash; A copy carrying the new glow. The values are stored as given, so call `Sanitized` if they came from outside the supported ranges.
+
+---
+
+## SkinTargetingTokens
+
+```csharp
+public struct SkinTargetingTokens
+```
+
+`TurnGauge.Presentation` &middot; <small>TurnGauge/Runtime/Presentation/Skin/BattleSkinTokens.cs</small>
+
+How a target pick is expressed. Two fields, because the interesting
+decision is not which of the four presets to use - it is whether to let the
+package pick for you.
+
+None of this changes what is legal. Legality stays with the resolver, so a
+project can swap presets, or hand the choice to its players as an
+accessibility setting, without touching content or invalidating a replay.
+
+**Fields**
+
+`public bool AdaptToDevice`
+
+:   Move to the preset the device and party size call for. A preset that adapts is worth more on a store page than four a buyer has to configure. Off honours `Preset` verbatim, which is what a project with one target platform wants.
+
+`public TargetingPreset Preset`
+
+:   The preset a pick is expressed with. With `AdaptToDevice` on this is the starting point rather than the last word.
+
+**Methods**
+
+`public static SkinTargetingTokens Default()`
+
+:   The shipped default: reticle, adapting to the device.
+    - **Returns** &mdash; Reticle with adaptation enabled.
 
 ---
 
@@ -1029,7 +1338,7 @@ Type sizing and treatment. Fonts stay optional so no font is redistributed.
 
 :   Size of small supporting text, and the busiest of the three sizes: it covers combatant plates, bar readouts, log lines, timeline entries, and tooltip cost and timing rows. Several regions derive their row heights from it, so raising it grows those rows rather than overflowing them.
 
-`public Font Font`
+`public TMP_FontAsset Font`
 
 :   Optional font. Left empty, the skin falls back to Unity's built-in runtime font, so a skin never depends on a font asset the package would have to redistribute.
 
@@ -1037,13 +1346,25 @@ Type sizing and treatment. Fonts stay optional so no font is redistributed.
 
 :   Size of titles. The result banner scales it up further for its headline, so a large value here grows the end-of-battle text faster than it grows a tooltip title.
 
+`public int LabelSize`
+
+:   Size of a tracked, uppercase label: ACTING, TARGET, NOW, CAST, and the card footers. These are read as shapes rather than as words, so they sit between caption and heading and are always drawn with letter spacing. Zero means "derive": the size settles midway between `BodySize` and `HeadingSize`, so a skin authored before this token existed still gets a sensible value rather than the minimum.
+
 `public float LineSpacing`
 
 :   Multiplies the gap between lines of a wrapped label. Most HUD text is a single line, so this mainly affects the feedback log and tooltip body.
 
+`public int NameSize`
+
+:   Size of a combatant's name on the stage nameplate. It is the largest type a player reads mid-turn without stopping, so it is deliberately a step above `BodySize` rather than sharing it. Zero derives it from `HeadingSize`.
+
 `public Color OutlineColor`
 
 :   Colour of that outline. It is read only while `UseOutline` is set, and it should oppose the text colour rather than match the panel behind it: the shipped dark skins outline in black, the neon skin in its own near-black backdrop colour.
+
+`public int TitleSize`
+
+:   Size of the skill announcement banner that crosses the stage on perform. It is display type: it exists to be seen from across a room for half a second, not to be read carefully. Zero derives it from `HeadingSize`.
 
 `public bool UseOutline`
 

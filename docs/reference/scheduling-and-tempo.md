@@ -133,27 +133,27 @@ since the codec is stateless and has no public constructor.
 
 `public static readonly ActionOrderSchedulerStateCodec Instance`
 
-:   Shared instance constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Stateless singleton for canonical Action Order scheduler-state payloads.
 
 **Methods**
 
 `public bool CanHandle(SchedulerState state)`
 
 :   Accepts only a state that names the Action Order scheduler at this contract version, carries the Action Order tag, and populates the Action Order payload with no ATB payload.
-    - `state` &mdash; The state value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `state` &mdash; Candidate state to test against the built-in Action Order ID, current version, tag, and exclusive payload shape.
+    - **Returns** &mdash; True only for a complete current-version Action Order state with no ATB payload; null and foreign states return false.
 
 `public SchedulerStateDecodeResult DecodePayload(byte[] payload)`
 
 :   Reads bytes written by `EncodePayload` back into a state, checking the scheduler ID, contract version, state tag, entry ordering, and that nothing trails the payload.
-    - `payload` &mdash; The payload value used by this operation.
+    - `payload` &mdash; Candidate canonical Action Order bytes; null, malformed, foreign, oversized, or trailing data produces a failed decode result.
     - **Returns** &mdash; The decoded state, or a failure when the payload is null, empty, oversized, written by another codec, or malformed. It never throws for bad bytes.
 
 `public byte[] EncodePayload(SchedulerState state)`
 
 :   Writes the state to its canonical payload bytes.
-    - `state` &mdash; The state value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `state` &mdash; Current-version Action Order state accepted by `CanHandle`.
+    - **Returns** &mdash; A newly allocated canonical payload containing scheduler identity, decision queue, ready ticks, and round state.
 
 ---
 
@@ -175,8 +175,8 @@ tag is `SchedulerStateTag.ActionOrder`.
 
 :   Creates an Action Order payload. The ready ticks are sorted here into `(readyTick, actorId)` order, at most one per actor and no more than the combatant limit; a null round throws.
     - `roundIndex` &mdash; The 1-based index of the round in progress. Must be positive; it increments once per completed round and is never allowed to wrap.
-    - `readyTicks` &mdash; The ready ticks value used by this operation.
-    - `round` &mdash; The round value used by this operation.
+    - `readyTicks` &mdash; At most one non-null readiness record per actor; entries are copied and sorted by tick then actor ID.
+    - `round` &mdash; Required participant and resolution snapshot for the current round.
 
 **Properties**
 
@@ -197,7 +197,7 @@ tag is `SchedulerStateTag.ActionOrder`.
 `public ReadyTickEntry FindReadyTick(StableId actorId)`
 
 :   Finds the ready-tick entry for `actorId`.
-    - `actorId` &mdash; The actor id value used by this operation.
+    - `actorId` &mdash; Combatant identifier whose Action Order readiness record is requested.
     - **Returns** &mdash; The entry, or `null` when the actor has none, which is the case while it is queued for a decision or has been removed from the battle.
 
 ---
@@ -312,27 +312,27 @@ scheduler by hand, since the codec is stateless and has no public constructor.
 
 `public static readonly AtbSchedulerStateCodec Instance`
 
-:   Shared instance constant used by the deterministic contract; changing it can affect compatibility or authored validation.
+:   Stateless singleton for canonical ATB scheduler-state payloads.
 
 **Methods**
 
 `public bool CanHandle(SchedulerState state)`
 
 :   Accepts only a state that names the ATB scheduler at this contract version, carries the ATB tag, and populates the ATB payload with no Action Order payload.
-    - `state` &mdash; The state value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `state` &mdash; Candidate state to test against the built-in ATB ID, current version, tag, and exclusive payload shape.
+    - **Returns** &mdash; True only for a complete current-version ATB state with no Action Order payload; null and foreign states return false.
 
 `public SchedulerStateDecodeResult DecodePayload(byte[] payload)`
 
 :   Reads bytes written by `EncodePayload` back into a state, checking the scheduler ID, contract version, state tag, gauge ordering, and that nothing trails the payload.
-    - `payload` &mdash; The payload value used by this operation.
+    - `payload` &mdash; Candidate canonical ATB bytes; null, malformed, foreign, oversized, or trailing data produces a failed decode result.
     - **Returns** &mdash; The decoded state, or a failure when the payload is null, empty, oversized, written by another codec, or malformed. It never throws for bad bytes.
 
 `public byte[] EncodePayload(SchedulerState state)`
 
 :   Writes the state to its canonical payload bytes.
-    - `state` &mdash; The state value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `state` &mdash; Current-version ATB state accepted by `CanHandle`.
+    - **Returns** &mdash; A newly allocated canonical payload containing scheduler identity, decision queue, threshold, pause policy, and actor gauges.
 
 ---
 
@@ -355,7 +355,7 @@ state's tag is `SchedulerStateTag.Atb`.
 :   Creates an ATB payload. Gauge entries are sorted here by actor, at most one per actor and no more than the combatant limit, and every one of them must be strictly below `gaugeThresholdUnits`.
     - `gaugeThresholdUnits` &mdash; The units an actor must accumulate to become ready. Copied from the compiled scheduler definition; must be positive and within the ATB gauge limit.
     - `inputPausePolicy` &mdash; How the battle clock behaves while a player decision is pending. Held in state as well as in content so that a corrupted mismatch between the two is rejected.
-    - `gaugeEntries` &mdash; The gauge entries value used by this operation.
+    - `gaugeEntries` &mdash; At most one gauge per combatant; entries are copied, actor-sorted, and required to remain below the threshold.
 
 **Properties**
 
@@ -376,7 +376,7 @@ state's tag is `SchedulerStateTag.Atb`.
 `public GaugeEntry FindGauge(StableId actorId)`
 
 :   Finds the gauge for `actorId`.
-    - `actorId` &mdash; The actor id value used by this operation.
+    - `actorId` &mdash; Combatant identifier whose ATB gauge and recovery lock are requested.
     - **Returns** &mdash; The entry, or `null` when the actor has no gauge.
 
 ---
@@ -445,7 +445,7 @@ shared base registry can be extended per game without being copied defensively.
 `public static BattleSchedulerRegistry CreateWithBuiltIns()`
 
 :   Creates a registry holding the two built-in schedulers, Action Order and ATB, each with its canonical state codec and its scheduler-adjustment adapter. This is what the engine, the serializer, the replay executor, and the content compiler fall back to when no registry is supplied.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A fresh immutable registry containing Action Order and ATB schedulers, their canonical codecs, and their retiming adapters.
 
 `public BattleSchedulerRegistry Register(IBattleScheduler scheduler)`
 
@@ -456,8 +456,8 @@ shared base registry can be extended per game without being copied defensively.
 `public BattleSchedulerRegistry Register()`
 
 :   Registers a scheduler with an explicit state codec and no adjustment adapter. A battle whose content uses the scheduler-adjustment effect then refuses to start on this scheduler, so pass an adapter if any skill, status, or reaction retimes an actor.
-    - `scheduler` &mdash; The scheduler value used by this operation.
-    - `stateCodec` &mdash; The state codec value used by this operation.
+    - `scheduler` &mdash; Deterministic implementation with a valid ID and positive contract version not already registered as a pair.
+    - `stateCodec` &mdash; Non-null canonical codec whose scheduler ID and contract version match `scheduler` and whose state tag is supported.
     - **Returns** &mdash; A new registry holding the existing registrations plus this one; this instance is unchanged.
 
 `public BattleSchedulerRegistry Register()`
@@ -465,14 +465,14 @@ shared base registry can be extended per game without being copied defensively.
 :   Registers a scheduler with an explicit state codec and adjustment adapter.
     - `stateCodec` &mdash; The canonical codec for this scheduler's state. Its scheduler ID and contract version must equal the scheduler's, and its state tag must be Action Order or ATB.
     - `adjustmentAdapter` &mdash; How effects retime an actor under this scheduler, or null when the scheduler supports no adjustments. When given, its scheduler ID and contract version must match the scheduler's.
-    - `scheduler` &mdash; The scheduler value used by this operation.
+    - `scheduler` &mdash; Deterministic implementation whose valid ID and positive contract version form the unique registration key.
     - **Returns** &mdash; A new registry holding the existing registrations plus this one; this instance is unchanged.
 
 `public BattleSchedulerResolveResult Resolve()`
 
 :   Looks up the scheduler registered under an exact ID and contract version, together with its state codec and its adjustment adapter.
     - `schedulerContractVersion` &mdash; The version the caller requires. The same ID registered at a different version does not match, which is what stops an older saved state from being reinterpreted by a newer scheduler.
-    - `schedulerId` &mdash; The scheduler id value used by this operation.
+    - `schedulerId` &mdash; Stable scheduler registry key to match ordinally; an unknown or invalid ID produces a typed missing result rather than an exception.
     - **Returns** &mdash; A successful result carrying the scheduler, its codec, and its adjustment adapter, which is null when none was registered; otherwise a failed result whose diagnostic is `SchedulerDiagnosticIds.VersionUnsupported` when the ID is registered at another version, or `SchedulerDiagnosticIds.RegistryMissing` when the ID is not registered at all. An unknown scheduler is reported, never thrown.
 
 ---
@@ -493,9 +493,9 @@ rather than when the action resolves.
 
 `public CompiledActionCost(StableId resourceId, int amount)`
 
-:   Copies the supplied dependencies into a new CompiledActionCost instance. Optional services use their documented no-op fallback while required inputs reject null.
+:   Pairs one valid resource identifier with the strictly positive amount debited at command acceptance.
     - `amount` &mdash; Units to spend; must be greater than zero.
-    - `resourceId` &mdash; The resource id value used by this operation.
+    - `resourceId` &mdash; Resource pool to debit; an empty or otherwise invalid stable identifier is rejected.
 
 **Properties**
 
@@ -538,11 +538,11 @@ instance that exists has already passed the simulation's structural limits.
     - `minimumRequestedTargets` &mdash; Fewest target IDs a command for this skill may carry.
     - `maximumRequestedTargets` &mdash; Most target IDs a command for this skill may carry; may not be below `minimumRequestedTargets`.
     - `costs` &mdash; Resource costs. They are copied and sorted by resource ID, and a repeated resource ID is rejected.
-    - `cooldownClockKind` &mdash; The cooldown clock kind value used by this operation.
-    - `cooldownStartPolicy` &mdash; The cooldown start policy value used by this operation.
-    - `interruptRefundPolicy` &mdash; The interrupt refund policy value used by this operation.
-    - `skillId` &mdash; The skill id value used by this operation.
-    - `timingResolutionKind` &mdash; The timing resolution kind value used by this operation.
+    - `cooldownClockKind` &mdash; Clock domain in which `cooldownAmount` is measured; undefined values are rejected.
+    - `cooldownStartPolicy` &mdash; Event—acceptance or resolution—that starts the skill's cooldown.
+    - `interruptRefundPolicy` &mdash; Whether an interrupted cast restores costs already paid at acceptance.
+    - `skillId` &mdash; Valid stable identifier of the skill whose timing contract is being compiled.
+    - `timingResolutionKind` &mdash; Extra timing-layer operation performed at resolution, such as interrupting the first locked cast.
 
 **Properties**
 
@@ -654,9 +654,9 @@ crossing is converted into a decision entry and only the remainder kept.
 `public GaugeEntry(StableId actorId, int gaugeUnits, long recoveryLockUntilTick)`
 
 :   Creates a gauge entry. An unset actor, a negative gauge, or a negative recovery lock throws. The threshold is not known here, so it is `AtbState` that rejects a gauge at or above it.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - `gaugeUnits` &mdash; The gauge units value used by this operation.
-    - `recoveryLockUntilTick` &mdash; The recovery lock until tick value used by this operation.
+    - `actorId` &mdash; Valid combatant identifier whose deterministic ATB progress this entry records.
+    - `gaugeUnits` &mdash; Non-negative accumulated progress; the owning `AtbState` additionally requires it below the readiness threshold.
+    - `recoveryLockUntilTick` &mdash; Non-negative absolute tick through which this actor's gauge remains frozen after acting.
 
 **Properties**
 
@@ -703,6 +703,45 @@ Order and ATB schedulers.
     scheduler fails with
     `SchedulerDiagnosticIds.RegistryMissing`.
 
+**Properties**
+
+`public int SchedulerContractVersion`
+
+:   Version of this scheduler contract the implementation targets; it must be positive. Resolution matches on ID and version together, so raising the version deliberately stops older saved states from loading rather than reinterpreting them.
+
+`public StableId SchedulerId`
+
+:   Stable identity a compiled definition and a saved state refer to. It is half of the registry key, so the same ID may be registered only once per contract version.
+
+**Methods**
+
+`public SchedulerAdvanceResult Advance(SchedulerAdvanceContext context, SchedulerState state)`
+
+:   Moves the schedule forward from the state's last advanced tick to its next boundary. Advance to the earliest of the scheduler's own next readiness, the earliest due timer, and the caller's tick ceiling, and never past it; ticks in between may be jumped as long as the result equals what per-tick execution would produce. Return work in the exact order the engine must apply it, and report a no-work record with the stop reason when nothing happens.
+    - `context` &mdash; Current tick, timing views, the next opportunity sequence to allocate, the due timers, and the optional tick ceiling.
+    - `state` &mdash; The current state, whose `SchedulerState.LastAdvancedTick` equals the context's current tick.
+    - **Returns** &mdash; The next state with its ordered work and stop reason, or a failure.
+
+`public SchedulerCreateResult Create(SchedulerCreateContext context)`
+
+:   Builds the initial scheduler state at battle start, deciding who is immediately ready and what each actor's starting timing is.
+    - `context` &mdash; The compiled definition, the creation tick, and one timing view per combatant.
+    - **Returns** &mdash; The initial state, or a failure whose diagnostic prevents the battle from starting.
+
+`public SchedulerTransitionResult OnOpportunityAccepted()`
+
+:   Called once as the engine consumes the head of the decision queue, before the actor's command resolves. Remove that decision from the returned state; the actor is not finished acting yet, so do not charge recovery here.
+    - `context` &mdash; The opportunity sequence and actor being consumed, which must identify the current queue head.
+    - `state` &mdash; The state still holding that decision.
+    - **Returns** &mdash; The state without that decision, or a failure, which the engine treats as fatal.
+
+`public SchedulerTransitionResult OnOpportunityFinished()`
+
+:   Called once after an opportunity completes, is interrupted, or is skipped. This is where recovery is charged and the actor's next readiness is set, and where a round-based scheduler marks the actor resolved and may open the next round.
+    - `result` &mdash; The finished opportunity, its outcome, and the recovery the actor owes.
+    - `state` &mdash; The state after the decision was consumed, which must no longer hold a decision for that actor.
+    - **Returns** &mdash; The state with the actor's next readiness recorded plus any work the finish created, or a failure, which the engine treats as fatal.
+
 ---
 
 ## ISchedulerAdjustmentAdapter
@@ -742,6 +781,31 @@ needs one.
     `SchedulerAdjustmentContext.NextOpportunitySequence`. An adapter that
     invents its own arithmetic will be rejected at runtime, not silently honoured.
 
+**Properties**
+
+`public int SchedulerContractVersion`
+
+:   The scheduler contract version this adapter targets; it must match the registered scheduler's version.
+
+`public StableId SchedulerId`
+
+:   The scheduler this adapter retimes. It must match the scheduler it is registered with, or `BattleSchedulerRegistry` rejects the registration.
+
+**Methods**
+
+`public SchedulerAdjustmentResult Apply()`
+
+:   Applies one adjustment, returning a new state rather than editing the one supplied. Verify the request first - that the kind is supported, that the state is this scheduler's and stands at the context's current tick, and that the actor is present, eligible, and not busy - and refuse it with a diagnostic instead of throwing.
+    - `context` &mdash; The actor, the kind of adjustment, the requested delta, the timing views, and the next opportunity sequence available.
+    - `state` &mdash; The current scheduler state, whose `SchedulerState.LastAdvancedTick` equals the context's current tick.
+    - **Returns** &mdash; The retimed state with the delta actually applied and any readiness it opened, or a failure carrying the unchanged state.
+
+`public bool Supports(SchedulerAdjustmentKind kind)`
+
+:   Reports whether this adapter can apply that kind of adjustment. The engine calls it before `Apply`, and a false answer fails the effect outright instead of turning it into a no-op, so answer for the quantities the scheduler actually keeps - the built-in Action Order adapter accepts only `SchedulerAdjustmentKind.ReadyTickDelta` and the ATB adapter only `SchedulerAdjustmentKind.GaugeDelta`. It must be a pure function of `kind` and must not throw.
+    - `kind` &mdash; Requested scheduler quantity, including unknown enum values that implementations must answer without throwing.
+    - **Returns** &mdash; True only when this adapter can deterministically apply that adjustment category to its scheduler state.
+
 ---
 
 ## ISchedulerAdjustmentAdapterProvider
@@ -762,6 +826,12 @@ without the caller naming it separately.
     The adapter must match the scheduler's ID and contract version, or registration
     throws. Returning null is allowed and means the scheduler cannot be retimed by an
     effect; every other part of the scheduler still works.
+
+**Properties**
+
+`public ISchedulerAdjustmentAdapter AdjustmentAdapter`
+
+:   Adapter automatically registered alongside the scheduler, or null when that scheduler deliberately exposes no retiming effect.
 
 ---
 
@@ -794,6 +864,40 @@ replayable, and hashable.
     immutable, so neither method may mutate or retain what it is handed, and
     neither may read the clock or any other ambient state.
 
+**Properties**
+
+`public int SchedulerContractVersion`
+
+:   The contract version this payload layout belongs to; it must match the registered scheduler's version. Raising it therefore stops older payloads from decoding rather than letting them be reinterpreted.
+
+`public StableId SchedulerId`
+
+:   The scheduler this codec speaks for. It must match the registered scheduler's ID, and a payload naming a different ID must fail to decode.
+
+`public SchedulerStateTag StateTag`
+
+:   Which of the two state shapes this codec encodes. The registry accepts only `SchedulerStateTag.ActionOrder` or `SchedulerStateTag.Atb`, so a custom scheduler must reuse one of them rather than invent a third.
+
+**Methods**
+
+`public bool CanHandle(SchedulerState state)`
+
+:   Reports whether this codec owns the given state. The engine and the serializer call it before encoding and again on the decoded result, so it must accept exactly the states this codec can round-trip, and return false rather than throw for a null or foreign state.
+    - `state` &mdash; Candidate scheduler state, which may be null or belong to a different implementation.
+    - **Returns** &mdash; True only when scheduler ID, contract version, state tag, and payload shape are all encodable by this codec.
+
+`public SchedulerStateDecodeResult DecodePayload(byte[] payload)`
+
+:   Rebuilds a state from bytes produced by `EncodePayload`.
+    - `payload` &mdash; The bytes to read. A null, empty, truncated, oversized, foreign, or otherwise malformed payload must be reported as a failed result rather than thrown; the canonical reader turns a failed decode into a read diagnostic, whereas an escaping exception reaches the caller.
+    - **Returns** &mdash; The decoded state, or a failure carrying `SchedulerDiagnosticIds.StateInvalid`.
+
+`public byte[] EncodePayload(SchedulerState state)`
+
+:   Encodes a state this codec accepts into its canonical payload bytes.
+    - `state` &mdash; Non-null scheduler state previously accepted by `CanHandle`; foreign state is rejected rather than coerced.
+    - **Returns** &mdash; A self-contained payload that also carries the scheduler ID, contract version, and state tag, so `DecodePayload` can verify them.
+
 ---
 
 ## ISchedulerStateCodecProvider
@@ -813,6 +917,12 @@ without the caller naming the codec separately.
 !!! note "Remarks"
     `StateCodec` must never be null and must be the canonical codec for
     this scheduler - same scheduler ID and contract version - or registration throws.
+
+**Properties**
+
+`public ISchedulerStateCodec StateCodec`
+
+:   Non-null canonical codec automatically paired with the implementing scheduler during registration.
 
 ---
 
@@ -876,8 +986,8 @@ receives a fresh entry whose delay is scaled by its effective speed.
 `public ReadyTickEntry(StableId actorId, long readyTick)`
 
 :   Creates a ready-tick entry. An unset actor or a negative ready tick throws.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - `readyTick` &mdash; The ready tick value used by this operation.
+    - `actorId` &mdash; Valid combatant identifier whose next Action Order opportunity is being scheduled.
+    - `readyTick` &mdash; Non-negative absolute battle tick at or after which the actor may become ready.
 
 **Properties**
 
@@ -911,7 +1021,7 @@ start the next one.
 :   Creates a round. Both identifier sets are sorted here, so caller order does not matter, but they must hold valid unique IDs, the resolved set must be a subset of the participants, and the participant count may not exceed the combatant limit.
     - `startedTick` &mdash; The tick the round began on. The owning `SchedulerState` additionally rejects a round that begins after its own tick.
     - `resolvedParticipantIds` &mdash; Participants that already acted this round, or that stopped being eligible during it.
-    - `participantIds` &mdash; The participant ids value used by this operation.
+    - `participantIds` &mdash; Valid unique actors eligible when the round opened; the set is sorted and frozen independently of caller order.
 
 **Properties**
 
@@ -932,14 +1042,14 @@ start the next one.
 `public bool ContainsParticipant(StableId actorId)`
 
 :   Whether `actorId` is in this round's participant snapshot. Non-participants are not offered opportunities this round.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `actorId` &mdash; Combatant identifier to search in the immutable round-start participant set.
+    - **Returns** &mdash; True when the actor belonged to the participant snapshot captured at round start; otherwise false.
 
 `public bool IsResolved(StableId actorId)`
 
 :   Whether `actorId` has already resolved this round. A resolved participant is passed over even when its ready tick is the smallest, until the next round begins.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `actorId` &mdash; Participant identifier to search in the immutable resolved subset.
+    - **Returns** &mdash; True when the participant has acted or become ineligible during this round; otherwise false.
 
 ---
 
@@ -966,7 +1076,7 @@ order and nothing else.
     - `delta` &mdash; The requested signed change: ticks for `SchedulerAdjustmentKind.ReadyTickDelta`, gauge units for `SchedulerAdjustmentKind.GaugeDelta`. Negative hastens the actor, and the value is clamped rather than rejected when it would run past a bound.
     - `combatants` &mdash; Every combatant in the battle, eligible or not. Required, and entries must be non-null.
     - `nextOpportunitySequence` &mdash; The first opportunity sequence the adapter may assign should the adjustment itself make the actor ready. It may not be zero.
-    - `kind` &mdash; The kind value used by this operation.
+    - `kind` &mdash; Scheduler quantity to retime: absolute Action Order readiness or accumulated ATB gauge.
 
 **Properties**
 
@@ -1039,7 +1149,7 @@ was.
 :   Reports that the adjustment was refused. The engine raises the diagnostic and rolls the step back, so the battle keeps its last valid snapshot.
     - `unchangedState` &mdash; The state the adapter was handed, returned untouched. Required.
     - `diagnostic` &mdash; Why the adjustment was refused. Prefer an ID from `SchedulerDiagnosticIds` so tooling classifies the failure.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A failed result that preserves `unchangedState`, emits no work, applies zero delta, and carries the diagnostic.
 
 `public static SchedulerAdjustmentResult Success()`
 
@@ -1047,7 +1157,7 @@ was.
     - `state` &mdash; The state after the adjustment. Required.
     - `actualDelta` &mdash; How much of the requested delta the new state reflects, after clamping. The engine reports it on the scheduler-adjusted event, so it is what a UI can show as the retiming that landed.
     - `work` &mdash; Work the adjustment created, in application order - a ready opportunity when the adjustment made the actor ready. Null means none.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A successful result owning the supplied state, frozen work records, actual clamped delta, and no diagnostic.
 
 ---
 
@@ -1074,7 +1184,7 @@ earliest due timer or the ceiling.
     - `nextOpportunitySequence` &mdash; The first opportunity sequence this transition may assign. Allocate consecutively from it, one per ready opportunity produced, because the engine advances its own counter by exactly that many.
     - `dueTimers` &mdash; Engine-owned timers, none of which may be due before `currentTick`. Null means no timer is pending; entries must be non-null and unique.
     - `tickCeiling` &mdash; The highest tick the caller's advance request permits, or null when the caller set no ceiling.
-    - `combatants` &mdash; The combatants value used by this operation.
+    - `combatants` &mdash; Complete timing view of the battle roster; entries are copied and sorted by actor ID for deterministic traversal.
 
 **Properties**
 
@@ -1148,8 +1258,8 @@ advance can never leave the battle partly advanced.
 `public static SchedulerAdvanceResult Failure(Diagnostic diagnostic)`
 
 :   Reports that the advance was rejected. The engine raises the diagnostic and keeps its last valid snapshot, so the input state is never partly advanced.
-    - `diagnostic` &mdash; The diagnostic value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `diagnostic` &mdash; Machine-readable reason the requested scheduler advance was rejected without producing state or work.
+    - **Returns** &mdash; A failed advance result carrying only the supplied diagnostic, so callers cannot consume partial state.
 
 `public static SchedulerAdvanceResult Success()`
 
@@ -1157,7 +1267,7 @@ advance can never leave the battle partly advanced.
     - `state` &mdash; The state after the advance. Required.
     - `work` &mdash; The work records in application order. Required, entries must be non-null, and the count may not exceed `SimulationLimits.ExecutionFrames`.
     - `stopReason` &mdash; Why the advance stopped; must be a defined value.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A successful advance result with the required next state, an immutable ordered work list, and its validated stop reason.
 
 ---
 
@@ -1204,8 +1314,8 @@ can neither read nor change authoritative battle state through it.
     - `isEligible` &mdash; Whether the actor may receive a new opportunity at all.
     - `isBusy` &mdash; Whether the actor already holds an active action or cast.
     - `initialAtbGaugeUnits` &mdash; Gauge units the actor starts an ATB battle with. Action Order ignores the value.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - `controlKind` &mdash; The control kind value used by this operation.
+    - `actorId` &mdash; Stable identifier of the combatant whose eligibility, speed, and busy state this view exposes.
+    - `controlKind` &mdash; Whether a ready opportunity for this actor requires human input or automatic policy evaluation.
 
 **Properties**
 
@@ -1255,7 +1365,7 @@ creation happens at battle start and never mid-battle.
 :   Freezes the supplied timing views into an actor-ID-ordered snapshot, so later changes to the caller's collection cannot reach the scheduler.
     - `currentTick` &mdash; Tick the scheduler state is created at; the built-in schedulers accept only zero.
     - `combatants` &mdash; Every combatant in the battle, eligible or not. Required, and entries must be non-null.
-    - `definition` &mdash; The definition value used by this operation.
+    - `definition` &mdash; Compiled scheduler settings used to create the initial state; the selected scheduler validates that its tag and contract version match.
 
 **Properties**
 
@@ -1304,14 +1414,14 @@ and no state, and the engine refuses to start the battle.
 `public static SchedulerCreateResult Failure(Diagnostic diagnostic)`
 
 :   Reports that no state could be created. Prefer an ID from `SchedulerDiagnosticIds` so tooling classifies the failure.
-    - `diagnostic` &mdash; The diagnostic value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `diagnostic` &mdash; Machine-readable reason scheduler state creation could not satisfy its contract.
+    - **Returns** &mdash; A failed creation result containing no scheduler state and preserving the supplied diagnostic.
 
 `public static SchedulerCreateResult Success(SchedulerState state)`
 
 :   Reports a created scheduler state.
     - `state` &mdash; The initial state. Required.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A successful creation result containing the required initial state and no diagnostic.
 
 ---
 
@@ -1332,27 +1442,27 @@ parallel IDs for the same failures.
 
 `public static readonly StableId AtbGaugeInvalid`
 
-:   Stable diagnostic ID emitted when ATB gauge invalid is detected; branch on this ID rather than the human detail string.
+:   Failure code when an actor's ATB gauge is negative, reaches an impossible value, or is not below the threshold at initialization.
 
 `public static readonly StableId AtbThresholdInvalid`
 
-:   Stable diagnostic ID emitted when ATB threshold invalid is detected; branch on this ID rather than the human detail string.
+:   Failure code for a non-positive ATB readiness threshold or one above the simulation gauge limit.
 
 `public static readonly StableId DefinitionInvalid`
 
-:   Stable diagnostic ID emitted when definition invalid is detected; branch on this ID rather than the human detail string.
+:   Failure code for scheduler definitions whose state tag, contract version, ranges, or ATB-only fields violate the selected implementation.
 
 `public static readonly StableId NoEligibleCombatants`
 
-:   Stable diagnostic ID emitted when no eligible combatants is detected; branch on this ID rather than the human detail string.
+:   Failure code when scheduler creation or transition finds no combatant that can ever receive an opportunity.
 
 `public static readonly StableId OpportunityOverflow`
 
-:   Stable diagnostic ID emitted when opportunity overflow is detected; branch on this ID rather than the human detail string.
+:   Failure code when allocating one or more opportunity sequences would wrap the unsigned sequence counter.
 
 `public static readonly StableId ReadyQueueLimit`
 
-:   Stable diagnostic ID emitted when ready queue limit is detected; branch on this ID rather than the human detail string.
+:   Failure code when scheduler output would exceed the bounded ready-decision queue.
 
 `public static readonly StableId RegistryMissing`
 
@@ -1360,19 +1470,19 @@ parallel IDs for the same failures.
 
 `public static readonly StableId RoundOverflow`
 
-:   Stable diagnostic ID emitted when round overflow is detected; branch on this ID rather than the human detail string.
+:   Failure code when opening the next Action Order round would wrap its unsigned round index.
 
 `public static readonly StableId SpeedInvalid`
 
-:   Stable diagnostic ID emitted when speed invalid is detected; branch on this ID rather than the human detail string.
+:   Failure code for a combatant speed outside deterministic bounds or incompatible with the configured ATB threshold.
 
 `public static readonly StableId StateInvalid`
 
-:   Stable diagnostic ID emitted when state invalid is detected; branch on this ID rather than the human detail string.
+:   Failure code for malformed scheduler state, mismatched current ticks, duplicate actors, or inconsistent decision queues.
 
 `public static readonly StableId TickOverflow`
 
-:   Stable diagnostic ID emitted when tick overflow is detected; branch on this ID rather than the human detail string.
+:   Failure code when advancing, scaling recovery, or computing a due tick would exceed the signed tick range.
 
 `public static readonly StableId VersionUnsupported`
 
@@ -1401,7 +1511,7 @@ scheduler normally needs only `DueTick` and `Kind`.
     - `ownerId` &mdash; Combatant that owns the timer. Required.
     - `timerId` &mdash; Skill ID for a cast or cooldown timer, status definition ID for a status boundary. Required.
     - `applicationSequence` &mdash; Which application of a status the boundary belongs to. It must be non-zero for `SchedulerDueTimerKind.ElapsedStatusBoundary` and zero for every other kind.
-    - `kind` &mdash; The kind value used by this operation.
+    - `kind` &mdash; Engine boundary category, which also establishes tie precedence for timers sharing a due tick.
 
 **Properties**
 
@@ -1467,8 +1577,8 @@ state-invalid failure.
 :   Names the decision being consumed and freezes the timing views into an actor-ID-ordered snapshot.
     - `currentTick` &mdash; The current tick, which must equal `SchedulerState.LastAdvancedTick` of the state passed alongside it.
     - `opportunitySequence` &mdash; Sequence of the decision being consumed. It must match the queue head and may not be zero.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - `combatants` &mdash; The combatants value used by this operation.
+    - `actorId` &mdash; Stable identifier on the decision-queue head being accepted.
+    - `combatants` &mdash; Current complete roster timing view, defensively copied and sorted by actor ID.
 
 **Properties**
 
@@ -1531,9 +1641,9 @@ the same actor consecutive turns.
     - `currentTick` &mdash; The tick the opportunity finished on, which must equal `SchedulerState.LastAdvancedTick` of the state passed alongside it.
     - `opportunitySequence` &mdash; Sequence of the opportunity that finished; may not be zero.
     - `recoveryTicks` &mdash; Recovery the actor owes before it may act again. It must be positive and at most `SimulationLimits.TimingTicks`.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - `combatants` &mdash; The combatants value used by this operation.
-    - `outcome` &mdash; The outcome value used by this operation.
+    - `actorId` &mdash; Stable identifier of the combatant whose opportunity finished and whose next readiness must be scheduled.
+    - `combatants` &mdash; Current complete roster timing view used to validate the actor and, for Action Order, scale recovery by speed.
+    - `outcome` &mdash; Completion, interruption, or skip classification recorded for the finished opportunity.
 
 **Properties**
 
@@ -1621,34 +1731,34 @@ transition returns a new instance instead of editing this one.
 
 :   Builds an Action Order state. The tag and payload must agree, so `actionOrder` is required; its round may not have begun after `lastAdvancedTick`, and no actor may be both ready and queued.
     - `decisionEntries` &mdash; The queue to sort into service order. Actors and opportunity sequences must be unique, and the count may not exceed the ready-decision limit.
-    - `actionOrder` &mdash; The action order value used by this operation.
-    - `lastAdvancedTick` &mdash; The last advanced tick value used by this operation.
-    - `schedulerContractVersion` &mdash; The scheduler contract version value used by this operation.
-    - `schedulerId` &mdash; The scheduler id value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `actionOrder` &mdash; Required Action Order payload whose current round cannot start after the state tick.
+    - `lastAdvancedTick` &mdash; Non-negative battle tick through which this scheduler state has already been reduced.
+    - `schedulerContractVersion` &mdash; Positive compatibility version required when resolving the scheduler that owns the state.
+    - `schedulerId` &mdash; Valid registry identifier of the scheduler implementation that produced the state.
+    - **Returns** &mdash; A new immutable state tagged as Action Order with its decisions sorted into service order; inconsistent payloads throw.
 
 `public static SchedulerState CreateAtb()`
 
 :   Builds an ATB state. The tag and payload must agree, so `atb` is required.
     - `decisionEntries` &mdash; The queue to sort into service order. Actors and opportunity sequences must be unique, and the count may not exceed the ready-decision limit.
-    - `atb` &mdash; The atb value used by this operation.
-    - `lastAdvancedTick` &mdash; The last advanced tick value used by this operation.
-    - `schedulerContractVersion` &mdash; The scheduler contract version value used by this operation.
-    - `schedulerId` &mdash; The scheduler id value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `atb` &mdash; Required gauge payload carrying the readiness threshold, pause policy, and actor entries.
+    - `lastAdvancedTick` &mdash; Non-negative battle tick through which this scheduler state has already been reduced.
+    - `schedulerContractVersion` &mdash; Positive compatibility version required when resolving the scheduler that owns the state.
+    - `schedulerId` &mdash; Valid registry identifier of the ATB scheduler implementation that produced the state.
+    - **Returns** &mdash; A new immutable state tagged as ATB with its decisions sorted into service order; null or inconsistent payloads throw.
 
 `public SchedulerState RemoveHeadDecision(ulong opportunitySequence, StableId actorId)`
 
 :   Removes the head decision, which must be the one identified by both `opportunitySequence` and `actorId`. Decisions behind the head are never removed out of order.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - `opportunitySequence` &mdash; The opportunity sequence value used by this operation.
+    - `actorId` &mdash; Combatant identifier that must match the actor on the current queue head.
+    - `opportunitySequence` &mdash; Non-zero opportunity identity that must match the current queue head.
     - **Returns** &mdash; The state without that decision, or `null` when the queue is empty or its head is a different decision. The built-in schedulers turn that null into an invalid-state diagnostic rather than throwing.
 
 `public bool TryFindDecision(StableId actorId, out DecisionEntry decision)`
 
 :   Finds the queued decision belonging to `actorId`.
-    - `actorId` &mdash; The actor id value used by this operation.
-    - `decision` &mdash; The decision value used by this operation.
+    - `actorId` &mdash; Combatant identifier to locate in the unique-actor decision queue.
+    - `decision` &mdash; Receives the actor's queued entry on success, or null when no entry belongs to that actor.
     - **Returns** &mdash; True when the actor is queued, in which case `decision` receives its single entry.
 
 ---
@@ -1755,15 +1865,15 @@ opportunity has already been committed.
 `public static SchedulerTransitionResult Failure(Diagnostic diagnostic)`
 
 :   Reports that the transition was rejected. The engine treats this as fatal and raises the diagnostic.
-    - `diagnostic` &mdash; The diagnostic value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `diagnostic` &mdash; Machine-readable reason an accepted or finished opportunity could not transition the scheduler state.
+    - **Returns** &mdash; A failed transition containing neither state nor work; the engine treats this committed-opportunity failure as fatal.
 
 `public static SchedulerTransitionResult Success()`
 
 :   Reports a completed transition and freezes the work into an immutable list. When nothing changed, the built-in schedulers return a single no-work record rather than an empty list.
     - `state` &mdash; The state after the transition. Required.
     - `work` &mdash; The work records in application order. Required, entries must be non-null, and the count may not exceed `SimulationLimits.ExecutionFrames`.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A successful opportunity transition with the required next state and a frozen application-ordered work sequence.
 
 ---
 
@@ -1817,33 +1927,33 @@ factories, so an ill-formed record cannot be built.
 :   Reports that the battle clock moves forward with no scheduler boundary in between. The engine applies the whole delta at once, which is how a scheduler jumps over empty ticks without changing the outcome.
     - `fromTick` &mdash; Tick the clock leaves; may not be negative.
     - `toTick` &mdash; Tick the clock reaches, which must be strictly later than `fromTick`.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A timer-advance work record carrying the strictly increasing half-open tick movement; invalid bounds throw.
 
 `public static SchedulerWork CompleteRound(ulong roundIndex, RoundState round)`
 
 :   Reports that the round with this index finished. The engine emits the round-completed frame before any work that can expose new readiness.
     - `round` &mdash; Participants of the round that completed. Required.
-    - `roundIndex` &mdash; The round index value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `roundIndex` &mdash; Non-zero deterministic sequence of the round whose participant snapshot has completed.
+    - **Returns** &mdash; A work record tagged `SchedulerWorkTag.CompleteRound` and retaining the required round snapshot.
 
 `public static SchedulerWork NoWork(SchedulerAdvanceStopReason reason)`
 
 :   Reports that the transition produced nothing, and why. Returning this rather than an empty work list is what lets the engine distinguish a paused battle from a stalled one.
     - `reason` &mdash; Why no work happened. `SchedulerAdvanceStopReason.WorkProduced` is rejected, since it contradicts the record.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A no-work record carrying the specified non-work stop reason; `SchedulerAdvanceStopReason.WorkProduced` is rejected.
 
 `public static SchedulerWork ReadyOpportunity(DecisionEntry decision)`
 
 :   Reports that an actor is ready to act and that its decision has been queued. The engine consumes one opportunity sequence per record of this kind, so return exactly one for each sequence allocated.
     - `decision` &mdash; The queued decision, carrying its opportunity sequence, ready tick, actor, and control kind. Required.
-    - **Returns** &mdash; The validated result of the operation.
+    - **Returns** &mdash; A work record tagged `SchedulerWorkTag.ReadyOpportunity` and owning the supplied non-null decision reference.
 
 `public static SchedulerWork StartRound(ulong roundIndex, RoundState round)`
 
 :   Reports that a round began. The engine translates it into a round-started frame using the participant snapshot.
     - `round` &mdash; Participants of the round that started. Required.
-    - `roundIndex` &mdash; The round index value used by this operation.
-    - **Returns** &mdash; The validated result of the operation.
+    - `roundIndex` &mdash; Non-zero deterministic sequence of the round whose participant snapshot is opening.
+    - **Returns** &mdash; A work record tagged `SchedulerWorkTag.StartRound` and retaining the required round snapshot.
 
 ---
 

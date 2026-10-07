@@ -1,4 +1,4 @@
-# 6. Restyle the interface
+# 7. Restyle the interface
 
 Everything the battle interface draws itself with lives in one asset. Here you turn a
 shipped skin into an asset you own, assign it, and swap skins while a battle is running.

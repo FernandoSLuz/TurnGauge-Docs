@@ -45,6 +45,57 @@ stage looks only there, and adds one when the root carries none), then moved to 
 position with `localScale` reset to `Vector3.one` — so bake scale into a child rather than the
 prefab root, and keep the view on the root or the stage will configure a second copy beside it.
 
+<figure aria-label="Engineering map of token pooling and formation anchors">
+<style>
+  .tg-art-flow { display:grid; gap:0.7em; max-width:70rem; margin:1rem 0; color:#f2f5f7; font:16px/1.35 system-ui,sans-serif; }
+  .tg-art-flow .tg-flow-step { display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:stretch; gap:0.7em; }
+  .tg-art-flow .tg-flow-node { min-width:0; padding:0.65em 0.8em; border:2px solid #72b7d6; border-radius:0.65rem; background:#18212b; text-align:center; overflow-wrap:anywhere; }
+  .tg-art-flow .tg-flow-node strong, .tg-art-flow .tg-flow-node span { display:block; }
+  .tg-art-flow .tg-flow-node span { margin-top:0.3rem; color:#c7d6de; font-family:ui-monospace,SFMono-Regular,monospace; font-size:1em; }
+  .tg-art-flow .tg-flow-arrow { display:flex; align-items:center; justify-content:center; color:#e4ad62; font-size:1.5em; font-weight:700; }
+  .tg-art-flow .tg-flow-branch { padding:0.8em; border:2px solid #8db7c8; border-radius:0.65rem; background:#202b36; text-align:center; }
+  .tg-art-flow .tg-flow-branch > strong { display:block; margin-bottom:0.7rem; }
+  .tg-art-flow .tg-flow-choices { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0.7em; }
+  .tg-art-flow .tg-flow-choice { min-width:0; padding:0.65em; border:2px solid #8db7c8; border-radius:0.55rem; background:#18212b; overflow-wrap:anywhere; }
+  .tg-art-flow .tg-flow-choice span { display:block; margin-top:0.25rem; color:#c7d6de; font-family:ui-monospace,SFMono-Regular,monospace; font-size:1em; }
+  .tg-art-flow .tg-flow-merge { margin-top:0.65rem; color:#e4ad62; font-size:1.5em; font-weight:700; }
+  .tg-art-flow .tg-flow-inline::before { content:"→"; }
+  @media (max-width:700px) {
+    .tg-art-flow .tg-flow-inline::before { content:"↓"; }
+    .tg-art-flow .tg-flow-step { grid-template-columns:minmax(0,1fr); }
+    .tg-art-flow .tg-flow-arrow { min-height:1.5rem; }
+    .tg-art-flow .tg-flow-choices { grid-template-columns:minmax(0,1fr); }
+  }
+</style>
+<div class="tg-art-flow" role="group" aria-label="PresenterBinding passes the same pool to BattleStage2D, which selects a specific or shared pool key before cloning CombatantTokenView and resolving the compiled formation anchor">
+  <div class="tg-flow-step">
+    <div class="tg-flow-node"><strong>PresenterBinding</strong><span>same IPoolAdapter passed to Bind</span></div>
+    <div class="tg-flow-arrow tg-flow-inline" aria-hidden="true"></div>
+    <div class="tg-flow-node"><strong>BattleStage2D</strong><span>one occupied slot</span></div>
+  </div>
+  <div class="tg-flow-arrow" aria-hidden="true">↓</div>
+  <div class="tg-flow-branch">
+    <strong>Select the pool key for that occupied slot</strong>
+    <div class="tg-flow-choices">
+      <div class="tg-flow-choice"><strong>specific key</strong><span>TokenPoolKeyFor(id), when HasPrototype is true</span></div>
+      <div class="tg-flow-choice"><strong>shared fallback</strong><span>TokenPoolKey, presentation.token, otherwise</span></div>
+    </div>
+    <div class="tg-flow-merge" aria-hidden="true">↓ both paths converge</div>
+  </div>
+  <div class="tg-flow-arrow" aria-hidden="true">↓</div>
+  <div class="tg-flow-node"><strong>clone root</strong><span>CombatantTokenView, then project the occupied slot</span></div>
+  <div class="tg-flow-arrow" aria-hidden="true">↓</div>
+  <div class="tg-flow-node"><strong>formation compiled anchor</strong><span>TryGetAnchorWorld(..., VfxAnchorId)</span></div>
+</div>
+<figcaption>Engineering map of the verified extension seams. This is an authored diagram, not a runtime capture or art approval.</figcaption>
+</figure>
+
+The stage asks an `IPoolPrototypeQuery` before it acquires a specific key. That check is what
+preserves the shared fallback when a combatant has no dedicated prototype. Once the root is
+spawned, named formation anchors are resolved from the compiled placement by
+`TryGetAnchorWorld(combatantId, PresentationVfxAnchorKind.Anchor, anchorId, out world)`;
+the VFX adapter receives the resulting stage-space position.
+
 ### A SpriteRenderer is optional
 
 `CombatantTokenView` takes a serialized `SpriteRenderer`, falls back to `GetComponent` in `Awake`,
@@ -57,6 +108,40 @@ reads the view in `LateUpdate` — never `OnEnable`, which runs before the stage
 | No horizontal flip on a left-facing slot | `token.Facing == FormationFacing.Left` |
 | No `sortingOrder` written | `token.SortingOrder`; `token.SortingLayerKey` is recorded, never applied |
 | No desaturate-and-fade on death | `token.IsDead` |
+
+### Author the visual ground point
+
+Character illustrations often include transparent breathing room below the feet. The renderer
+bounds still include that canvas, so the default ground line can leave a contact shadow or a
+nameplate visibly low. When the feet are not the bottom of the imported rectangle, add a child
+transform at the intended contact point and assign it as the token's visual ground anchor:
+
+```csharp
+var feet = token.transform.Find("Visual Ground");
+token.SetVisualGroundAnchor(feet);
+
+if (token.TryGetVisualGroundWorld(out var ground, out var artWidth))
+{
+    // ground is the authored feet position; artWidth is still the renderer's visible width.
+}
+```
+
+`SetVisualGroundAnchor` accepts the token transform or a descendant of it. A transform from
+another hierarchy is rejected. Passing `null` removes the override and restores grounding from
+the visible sprite or fallback bounds. The plate and contact shadow are repositioned when the
+anchor changes. The lookup is deliberately authored: TurnGauge does not scan texture alpha,
+crop transparent pixels, or guess where feet are.
+
+Keep this point separate from a formation or VFX anchor. A formation anchor belongs to a slot and
+places an effect in stage space; the visual ground anchor belongs to one token and controls where
+that token's plate and contact shadow meet the ground. Samples use a measured child anchor while
+keeping the complete source canvas, so the art is never cropped to make placement work.
+
+For 2D authoring, keep the local origin on the intended ground line and choose the sprite pivot
+that suits the drawing. The Sira sample convention is pivot `(0.5, 0.08333)`, with the artwork
+supported from that local origin; a separate `Visual Ground` child remains the precise option when
+the feet do not coincide with the imported bounds. This convention does not replace formation or
+VFX anchors.
 
 ### Give one combatant its own prefab
 

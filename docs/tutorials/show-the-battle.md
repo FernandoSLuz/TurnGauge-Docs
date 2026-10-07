@@ -1,6 +1,6 @@
-# 4. Draw the battle on screen
+# 5. Draw the battle on screen
 
-The battle you started in [guide 3](run-a-battle-from-code.md) runs with nothing on screen.
+The battle you started in [guide 4](run-a-battle-from-code.md) runs with nothing on screen.
 Binding a `BattlePresenter` to the same compiled content gives you the stage, the combatant
 tokens and the battle interface, all fed from the events and snapshots you already have.
 
@@ -12,7 +12,7 @@ This is what the four steps below add up to:
 
 !!! note "The controller does all of this for you"
     `BattleRuntimeController` binds the presenter and the interface from Inspector fields, with
-    no binding code at all. See [2. Put a battle in your scene](playable-battle-in-a-scene.md).
+    no binding code at all. See [3. Put a battle in your scene](playable-battle-in-a-scene.md).
     Read on when your own driver owns the engine.
 
     ![The Presentation section of the BattleRuntimeController Inspector: Presenter, Ui Root, Recipes, Skin, Display Strings and Audio Source object fields, and the audio and VFX binding lists](../assets/images/03-controller-inspector-presentation.png){ .shot }
@@ -139,7 +139,7 @@ clicking a skill does nothing, start with
 
 ## Next
 
-- **[5. Take a decision from the player](take-player-input.md)** -- turn a tray choice into a
+- **[6. Take a decision from the player](take-player-input.md)** -- turn a tray choice into a
   submitted command.
 - **[Turn events into visuals](../how-to/presentation-recipes.md)** -- author the recipe that
   gives an event its animation, effect and audio.
