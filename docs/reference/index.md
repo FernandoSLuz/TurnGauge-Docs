@@ -1,6 +1,6 @@
 # API reference
 
-The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **423 types.**
+The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **424 types.**
 
 !!! info "What is not listed here"
     74 further types are public in the source but left out of this reference. They are public only because `internal` is per-assembly in C# and the package spans several assemblies -- plumbing, not API. They carry `[EditorBrowsable(Never)]` in the source to say so. Nothing you need is hidden: if a documented type exposes it, it is documented too.
@@ -488,6 +488,7 @@ The types a new project meets first.
 | [`ToolkitBattleView`](other.md#toolkitbattleview) | class | Other | A replaceable UXML surface. |
 | [`TurnGaugeDemoBootstrap`](other.md#turngaugedemobootstrap) | class | Other | The runtime demo driver (specification section 9). |
 | [`UguiBattleView`](other.md#uguibattleview) | class | Other | Prefab-authored uGUI surface. |
+| [`UiPortraitCrop`](other.md#uiportraitcrop) | struct | Other | Normalized source-space window used only by a portrait presentation. |
 | [`BattleRuntimeController.VfxBinding`](other.md#vfxbinding) | class | Other | Maps one presentation VFX key to an optional pooled prototype. |
 
 </div>

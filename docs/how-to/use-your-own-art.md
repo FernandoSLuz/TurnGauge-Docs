@@ -146,6 +146,37 @@ Passing the same direction for source and desired (`Left` to `Left`, for example
 the portrait unmirrored. Keep portrait framing and crop decisions separate from the token's visual
 ground or formation anchors: changing the crop must not move the feet, HUD, or effect attachment.
 
+### Crop the rail portrait separately
+
+The rail can use a separate portrait sprite and a finite normalized crop while the stage keeps its
+full body illustration. The crop window is source-space: its center and size are between 0 and 1,
+and the window must remain inside that range.
+
+```csharp
+var railCrop = new UiPortraitCrop(
+    centerX: 0.50f, centerY: 0.68f,
+    width: 0.48f, height: 0.58f);
+
+presenter.SetCombatantArt(
+    combatantId,
+    bodyArt,
+    FormationFacing.Left,
+    portraitSprite,
+    railCrop);
+
+// A UI-only presenter can use the same crop contract.
+ui.SetCombatantPortrait(
+    combatantId,
+    portraitSprite,
+    FormationFacing.Left,
+    railCrop);
+```
+
+Use `UiPortraitCrop.Default` when no crop is authored; it is the unconfigured sentinel and keeps
+the legacy framing. The crop affects the legacy timeline renderer's portrait path only. It does not
+crop stage body art, text HUD labels, feet or effects. Native backend art consumption is outside
+this crop contract; no pixel art parity claim is made here.
+
 ### Author the visual ground point
 
 Character illustrations often include transparent breathing room below the feet. The renderer

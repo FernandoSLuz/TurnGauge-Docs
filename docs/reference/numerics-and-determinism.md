@@ -264,14 +264,6 @@ This type is deliberately distinct from Fixed64.
 
 :   Impossible probability, which short-circuits sampling without consuming an RNG draw.
 
-`public static bool operator`
-
-:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-
-    - `left` &mdash; First probability compared by exact raw units.
-    - `right` &mdash; Second probability compared by exact raw units.
-    - **Returns** &mdash; The value produced by applying the operator.
-
 **Methods**
 
 `public static Chance64 ApplyResistance(Chance64 baseChance, Chance64 resistance)`
@@ -329,6 +321,22 @@ This type is deliberately distinct from Fixed64.
 :   Returns the raw units as invariant-culture digits, not a percentage: 50% prints as "500000". It is meant for logs, diagnostics, and canonical text, so format the value yourself for anything a player reads.
 
     - **Returns** &mdash; The raw probability units as invariant decimal digits, without percentage conversion or locale-dependent formatting.
+
+`public static bool operator !=(Chance64 left, Chance64 right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; First probability tested for raw-unit inequality.
+    - `right` &mdash; Second probability tested for raw-unit inequality.
+    - **Returns** &mdash; The value produced by applying the operator.
+
+`public static bool operator ==(Chance64 left, Chance64 right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; First probability compared by exact raw units.
+    - `right` &mdash; Second probability compared by exact raw units.
+    - **Returns** &mdash; The value produced by applying the operator.
 
 ---
 
@@ -558,14 +566,6 @@ decimal, because that text feeds canonical encoding. Use
 
 :   Additive identity with a raw representation of zero.
 
-`public static bool operator`
-
-:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-
-    - `left` &mdash; First fixed-point value compared by its exact raw representation.
-    - `right` &mdash; Second fixed-point value compared by its exact raw representation.
-    - **Returns** &mdash; The value produced by applying the operator.
-
 **Methods**
 
 `public static Fixed64 Abs(Fixed64 value)`
@@ -683,6 +683,22 @@ decimal, because that text feeds canonical encoding. Use
     - `result` &mdash; The parsed value on success, and `Zero` on failure; it is always assigned.
     - **Returns** &mdash; True only when the whole string was consumed as an exact value.
 
+`public static bool operator !=(Fixed64 left, Fixed64 right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; First fixed-point value tested for raw inequality.
+    - `right` &mdash; Second fixed-point value tested for raw inequality.
+    - **Returns** &mdash; The value produced by applying the operator.
+
+`public static bool operator ==(Fixed64 left, Fixed64 right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; First fixed-point value compared by its exact raw representation.
+    - `right` &mdash; Second fixed-point value compared by its exact raw representation.
+    - **Returns** &mdash; The value produced by applying the operator.
+
 ---
 
 ## FrozenList
@@ -770,14 +786,6 @@ difference.
 
 :   The digest length in bytes. Hex text must be exactly twice this long to parse.
 
-`public static bool operator`
-
-:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-
-    - `left` &mdash; The digest on the left side of the equality comparison.
-    - `right` &mdash; The digest on the right side of the equality comparison.
-    - **Returns** &mdash; The value produced by applying the operator.
-
 **Methods**
 
 `public static Sha256Digest Compute(byte[] data)`
@@ -834,6 +842,22 @@ difference.
     - `digest` &mdash; The parsed digest, or the default value on failure.
     - **Returns** &mdash; True when the text was a well-formed digest.
 
+`public static bool operator !=(Sha256Digest left, Sha256Digest right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; The digest on the left side of the inequality comparison.
+    - `right` &mdash; The digest on the right side of the inequality comparison.
+    - **Returns** &mdash; The value produced by applying the operator.
+
+`public static bool operator ==(Sha256Digest left, Sha256Digest right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; The digest on the left side of the equality comparison.
+    - `right` &mdash; The digest on the right side of the equality comparison.
+    - **Returns** &mdash; The value produced by applying the operator.
+
 ---
 
 ## StableId
@@ -881,14 +905,6 @@ carries no text and is not a usable id; see `IsValid`.
 `public const int MaximumLength`
 
 :   Maximum accepted identifier length in ASCII characters, limiting serialized keys and lookup work to 128.
-
-`public static bool operator`
-
-:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
-
-    - `left` &mdash; First identifier compared by exact ordinal text, including the default invalid value.
-    - `right` &mdash; Second identifier compared by exact ordinal text, including the default invalid value.
-    - **Returns** &mdash; The value produced by applying the operator.
 
 **Methods**
 
@@ -939,5 +955,21 @@ carries no text and is not a usable id; see `IsValid`.
     - `text` &mdash; Candidate text; null is allowed and fails.
     - `id` &mdash; The identifier on success, otherwise the default value, which is not usable.
     - **Returns** &mdash; True when `text` satisfies the grammar.
+
+`public static bool operator !=(StableId left, StableId right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; First identifier tested for ordinal-text inequality.
+    - `right` &mdash; Second identifier tested for ordinal-text inequality.
+    - **Returns** &mdash; The value produced by applying the operator.
+
+`public static bool operator ==(StableId left, StableId right)`
+
+:   Returns a new value computed from the operands without mutating either operand; numeric overflow follows the underlying contract.
+
+    - `left` &mdash; First identifier compared by exact ordinal text, including the default invalid value.
+    - `right` &mdash; Second identifier compared by exact ordinal text, including the default invalid value.
+    - **Returns** &mdash; The value produced by applying the operator.
 
 ---

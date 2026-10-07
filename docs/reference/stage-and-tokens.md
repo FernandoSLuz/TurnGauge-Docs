@@ -160,6 +160,16 @@ event chain, a replay, or a result.
     - `art` &mdash; The source illustration, or null to clear it.
     - `sourceArtFacing` &mdash; Direction encoded by the unmirrored source sprite.
 
+`public void SetCombatantArt(StableId combatantId, Sprite bodyArt, FormationFacing sourceArtFacing, Sprite portraitSprite, UiPortraitCrop portraitCrop)`
+
+:   Assigns body art and an optional independent rail portrait crop.
+
+    - `combatantId` &mdash; Combatant to dress.
+    - `bodyArt` &mdash; Stage sprite, preserving the body's ground anchor.
+    - `sourceArtFacing` &mdash; Direction encoded by the stage sprite.
+    - `portraitSprite` &mdash; Optional independent rail sprite; body art is reused when null.
+    - `portraitCrop` &mdash; Finite normalized crop, or default for exact legacy framing.
+
 `public void SetReducedMotion(bool value)`
 
 :   Applies a session preference to beats, stage and numbers without changing skin assets or battle state. A custom HUD applies its own matching policy. Existing perform modules reset when reduction is enabled. Effects already started outside those modules remain the host's responsibility.

@@ -175,6 +175,17 @@ class ExtractDocsTests(unittest.TestCase):
         self.assertEqual(members[0]['conditions'], ['#if ENABLE_LEGACY'])
         self.assertEqual(members[1]['conditions'], ['#else (matching #if ENABLE_LEGACY)'])
 
+    def test_public_equality_operators_are_methods_with_real_signatures(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'Value.cs'
+            source.write_text('''namespace Sample;\npublic readonly struct Value\n{\n    public static bool operator ==(Value left, Value right) => true;\n    public static bool operator !=(Value left, Value right) => false;\n}\n''', encoding='utf-8')
+            api = extract_docs.collect(directory)
+        members = {member['name']: member for member in api['Sample.Value']['members']}
+        self.assertEqual(members['operator ==']['kind'], 'method')
+        self.assertEqual(members['operator !=']['kind'], 'method')
+        self.assertIn('operator ==(Value left, Value right)', members['operator ==']['signature'])
+        self.assertIn('operator !=(Value left, Value right)', members['operator !=']['signature'])
+
     def test_public_nested_types_are_qualified_and_keep_inline_attributes(self):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / 'Controller.cs'

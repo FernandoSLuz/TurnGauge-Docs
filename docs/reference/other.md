@@ -1,9 +1,9 @@
 # Other
 
-68 types in this area.
+69 types in this area.
 
 !!! abstract "On this page"
-    [AudioArtBinding](#audioartbinding) &middot; [AudioBinding](#audiobinding) &middot; [BattleCancelRelay](#battlecancelrelay) &middot; [BattleFeedbackLayout](#battlefeedbacklayout) &middot; [BattleLayoutIdentity](#battlelayoutidentity) &middot; [BattlePresentationLabel](#battlepresentationlabel) &middot; [BattlePresentationProfile](#battlepresentationprofile) &middot; [BattleProfileCatalog](#battleprofilecatalog) &middot; [BattleRulesPreset](#battlerulespreset) &middot; [BattleRuntimeCheckpoint](#battleruntimecheckpoint) &middot; [BattleRuntimeController](#battleruntimecontroller) &middot; [BattleRuntimeEndReason](#battleruntimeendreason) &middot; [BattleRuntimeEndedEvent](#battleruntimeendedevent) &middot; [BattleRuntimeEventsEvent](#battleruntimeeventsevent) &middot; [BattleRuntimeFailedEvent](#battleruntimefailedevent) &middot; [BattleRuntimeFailure](#battleruntimefailure) &middot; [BattleRuntimeHumanControlRequirement](#battleruntimehumancontrolrequirement) &middot; [BattleRuntimeOperationResult](#battleruntimeoperationresult) &middot; [BattleRuntimePacing](#battleruntimepacing) &middot; [BattleRuntimeSeedPolicy](#battleruntimeseedpolicy) &middot; [BattleRuntimeSnapshotCause](#battleruntimesnapshotcause) &middot; [BattleRuntimeSnapshotEvent](#battleruntimesnapshotevent) &middot; [BattleRuntimeStartedEvent](#battleruntimestartedevent) &middot; [BattleRuntimeState](#battleruntimestate) &middot; [BattleRuntimeUnityEvent](#battleruntimeunityevent) &middot; [BattleRuntimeValueResult](#battleruntimevalueresult) &middot; [BattleStageBounds](#battlestagebounds) &middot; [BattleTheme](#battletheme) &middot; [BattleUiCommandTranslationResult](#battleuicommandtranslationresult) &middot; [BattleUiCommandTranslator](#battleuicommandtranslator) &middot; [BattleUiTechnology](#battleuitechnology) &middot; [BattleViewAction](#battleviewaction) &middot; [BattleViewBehaviour](#battleviewbehaviour) &middot; [BattleViewCombatant](#battleviewcombatant) &middot; [BattleViewCommand](#battleviewcommand) &middot; [BattleViewIntent](#battleviewintent) &middot; [BattleViewIntentKind](#battleviewintentkind) &middot; [BattleViewProjection](#battleviewprojection) &middot; [BattleViewRoster](#battleviewroster) &middot; [BattleViewSession](#battleviewsession) &middot; [BattleViewState](#battleviewstate) &middot; [CustomMechanicsRegistryProvider](#custommechanicsregistryprovider) &middot; [CustomShieldEffectResolver](#customshieldeffectresolver) &middot; [DemoIdleSheet](#demoidlesheet) &middot; [DisplayStringTableAsset](#displaystringtableasset) &middot; [Entry](#entry) &middot; [ForecastRequest](#forecastrequest) &middot; [ForecastResult](#forecastresult) &middot; [ForecastStopReason](#forecaststopreason) &middot; [GeneratedUiText](#generateduitext) &middot; [IBattleFeedbackLayout](#ibattlefeedbacklayout) &middot; [IBattlePointerBlocker](#ibattlepointerblocker) &middot; [IBattleStageInformationLayout](#ibattlestageinformationlayout) &middot; [IBattleStageLayout](#ibattlestagelayout) &middot; [IBattleView](#ibattleview) &middot; [IInteractiveBattleView](#iinteractivebattleview) &middot; [LowestHealthAllyTargetResolver](#lowesthealthallytargetresolver) &middot; [ParticleArtBinding](#particleartbinding) &middot; [SessionEndState](#sessionendstate) &middot; [TargetCandidateQuery](#targetcandidatequery) &middot; [TargetPreview](#targetpreview) &middot; [TargetTreatment](#targettreatment) &middot; [TargetingPreset](#targetingpreset) &middot; [TokenArtBinding](#tokenartbinding) &middot; [ToolkitBattleView](#toolkitbattleview) &middot; [TurnGaugeDemoBootstrap](#turngaugedemobootstrap) &middot; [UguiBattleView](#uguibattleview) &middot; [VfxBinding](#vfxbinding)
+    [AudioArtBinding](#audioartbinding) &middot; [AudioBinding](#audiobinding) &middot; [BattleCancelRelay](#battlecancelrelay) &middot; [BattleFeedbackLayout](#battlefeedbacklayout) &middot; [BattleLayoutIdentity](#battlelayoutidentity) &middot; [BattlePresentationLabel](#battlepresentationlabel) &middot; [BattlePresentationProfile](#battlepresentationprofile) &middot; [BattleProfileCatalog](#battleprofilecatalog) &middot; [BattleRulesPreset](#battlerulespreset) &middot; [BattleRuntimeCheckpoint](#battleruntimecheckpoint) &middot; [BattleRuntimeController](#battleruntimecontroller) &middot; [BattleRuntimeEndReason](#battleruntimeendreason) &middot; [BattleRuntimeEndedEvent](#battleruntimeendedevent) &middot; [BattleRuntimeEventsEvent](#battleruntimeeventsevent) &middot; [BattleRuntimeFailedEvent](#battleruntimefailedevent) &middot; [BattleRuntimeFailure](#battleruntimefailure) &middot; [BattleRuntimeHumanControlRequirement](#battleruntimehumancontrolrequirement) &middot; [BattleRuntimeOperationResult](#battleruntimeoperationresult) &middot; [BattleRuntimePacing](#battleruntimepacing) &middot; [BattleRuntimeSeedPolicy](#battleruntimeseedpolicy) &middot; [BattleRuntimeSnapshotCause](#battleruntimesnapshotcause) &middot; [BattleRuntimeSnapshotEvent](#battleruntimesnapshotevent) &middot; [BattleRuntimeStartedEvent](#battleruntimestartedevent) &middot; [BattleRuntimeState](#battleruntimestate) &middot; [BattleRuntimeUnityEvent](#battleruntimeunityevent) &middot; [BattleRuntimeValueResult](#battleruntimevalueresult) &middot; [BattleStageBounds](#battlestagebounds) &middot; [BattleTheme](#battletheme) &middot; [BattleUiCommandTranslationResult](#battleuicommandtranslationresult) &middot; [BattleUiCommandTranslator](#battleuicommandtranslator) &middot; [BattleUiTechnology](#battleuitechnology) &middot; [BattleViewAction](#battleviewaction) &middot; [BattleViewBehaviour](#battleviewbehaviour) &middot; [BattleViewCombatant](#battleviewcombatant) &middot; [BattleViewCommand](#battleviewcommand) &middot; [BattleViewIntent](#battleviewintent) &middot; [BattleViewIntentKind](#battleviewintentkind) &middot; [BattleViewProjection](#battleviewprojection) &middot; [BattleViewRoster](#battleviewroster) &middot; [BattleViewSession](#battleviewsession) &middot; [BattleViewState](#battleviewstate) &middot; [CustomMechanicsRegistryProvider](#custommechanicsregistryprovider) &middot; [CustomShieldEffectResolver](#customshieldeffectresolver) &middot; [DemoIdleSheet](#demoidlesheet) &middot; [DisplayStringTableAsset](#displaystringtableasset) &middot; [Entry](#entry) &middot; [ForecastRequest](#forecastrequest) &middot; [ForecastResult](#forecastresult) &middot; [ForecastStopReason](#forecaststopreason) &middot; [GeneratedUiText](#generateduitext) &middot; [IBattleFeedbackLayout](#ibattlefeedbacklayout) &middot; [IBattlePointerBlocker](#ibattlepointerblocker) &middot; [IBattleStageInformationLayout](#ibattlestageinformationlayout) &middot; [IBattleStageLayout](#ibattlestagelayout) &middot; [IBattleView](#ibattleview) &middot; [IInteractiveBattleView](#iinteractivebattleview) &middot; [LowestHealthAllyTargetResolver](#lowesthealthallytargetresolver) &middot; [ParticleArtBinding](#particleartbinding) &middot; [SessionEndState](#sessionendstate) &middot; [TargetCandidateQuery](#targetcandidatequery) &middot; [TargetPreview](#targetpreview) &middot; [TargetTreatment](#targettreatment) &middot; [TargetingPreset](#targetingpreset) &middot; [TokenArtBinding](#tokenartbinding) &middot; [ToolkitBattleView](#toolkitbattleview) &middot; [TurnGaugeDemoBootstrap](#turngaugedemobootstrap) &middot; [UguiBattleView](#uguibattleview) &middot; [UiPortraitCrop](#uiportraitcrop) &middot; [VfxBinding](#vfxbinding)
 
 ## AudioArtBinding
 
@@ -2708,6 +2708,88 @@ Prefab-authored uGUI surface. Named slots may appear anywhere in the authored tr
 :   Checks required named slots and reports missing, duplicate or incompatible controls.
 
     - **Returns** &mdash; Diagnostic messages; an empty array means the authored hierarchy is valid.
+
+---
+
+## UiPortraitCrop
+
+```csharp
+public readonly struct UiPortraitCrop : IEquatable<UiPortraitCrop>
+```
+
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UiPortraitCrop.cs</small>
+
+Normalized source-space window used only by a portrait presentation.
+
+**Constructors**
+
+`public UiPortraitCrop(float centerX, float centerY, float width, float height)`
+
+:   Creates a finite normalized source-space crop.
+
+    - `centerX` &mdash; Crop center in normalized source coordinates.
+    - `centerY` &mdash; Crop center in normalized source coordinates.
+    - `width` &mdash; Crop width between .01 and 1.
+    - `height` &mdash; Crop height between .01 and 1.
+
+**Properties**
+
+`public Vector2 Center`
+
+:   Normalized bottom-left source coordinate at the crop center.
+
+`public float Height`
+
+:   Normalized crop height.
+
+`public bool IsConfigured`
+
+:   True when this value contains a configured, finite crop.
+
+`public Vector2 Size`
+
+:   Normalized source-space crop size.
+
+`public float Width`
+
+:   Normalized crop width.
+
+**Fields**
+
+`public static readonly UiPortraitCrop Default`
+
+:   Unconfigured sentinel that selects the unchanged legacy crop.
+
+**Methods**
+
+`public bool Equals(UiPortraitCrop other)`
+
+:   Compares crop components exactly, including the unconfigured sentinel.
+
+`public override bool Equals(object obj)`
+
+:   &mdash;
+
+`public override int GetHashCode()`
+
+:   &mdash;
+
+`public static bool IsValid(float centerX, float centerY, float width, float height)`
+
+:   Checks finite values, normalized bounds and containment.
+
+    - `centerX` &mdash; Crop center in normalized source coordinates.
+    - `centerY` &mdash; Crop center in normalized source coordinates.
+    - `width` &mdash; Crop width between .01 and 1.
+    - `height` &mdash; Crop height between .01 and 1.
+
+`public static bool operator !=(UiPortraitCrop left, UiPortraitCrop right)`
+
+:   &mdash;
+
+`public static bool operator ==(UiPortraitCrop left, UiPortraitCrop right)`
+
+:   &mdash;
 
 ---
 

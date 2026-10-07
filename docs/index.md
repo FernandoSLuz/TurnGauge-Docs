@@ -71,7 +71,7 @@ Step a battle tick by tick, read the formula trace behind a number you did not e
 
 </div>
 
-Looking for a type rather than a task? The [API reference](reference/index.md) lists 423 public
+Looking for a type rather than a task? The [API reference](reference/index.md) lists 424 public
 types, grouped by what they are for and filterable as you type.
 
 ## What it does

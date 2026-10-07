@@ -382,6 +382,25 @@ shipped default skin rather than rendering unstyled boxes.
     - `sourceFacing` &mdash; Direction encoded by the unmirrored sprite.
     - `desiredFacing` &mdash; Direction this portrait should face on the rail.
 
+`public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing, FormationFacing desiredFacing, UiPortraitCrop crop)`
+
+:   Supplies explicit facing and a rail-only normalized crop.
+
+    - `combatantId` &mdash; Combatant receiving the portrait.
+    - `portrait` &mdash; Portrait sprite, or null to clear it.
+    - `sourceFacing` &mdash; Direction encoded by the source sprite.
+    - `desiredFacing` &mdash; Direction shown by the rail.
+    - `crop` &mdash; Finite normalized crop, or default for legacy framing.
+
+`public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing, UiPortraitCrop crop)`
+
+:   Supplies a crop while retaining current team auto-facing.
+
+    - `combatantId` &mdash; Combatant receiving the portrait.
+    - `portrait` &mdash; Portrait sprite, or null to clear it.
+    - `sourceFacing` &mdash; Direction encoded by the source sprite.
+    - `crop` &mdash; Finite normalized crop, or default for legacy framing.
+
 `public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing)`
 
 :   Supplies a portrait with its authored direction while letting the timeline choose the displayed direction from its current team state. This overload is used by UI-only presenters that have no stage token.
@@ -1567,6 +1586,16 @@ the scheduler is.
     - `portraits` &mdash; Art to crop for each combatant.
     - `portraitFacings` &mdash; Optional authored and displayed direction per portrait.
 
+`public void Apply(IReadOnlyList<UiTimelineEntry> entries, DisplayStringTable labels, IReadOnlyDictionary<StableId, Sprite> portraits, IReadOnlyDictionary<StableId, UiPortraitFacing> portraitFacings, IReadOnlyDictionary<StableId, UiPortraitCrop> portraitCrops)`
+
+:   Rebuilds the rail with optional per-combatant crop metadata.
+
+    - `entries` &mdash; Decision order, soonest first.
+    - `labels` &mdash; Display names for the actors.
+    - `portraits` &mdash; Portrait sprites keyed by combatant.
+    - `portraitFacings` &mdash; Optional authored and displayed directions.
+    - `portraitCrops` &mdash; Optional finite normalized crops; invalid/default values use legacy framing.
+
 `public void Build(CompiledBattleSkin battleSkin)`
 
 :   Builds the rail. Explicit so EditMode tests can drive it.
@@ -1578,6 +1607,16 @@ the scheduler is.
 :   Advances the slide that follows a reorder. Driven by the presenter's visual clock, so pause and speed apply to the rail exactly as they do to the stage, and a reduced-motion skin snaps instead.
 
     - `deltaSeconds` &mdash; Positive presentation-clock duration. Non-positive values are ignored.
+
+`public bool TryGetPortraitFrameLayout(StableId combatantId, out Vector3 scale, out Vector2 position, out Vector2 size)`
+
+:   Reads the pooled portrait transform for visual diagnostics.
+
+    - `combatantId` &mdash; Visible combatant whose pooled chip is queried.
+    - `scale` &mdash; Local portrait scale, including facing mirror.
+    - `position` &mdash; Local crop position inside the chip mask.
+    - `size` &mdash; Local source image size before masking.
+    - **Returns** &mdash; True when the combatant currently has a visible portrait.
 
 `public bool TryGetPortraitFrameScale(StableId combatantId, out Vector3 scale)`
 

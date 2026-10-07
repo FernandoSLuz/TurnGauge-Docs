@@ -37,6 +37,10 @@ MEMBER = re.compile(
     r'event\s+|async\s+|extern\s+|unsafe\s+|new\s+)*)'
     r'([A-Za-z0-9_<>\[\],.?:\s]+?)\s+([A-Za-z0-9_]+)\s*(\(|\{|=>|;|=|$)')
 
+OPERATOR = re.compile(
+    r'^\s*public\s+((?:static\s+|virtual\s+|override\s+|readonly\s+|abstract\s+|new\s+)*)'
+    r'([A-Za-z0-9_<>,.?:\s]+?)\s+operator\s+(==|!=)\s*\(')
+
 # Interface members are implicitly public and therefore have no `public` token.
 INTERFACE_MEMBER = re.compile(
     r'^\s*(?!class\b|struct\b|interface\b|enum\b)'
@@ -196,7 +200,7 @@ def declaration_line(lines, index, code):
     """Coalesce a declaration's multiline parameter list without consuming its body."""
     if parenthesis_delta(code) <= 0:
         return lines, index, code
-    if not (CTOR.match(code) or MEMBER.match(code) or INTERFACE_MEMBER.match(code)):
+    if not (CTOR.match(code) or OPERATOR.match(code) or MEMBER.match(code) or INTERFACE_MEMBER.match(code)):
         return lines, index, code
 
     parts = [code]
@@ -405,10 +409,27 @@ def parse_file(path, display, out):
                     doc_buffer = []
             else:
                 ctor = CTOR.match(code)
+                operator = OPERATOR.match(code)
                 mm = MEMBER.match(code)
                 if not mm and entry['kind'] == 'interface':
                     mm = INTERFACE_MEMBER.match(code)
-                if ctor and ctor.group(1) == entry['name']:
+                if operator:
+                    modifiers = operator.group(1).strip()
+                    rtype = ' '.join(operator.group(2).split())
+                    token = operator.group(3)
+                    entry['members'].append({
+                        'kind': 'method',
+                        'modifiers': modifiers,
+                        'type': rtype,
+                        'name': 'operator ' + token,
+                        'signature': 'public ' + (modifiers + ' ' if modifiers else '') +
+                            rtype + ' operator ' + token + '(' + parameter_text(code) + ')',
+                        'conditions': conditions,
+                        'doc': parse_doc(doc_buffer),
+                    })
+                    matched_declaration = True
+                    doc_buffer = []
+                elif ctor and ctor.group(1) == entry['name']:
                     params = parameter_text(code)
                     entry['members'].append({
                         'kind': 'constructor',
