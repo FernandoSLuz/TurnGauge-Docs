@@ -98,12 +98,14 @@ platforms, and worker counts.
 `public static string WriteCsv(BattleBatchResult result)`
 
 :   Encodes one batch result as CSV: a fixed header line, then one line per record in the order `BattleBatchResult.Records` holds them, which is ascending by seed. A result carrying an aggregate then gets one `# aggregate name=value` comment line per aggregate field, so the reduction travels with the records in the same file.
+
     - `result` &mdash; The result to encode. A failed or cancelled result exports the records it does have and no aggregate block, because it has none.
     - **Returns** &mdash; The CSV text. Every line, the last one included, ends with a single `\n`. Per-record engine diagnostics are not exported, which is what lets two runs of the same request compare byte for byte.
 
 `public static string WriteJson(BattleBatchResult result)`
 
 :   Encodes one batch result as a single JSON object: the format version, the succeeded and cancelled flags, the records in the same seed order the CSV uses, and the aggregate. The aggregate member is always present and is JSON null when the result has none.
+
     - `result` &mdash; The result to encode.
     - **Returns** &mdash; The JSON text, ASCII only: any character outside printable ASCII is escaped as a `\uXXXX` sequence rather than emitted directly. It carries the same fields as the CSV and likewise omits per-record engine diagnostics.
 
@@ -155,6 +157,7 @@ instead of throwing.
 `public static BatchSeedPlan FromRange(uint firstSeed, int count)`
 
 :   Plans the ascending run of consecutive seeds that starts at `firstSeed`.
+
     - `firstSeed` &mdash; The lowest seed in the run.
     - `count` &mdash; How many consecutive seeds to plan. Must be at least 1 and at most `AnalysisLimits.SeedsPerBatch`.
     - **Returns** &mdash; The planned seeds, or an empty plan carrying the retained failure detail when the count is out of range or the run would pass `uint.MaxValue`. This method never throws.
@@ -162,6 +165,7 @@ instead of throwing.
 `public static BatchSeedPlan FromSeeds(IEnumerable<uint> seeds)`
 
 :   Plans arbitrary seeds, dropping duplicates and sorting the rest ascending, so the plan never depends on enumeration order.
+
     - `seeds` &mdash; The seeds to plan; repeated values collapse to one.
     - **Returns** &mdash; The deduplicated ascending plan, or an empty plan carrying the retained failure detail when more than `AnalysisLimits.SeedsPerBatch` distinct seeds arrive. An empty sequence yields an empty plan, which the batch request gate then rejects.
 
@@ -270,6 +274,7 @@ surfaced as the typed request-gate failure instead of throwing.
 `public BattleBatchLimits(int maximumRootActionsPerBattle, long maximumTicksPerBattle, int cancellationPollRootActionInterval)`
 
 :   Creates per-battle bounds. Values are stored exactly as given; the range check happens in the batch request gate.
+
     - `maximumRootActionsPerBattle` &mdash; The completed root-action count at which a battle stops and records `BatchOutcomeKind.RootActionLimit`.
     - `maximumTicksPerBattle` &mdash; The tick at which a battle stops and records `BatchOutcomeKind.TickLimit`.
     - `cancellationPollRootActionInterval` &mdash; How many completed root actions may pass between cancellation-token polls inside one battle. Smaller values react to cancellation sooner.
@@ -308,6 +313,7 @@ starts.
 `public BattleBatchRequest(CompiledBattleContent content, BattleStartRequest startRequest, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry, BatchSeedPlan seedPlan, BattleBatchLimits limits, CancellationToken cancellationToken)`
 
 :   Captures the batch input as given. Nothing is validated here, so constructing a request never throws and never starts work.
+
     - `content` &mdash; The compiled content every battle in the batch runs against.
     - `startRequest` &mdash; The start request shared by every battle. Its profile must match `content` and no combatant may be human controlled, or the request gate rejects the batch.
     - `schedulerRegistry` &mdash; The registry battles resolve their scheduler through.
@@ -403,12 +409,14 @@ regardless of worker count, scheduling, or processor count.
 `public BattleBatchResult Run(BattleBatchRequest request)`
 
 :   Runs every planned seed synchronously on the caller thread.
+
     - `request` &mdash; The batch to run. Null, a null member, and every other invalid input are reported through the returned result rather than thrown.
     - **Returns** &mdash; A completed result carrying the records and their aggregate; a failed result carrying only the request-gate diagnostic when the request is rejected; or, if the token is signalled partway, a succeeded but cancelled result holding the seeds that finished and no aggregate.
 
 `public BattleBatchResult RunParallel(BattleBatchRequest request, int workerCount)`
 
 :   Runs the planned seeds on worker threads owned by this call. Workers execute whole battles only, share no mutable state, and deliver completed immutable records that are merged and sorted by seed before the single-threaded ordered aggregation.
+
     - `request` &mdash; The batch to run, gated exactly as `Run` gates it.
     - `workerCount` &mdash; Threads to start. It must be between 1 and `AnalysisLimits.BatchWorkers` or the request gate rejects the batch, and it is lowered to the planned seed count when it exceeds it. It changes only how long the batch takes, never its result.
     - **Returns** &mdash; The same three shapes `Run` returns, for the same reasons.
@@ -416,6 +424,7 @@ regardless of worker count, scheduling, or processor count.
 `public SingleBattleReproduction RunSingleForReproduction(BattleBatchRequest request, uint seed)`
 
 :   Reruns one seed through the identical per-battle algorithm the batch loop uses and additionally captures the strict replay envelope bytes from the same engine. Invalid requests throw the request-gate diagnostic as an `ArgumentException`; cancellation throws `OperationCanceledException`.
+
     - `request` &mdash; The batch whose content, start, registries, and limits this rerun uses. Its seed plan still has to pass the gate, but is not consulted.
     - `seed` &mdash; The seed to rerun. It need not be one of the planned seeds, so a single interesting seed can be reproduced from the batch's request.
     - **Returns** &mdash; The record the batch loop would have produced for this seed, together with the replay bytes captured from the very engine that produced it.
@@ -440,6 +449,7 @@ is excluded from CSV, JSON, and `RecordSetHash`.
 `public BattleOutcomeRecord(uint seed, BatchOutcomeKind kind, StableId? resultId, StableId? winningTeamId, StableId? losingTeamId, long finalTick, ulong completedRootActions, int eventCount, long totalDamageDealt, long totalHealingDone, int survivingCombatants, Sha256Digest finalStateHash, Sha256Digest finalEventChainHash, Diagnostic? diagnostic)`
 
 :   Creates a record and enforces its pairing invariants: a result ID exists exactly on `BatchOutcomeKind.Terminal` records, team result IDs require that result ID, counters are nonnegative, both hashes are valid, and only fatal-invariant records carry a diagnostic.
+
     - `seed` &mdash; The batch seed this battle ran with.
     - `kind` &mdash; Why the battle stopped.
     - `resultId` &mdash; The engine's terminal result ID, or null when the battle stopped for any other reason.
@@ -518,18 +528,21 @@ is excluded from CSV, JSON, and `RecordSetHash`.
 `public bool Equals(BattleOutcomeRecord other)`
 
 :   Value comparison across the whole record.
+
     - `other` &mdash; The record to compare with; null is never equal.
     - **Returns** &mdash; True when every recorded member matches, the diagnostic included.
 
 `public override bool Equals(object obj)`
 
 :   Value comparison with any object; only another record can be equal.
+
     - `obj` &mdash; The object to compare with.
     - **Returns** &mdash; True when `obj` is a record with matching members.
 
 `public override int GetHashCode()`
 
 :   Hashes the seed, kind, final tick, and both final hashes only. It stays consistent with `Equals(BattleOutcomeRecord)` without visiting every member.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---

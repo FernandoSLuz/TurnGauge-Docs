@@ -23,6 +23,7 @@ no-op, never a gameplay effect. Fully replaceable per B6-08.
 `public BuiltInAnimationAdapter(PresentationLog log = null)`
 
 :   Creates an adapter with nothing bound, so every key degrades until `Register` supplies a handler.
+
     - `log` &mdash; Shared warning ledger; null gives this adapter its own, which routes to the Unity console.
 
 **Methods**
@@ -30,12 +31,14 @@ no-op, never a gameplay effect. Fully replaceable per B6-08.
 `public void Play(string animationKey, PresentationCue cue)`
 
 :   Invokes the handler bound to `animationKey`. A null or empty key is ignored outright; an unbound key warns once through the log and then stays silent, so a render frame never throws.
+
     - `animationKey` &mdash; Ordinal key registered to an Animator trigger.
     - `cue` &mdash; Resolved participant and stage placement supplied to custom bindings.
 
 `public void Register(string animationKey, Action<PresentationCue> handler)`
 
 :   Binds a key to a neutral flip-book/animator handler.
+
     - `animationKey` &mdash; Authored key a beat names; null or empty throws, and re-registering a bound key replaces its handler.
     - `handler` &mdash; Invoked with the beat's cue each time the key plays; null throws.
 
@@ -58,6 +61,7 @@ degrade to a single warning and a no-op.
 `public BuiltInAudioAdapter(AudioSource source = null, PresentationLog log = null)`
 
 :   The audio adapter routes registered phase keys through one optional non-positional AudioSource.
+
     - `source` &mdash; Voice every one-shot plays through; with no source the adapter stays silent even for bound keys.
     - `log` &mdash; Shared warning ledger; null gives this adapter its own, which routes to the Unity console.
 
@@ -66,11 +70,13 @@ degrade to a single warning and a no-op.
 `public void Play(string audioKey)`
 
 :   Plays the clip bound to `audioKey` as a one-shot on the shared source, so playback is non-positional. A null or empty key is ignored; an unbound key warns once and then stays silent.
+
     - `audioKey` &mdash; Ordinal sound binding named by the presentation phase.
 
 `public void Register(string audioKey, AudioClip clip)`
 
 :   Binds a key to a one-shot clip.
+
     - `audioKey` &mdash; Authored key; null or empty throws, and re-registering a bound key replaces its clip.
     - `clip` &mdash; Clip to play. A null clip is accepted: the key counts as bound and plays nothing, without a warning.
 
@@ -94,6 +100,7 @@ to a single warning and a null result rather than allocating forever.
 `public BuiltInPoolAdapter(Transform root = null, PresentationLog log = null)`
 
 :   The built-in pool retains keyed prototypes, idle clones, live ownership, and per-key structural caps.
+
     - `root` &mdash; Parent given to freshly created instances and to anything released back; null leaves them at the scene root.
     - `log` &mdash; Shared warning ledger; null gives this pool its own, which routes to the Unity console.
 
@@ -108,36 +115,42 @@ to a single warning and a null result rather than allocating forever.
 `public GameObject Acquire(string key)`
 
 :   Hands out a live instance for `key`, reusing an idle one when there is one. A key with no registered prototype still succeeds: it yields a bare `GameObject` named after the key, which the caller has to give visuals of its own.
+
     - `key` &mdash; Pool channel to acquire from, reusing idle instances before cloning its prototype.
     - **Returns** &mdash; An active instance, or null when the key is null or empty or already holds `MaximumPerKey` live instances - hitting the cap warns once for that key.
 
 `public int ActiveCount(string key)`
 
 :   Instances handed out for a key and not yet released; zero for a null key or one that has never been acquired.
+
     - `key` &mdash; Pool channel whose unreleased checkout count is requested.
     - **Returns** &mdash; Live instance count for the key, or zero for null or unknown keys.
 
 `public bool HasPrototype(string key)`
 
 :   True when `RegisterPrototype` has bound a prototype to `key` and that prototype is still alive. A destroyed prototype reports false rather than true, so a scene teardown that took the source object with it degrades to the shared fallback instead of cloning a dead reference.
+
     - `key` &mdash; Prototype identity to inspect without creating or acquiring an instance.
     - **Returns** &mdash; when the exact key maps to a non-destroyed prototype.
 
 `public int IdleCount(string key)`
 
 :   Idle (recycled) instances retained for a key.
+
     - `key` &mdash; Pool channel whose recycled-instance count is requested.
     - **Returns** &mdash; Inactive retained instance count for the key, or zero for null or unknown keys.
 
 `public void RegisterPrototype(string key, GameObject prototype)`
 
 :   Binds a key to a prototype cloned on acquire.
+
     - `key` &mdash; Pool key; null or empty throws. Re-registering replaces the prototype without disturbing instances already handed out or idle.
     - `prototype` &mdash; Object cloned when no idle instance is available; null throws.
 
 `public void Release(GameObject instance)`
 
 :   Takes back an instance from `Acquire`: deactivates it, reparents it under the pool root, and keeps it for reuse rather than destroying it. A null instance, one this pool did not hand out, and a second release of the same instance are all ignored, so a duplicate release during teardown is harmless.
+
     - `instance` &mdash; Owned live checkout to deactivate, reparent, and return to its keyed idle stack.
 
 ---
@@ -159,6 +172,7 @@ degrade to a single warning and a no-op.
 `public BuiltInVfxAdapter(IPoolAdapter pool = null, PresentationLog log = null)`
 
 :   The effect adapter borrows keyed instances from the optional pool and shares a log-once warning ledger.
+
     - `pool` &mdash; Source of the spawned instances; with no pool a registered key resolves quietly to nothing, since only unregistered keys warn.
     - `log` &mdash; Shared warning ledger; null gives this adapter its own, which routes to the Unity console.
 
@@ -167,12 +181,14 @@ degrade to a single warning and a no-op.
 `public void Play(string vfxKey, PresentationCue cue)`
 
 :   Spawns a pooled instance for `vfxKey` at the cue. An unregistered key warns once and no-ops; a registered key with no pool, or one the pool has capped, does nothing at all. This adapter never releases what it acquired, so whoever owns the pool decides when the instance goes back.
+
     - `cue` &mdash; Placement for the effect; its parent, when set, adopts the instance without moving it.
     - `vfxKey` &mdash; Ordinal effect binding and pool key named by the presentation phase.
 
 `public void RegisterKey(string vfxKey)`
 
 :   Registers a VFX key as bound to art.
+
     - `vfxKey` &mdash; Authored key that should stop warning; null or empty throws. Registering the key does not supply the art - the pool prototype under the same key does.
 
 ---
@@ -226,6 +242,7 @@ byte-identical.
 `public void Play(string animationKey, PresentationCue cue)`
 
 :   Starts the animation bound to `animationKey`. Fires once per beat phase that names a key, which can be several times in a single frame when the visual clock is scaled up or beats are skipped.
+
     - `animationKey` &mdash; Authored key, never null or empty from the presenter; an unbound key must no-op rather than throw.
     - `cue` &mdash; Placement for this beat, passed by value. Its position is the beat source's stage slot, or (0,0,0) when that combatant has no resolved placement.
 
@@ -250,6 +267,7 @@ touch battle state: audio can never change a battle outcome.
 `public void Play(string audioKey)`
 
 :   Plays the sound bound to `audioKey`. No cue is supplied, so playback is non-positional. A skip or a sped-up clock can deliver many calls in one frame, so an implementation that cares about voice count must cap itself.
+
     - `audioKey` &mdash; Authored key, never null or empty from the presenter; an unbound key must no-op rather than throw.
 
 ---
@@ -276,18 +294,21 @@ leaking instances and without destroying them.
 `public GameObject Acquire(string key)`
 
 :   Hands out a live instance for `key`, reusing a previously released one when there is one. An implementation must return null once the key is at its cap rather than allocate without bound; every caller in the package reads null as "skip this visual" and carries on.
+
     - `key` &mdash; Pool channel or prototype identity to check out.
     - **Returns** &mdash; An active instance the caller may reposition, reparent, and add components to, or null when the key is capped.
 
 `public int ActiveCount(string key)`
 
 :   Instances acquired for `key` and not yet released. A key that has never been acquired reports zero rather than throwing.
+
     - `key` &mdash; Pool channel whose unreleased instance count is requested.
     - **Returns** &mdash; The number of live checkouts for the key, or zero when the key is unknown.
 
 `public void Release(GameObject instance)`
 
 :   Takes back an instance from `Acquire`. An implementation must deactivate and retain it for reuse rather than destroy it, and must ignore a null instance or one it does not own, so a duplicate release during teardown is harmless.
+
     - `instance` &mdash; Previously acquired object to deactivate and retain for reuse.
 
 ---
@@ -318,6 +339,7 @@ per-combatant art existed.
 `public bool HasPrototype(string key)`
 
 :   True when a prototype has been registered for `key`. Must not acquire, allocate, or mutate anything.
+
     - `key` &mdash; Prototype identity to inspect without checking out an instance.
     - **Returns** &mdash; only when a live registered prototype exists for the exact key.
 
@@ -343,6 +365,7 @@ cosmetic only and must never feed back into anything authoritative.
 `public void Play(string vfxKey, PresentationCue cue)`
 
 :   Spawns the effect bound to `vfxKey`. Fires once per beat phase that names a key, and may fire several times in one frame when beats are skipped or the visual clock is scaled up.
+
     - `vfxKey` &mdash; Authored key, never null or empty from the presenter; an unbound key must no-op rather than throw.
     - `cue` &mdash; Anchor the phase asked for, resolved against the beat's target or its source when there is no target; the position is (0,0,0) when neither resolves.
 
@@ -369,6 +392,7 @@ non-authoritative and never enters any battle hash.
 `public PresentationBeatSpec(long durationRawSeconds, string animationKey, string vfxKey, PresentationVfxAnchorKind vfxAnchorKind, string vfxAnchorId, string audioKey, FloatingNumberStyle floatingNumberStyle, bool cameraShake)`
 
 :   Creates a beat from authored values. Nothing is validated or clamped here: the duration is stored exactly as given and only clamped when read, and null keys are stored as empty strings.
+
     - `durationRawSeconds` &mdash; Beat length in raw Fixed64 seconds. May exceed the 0..30 s cap, in which case `ExceedsDurationCap` reports it.
     - `animationKey` &mdash; Key handed to the animation adapter; empty plays no animation.
     - `vfxKey` &mdash; Key handed to the VFX adapter; empty plays no VFX.
@@ -381,6 +405,7 @@ non-authoritative and never enters any battle hash.
 `public PresentationBeatSpec(long durationRawSeconds, string animationKey, string vfxKey, PresentationVfxAnchorKind vfxAnchorKind, string vfxAnchorId, string audioKey, FloatingNumberStyle floatingNumberStyle, FloatingNumberStyle criticalNumberStyle, bool cameraShake)`
 
 :   Creates a beat that also names the style to use when the hit was a critical. Identical to the shorter form otherwise, which leaves the critical style at `FloatingNumberStyle.Critical`.
+
     - `durationRawSeconds` &mdash; Beat length in raw Fixed64 seconds.
     - `animationKey` &mdash; Key handed to the animation adapter; empty plays no animation.
     - `vfxKey` &mdash; Key handed to the VFX adapter; empty plays no VFX.
@@ -452,6 +477,7 @@ non-authoritative and never enters any battle hash.
 `public FloatingNumberStyle ResolveFloatingNumberStyle(PresentationBeatContext context)`
 
 :   Picks the number style for one beat's context.
+
     - `context` &mdash; The beat being played; only its critical flag is read.
     - **Returns** &mdash; `CriticalNumberStyle` for a critical hit and `FloatingNumberStyle` otherwise. A beat that draws no number at all keeps drawing none, because a critical is a reason to draw the number differently and never a reason to introduce one.
 
@@ -474,6 +500,7 @@ for the beat, never any authoritative value or engine reference.
 `public PresentationCue(Vector3 worldPosition, FormationFacing facing, Transform parent, StableId sourceId, StableId targetId)`
 
 :   Creates a cue from an already-resolved placement. The cue carries placement and identity only, never an authoritative battle value.
+
     - `parent` &mdash; Optional parent for spawned instances; null leaves them unparented.
     - `sourceId` &mdash; Beat source, or the default id when the beat has no source.
     - `targetId` &mdash; Beat target, or the default id when the beat has no target.
@@ -521,6 +548,7 @@ key so a render frame never spams the console or throws.
 `public PresentationLog(Action<string> sink = null)`
 
 :   Creates a ledger that forwards each first-time warning to `sink`.
+
     - `sink` &mdash; Receiver for warning text; null routes to the Unity console through Debug.LogWarning.
 
 **Properties**
@@ -534,12 +562,14 @@ key so a render frame never spams the console or throws.
 `public bool HasWarnedFor(string key)`
 
 :   Reports whether a warning has already been recorded for `key`, without recording one.
+
     - `key` &mdash; Exact adapter or recipe key whose warning-ledger membership is queried.
     - **Returns** &mdash; True once `WarnOnce` has fired for that exact key; always false for a null key, which `WarnOnce` dedupes under the empty string instead.
 
 `public void WarnOnce(string key, string message)`
 
 :   Emits at most one warning per `key`. Subsequent calls with the same key are silently ignored (documented degrade).
+
     - `key` &mdash; Ordinal deduplication key; null shares the empty-string ledger entry.
     - `message` &mdash; Warning text sent only for the key's first occurrence; null falls back to the key.
 
@@ -593,18 +623,21 @@ output. Selectors bind an event type plus an optional mechanic id or tag.
 `public PresentationBeatSpec GetBeat(int phaseIndex)`
 
 :   Fetches the beat for a fixed phase index (0=In,1=Impact,2=Out).
+
     - `phaseIndex` &mdash; The phase to read; only 0, 1 and 2 are valid.
     - **Returns** &mdash; The recipe's own beat instance, not a copy, so it stays valid only as long as the recipe asset does.
 
 `public bool TryGetEventTypeId(out StableId id)`
 
 :   Parses the event type id; false when it is unset or invalid. A recipe whose event id does not parse can never win resolution.
+
     - `id` &mdash; The parsed id, or the default id on failure.
     - **Returns** &mdash; True when the raw event type id parsed.
 
 `public bool TryGetSelectorValue(out StableId id)`
 
 :   Parses the selector value; false for defaults or bad ids.
+
     - `id` &mdash; The parsed id or tag, or the default id on failure.
     - **Returns** &mdash; True when the raw selector value parsed. False is normal for an `PresentationSelectorKind.EventDefault` recipe, which matches without reading the value at all.
 
@@ -644,6 +677,7 @@ any battle hash.
 `public static PresentationRecipeSet CreateTransient(string stableIdRaw, IEnumerable<PresentationRecipeDefinition> authoredRecipes = null)`
 
 :   Creates a non-persistent recipe set for runtime composition. The caller owns and must destroy the returned ScriptableObject.
+
     - `authoredRecipes` &mdash; Recipe assets copied into serialized order; null produces an empty set.
     - `stableIdRaw` &mdash; Unvalidated identity text assigned to the transient set.
     - **Returns** &mdash; A caller-owned, unsaved ScriptableObject containing the supplied recipe references.

@@ -23,6 +23,7 @@ and may reject it.
 `public AiCandidateDescription(StableId ruleId, StableId skillId, int priority, uint weight, IEnumerable<StableId> requestedTargets)`
 
 :   Describes one candidate action.
+
     - `ruleId` &mdash; Authored rule this candidate comes from. Must be a rule of the policy being executed.
     - `skillId` &mdash; Skill to use. Must match the skill the named rule declares.
     - `priority` &mdash; Ordering key for priority-based selection; higher is preferred.
@@ -70,6 +71,7 @@ survives validation, so a policy expresses its ranking by how it orders this lis
 `public AiCandidatePlan(IEnumerable<AiCandidateDescription> candidates)`
 
 :   Freezes a candidate list, preserving the order given.
+
     - `candidates` &mdash; Candidates in preference order. Must contain no nulls and must not exceed the per-decision candidate limit. An empty plan is legal and means the actor has nothing to propose.
 
 **Properties**
@@ -96,6 +98,7 @@ conditions that were evaluated for it and the diagnostic that rejected it.
 `public AiCandidateTrace(StableId ruleId, StableId skillId, IEnumerable<AiConditionTrace> conditions, Diagnostic? rejection, int priority, uint weight)`
 
 :   Records the evaluation of one candidate.
+
     - `ruleId` &mdash; Rule the candidate came from.
     - `skillId` &mdash; Skill the candidate proposed.
     - `conditions` &mdash; Conditions evaluated for the rule, in evaluation order. Condition evaluation stops at the first failure, so this ends at the failing condition rather than covering every authored condition.
@@ -146,6 +149,7 @@ Record of one authored condition being evaluated for a rule during an AI decisio
 `public AiConditionTrace(StableId ruleId, int conditionIndex, bool passed)`
 
 :   Records the outcome of a single condition evaluation.
+
     - `ruleId` &mdash; Rule the condition belongs to.
     - `conditionIndex` &mdash; Position of the condition within that rule's condition list.
     - `passed` &mdash; Whether the condition held.
@@ -184,6 +188,7 @@ or mutate the simulation.
 `public AiContext(CompiledBattleContent content, BattleSnapshot snapshot, StableId actorId, CompiledAiPolicyDefinition policy)`
 
 :   Binds compiled content, immutable snapshot, acting combatant, and compiled policy for one AI decision. Policies may read it but cannot mutate the engine.
+
     - `content` &mdash; Compiled content the decision is resolved against.
     - `snapshot` &mdash; Battle state at the decision tick. It is wrapped in a `BattleStateView`; the snapshot itself is not retained or exposed.
     - `actorId` &mdash; Combatant whose decision opportunity is being resolved. Must be a valid identifier.
@@ -228,6 +233,7 @@ Traces are surfaced on step, forecast, and replay results.
 `public AiDecisionTrace(long tick, ulong opportunitySequence, StableId actorId, StableId policyId, MechanicsImplementationReference implementation, IEnumerable<AiCandidateTrace> candidates, ulong? selectionBound, ulong? selectionSample, IEnumerable<StableId> targetCandidates, IEnumerable<uint> targetSamples, BattleCommand selectedCommand, bool noLegalCommand)`
 
 :   Records one automatic decision. Either a command was selected or the decision yielded no legal command; exactly one of those two outcomes must be supplied, and a no-legal-command decision must carry no selection or target draws.
+
     - `tick` &mdash; Tick on which the decision was made.
     - `opportunitySequence` &mdash; Identifies the decision opportunity being resolved. Must be non-zero.
     - `actorId` &mdash; Combatant that decided.

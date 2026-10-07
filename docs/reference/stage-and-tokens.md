@@ -101,26 +101,31 @@ event chain, a replay, or a result.
 `public void AdoptSnapshot(BattleSnapshot snapshot)`
 
 :   Adopts an authoritative snapshot for resync/skip and display.
+
     - `snapshot` &mdash; State to mirror onto the stage and HUD. It is read, never advanced or mutated; a null snapshot is accepted and updates nothing.
 
 `public void Bind(PresenterBinding presenterBinding)`
 
 :   Rebuilds the stage from an explicit binding and reconnects its optional interactive HUD. Clears queued visual beats and resets playback without changing the simulation.
+
     - `presenterBinding` &mdash; Required compiled content, layout, recipes, adapters, pool, labels and optional UI. Retained until the next binding; null throws.
 
 `public void ConfigureStageFeel(PerformFeelPreset feel)`
 
 :   Chooses the profile's fallback feel. An explicit inspector preset or host-installed module keeps precedence. Only automatically installed modules are replaced; their camera and body offsets reset first.
+
     - `feel` &mdash; Session-owned fallback feel; null returns to the presenter's default policy.
 
 `public void EnqueueEvents(IReadOnlyList<BattleEvent> events)`
 
 :   Derives and enqueues one beat per event (host step result).
+
     - `events` &mdash; Events from one engine step, in the order the engine produced them. A null list, and any null entry, is skipped. Once the queue reaches `MaximumQueuedBeats` the oldest beat is completed instantly to make room instead of being dropped, which increments `ForcedInstantBeatCount`.
 
 `public int InstallBuiltInPerformModules(PerformFeelPreset feel, Camera camera, SkillTitleView titleView)`
 
 :   Registers the shipped perform moment in one call: the skill title announcement, the focus pull, the body shake, and - when a camera is supplied - the camera shake and push-in, plus the bloom, vignette, and backdrop blur for whichever of those optional components the camera carries. This is the wiring the demo scene does by hand, offered as one line so a battle assembled from the shipped facade does not read flatter than the demo a buyer watched before purchasing. It adds only modules of a kind that is not registered yet, so calling it twice, or calling it after adding a module of your own, cannot double an effect. The first tick calls it for you with the serialized feel, camera, and no card, so calling it explicitly is only needed to pass a different preset, a different camera, or a card of your own. `PerformModules` stays open afterwards: drop one, reorder them, or add your own alongside.
+
     - `feel` &mdash; How hard the moment hits. Null uses the shipped defaults rather than zeroes, so the effects are visible without an asset being authored.
     - `camera` &mdash; The camera the shake and the push-in drive. Null registers the modules that need no camera and skips the rest.
     - `titleView` &mdash; The card the skill name is announced on. Null builds one over the bound interface, and skips the announcement when there is no interface to build it on.
@@ -129,6 +134,7 @@ event chain, a replay, or a result.
 `public void RebindEffects(PresentationRecipeSet recipes, IAnimationAdapter animation, IVfxAdapter vfx, IAudioAdapter audio, PresentationLog log = null)`
 
 :   Replaces visual recipes and effect adapters without rebuilding the stage or HUD. Pending old effects are cancelled, not replayed. The snapshot, interactive subscriptions, selection and pool stay intact.
+
     - `recipes` &mdash; Replacement visual recipe set; must satisfy PresenterBinding's content contract.
     - `animation` &mdash; Adapter receiving animation keys from future phases.
     - `vfx` &mdash; Adapter receiving effect keys and participant anchors from future phases.
@@ -142,12 +148,14 @@ event chain, a replay, or a result.
 `public void SetCombatantArt(StableId combatantId, Sprite art)`
 
 :   Gives one combatant its illustration, on the stage and on the rail at once. Existing source-facing metadata is preserved. Newly configured tokens default to right-facing source art; use the explicit overload when the imported illustration points elsewhere.
+
     - `combatantId` &mdash; The combatant to dress. Unknown ids are ignored.
     - `art` &mdash; The illustration, or null to strip it back to the lettered fallback. The same sprite becomes the bust crop on that combatant's turn-order chip, so a project assigns art once rather than twice.
 
 `public void SetCombatantArt(StableId combatantId, Sprite art, FormationFacing sourceArtFacing)`
 
 :   Gives a combatant art whose source orientation is supplied by the project. The direction is retained by the token and shared with the turn-order portrait, so stage art and the legacy rail never acquire independent mirror rules.
+
     - `combatantId` &mdash; The combatant to dress.
     - `art` &mdash; The source illustration, or null to clear it.
     - `sourceArtFacing` &mdash; Direction encoded by the unmirrored source sprite.
@@ -155,11 +163,13 @@ event chain, a replay, or a result.
 `public void SetReducedMotion(bool value)`
 
 :   Applies a session preference to beats, stage and numbers without changing skin assets or battle state. A custom HUD applies its own matching policy. Existing perform modules reset when reduction is enabled. Effects already started outside those modules remain the host's responsibility.
+
     - `value` &mdash; Session preference, combined with the authored skin preference.
 
 `public void SetViewport(FormationViewport value)`
 
 :   Sets the stage viewport; rebuilds the stage when bound.
+
     - `value` &mdash; Pixel rectangle the formation is projected into. Written to the serialized stage fields even when the presenter is not bound yet, so the next `Bind` uses it and the inspector shows it.
 
 `public void SkipAll()`
@@ -173,11 +183,13 @@ event chain, a replay, or a result.
 `public void Tick(float presentationDeltaSeconds)`
 
 :   Advances beats and adapters by presentation delta seconds.
+
     - `presentationDeltaSeconds` &mdash; Elapsed seconds, unscaled: `Speed` is applied on top, so a host passes its frame delta straight in. Zero or less does nothing, which is how a host implements pause.
 
 `public void Tick(float presentationDeltaSeconds, bool reduceMotion)`
 
 :   Advances visual beat playback using the current speed and motion preference. An unbound, paused or nonpositive-delta call leaves playback and the motion preference unchanged; simulation time is never advanced here.
+
     - `presentationDeltaSeconds` &mdash; Elapsed seconds, unscaled. Zero or less, or a zero `Speed`, preserves pause.
     - `reduceMotion` &mdash; Whether to compress beats, suppress new decorative effects and keep stage feedback static.
 
@@ -281,6 +293,7 @@ transform ever feeds back into anything authoritative.
 `public void Build(CompiledEncounterFormationLayout layout, IPoolAdapter pool, FormationViewport viewport, PresentationLog log = null, float unitsPerPixel = 0.01f)`
 
 :   Projects the layout at `viewport` and spawns the token set. Explicit; the stage never scans the scene.
+
     - `layout` &mdash; Compiled team formations and combatant-to-slot occupancies to project and spawn.
     - `log` &mdash; Optional log-once ledger for projection or missing-art warnings.
     - `pool` &mdash; Instance pool supplying shared or combatant-specific token objects.
@@ -294,12 +307,14 @@ transform ever feeds back into anything authoritative.
 `public bool IsPointerOccluded(Vector2 screenPoint)`
 
 :   Tests semantic HUD occlusion and raycasts from other UI surfaces.
+
     - `screenPoint` &mdash; Pointer position in screen pixels supplied to host/native hit tests and the current EventSystem.
     - **Returns** &mdash; True when either semantic blocker accepts the point or an unowned UI raycast hit remains; false when no surface blocks stage picking.
 
 `public void SetPresentation(CompiledBattleSkin battleSkin, DisplayStringTable labelTable, StableId allyTeamId)`
 
 :   Supplies the skin and label table used to dress spawned tokens with nameplates, bars, and status pips. Call before `Build`. Optional: without it tokens still mirror state onto their properties, which is what the headless tests assert against.
+
     - `allyTeamId` &mdash; Team identity whose spawned token plates receive the ally tint.
     - `battleSkin` &mdash; Compiled skin used to build token plates; null leaves tokens headless.
     - `labelTable` &mdash; Combatant ID labels used on token plates; null selects an empty table.
@@ -307,17 +322,20 @@ transform ever feeds back into anything authoritative.
 `public void Tick(float presentationDeltaSeconds)`
 
 :   Advances token plate animation by a visual delta.
+
     - `presentationDeltaSeconds` &mdash; Positive presentation-clock duration forwarded to every spawned token plate.
 
 `public static string TokenPoolKeyFor(StableId combatantId)`
 
 :   The pool key that gives one combatant its own body: `presentation.token.`. Register a prototype under this key and that combatant spawns from it; register nothing and it falls back to `TokenPoolKey`, so a project can give art to some combatants and not others. The stage only looks for the specific key when the pool can be asked whether it holds one, because `IPoolAdapter.Acquire` is allowed to fabricate an empty instance for an unknown key rather than returning null, and a fallback built on null would silently spawn blank tokens instead.
+
     - `combatantId` &mdash; The combatant whose prototype is wanted.
     - **Returns** &mdash; `presentation.token.` for exact prototype registration.
 
 `public bool TryGetAnchorWorld(StableId combatantId, PresentationVfxAnchorKind kind, StableId? anchorId, out Vector3 world)`
 
 :   Resolves a beat anchor to stage space for a combatant.
+
     - `anchorId` &mdash; Named VFX anchor when `kind` is Anchor; otherwise ignored.
     - `combatantId` &mdash; Spawned combatant whose compiled placement supplies the handle.
     - `kind` &mdash; Standing slot, approach point, or named anchor to resolve.
@@ -327,6 +345,7 @@ transform ever feeds back into anything authoritative.
 `public bool TryGetToken(StableId combatantId, out CombatantTokenView token)`
 
 :   Returns the spawned token for a combatant, if present.
+
     - `combatantId` &mdash; Combatant identity used as the stage token dictionary key.
     - `token` &mdash; Receives the active pooled token view, or null when the combatant was not spawned.
     - **Returns** &mdash; True when the operation succeeds; otherwise false.
@@ -334,6 +353,7 @@ transform ever feeds back into anything authoritative.
 `public bool TryPickTokenAtScreen(Vector2 screenPoint, Camera camera, out StableId combatantId)`
 
 :   Projects a pointer through `camera` and picks the nearest token on the stage plane. Input-system integrations can call this directly without depending on TurnGauge input packages.
+
     - `screenPoint` &mdash; Screen-space pointer position in pixels.
     - `camera` &mdash; Camera that produced the screen point.
     - `combatantId` &mdash; Picked combatant, or the default id.
@@ -342,6 +362,7 @@ transform ever feeds back into anything authoritative.
 `public bool TryPickTokenAtWorld(Vector3 worldPoint, out StableId combatantId)`
 
 :   Finds the combatant standing nearest a point on the stage.
+
     - `worldPoint` &mdash; The point to test, in world space, and only its x and y are read. Tokens are placed at world positions rather than under this transform, so this is measured against those positions directly.
     - `combatantId` &mdash; The combatant found, or the default id when none is near enough.
     - **Returns** &mdash; True when a combatant stands within `TokenPickRadiusPixels` of the point. Ties resolve to the lowest id so the same click always picks the same combatant.
@@ -349,6 +370,7 @@ transform ever feeds back into anything authoritative.
 `public bool TryProjectScreenToStage(Vector2 screenPoint, Camera camera, out Vector3 worldPoint)`
 
 :   Projects one screen point onto the world-space stage plane at z = 0. A ray/plane intersection works for orthographic and perspective cameras, including cameras rotated away from the world z axis.
+
     - `screenPoint` &mdash; Screen-space pointer position in pixels.
     - `camera` &mdash; Camera that produced the screen point.
     - `worldPoint` &mdash; Intersection on the stage plane.
@@ -357,6 +379,7 @@ transform ever feeds back into anything authoritative.
 `public void UpdateFromSnapshot(BattleSnapshot snapshot)`
 
 :   Mirrors current snapshot state onto every token.
+
     - `snapshot` &mdash; Authoritative snapshot supplying health, shields, statuses, and death state for each spawned combatant.
 
 ---
@@ -491,6 +514,7 @@ whenever the screen, safe area, or any field changes.
 `public FormationViewport Resolve(int screenWidth, int screenHeight, Rect safeAreaPixels)`
 
 :   Computes the stage viewport for a screen. Public and parameterised so EditMode tests can verify every mode and margin without a device. Pure: it reads the serialized fields but applies nothing to the presenter.
+
     - `screenWidth` &mdash; Screen width in pixels. Outside Explicit mode, a non-positive value falls back to a 1x1 viewport rather than throwing.
     - `screenHeight` &mdash; Screen height in pixels, treated as `screenWidth` is.
     - `safeAreaPixels` &mdash; The device safe area in pixels. Ignored unless the safe-area option is on, and ignored when its width or height is not positive, so passing a default Rect is a valid way to ask for the full screen.
@@ -499,11 +523,13 @@ whenever the screen, safe area, or any field changes.
 `public void SetInterfaceLayout(IBattleStageLayout layout)`
 
 :   Binds an optional native/custom view's stage reservation. Null restores legacy or host margins.
+
     - `layout` &mdash; View supplying normalized stage bounds, or null to restore the configured margin policy. The viewport is refreshed immediately.
 
 `public void SetMode(StageFrameMode value)`
 
 :   Sets the framing mode and re-frames immediately. Exists because a scene that builds its presenter at runtime, as the runtime demo does, has no inspector to set this in. `StageFrameMode.FullScreen` is what gives a wider screen more stage instead of wider empty gutters.
+
     - `value` &mdash; How the stage rectangle is derived from the screen.
 
 ---
@@ -761,12 +787,14 @@ engine reference.
 `public static PresentationBeatContext BuildContext(BattleEvent battleEvent)`
 
 :   Extracts the beat context from an event's property set.
+
     - `battleEvent` &mdash; The event to read; only its typed properties are inspected.
     - **Returns** &mdash; The extracted context, or the default context when the event is null. Source falls back to the actor id, and amount to the actual delta when present, otherwise the plain amount; both are absent when untyped. The critical, shielded, and killing-blow flags read false unless the event says otherwise.
 
 `public static PresentationBeat Derive(BattleEvent battleEvent, PresentationRecipeSet recipes, CompiledAuthoringCatalog catalog)`
 
 :   Derives the single beat for one event (never null).
+
     - `battleEvent` &mdash; The gameplay event to map; null yields a default context.
     - `recipes` &mdash; The candidate recipe set searched for a match.
     - `catalog` &mdash; Compiled content supplying the skill/status tag tables that tag selectors match against.
@@ -886,12 +914,14 @@ It reads values only; it never computes or mutates anything authoritative.
 `public void ApplySkin(CompiledBattleSkin battleSkin, float unitsPerPixel)`
 
 :   Attaches the skinned plate that renders this token's values. Optional: a token with no skin still mirrors state onto its properties, which is what the headless tests assert against.
+
     - `battleSkin` &mdash; The compiled skin to draw with; null leaves the token unskinned and adds no plate.
     - `unitsPerPixel` &mdash; World units per reference pixel, used to size and offset the plate.
 
 `public void ApplyState(CombatantState combatant, int shieldAmount, int statusPipCount)`
 
 :   Mirrors snapshot/event state onto the token and its plate.
+
     - `combatant` &mdash; Snapshot state to mirror; null leaves health, maximum, and death as they were.
     - `shieldAmount` &mdash; Shield amount to display; negative values clamp to zero.
     - `statusPipCount` &mdash; How many status pips to show; negative values clamp to zero.
@@ -899,6 +929,7 @@ It reads values only; it never computes or mutates anything authoritative.
 `public void Configure(StableId combatantId, FormationFacing facing, StableId sortingLayerKey, int sortingOrder, ProjectedFormationPoint slotProjected, ProjectedFormationPoint approachProjected, float unitsPerPixel)`
 
 :   Places the token from its compiled slot projection.
+
     - `facing` &mdash; Compiled slot facing; the sprite is mirrored when this differs from its source art direction.
     - `sortingLayerKey` &mdash; Recorded for the caller to apply; only `sortingOrder` reaches the sprite renderer.
     - `slotProjected` &mdash; Projected rest position, in reference pixels, that the token is moved to.
@@ -914,50 +945,59 @@ It reads values only; it never computes or mutates anything authoritative.
 `public void SetArt(Sprite art)`
 
 :   Gives this combatant its painted body. This is the supported way to dress a token, and it does the two things that assigning `SpriteRenderer.sprite` directly does not: it retires the lettered fallback card, which would otherwise sit behind the art as a leftover box, and it moves the nameplate down to the new body's ground line.
+
     - `art` &mdash; The combatant's illustration, or null to return to the lettered fallback. A renderer is provisioned on the token root when needed.
 
 `public void SetArtScale(float scale)`
 
 :   Scales this combatant's art to fit the stage it is standing on. Only the body scales. The nameplate is built in reference pixels and keeps its own size, because a plate that shrank with the stage would take the name and the health readout below the size anybody can read - which is the fault this whole pass exists to fix.
+
     - `scale` &mdash; Multiplier for the art, normally `BattleStage2D.TokenScale`. Zero or less is ignored, so a caller that has not computed one yet leaves the token at its authored size.
 
 `public void SetCastProgress(float fraction, bool visible)`
 
 :   Shows cast progress on the plate, or hides the cast bar.
+
     - `fraction` &mdash; Cast progress in [0,1]; read only when `visible` is true.
     - `visible` &mdash; False hides the cast bar. Does nothing when the token is unskinned.
 
 `public void SetGauge(float fraction, bool visible)`
 
 :   Shows the scheduler gauge on the plate, or hides it.
+
     - `fraction` &mdash; Gauge fill in [0,1]; a full gauge is drawn with the ready accent.
     - `visible` &mdash; False hides the gauge. Does nothing when the token is unskinned.
 
 `public void SetPlateIdentity(string label, Color teamTint)`
 
 :   Updates set plate identity on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
+
     - `label` &mdash; The resolved display string; ignored when the token is unskinned.
     - `teamTint` &mdash; Tint that distinguishes ally from enemy, replacing the skin default.
 
 `public void SetSourceArtFacing(FormationFacing value)`
 
 :   Sets the direction painted into the source sprite, independently of its compiled slot facing.
+
     - `value` &mdash; The source illustration's unmirrored direction. It persists when the stage reconfigures this token.
 
 `public void SetStagePresence(SkinStagePresenceTokens presence, int rank)`
 
 :   Stages this token for the depth rank it stands at. This is what makes a formation read as a scene instead of a diagram: a body further from the camera is smaller, darker, and lit less by the key light, and the three cues together are what the eye reads as distance. One of them alone reads as a smaller character, a shadowed character, or a differently-painted one.
+
     - `presence` &mdash; The skin's staging tokens. Sanitized on the way in, so an unclamped authored value cannot reach the transform.
     - `rank` &mdash; Depth rank, 0 at the front. Negative values are treated as the front, which is what a caller that could not resolve a rank should pass.
 
 `public void SetTargetCandidate(bool eligible)`
 
 :   Marks this token eligible, or not, for the pick in progress.
+
     - `eligible` &mdash; False dims the token to `NonCandidateDim`.
 
 `public void SetVisualGroundAnchor(Transform anchor)`
 
 :   Sets an authored point on this token that represents where its art meets the ground. The anchor may be the token itself or any descendant; a foreign transform is rejected so one combatant cannot ground itself from another object's moving hierarchy. Passing null restores renderer or fallback bounds grounding.
+
     - `anchor` &mdash; A transform in this token's hierarchy, or null to use visible bounds.
 
 `public void StopPulse()`
@@ -967,11 +1007,13 @@ It reads values only; it never computes or mutates anything authoritative.
 `public void Tick(float deltaSeconds)`
 
 :   Advances plate and pulse animation by a visual delta.
+
     - `deltaSeconds` &mdash; Wall-clock seconds since the last call. Non-positive values are ignored, and this is presentation time only: it never advances the battle.
 
 `public bool TryGetVisualGroundWorld(out Vector3 groundWorld, out float widthWorld)`
 
 :   Returns the actual visual ground line and width in world space. Renderer bounds keep this correct for a configured child renderer, pivots, flipX and transformed parents. When art is absent, the visible fallback card supplies the same contract.
+
     - `groundWorld` &mdash; Receives the visual ground centre in world coordinates.
     - `widthWorld` &mdash; Receives the visual width in world units.
     - **Returns** &mdash; True when a visible sprite or fallback body supplies a non-zero width.
@@ -996,6 +1038,7 @@ back into any authoritative hash.
 `public PresentationBeat(PresentationBeatContext context, PresentationRecipeDefinition recipe)`
 
 :   Pairs an event's beat context with the recipe resolved for it.
+
     - `context` &mdash; The data extracted from the source event.
     - `recipe` &mdash; The resolved recipe, or null to make this an instant no-visual beat.
 
@@ -1040,6 +1083,7 @@ optional amount for floating numbers; it performs no simulation math.
 `public PresentationBeatContext(StableId eventTypeId, long tick, ulong eventSequence, StableId? sourceId, StableId? targetId, StableId? skillId, StableId? statusId, StableId? reactionId, int? amount)`
 
 :   Creates a beat context. Normally produced by `BeatDeriver.BuildContext` from an event's property set; construct one directly only to drive a beat without a live battle.
+
     - `eventTypeId` &mdash; The source event's type, one of the `BattleIds` event identifiers.
     - `tick` &mdash; The tick the source event was emitted on.
     - `eventSequence` &mdash; The source event's battle-wide sequence, which identifies this beat's origin uniquely.
@@ -1053,6 +1097,7 @@ optional amount for floating numbers; it performs no simulation math.
 `public PresentationBeatContext(StableId eventTypeId, long tick, ulong eventSequence, StableId? sourceId, StableId? targetId, StableId? skillId, StableId? statusId, StableId? reactionId, int? amount, bool isCritical, bool blockedByShield, bool isKillingBlow)`
 
 :   Creates a beat context that also carries the outcome flags a hit can have. Same as the shorter form in every other respect; the flags default to false there, which is what an event that does not report them reads as.
+
     - `eventTypeId` &mdash; The source event's type, one of the `BattleIds` event identifiers.
     - `tick` &mdash; The tick the source event was emitted on.
     - `eventSequence` &mdash; The source event's battle-wide sequence, which identifies this beat's origin uniquely.
@@ -1156,6 +1201,7 @@ visual-only and is never read by simulation or included in its hashes.
 `public IReadOnlyList<string> Validate()`
 
 :   Returns authoring diagnostics without throwing. Duplicate keys are reported even though playback keeps the first binding deterministically.
+
     - **Returns** &mdash; Ordered diagnostics for missing content, duplicate keys and invalid effect values; empty when valid.
 
 ---
@@ -1181,6 +1227,7 @@ binding contains no engine and no authoritative mutator.
 `public PresenterBinding(CompiledAuthoringCatalog catalog, CompiledEncounterFormationLayout layout, PresentationRecipeSet recipes, IAnimationAdapter animation, IVfxAdapter vfx, IAudioAdapter audio, IPoolAdapter pool, DisplayStringTable labels, BattleUiRoot ui = null, PresentationLog log = null, IBattleView surface = null)`
 
 :   Bundles everything a presenter needs into one value. Every argument through `labels` is required and throws `ArgumentNullException` when null, so a binding that constructs is always complete: the presenter never has to null-check its own dependencies.
+
     - `layout` &mdash; The non-authoritative formation layout, used for placement only.
     - `recipes` &mdash; The recipe set beats are resolved against.
     - `labels` &mdash; The display-string table names are resolved through.
@@ -1337,6 +1384,7 @@ is used. Missing and malformed bindings degrade with one warning each.
 `public StagePresentationPlayback(PresentationStagePreset preset, BattlePresenter presenter, Transform owner, PresentationLog presentationLog = null)`
 
 :   Copies recipes and feel without modifying their authored assets, then owns timed effects and one-shot audio below an explicit scene parent. Null preset or owner throws; absent effect bindings warn and play nothing.
+
     - `preset` &mdash; Authored visual content read once and copied for this session.
     - `presenter` &mdash; Optional existing stage for token pulses and relative sprite sorting.
     - `owner` &mdash; Required scene parent; Dispose destroys only descendants created by this playback.
@@ -1389,6 +1437,7 @@ is used. Missing and malformed bindings degrade with one warning each.
 `public void OnPhaseBegin(PerformPhaseContext context)`
 
 :   Intentionally does not redispatch phases already handled by the presenter.
+
     - `context` &mdash; Phase notification; adapters are dispatched separately by BattlePresenter.
 
 `public void Reset()`
@@ -1398,6 +1447,7 @@ is used. Missing and malformed bindings degrade with one warning each.
 `public void Tick(float presentationDeltaSeconds)`
 
 :   Expires effects on positive finite presentation time.
+
     - `presentationDeltaSeconds` &mdash; Elapsed visual seconds; zero, negative and non-finite values are ignored.
 
 ---
@@ -1511,17 +1561,20 @@ the engine. Eight looks, one data source, no new simulation code.
 `public void Build(CompiledBattleSkin battleSkin, float unitsPerPixel)`
 
 :   Prepares the preview to draw with a skin. Call before `Show`.
+
     - `battleSkin` &mdash; The compiled skin whose palette the marks are drawn from.
     - `unitsPerPixel` &mdash; World units per reference pixel, matching the stage.
 
 `public void Hide(BattleStage2D stage)`
 
 :   Clears the preview and gives every token its colour back.
+
     - `stage` &mdash; The stage to un-dim; null skips that half.
 
 `public void Show(BattleStage2D stage, TargetTreatment treatment, IReadOnlyList<StableId> affected, IReadOnlyList<StableId> candidates, StableId playerTeamId)`
 
 :   Draws `treatment` for the set the resolver returned. The treatment is degraded for the party in front of it first, so a region shape with one candidate collapses to the single-pick look rather than drawing a team scrim around one body.
+
     - `stage` &mdash; The stage whose placements supply every position.
     - `treatment` &mdash; The classified treatment, before degradation.
     - `affected` &mdash; Combatants the skill would reach.
@@ -1589,11 +1642,13 @@ it never resolves a target, it only says which one is being pointed at.
 `public void ApplySkin(CompiledBattleSkin battleSkin)`
 
 :   Re-applies the skin's colours without rebuilding the marker.
+
     - `battleSkin` &mdash; The skin to adopt.
 
 `public void Build(CompiledBattleSkin battleSkin, float pixelScale)`
 
 :   Builds the marker. Explicit so EditMode tests can construct one.
+
     - `battleSkin` &mdash; Skin the marker is dressed from; null falls back to the package default.
     - `pixelScale` &mdash; World units one reference pixel is worth.
 
@@ -1604,6 +1659,7 @@ it never resolves a target, it only says which one is being pointed at.
 `public void Show(BattleStage2D stage, StableId combatantId, int index, int count)`
 
 :   Puts the marker over one candidate.
+
     - `stage` &mdash; Stage that knows where the combatant is standing.
     - `combatantId` &mdash; The candidate to point at.
     - `index` &mdash; Zero-based position in the candidate list.
@@ -1612,6 +1668,7 @@ it never resolves a target, it only says which one is being pointed at.
 `public void Tick(float presentationDeltaSeconds)`
 
 :   Advances the marker's bob around the anchor it was shown at. The offset is applied to a remembered anchor rather than to the current position, because adding a delta to the live transform every frame is how a bob turns into a drift.
+
     - `presentationDeltaSeconds` &mdash; Visual seconds elapsed.
 
 ---

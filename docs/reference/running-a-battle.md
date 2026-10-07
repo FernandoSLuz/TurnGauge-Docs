@@ -131,17 +131,20 @@ Owns immutable battle state and advances it through deterministic command, sched
 `public AdvanceTicksResult AdvanceTicks(int count)`
 
 :   Advances the battle by up to `count` ticks and returns every event emitted along the way.
+
     - `count` &mdash; How many ticks to advance, relative to the current tick. Zero is allowed; negative values are not.
     - **Returns** &mdash; Why the call stopped, the absolute tick it aimed at, the events it emitted in tick and event-sequence order, and the resulting snapshot.
 
 `public BattleEngine Clone()`
 
 :   Returns a second engine positioned on the current snapshot and sharing the same content, start request, seed, scheduler, and registries.
+
     - **Returns** &mdash; An independently step-able engine at the same immutable snapshot, with shared static dependencies and empty diagnostic trace buffers.
 
 `public static BattleEngine Create(CompiledBattleContent content, BattleStartRequest startRequest, uint seed)`
 
 :   Starts a new battle on the built-in schedulers and the built-in mechanics and returns it standing on the opening snapshot. Nothing is reduced yet and no event exists: the opening work, including `battle.started`, is queued on that snapshot and is first reduced by a step or advance call. This is the overload to reach for unless the project ships a custom scheduler or a custom formula, effect, target, AI, or reaction implementation.
+
     - `content` &mdash; Compiled content whose profile must match that of `startRequest`; the profile also decides which reducer the returned engine runs.
     - `startRequest` &mdash; The roster, teams, and scheduler choice to open with.
     - `seed` &mdash; Seed for the battle's random sequence. The same seed and the same command order reproduce the run exactly.
@@ -150,6 +153,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 `public static BattleEngine Create(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSchedulerRegistry registry)`
 
 :   Starts a new battle on a caller-supplied scheduler registry, keeping the built-in mechanics. Use this when the project ships its own turn-order or gauge scheduler but no custom formulas or effects.
+
     - `content` &mdash; Compiled content whose profile must match that of `startRequest`.
     - `startRequest` &mdash; The roster, teams, and scheduler choice to open with.
     - `seed` &mdash; Seed for the battle's random sequence.
@@ -159,6 +163,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 `public static BattleEngine Create(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Starts a new battle on caller-supplied scheduler and mechanics registries. This is the overload a B3 battle with custom formulas, effects, targeting, AI, or reactions needs, because the compiled content is checked against the mechanics registry up front: every implementation the content names must be registered at the contract version it was compiled for, or the battle is refused here rather than failing partway through a fight.
+
     - `content` &mdash; Compiled content whose profile must match that of `startRequest`.
     - `startRequest` &mdash; The roster, teams, and scheduler choice to open with.
     - `seed` &mdash; Seed for the battle's random sequence.
@@ -169,21 +174,25 @@ Owns immutable battle state and advances it through deterministic command, sched
 `public FrozenList<AiDecisionTrace> DrainAiDecisionTraces()`
 
 :   Removes and returns whatever AI decision evidence is still buffered on the engine.
+
     - **Returns** &mdash; All currently buffered non-authoritative AI decision traces in recording order; the engine buffer is empty after the call.
 
 `public FormulaAttributionTraceBatch DrainFormulaAttributionTraces()`
 
 :   Removes and returns whatever formula attribution evidence is still buffered on the engine, on the same terms as `DrainAiDecisionTraces`. The returned batch also reports how many traces were dropped to stay inside the documented memory bound, so a caller can tell a quiet battle from a truncated one.
+
     - **Returns** &mdash; All buffered formula traces plus their omitted count; taking the batch clears both values from the engine buffer.
 
 `public BattleSnapshot GetSnapshot()`
 
 :   Returns the current authoritative state. The returned snapshot is immutable and is never edited in place, so it stays valid after the engine steps; call again to see the state that followed.
+
     - **Returns** &mdash; The immutable authoritative snapshot currently owned by this engine; later reductions replace rather than mutate it.
 
 `public static BattleEngine Restore(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSnapshot snapshot)`
 
 :   Resumes a saved battle on the built-in schedulers and mechanics, continuing from `snapshot` exactly where it left off, including the position in the random sequence.
+
     - `content` &mdash; The same compiled content the battle was created against.
     - `startRequest` &mdash; The same start request the battle was created from.
     - `seed` &mdash; The seed the battle was created with.
@@ -193,6 +202,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 `public static BattleEngine Restore(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSnapshot snapshot, BattleSchedulerRegistry registry)`
 
 :   Resumes a saved battle on a caller-supplied scheduler registry, keeping the built-in mechanics. Use this when the save was written by a battle running a custom scheduler, since the saved scheduler state can only be recognised by the codec that registry provides.
+
     - `content` &mdash; The same compiled content the battle was created against.
     - `startRequest` &mdash; The same start request the battle was created from.
     - `seed` &mdash; The seed the battle was created with.
@@ -203,6 +213,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 `public static BattleEngine Restore(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSnapshot snapshot, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Resumes a saved battle on caller-supplied scheduler and mechanics registries. A B3 save needs this overload for two separate checks: `mechanicsRegistry` must resolve every mechanics binding `content` names, each at the contract version it was compiled for, and the binding digest recorded on the snapshot must equal the digest recomputed from that content. Content that has since moved a skill, status, or policy onto a different implementation id or contract version is therefore refused here instead of silently changing how the rest of the fight resolves. The digest covers those declared ids and versions only, so a different implementation object registered under the same id and version is not detected.
+
     - `content` &mdash; The same compiled content the battle was created against.
     - `startRequest` &mdash; The same start request the battle was created from.
     - `seed` &mdash; The seed the battle was created with.
@@ -214,21 +225,25 @@ Owns immutable battle state and advances it through deterministic command, sched
 `public FrozenList<BattleEvent> RunUntilBoundary()`
 
 :   Steps events until the battle stops producing them and returns all of them in emission order.
+
     - **Returns** &mdash; Every event emitted before the battle stopped, in emission order.
 
 `public StepActionResult StepAction()`
 
 :   Drives execution to the end of one root action and returns every event emitted on the way, in order.
+
     - **Returns** &mdash; Why the call stopped, the events it emitted, and the snapshot at that boundary.
 
 `public StepEventResult StepEvent()`
 
 :   Reduces queued execution work until exactly one gameplay event is emitted, or until the battle stops at a boundary, stalls, or fails.
+
     - **Returns** &mdash; Why the call stopped, the event it emitted if any, and the resulting snapshot.
 
 `public CommandResult Submit(BattleCommand command)`
 
 :   Offers one command to the battle and runs command validation only.
+
     - `command` &mdash; The command to offer. Its sequence number and requested tick must match the current snapshot.
     - **Returns** &mdash; How the command was treated, the one command event it produced, and the snapshot that follows.
 
@@ -257,6 +272,7 @@ while the battle is still running.
 `public BattleResultState(bool terminal, StableId resultId, StableId winningTeamId, StableId losingTeamId)`
 
 :   Creates a result from raw IDs, treating an invalid ID as absent. Prefer the named factories below. Throws when a nonterminal result is given any ID, when the result ID is not one of the five supported outcomes, when a team outcome is missing two distinct valid team IDs, or when a teamless outcome carries team IDs.
+
     - `terminal` &mdash; Whether the battle has ended. When `false`, all three IDs must be invalid.
     - `resultId` &mdash; One of `battle.victory`, `battle.defeat`, `battle.concession`, `battle.draw`, or `battle.stalled`. The first three require both team IDs; the last two must have neither.
     - `winningTeamId` &mdash; The surviving team, for the three team outcomes.
@@ -291,6 +307,7 @@ while the battle is still running.
 `public static BattleResultState Concession(StableId winningTeamId, StableId losingTeamId)`
 
 :   A terminal `battle.concession`: the battle ended because one team conceded rather than because it was eliminated.
+
     - `winningTeamId` &mdash; The team that did not concede.
     - `losingTeamId` &mdash; The conceding team.
     - **Returns** &mdash; A terminal concession state naming the surviving and conceding teams.
@@ -298,6 +315,7 @@ while the battle is still running.
 `public static BattleResultState Defeat(StableId winningTeamId, StableId losingTeamId)`
 
 :   A terminal `battle.defeat`: one team survived and it is not the perspective team.
+
     - `winningTeamId` &mdash; The surviving team - the perspective team's opponent.
     - `losingTeamId` &mdash; The eliminated perspective team.
     - **Returns** &mdash; A terminal defeat state carrying both distinct valid team identities.
@@ -305,16 +323,19 @@ while the battle is still running.
 `public static BattleResultState Draw()`
 
 :   A terminal `battle.draw`: neither team has a living combatant left on an unconceded team, so there is no winner to name.
+
     - **Returns** &mdash; A terminal draw state with no winner or loser identity.
 
 `public static BattleResultState Stalled()`
 
 :   A terminal `battle.stalled`: both teams were still standing when the battle hit its configured root-action or tick limit, so the engine stopped without a winner.
+
     - **Returns** &mdash; A terminal stalled state with no winner or loser identity.
 
 `public static BattleResultState Victory(StableId winningTeamId, StableId losingTeamId)`
 
 :   A terminal `battle.victory`: one team survived and it is the start request's perspective team.
+
     - `winningTeamId` &mdash; The surviving perspective team.
     - `losingTeamId` &mdash; The opposing team, which must differ from the winner.
     - **Returns** &mdash; A terminal victory state carrying both distinct valid team identities.
@@ -344,6 +365,7 @@ before they return, so a request they produce is one the engine will accept.
 `public BattleStartRequest(StableId schedulerId, IEnumerable<StartTeam> teams)`
 
 :   Builds a profile-1 start from two opposing teams. Nothing is resolved against compiled content here, so `schedulerId` is taken on trust and the request carries no scheduler definition; use `CreateB2` or the profile-3 factories when the ids should be checked before the engine sees them.
+
     - `schedulerId` &mdash; The scheduler that will drive the battle. It has to be a valid id, but it is not looked up.
     - `teams` &mdash; Exactly two non-null teams with distinct ids, built with the `StartTeam` constructor rather than `StartTeam.CreateB2`. Combatant ids must not repeat across the pair. The sequence is read once and sorted by team id, so the order it arrives in cannot change the battle.
 
@@ -382,6 +404,7 @@ before they return, so a request they produce is one the engine will accept.
 `public static BattleStartRequest CreateB2(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeam> teams)`
 
 :   Builds a profile-2 start whose scheduler and combatants are resolved against compiled content before the request exists. Unlike the profile-1 constructor it reports a bad id at build time rather than leaving the engine to reject the pairing later, which is why it needs the content the battle will be run with.
+
     - `content` &mdash; Profile-2 compiled content. Every id in the start is looked up in it, and content compiled for another profile is refused.
     - `schedulerId` &mdash; The scheduler that will drive the battle. It has to name a scheduler definition present in `content`.
     - `teams` &mdash; Exactly two non-null teams with distinct ids, built through `StartTeam.CreateB2`. Combatant ids must not repeat across the pair, and the two teams together may hold at most `SimulationLimits.TotalCombatants` members.
@@ -390,6 +413,7 @@ before they return, so a request they produce is one the engine will accept.
 `public static BattleStartRequest CreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams)`
 
 :   Builds a profile-3 start, taking the perspective team to be whichever of the two team ids sorts first. Throws on the first broken start rule; call `TryCreateB3` to receive a diagnostic instead.
+
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
     - `schedulerId` &mdash; The compiled scheduler definition that will drive the battle.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.
@@ -398,6 +422,7 @@ before they return, so a request they produce is one the engine will accept.
 `public static BattleStartRequest CreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams, StableId perspectiveTeamId)`
 
 :   Builds a profile-3 start with the perspective team chosen explicitly. Throws on the first broken start rule; call `TryCreateB3` to receive a diagnostic instead.
+
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
     - `schedulerId` &mdash; The compiled scheduler definition that will drive the battle.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.
@@ -407,6 +432,7 @@ before they return, so a request they produce is one the engine will accept.
 `public static B3CreationResult<BattleStartRequest> TryCreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams)`
 
 :   Builds a profile-3 start exactly as the matching `CreateB3` overload does, inferring the perspective team, but reports a broken start rule as a failed result instead of throwing.
+
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
     - `schedulerId` &mdash; The compiled scheduler definition that will drive the battle.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.
@@ -415,6 +441,7 @@ before they return, so a request they produce is one the engine will accept.
 `public static B3CreationResult<BattleStartRequest> TryCreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams, StableId perspectiveTeamId)`
 
 :   Builds a profile-3 start with an explicit perspective team, reporting a broken start rule as a failed result instead of throwing.
+
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
     - `schedulerId` &mdash; The compiled scheduler definition that will drive the battle.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.

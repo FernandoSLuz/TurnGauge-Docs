@@ -262,12 +262,14 @@ combatants at once. Each shipped template is a pair that works.
 `public FormationPresetDefinition CreateFormation(string stableIdRaw)`
 
 :   Creates the create formation asset/value from this template's explicit settings. The caller owns persistence and must supply any requested stable ID.
+
     - `stableIdRaw` &mdash; Stable ID for the produced preset. Unlike the scheduler ID this is yours to choose freely, because a formation preset is reached by reference from the catalog rather than looked up in a registry.
     - **Returns** &mdash; A new unsaved preset belonging to no catalog.
 
 `public SchedulerDefinition CreateScheduler()`
 
 :   Creates the create scheduler asset/value from this template's explicit settings. The caller owns persistence and must supply any requested stable ID.
+
     - **Returns** &mdash; A new unsaved instance carrying `SchedulerId` as its own stable ID. That ID is not made unique per copy on purpose - it is the key the compiler resolves against the scheduler registry, so changing it would leave the definition unresolvable rather than merely renamed.
 
 ---
@@ -305,37 +307,44 @@ assets. Nothing here is loaded at runtime.
 `public static IReadOnlyList<BattleTemplate> All()`
 
 :   Every shipped template, in the order the browser lists them: turn-based first, then real-time, so the two models are not interleaved.
+
     - **Returns** &mdash; A fresh list of fresh instances; nothing here is shared or cached.
 
 `public static BattleTemplate AtbRealtime()`
 
 :   A gauge that keeps filling while a decision is pending, on a column per side.
+
     - **Returns** &mdash; A fresh real-time gauge template with column formations and four seats per side.
 
 `public static BattleTemplate BossDuel()`
 
 :   One combatant a side, facing off on a single baseline.
+
     - **Returns** &mdash; A fresh action-order duel template with one rank seat per side.
 
 `public static BattleTemplate ClassicTurnOrder()`
 
 :   A strict turn queue on a single rank per side, in the manner of a 2D dungeon crawler.
+
     - **Returns** &mdash; A fresh action-order template with rank formations and four seats per side.
 
 `public static BattleTemplate Find(string templateId)`
 
 :   Looks a template up by `BattleTemplate.TemplateId`.
+
     - `templateId` &mdash; Template ID text; matched exactly.
     - **Returns** &mdash; The template, or null when no shipped template carries that ID.
 
 `public static BattleTemplate TacticalGrid()`
 
 :   A turn queue on the two-line perspective stage, for battles wide enough that position matters.
+
     - **Returns** &mdash; A fresh action-order template with perspective formations and six seats per side.
 
 `public static BattleTemplate WaveSurvival()`
 
 :   A gauge that stops one unit short while a decision is pending, on a staggered column of five.
+
     - **Returns** &mdash; A fresh input-pausing gauge template with staggered formations and five seats per side.
 
 ---
@@ -413,6 +422,7 @@ changing it, so a condition can never advance or mutate a battle.
 `public CompiledAiCondition(AiConditionKind kind, StableId id, long threshold)`
 
 :   Validates and freezes one condition. The kinds that name a resource, status, or skill require a valid `id`; the count and health kinds do not use one.
+
     - `kind` &mdash; Which test to run, and therefore which operands are read.
     - `id` &mdash; The resource, status, or skill the test is about. Leave it default for the kinds that take no operand.
     - `threshold` &mdash; Comparison bound, in the units of the kind: health points, resource units, or a combatant count. Ignored by the kinds that only test presence.
@@ -451,6 +461,7 @@ candidates, which the engine then validates before any of them can act.
 `public CompiledAiPolicyDefinition(StableId policyId, MechanicsImplementationReference implementation, PropertySet properties, IEnumerable<CompiledAiRule> rules)`
 
 :   Validates and freezes one AI policy. Rule ids must be unique within the policy, because candidates are matched back to their rule by id.
+
     - `implementation` &mdash; The `IAiPolicy` implementation to run, plus the contract version it was authored against.
     - `properties` &mdash; Authored arguments handed to the implementation. The built-in policies accept none and report any property as an error.
     - `rules` &mdash; Candidate rules, capped by `SimulationLimits.AutomaticPolicyEntries`. Nothing here forces the implementation to use them all.
@@ -492,6 +503,7 @@ all hold first, and the ordering data the policy selects with. Immutable.
 `public CompiledAiRule(StableId ruleId, StableId skillId, int priority, uint weight, IEnumerable<CompiledAiCondition> conditions, IEnumerable<StableId> requestedTargets)`
 
 :   Validates and freezes one AI rule. Both ids are required, and the engine later rejects any candidate whose skill id does not match the rule it names.
+
     - `priority` &mdash; Higher wins. The priority and conditional policies take the highest-priority legal rule and ignore weight; the weighted policy ignores priority.
     - `weight` &mdash; Relative share used by the weighted policy only. A weight of zero removes the rule from a weighted draw.
     - `conditions` &mdash; Gates that must all pass for the rule to be considered. Capped by `SimulationLimits.ConditionsPerAiRule`.
@@ -561,6 +573,7 @@ changes after construction, so the same content can back many battles.
 `public CompiledBattleContent(StableId rulesId, IEnumerable<StableId> registeredCommandTypeIds)`
 
 :   Builds the smallest usable content: a rules identity and the set of command types the engine will accept, with no schedulers, skill timings, or automatic policies. This is B1 content, which is enough for a battle whose only outcome is a concession. Content that has to run skills comes from CreateB2, and content for the current schema from the CreateB3 factories.
+
     - `rulesId` &mdash; Names the rule set this content belongs to. The default identifier is rejected, so content can never be built without one.
     - `registeredCommandTypeIds` &mdash; Command types the engine will accept. They are copied and sorted, so the order you pass them in does not matter, and the set must contain battle.concede and battle.use-skill.
 
@@ -643,11 +656,13 @@ changes after construction, so the same content can back many battles.
 `public static CompiledBattleContent CreateB1Default()`
 
 :   Builds ready-made B1 content under the rules id rules.b1-concession that registers the two built-in command types and nothing else. It needs no authored assets, so it is the quickest way to stand an engine up in a test or a sample scene. The battle it backs can only end by concession, since no skill is defined.
+
     - **Returns** &mdash; Profile-1 concession content with the built-in concede and use-skill commands registered.
 
 `public static CompiledBattleContent CreateB2(StableId rulesId, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledSkillTiming> skillTimings, IEnumerable<CompiledAutomaticDecisionPolicy> automaticDecisionPolicies)`
 
 :   Builds B2 content, which adds schedulers, skill timings, and automatic decision policies to the rules identity and command set B1 already had. Every collection is copied and sorted here, so the content is fixed and safe to share between battles from the moment it is returned.
+
     - `rulesId` &mdash; Names the rule set this content belongs to; the default identifier is rejected.
     - `registeredCommandTypeIds` &mdash; Command types the engine will accept; battle.concede and battle.use-skill must both be among them.
     - `schedulerDefinitions` &mdash; One to 16 schedulers a battle start may select from. Nulls and repeated scheduler ids are rejected.
@@ -658,6 +673,7 @@ changes after construction, so the same content can back many battles.
 `public static CompiledBattleContent CreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions)`
 
 :   Builds validated content resolved against the built-in mechanics alone. Use the overload that takes a registry if the content names an implementation you registered yourself.
+
     - `aiPolicyDefinitions` &mdash; Required AI policies with unique valid ids, bounded by `SimulationLimits.AiPolicyDefinitions` and resolved against declared skills.
     - `combatantDefinitions` &mdash; Required combatant archetypes with unique valid ids, bounded by `SimulationLimits.TotalCombatants` and checked against stat, resource, skill, and policy definitions.
     - `reactionDefinitions` &mdash; Required reaction rules with unique valid ids, bounded by `SimulationLimits.ReactionDefinitions` and checked for mechanics bindings and unsafe cycles.
@@ -673,6 +689,7 @@ changes after construction, so the same content can back many battles.
 `public static CompiledBattleContent CreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Builds validated content resolved against a registry you supply, which is how custom formulas, effects, targets, AI, and reactions reach the simulation.
+
     - `mechanicsRegistry` &mdash; Registry every implementation the content names must resolve from, at the contract version the content asks for. Whatever registry you later hand the engine has to satisfy the same bindings, so pass the same one.
     - `aiPolicyDefinitions` &mdash; Required AI policies with unique valid ids, bounded by `SimulationLimits.AiPolicyDefinitions` and resolved against declared skills.
     - `combatantDefinitions` &mdash; Required combatant archetypes with unique valid ids, bounded by `SimulationLimits.TotalCombatants` and checked against stat, resource, skill, and policy definitions.
@@ -689,72 +706,84 @@ changes after construction, so the same content can back many battles.
 `public CompiledAiPolicyDefinition FindAiPolicyDefinitionV3(StableId id)`
 
 :   The AI policy definition with this id, or null when the content has none.
+
     - `id` &mdash; The exact policy identity to binary-search in the canonical AI-policy list.
     - **Returns** &mdash; The compiled AI policy owned by this content, or null when no policy has that identity.
 
 `public CompiledAutomaticDecisionPolicy FindAutomaticDecisionPolicy(StableId policyId)`
 
 :   The automatic decision policy with this id, or null when the content has none. Schema 3 content always answers null, because its automatic combatants are driven by AI policy definitions instead.
+
     - `policyId` &mdash; Id a combatant names when it is placed under automatic control.
     - **Returns** &mdash; The matching automatic policy, or when the policy is unknown.
 
 `public CompiledCombatantDefinition FindCombatantDefinitionV3(StableId id)`
 
 :   The combatant definition with this id, or null when the content has none.
+
     - `id` &mdash; The exact archetype identity to binary-search in the canonical combatant list.
     - **Returns** &mdash; The compiled combatant definition owned by this content, or null when no archetype has that identity.
 
 `public CompiledReactionDefinition FindReactionDefinitionV3(StableId id)`
 
 :   The reaction definition with this rule id, or null when the content has none.
+
     - `id` &mdash; The exact reaction-rule identity to binary-search in the canonical reaction list.
     - **Returns** &mdash; The compiled reaction owned by this content, or null when no reaction has that rule identity.
 
 `public CompiledResourceDefinition FindResourceDefinitionV3(StableId id)`
 
 :   The resource definition with this id, or null when the content has none.
+
     - `id` &mdash; The exact resource identity to binary-search in the canonical resource list.
     - **Returns** &mdash; The compiled resource owned by this content, or null when no resource has that identity.
 
 `public CompiledSchedulerDefinition FindSchedulerDefinition(StableId schedulerId)`
 
 :   The scheduler definition with this id, or null when the content does not offer it. The lookup is a binary search over the sorted definitions.
+
     - `schedulerId` &mdash; Id a battle start uses to select its scheduler.
     - **Returns** &mdash; The matching scheduler definition, or when the id is absent.
 
 `public CompiledSkillDefinition FindSkillDefinitionV3(StableId id)`
 
 :   The skill definition with this id, or null when the content has none.
+
     - `id` &mdash; The exact skill identity to binary-search in the canonical skill list.
     - **Returns** &mdash; The compiled skill owned by this content, or null when no skill has that identity.
 
 `public CompiledSkillTiming FindSkillTiming(StableId skillId)`
 
 :   The timing contract for this skill, or null when the content has none. A null answer is what tells you a skill is unknown to the content, which is how a combatant granted a missing skill is caught.
+
     - `skillId` &mdash; Id of the skill whose timing is wanted.
     - **Returns** &mdash; The matching skill timing, or when the skill is unknown.
 
 `public CompiledStatDefinition FindStatDefinitionV3(StableId id)`
 
 :   The stat definition with this id, or null when the content has none.
+
     - `id` &mdash; The exact stat identity to binary-search in the canonical stat list.
     - **Returns** &mdash; The compiled stat owned by this content, or null when no stat has that identity.
 
 `public CompiledStatusDefinition FindStatusDefinitionV3(StableId id)`
 
 :   The status definition with this id, or null when the content has none.
+
     - `id` &mdash; The exact status identity to binary-search in the canonical status list.
     - **Returns** &mdash; The compiled status owned by this content, or null when no status has that identity.
 
 `public bool RegistersCommand(StableId commandType)`
 
 :   Reports whether a command type is one this content accepts. It binary searches the sorted ids and allocates nothing, so it is cheap enough to call while building a command rather than after submitting one.
+
     - `commandType` &mdash; Command type id to look for; an unknown or default id simply reports false.
     - **Returns** &mdash; when `commandType` is registered; otherwise, .
 
 `public static B3CreationResult<CompiledBattleContent> TryCreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions)`
 
 :   The reporting form of CreateB3, against the built-in mechanics alone: a broken construction rule comes back as a failed result instead of an exception. Prefer this when compiling authored content a user can edit, so a bad asset produces a message rather than a stack trace.
+
     - `aiPolicyDefinitions` &mdash; Required AI policies with unique valid ids, bounded by `SimulationLimits.AiPolicyDefinitions` and resolved against declared skills.
     - `combatantDefinitions` &mdash; Required combatant archetypes with unique valid ids, bounded by `SimulationLimits.TotalCombatants` and checked against stat, resource, skill, and policy definitions.
     - `reactionDefinitions` &mdash; Required reaction rules with unique valid ids, bounded by `SimulationLimits.ReactionDefinitions` and checked for mechanics bindings and unsafe cycles.
@@ -770,6 +799,7 @@ changes after construction, so the same content can back many battles.
 `public static B3CreationResult<CompiledBattleContent> TryCreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   The reporting form of CreateB3 against a registry you supply. This is the entry point an authoring pipeline wants: custom mechanics are honoured and every failure arrives as a diagnostic.
+
     - `mechanicsRegistry` &mdash; Registry every implementation the content names must resolve from, at the contract version the content asks for. The engine must later be handed a registry that satisfies the same bindings.
     - `aiPolicyDefinitions` &mdash; Required AI policies with unique valid ids, bounded by `SimulationLimits.AiPolicyDefinitions` and resolved against declared skills.
     - `combatantDefinitions` &mdash; Required combatant archetypes with unique valid ids, bounded by `SimulationLimits.TotalCombatants` and checked against stat, resource, skill, and policy definitions.
@@ -810,6 +840,7 @@ the order they were authored: by identifier, except
 `public CompiledCombatantDefinition(StableId definitionId, IEnumerable<CompiledStatValue> baseStats, IEnumerable<CompiledResourceDefault> resourceDefaults, IEnumerable<StableId> tags, IEnumerable<StableId> grantedSkillIds, StableId? defaultAiPolicyId, IEnumerable<CompiledStatusResistance> resistances, IEnumerable<StableId> immuneStatusIds, IEnumerable<StableId> immuneStatusTags, IEnumerable<StableId> intrinsicReactionDefinitionIds)`
 
 :   Compiles one combatant archetype, sorting every collection into canonical order and rejecting duplicate keys. The sequences are copied, so the caller may keep using its own collections afterwards.
+
     - `definitionId` &mdash; Identity a start request names to spawn this archetype. Required.
     - `baseStats` &mdash; The value each stat starts at before any status modifier, at most one entry per stat.
     - `resourceDefaults` &mdash; The amount each resource starts at, at most one entry per resource.
@@ -883,6 +914,7 @@ multi-target skill produces one plan per target.
 `public CompiledEffectEntry(StableId entryId, MechanicsImplementationReference resolver, PropertySet properties, IEnumerable<StableId> effectTags)`
 
 :   Validates and freezes one effect entry. The resolver is only named here, not resolved: a reference to an implementation missing from the mechanics registry fails later, when the catalog is validated or the entry is planned.
+
     - `entryId` &mdash; Identity of this entry inside its owner. It appears in attribution traces, and owners require it to be unique among their entries.
     - `resolver` &mdash; The `IEffectResolver` implementation to run, plus the contract version it was authored against.
     - `properties` &mdash; Authored arguments handed to the resolver on every plan call.
@@ -925,6 +957,7 @@ compiled catalog each time the skill resolves, so a skill in flight cannot drift
 `public CompiledSkillDefinition(StableId skillId, IEnumerable<StableId> tags, CompiledSkillTiming timing, MechanicsImplementationReference targetResolver, PropertySet targetProperties, TargetLockPolicy targetLockPolicy, InvalidTargetPolicy invalidTargetPolicy, IEnumerable<CompiledEffectEntry> effects)`
 
 :   Validates and freezes one skill definition. Timing must belong to the same skill id, and the two target policies must be values this contract version supports, so an incoherent skill cannot reach a battle.
+
     - `tags` &mdash; Skill tags. Stored sorted and de-duplicated.
     - `timing` &mdash; Cast, recovery, cooldown, cost, and requested-target bounds. Its `CompiledSkillTiming.SkillId` must equal `skillId`.
     - `targetResolver` &mdash; The `ITargetResolver` implementation that turns requested targets into locked targets.
@@ -988,6 +1021,7 @@ bookkeeping (stacks, remaining duration, next periodic tick) and never these rul
 `public CompiledStatusDefinition(StableId statusId, StatusPolarity polarity, IEnumerable<StableId> tags, StableId? exclusiveGroupId, StatusStackPolicy stackPolicy, int maximumStacks, Fixed64 strength, bool refreshKeepHigherMetadata, CompiledStatusDuration duration, CompiledStatusPeriodicPolicy periodic, IEnumerable<CompiledStatModifier> modifiers, IEnumerable<StableId> restrictedSkillTags, bool tauntHostileSingleTarget, IEnumerable<CompiledEffectEntry> periodicEffects, IEnumerable<StableId> reactionDefinitionIds, bool dispellable, bool persistOnDeath, bool preventNextOpportunity = false)`
 
 :   Validates and freezes one status definition. Stacking, duration, and periodic values are cross-checked against each other here, so an incoherent status cannot reach a battle.
+
     - `tags` &mdash; Status tags. Stored sorted and de-duplicated.
     - `exclusiveGroupId` &mdash; Optional exclusivity group. Pass null for none; a supplied id must be valid.
     - `maximumStacks` &mdash; Concurrent ceiling. It must be positive and no greater than `SimulationLimits.IndependentStatusStacks`, and exactly 1 when `stackPolicy` is `StatusStackPolicy.Refresh`.
@@ -1230,6 +1264,7 @@ content invalid instead of silently binding to it.
 `public MechanicsImplementationReference(StableId implementationId, int contractVersion)`
 
 :   Creates a reference to a registered formula, effect, target, AI, or reaction implementation.
+
     - `implementationId` &mdash; The implementation's registered ID; must be valid.
     - `contractVersion` &mdash; The contract version the content targets; must be positive and is matched exactly at resolution.
 
@@ -1248,18 +1283,21 @@ content invalid instead of silently binding to it.
 `public bool Equals(MechanicsImplementationReference other)`
 
 :   Two references are equal only when both the implementation ID and the contract version match; the same ID at another version is a different reference.
+
     - `other` &mdash; The value to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override bool Equals(object obj)`
 
 :   Value equality against any object; false for other types.
+
     - `obj` &mdash; The object to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override int GetHashCode()`
 
 :   A hash over the implementation ID and contract version.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---
@@ -1339,11 +1377,13 @@ copy their input, and a null array becomes an empty one.
 `public PropertyEntrySnapshot CreateSnapshot()`
 
 :   Copies this entry's key, tag, and live value into an immutable snapshot that later edits to this definition cannot reach. Arrays are copied element by element, so the snapshot shares no storage with the authored data.
+
     - **Returns** &mdash; Never null. An array longer than its tag allows is not an exception here: the snapshot then carries the key, the tag, and the declared value count, but no value.
 
 `public static PropertyEntryDefinition FromBoolean(string key, bool value)`
 
 :   Creates an authored from boolean entry whose tag and payload slot agree. The catalog compiler later validates the key and collection limits.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Boolean payload stored in the entry's active slot.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.Boolean` with the supplied payload.
@@ -1351,6 +1391,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromBooleans(string key, params bool[] values)`
 
 :   Creates an authored from booleans entry whose tag and payload slot agree. The catalog compiler later validates the key and collection limits.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Boolean payloads to copy in authored order; means an empty array.
     - **Returns** &mdash; An editable Boolean-array entry owning a copy of `values`.
@@ -1358,6 +1399,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromChance64Raw(string key, long value)`
 
 :   Creates an entry holding a chance as its raw scaled integer: certainty is `Chance64.Scale`, so 87.5% is authored as 875000. The range is not checked here - a raw value outside 0..`Chance64.Scale` is reported as an invalid property value when compiled.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Raw probability in `Chance64.Scale` units; range checking is deferred to compilation.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.Chance64` with the raw probability unchanged.
@@ -1365,6 +1407,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromChance64Raws(string key, params long[] values)`
 
 :   Creates an entry holding a copy of an array of chances, each as its raw scaled integer in `Chance64.Scale` units and range-checked only at compile time.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Raw probabilities in `Chance64.Scale` units, copied before compile-time range checks.
     - **Returns** &mdash; An editable Chance64-array entry owning a copy of the raw probabilities.
@@ -1372,6 +1415,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromFixed64Raw(string key, long value)`
 
 :   Creates an entry holding a fixed-point amount as its raw scaled integer: one whole unit is `Fixed64.Scale`, so 5 is authored as 50000.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Raw fixed-point payload in `Fixed64.Scale` units.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.Fixed64` with the raw amount unchanged.
@@ -1379,6 +1423,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromFixed64Raws(string key, params long[] values)`
 
 :   Creates an entry holding a copy of an array of fixed-point amounts, each as its raw scaled integer in `Fixed64.Scale` units.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Raw fixed-point amounts in `Fixed64.Scale` units, copied in authored order.
     - **Returns** &mdash; An editable Fixed64-array entry owning a copy of the raw amounts.
@@ -1386,6 +1431,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromInt32(string key, int value)`
 
 :   Creates an entry holding a 32-bit signed integer.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Signed 32-bit payload stored in the entry's active slot.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.Int32` with the supplied payload.
@@ -1393,6 +1439,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromInt32s(string key, params int[] values)`
 
 :   Creates an entry holding a copy of a 32-bit signed integer array.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Signed 32-bit payloads to copy in authored order; means empty.
     - **Returns** &mdash; An editable Int32-array entry owning a copy of `values`.
@@ -1400,6 +1447,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromInt64(string key, long value)`
 
 :   Creates an entry holding a 64-bit signed integer.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Signed 64-bit payload stored in the entry's active slot.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.Int64` with the supplied payload.
@@ -1407,6 +1455,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromInt64s(string key, params long[] values)`
 
 :   Creates an entry holding a copy of a 64-bit signed integer array.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Signed 64-bit payloads to copy in authored order; means empty.
     - **Returns** &mdash; An editable Int64-array entry owning a copy of `values`.
@@ -1414,6 +1463,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromStableId(string key, string value)`
 
 :   Creates an entry holding a `StableId` as its raw text; null becomes empty.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Stable-ID text payload; is normalized to an empty string.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.StableId` with the normalized ID text.
@@ -1421,6 +1471,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromStableIds(string key, params string[] values)`
 
 :   Creates an entry holding a copy of an array of `StableId` raw texts. Tagged ID arrays are capped at `SimulationLimits.StableIdsPerTaggedArray` values, well below the `SimulationLimits.PropertyArrayValues` cap the other array tags get.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Stable-ID texts to copy in authored order; individual IDs are validated during compilation.
     - **Returns** &mdash; An editable StableId-array entry owning a copy of the supplied texts.
@@ -1428,6 +1479,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromString(string key, string value)`
 
 :   Creates an entry holding free text. Null is stored as null rather than coerced to empty the way `FromStableId` does, and both a null value and text that is not already Unicode NFC are reported as an invalid property value when compiled.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Free-text payload retained verbatim, including for later validation.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.String` with the supplied text.
@@ -1435,6 +1487,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromStrings(string key, params string[] values)`
 
 :   Creates an authored from strings entry whose tag and payload slot agree. The catalog compiler later validates the key and collection limits.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Free-text payloads to copy in authored order; element validation is deferred to compilation.
     - **Returns** &mdash; An editable String-array entry owning a copy of the supplied texts.
@@ -1442,6 +1495,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromUInt64(string key, ulong value)`
 
 :   Creates an entry holding a 64-bit unsigned integer.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `value` &mdash; Unsigned 64-bit payload stored in the entry's active slot.
     - **Returns** &mdash; An editable entry tagged `AuthoringValueTag.UInt64` with the supplied payload.
@@ -1449,6 +1503,7 @@ copy their input, and a null array becomes an empty one.
 `public static PropertyEntryDefinition FromUInt64s(string key, params ulong[] values)`
 
 :   Creates an entry holding a copy of a 64-bit unsigned integer array.
+
     - `key` &mdash; Raw property key text; validity and uniqueness are checked during catalog compilation.
     - `values` &mdash; Unsigned 64-bit payloads to copy in authored order; means empty.
     - **Returns** &mdash; An editable UInt64-array entry owning a copy of `values`.
@@ -1480,6 +1535,7 @@ diagnostic when the owning catalog is compiled.
 `public PropertySetDefinition(params PropertyEntryDefinition[] entries)`
 
 :   Creates a property set holding the given entries. The array is copied, so later changes to the caller's array are not seen here; a null array yields an empty set.
+
     - `entries` &mdash; Entries to retain in authored order; the array is copied and means empty.
 
 **Properties**
@@ -1611,6 +1667,7 @@ shape; switching to ATB requires choosing an input policy and positive threshold
 `public static SchedulerDefinition CreateTransient(string stableIdRaw, SchedulerStateTag stateTag, int noActionRecoveryTicks, InputPausePolicy inputPausePolicy = default(InputPausePolicy), int gaugeThresholdUnits = 0, int schemaVersion = CurrentSchemaVersion)`
 
 :   The scheduler contract this content was authored against. It must equal the version the package ships, which is 1.
+
     - `stableIdRaw` &mdash; Scheduler ID text, stored verbatim and not checked here. Note that this one is looked up in the scheduler registry rather than merely being an identity, so text that names no registration compiles to an unresolved scheduler rather than to a renamed one.
     - `stateTag` &mdash; Which state shape the definition declares. It has to match the registration found under `stableIdRaw`, and it also decides which of the two ATB fields below carry meaning.
     - `noActionRecoveryTicks` &mdash; Ticks a combatant that takes no action waits.
@@ -1717,6 +1774,7 @@ skills are not set here; they come from the compiled combatant definition.
 `public StartCombatantV3(StableId combatantId, StableId combatantDefinitionId, DecisionControlKind controlKind, StableId? aiPolicyOverrideId, int currentHealth, int maximumHealth, bool targetable, IEnumerable<StartResourceV3> resources, StableId formationSlotId, StableId formationRowId, StableId formationSideId, int initialAtbGaugeUnits, IEnumerable<StartStatusApplicationV3> initialStatuses)`
 
 :   Describes one combatant's first tick. Every id is checked for shape here but resolved against compiled content only when the start request is created.
+
     - `combatantId` &mdash; Identity of this instance. Must be unique across the whole battle, not just within its team.
     - `combatantDefinitionId` &mdash; The compiled combatant definition supplying this instance's base stats, skills, and default AI policy.
     - `controlKind` &mdash; `Human` leaves decisions to submitted commands; `Automatic` requires an AI policy the content can resolve, from the override or the definition.
@@ -1805,6 +1863,7 @@ never from here.
 `public StartResourceV3(StableId resourceId, int current)`
 
 :   Seeds one resource pool. `current` is not range-checked here; it is validated against the compiled resource definition's minimum and maximum when the start request is created.
+
     - `resourceId` &mdash; The compiled resource definition this value fills.
     - `current` &mdash; The amount held at the first tick.
 
@@ -1838,6 +1897,7 @@ any other policy becomes one instance holding that many stacks.
 `public StartStatusApplicationV3(StableId statusDefinitionId, StableId? sourceCombatantId, int stackCount)`
 
 :   Describes one pre-applied status. The stack count is bounded here by the structural stack limit only; it is checked against the status definition's own stack cap when the start request is created.
+
     - `statusDefinitionId` &mdash; The compiled status definition to apply.
     - `sourceCombatantId` &mdash; The combatant credited as the source of the status, or `null` to credit the carrier itself. A supplied id must name a combatant taking part in the same battle, on either team.
     - `stackCount` &mdash; Stacks to apply; 1 to `SimulationLimits.IndependentStatusStacks`.
@@ -1875,6 +1935,7 @@ battle, and at least one member must start with health above zero.
 `public StartTeamV3(StableId teamId, IEnumerable<StartCombatantV3> combatants)`
 
 :   Assembles one side of a battle.
+
     - `teamId` &mdash; Identity of the team. It must differ from the opposing team's, which the start request checks rather than this constructor.
     - `combatants` &mdash; One to `SimulationLimits.CombatantsPerTeam` non-null members with distinct ids, at least one of them living.
 

@@ -34,6 +34,7 @@ Verify capture behavior in your project's render pipeline before enabling this m
 `public BackdropBlurPerformModule(BattleStageBackdrop stageBackdrop, PerformFeelPreset performFeel = null)`
 
 :   Creates the module for a backdrop component; null makes it inert.
+
     - `performFeel` &mdash; Backdrop blur amount, transition, and hold tuning; null uses package defaults.
     - `stageBackdrop` &mdash; Stage backdrop receiving the non-authoritative blur strength; null disables the module.
 
@@ -80,6 +81,7 @@ pretending to work - use that pipeline's own volume overrides instead.
 `public BloomPulsePerformModule(BattleStageBloom stageBloom, PerformFeelPreset feel = null)`
 
 :   Creates the module for a bloom component; null makes it inert.
+
     - `feel` &mdash; Bloom pulse amount and duration tuning; null uses package defaults.
     - `stageBloom` &mdash; Pipeline-neutral stage bloom component to pulse and restore; null disables the module.
 
@@ -111,6 +113,7 @@ and will not recompute it.
 `public BodyShakePerformModule(PerformFeelPreset feel = null)`
 
 :   Impact phases shake the struck combatant token and restore its exact local position when playback settles.
+
     - `feel` &mdash; Body-shake duration and strength tuning; null uses package defaults.
 
 **Methods**
@@ -141,6 +144,7 @@ only if that project does not move it during a shake.
 `public CameraShakePerformModule(Transform cameraTransform, PerformFeelPreset feel = null)`
 
 :   Creates the module for a camera transform; null makes it inert.
+
     - `cameraTransform` &mdash; Camera transform displaced locally during authored shake phases; null disables the module.
     - `feel` &mdash; Camera-shake duration and strength tuning; null uses package defaults.
 
@@ -174,6 +178,7 @@ camera is left alone rather than moved in a way the project did not ask for.
 `public CameraZoomPerformModule(Camera camera, PerformFeelPreset feel = null)`
 
 :   Creates the module for a camera; null, or a perspective camera, makes it inert.
+
     - `camera` &mdash; Orthographic battle camera whose size is pulsed; null or perspective cameras disable the module.
     - `feel` &mdash; Zoom amount and duration tuning; null uses package defaults.
 
@@ -215,6 +220,7 @@ the battle.
 `public FocusPerformModule(PerformFeelPreset performFeel = null)`
 
 :   The focus module uses the supplied feel tuning, or package defaults, to dim uninvolved combatants during opening and impact.
+
     - `performFeel` &mdash; Tuning; null uses the shipped defaults.
 
 **Properties**
@@ -266,6 +272,7 @@ happens.
 `public void OnPhaseBegin(PerformPhaseContext context)`
 
 :   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
     - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 `public void Reset()`
@@ -275,6 +282,7 @@ happens.
 `public void Tick(float presentationDeltaSeconds)`
 
 :   Called every presentation tick while the battle is playing, already scaled by the presenter's speed. Use it to advance a shake, a zoom, or a fade; a module with nothing to advance can leave it empty.
+
     - `presentationDeltaSeconds` &mdash; Elapsed presentation time, never negative.
 
 ---
@@ -401,18 +409,21 @@ no amount of tuning can change a battle's outcome or its event-chain digest.
 `public float BeatOnsetSeconds(PerformBeatPhase phase)`
 
 :   How far into the beat `phase` starts.
+
     - `phase` &mdash; The phase to place. An unknown value starts at the downbeat.
     - **Returns** &mdash; Seconds from the start of the beat, or zero when choreography is off.
 
 `public float BeatSpanSeconds(PerformBeatPhase phase)`
 
 :   How long `phase` runs for.
+
     - `phase` &mdash; The phase to measure. An unknown value takes the whole beat.
     - **Returns** &mdash; Seconds, or the whole beat when the phase is unknown. Choreography off returns the beat unchanged, because a caller asking for a span still needs a duration to animate over.
 
 `public static PerformFeelPreset CreateDefault()`
 
 :   The shipped defaults, as a throwaway instance. Used when a project wires no asset, so the modules still have sensible numbers rather than zeroes that would silently disable every effect.
+
     - **Returns** &mdash; A transient preset carrying the package's serialized field defaults.
 
 ---
@@ -467,6 +478,7 @@ and stages it, and can never change what happened.
 `public PerformPhaseContext(BattlePresenter presenter, PresentationBeatContext beat, PresentationBeatSpec spec, int phaseIndex, Vector3 sourceWorld, Vector3 targetWorld)`
 
 :   Creates a phase context. The presenter builds these; a test may build one directly.
+
     - `beat` &mdash; Simulation event context being staged by the current presentation beat.
     - `phaseIndex` &mdash; Zero-based in, impact, or out phase index.
     - `presenter` &mdash; Presenter whose stage resolves combatant tokens and anchors.
@@ -529,6 +541,7 @@ nothing, which makes a missing string visible instead of silent.
 `public SkillAnnouncementPerformModule(SkillTitleView titleView, DisplayStringTable displayStrings, PerformFeelPreset performFeel = null)`
 
 :   The skill-title card is bound to opening phases, with raw skill IDs used when no display label exists.
+
     - `titleView` &mdash; Card to drive; null makes the module inert.
     - `displayStrings` &mdash; Table skill ids are resolved through; null falls back to raw ids.
     - `performFeel` &mdash; Tuning; null uses the shipped defaults.
@@ -579,6 +592,7 @@ override there.
 `public VignettePulsePerformModule(BattleStageBloom stageBloom, PerformFeelPreset feel = null)`
 
 :   Creates the module for a bloom component; null makes it inert.
+
     - `feel` &mdash; Vignette pulse amount and duration tuning; null uses package defaults.
     - `stageBloom` &mdash; Stage bloom component whose vignette strength is pulsed and restored.
 

@@ -55,239 +55,286 @@ The Skin Browser materializes any of these into an editable
 `public static IReadOnlyList<CompiledBattleSkin> All()`
 
 :   Every shipped skin, in browser order.
+
     - **Returns** &mdash; A fresh five-item list ordered Ironlight, Slate Nocturne, Parchment Atlas, Neon Circuit, then Minimal Mono.
 
 `public static CompiledSkinLayout BandLayout(SkinLayoutProfile profile)`
 
 :   The three-band region placement for one aspect profile.
+
     - `profile` &mdash; Which composition to build. Wide and Ultrawide share their numbers on purpose - band heights are fixed, so a wider screen spends every extra pixel on the stage instead of inflating the interface.
     - **Returns** &mdash; A complete layout whose regions all dock into a band edge or the safe margin.
 
 `public static CompiledBattleSkin Default()`
 
 :   The skin used when a scene assigns none.
+
     - **Returns** &mdash; A freshly compiled Ironlight skin used as the package fallback.
 
 `public static SkinFloatingNumberTokens DefaultFloatingNumbers()`
 
 :   Floating-number sizing and timing shared by every shipped skin. The rise, easing, and scatter are unchanged; only the sizes moved. A number spawned over the stage competes with a 300-pixel character, so 26 disappeared against it. Criticals land at 80 with the skin's warning colour and a halo, which is the one moment the interface is allowed to shout.
+
     - **Returns** &mdash; Shared floating-number size, critical scale, rise, lifetime, easing, and scatter tokens.
 
 `public static CompiledSkinLayout DefaultLayout()`
 
 :   The region placement shared by every shipped skin.
+
     - **Returns** &mdash; The wide-profile three-band region placement used by every built-in skin.
 
 `public static SkinMotionTokens DefaultMotion()`
 
 :   Transition timings shared by every shipped skin.
+
     - **Returns** &mdash; Shared bar, panel, pip, timeline, and pulse transition timings at full motion scale.
 
 `public static SkinStagePresenceTokens DefaultStagePresence()`
 
 :   Depth falloff, contact shadow, and key light shared by every shipped skin.
+
     - **Returns** &mdash; Staging enabled, with a rank falloff and a shadow width in the middle of the windows the visual direction specifies, so a skin that edits neither still satisfies the composition audit.
 
 `public static SkinTypographyTokens DefaultTypography()`
 
 :   Type sizing shared by every shipped skin. The floor is 16, not 13. Thirteen reference pixels on a 27-inch monitor at arm's length is about a quarter of a degree of arc, which is fine for an inspector field and far too small for something a player has to read while deciding a turn. Everything above the floor is a step in the same four-size scale - caption, body, name, heading - so at most four sizes are ever on screen at once.
+
     - **Returns** &mdash; Shared caption, body, tracked-label, name, heading, title, spacing, and dark-outline typography tokens.
 
 `public static CompiledBattleSkin Ironlight()`
 
 :   Dark iron lit by one warm lamp. The shipped default.
+
     - **Returns** &mdash; A complete freshly compiled Ironlight skin with the band layout, chamfered surfaces, and team-coloured health.
 
 `public static SkinSurfaceTokens IronlightBackdrop()`
 
 :   Default-look stage backdrop drawn behind the combatants.
+
     - **Returns** &mdash; Borderless radial Ironlight backdrop tokens for the combat stage.
 
 `public static SkinSurfaceTokens IronlightButton()`
 
 :   Default-look card surface: the resting skill card and rail chip.
+
     - **Returns** &mdash; Ironlight resting button surface tokens.
 
 `public static SkinSurfaceTokens IronlightButtonDisabled()`
 
 :   Default-look card surface for a skill the actor cannot currently use.
+
     - **Returns** &mdash; Ironlight disabled-button tokens with muted contrast.
 
 `public static SkinSurfaceTokens IronlightButtonSelected()`
 
 :   Default-look card surface for the selected or hovered entry.
+
     - **Returns** &mdash; Ironlight selected-button tokens using the brass accent treatment.
 
 `public static SkinBarTokens IronlightCastBar()`
 
 :   Default-look cast bar. It carries no delta ghost, since progress only rises.
+
     - **Returns** &mdash; Ironlight cast-progress tokens without a delayed ghost.
 
 `public static SkinBarTokens IronlightGauge()`
 
 :   Default-look scheduler gauge for the combatant plate; no delta ghost either.
+
     - **Returns** &mdash; Ironlight scheduler-gauge tokens without a delayed ghost.
 
 `public static SkinBarTokens IronlightHealthBar()`
 
 :   Default-look health bar. Its fill is the ally team colour, not green.
+
     - **Returns** &mdash; Ironlight health-bar track, fill, ghost, border, and timing tokens.
 
 `public static SkinPaletteTokens IronlightPalette()`
 
 :   Dark iron lit by one warm lamp. The default look. The single rule that separates it from the others is that health is team-coloured rather than green: allies read bone-steel, enemies read rust, and green is freed up to mean healing and nothing else. On a 6v6 board that is the difference between twelve identical bars and a picture of who is winning.
+
     - **Returns** &mdash; Dark-iron palette tokens with a brass accent, steel alternate, and team-coloured health roles.
 
 `public static SkinSurfaceTokens IronlightPanel()`
 
 :   Default-look base panel: feedback log, tooltip, and band backings.
+
     - **Returns** &mdash; Ironlight base-panel surface tokens derived from its palette and look profile.
 
 `public static SkinSurfaceTokens IronlightPanelRaised()`
 
 :   Default-look raised surface: the acting chip and hovered rows.
+
     - **Returns** &mdash; Ironlight raised-panel tokens with stronger separation than the base panel.
 
 `public static SkinStatusPipTokens IronlightPips()`
 
 :   Default-look status pip strip drawn above each combatant.
+
     - **Returns** &mdash; Ironlight status-pip shape, color, size, spacing, and pop-motion tokens.
 
 `public static SkinBarTokens IronlightResourceBar()`
 
 :   Default-look resource bar for the actor's spendable pools.
+
     - **Returns** &mdash; Ironlight resource-bar tokens for spendable pools.
 
 `public static SkinBarTokens IronlightShieldBar()`
 
 :   Default-look shield bar, drawn as a second thinner rail under health.
+
     - **Returns** &mdash; Thin Ironlight shield-bar tokens.
 
 `public static SkinSurfaceTokens IronlightTooltip()`
 
 :   Default-look tooltip and result banner backing.
+
     - **Returns** &mdash; Ironlight elevated tooltip and result-banner surface tokens.
 
 `public static CompiledBattleSkin MinimalMono()`
 
 :   Light, flat, glowless; the neutral base to customize from.
+
     - **Returns** &mdash; A complete freshly compiled light skin with flat surfaces, no glow, and reduced pulse scale.
 
 `public static SkinPaletteTokens MinimalMonoPalette()`
 
 :   Light, flat, glowless. The neutral base to customize from.
+
     - **Returns** &mdash; Light neutral palette tokens intended as a glowless customization base.
 
 `public static CompiledBattleSkin NeonCircuit()`
 
 :   Deep indigo with saturated neon rims and heavy halos.
+
     - **Returns** &mdash; A complete freshly compiled neon skin with strong in-shader halos.
 
 `public static SkinPaletteTokens NeonCircuitPalette()`
 
 :   Deep indigo with saturated neon rims. The loudest look.
+
     - **Returns** &mdash; Deep-indigo palette tokens with saturated cyan, magenta, and violet accents.
 
 `public static CompiledBattleSkin ParchmentAtlas()`
 
 :   Warm paper and ink, no glow.
+
     - **Returns** &mdash; A complete freshly compiled parchment skin with outline-free sepia typography.
 
 `public static SkinPaletteTokens ParchmentAtlasPalette()`
 
 :   Warm paper and ink. Suits adventure and campaign framing.
+
     - **Returns** &mdash; Warm parchment palette tokens with sepia ink and muted red and green states.
 
 `public static CompiledBattleSkin Resolve(BattleSkinPreset preset)`
 
 :   Resolves the skin a component should draw with: the assigned asset when present, otherwise the shipped default. Never returns null, so callers need no null branch.
+
     - `preset` &mdash; Assigned authored preset to compile, or null to select Slate Nocturne.
     - **Returns** &mdash; The preset's compiled tokens when assigned; otherwise a non-null default skin.
 
 `public static CompiledBattleSkin SlateNocturne()`
 
 :   Dark slate with cyan and amber accents.
+
     - **Returns** &mdash; A complete freshly compiled dark-slate skin with default typography, motion, and layout.
 
 `public static SkinSurfaceTokens SlateNocturneBackdrop()`
 
 :   Default-look stage backdrop drawn behind the combatants.
+
     - **Returns** &mdash; Borderless radial Slate Nocturne backdrop tokens for the combat stage.
 
 `public static SkinSurfaceTokens SlateNocturneButton()`
 
 :   Default-look button surface: skill tray, timeline, and transport buttons.
+
     - **Returns** &mdash; Slate Nocturne resting button surface tokens.
 
 `public static SkinSurfaceTokens SlateNocturneButtonDisabled()`
 
 :   Default-look button surface for a skill the actor cannot currently use.
+
     - **Returns** &mdash; Slate Nocturne disabled-button tokens with muted contrast.
 
 `public static SkinSurfaceTokens SlateNocturneButtonSelected()`
 
 :   Default-look button surface for the selected or hovered entry.
+
     - **Returns** &mdash; Slate Nocturne selected-button tokens using the active accent treatment.
 
 `public static SkinBarTokens SlateNocturneCastBar()`
 
 :   Default-look cast bar. It carries no delta ghost, since progress only rises.
+
     - **Returns** &mdash; Slate Nocturne cast-progress tokens without a delayed ghost.
 
 `public static SkinBarTokens SlateNocturneGauge()`
 
 :   Default-look scheduler gauge for the combatant plate; no delta ghost either.
+
     - **Returns** &mdash; Slate Nocturne scheduler-gauge tokens without a delayed ghost.
 
 `public static SkinBarTokens SlateNocturneHealthBar()`
 
 :   Default-look health bar for nameplates and roster rows.
+
     - **Returns** &mdash; Slate Nocturne health-bar track, fill, ghost, border, and timing tokens.
 
 `public static SkinPaletteTokens SlateNocturnePalette()`
 
 :   Dark slate with cyan and amber accents. The previous default look.
+
     - **Returns** &mdash; Dark slate palette tokens with cyan informational and amber selection accents.
 
 `public static SkinSurfaceTokens SlateNocturnePanel()`
 
 :   Previous-default base panel: status roster, feedback log, timeline backing.
+
     - **Returns** &mdash; Slate Nocturne base-panel surface tokens derived from its palette and look profile.
 
 `public static SkinSurfaceTokens SlateNocturnePanelRaised()`
 
 :   Default-look raised surface: roster rows and the next timeline entry.
+
     - **Returns** &mdash; Slate Nocturne raised-panel tokens with stronger separation than the base panel.
 
 `public static SkinStatusPipTokens SlateNocturnePips()`
 
 :   Default-look status pip strip drawn above each combatant.
+
     - **Returns** &mdash; Slate Nocturne status-pip shape, color, size, spacing, and pop-motion tokens.
 
 `public static SkinBarTokens SlateNocturneResourceBar()`
 
 :   Default-look resource bar for the actor's spendable pools.
+
     - **Returns** &mdash; Slate Nocturne resource-bar tokens for spendable pools.
 
 `public static SkinBarTokens SlateNocturneShieldBar()`
 
 :   Default-look shield bar, drawn thinner than the health bar.
+
     - **Returns** &mdash; Thin Slate Nocturne shield-bar tokens.
 
 `public static SkinSurfaceTokens SlateNocturneTooltip()`
 
 :   Default-look tooltip and result banner backing.
+
     - **Returns** &mdash; Slate Nocturne elevated tooltip and result-banner surface tokens.
 
 `public static SkinSurfaceTokens StageGround(SkinPaletteTokens palette)`
 
 :   The lit ground a formation stands on: a soft, wide pool of light warmed towards the skin's accent, fading to nothing at its rim. Nothing like it existed. Without a ground plane every combatant hung in mid-air, which is most of why the shipped screenshots read as an unfinished scene rather than a battle. It is derived from the palette rather than stored on the skin asset, so every existing preset -- including one a buyer authored before this shipped -- gets a floor with no migration and no new serialized field.
+
     - `palette` &mdash; The palette the ground is tinted from.
     - **Returns** &mdash; Surface tokens for one team's ground pool.
 
 `public static bool TryFind(string stableId, out CompiledBattleSkin skin)`
 
 :   Finds a shipped skin by its stable id.
+
     - `stableId` &mdash; Id to match exactly; a skin asset's own id is never found here, since only the shipped looks are searched.
     - `skin` &mdash; The matching skin, or null when nothing matches.
     - **Returns** &mdash; True when a shipped skin carries that id.
@@ -331,11 +378,13 @@ battle outcome.
 `public CompiledBattleSkin Compile()`
 
 :   Resolves this asset into the immutable value set the HUD consumes. Out-of-range authored values are clamped rather than rejected, so a half-edited skin still renders instead of throwing at runtime.
+
     - **Returns** &mdash; A complete skin, never null. Every token group is copied by value, so editing this asset afterwards does not alter an already-compiled skin.
 
 `public void CopyFrom(CompiledBattleSkin source, string newStableId, string newDisplayName)`
 
 :   Overwrites every field from `source`. Used by "Duplicate and Edit" in the Skin Browser and by the editor tests; it is the only supported way to author a skin from code.
+
     - `source` &mdash; Values to write in. Required; a null source throws.
     - `newStableId` &mdash; Replacement identity, or null or empty to keep the source's id.
     - `newDisplayName` &mdash; Replacement Skin Browser name, or null or empty to keep the source's name.
@@ -360,6 +409,7 @@ assigned.
 `public CompiledBattleSkin(string stableIdText, string displayName, string description, SkinPaletteTokens palette, SkinTypographyTokens typography, CompiledSkinSurfaces surfaces, CompiledSkinBars bars, SkinStatusPipTokens statusPips, SkinFloatingNumberTokens floatingNumbers, SkinMotionTokens motion, SkinStagePresenceTokens stagePresence, SkinTargetingTokens targeting, CompiledSkinLayout layout)`
 
 :   Assembles a skin from finished token groups. Values are stored exactly as given; clamping is `BattleSkinPreset.Compile`'s job, not this constructor's. A null surface, bar, or layout group throws, because the interface has nothing to fall back to for those.
+
     - `bars` &mdash; Complete styling for health, shield, resource, cast, and scheduler bars.
     - `description` &mdash; Player-facing prose describing the skin, or for no description.
     - `displayName` &mdash; Player-facing skin name, or for an empty name.
@@ -433,12 +483,14 @@ assigned.
 `public Color FloatingNumberColor(FloatingNumberStyle style)`
 
 :   The colour a floating number of `style` uses.
+
     - `style` &mdash; Semantic event category whose palette role should be selected.
     - **Returns** &mdash; The palette color assigned to the requested category, or primary text for an unknown enum value.
 
 `public TMP_FontAsset ResolveFont()`
 
 :   The font the skin draws text with. It always returns one, even in a project that has never imported TextMeshPro's resources, so the battle interface can never come up wordless or unbuilt.
+
     - **Returns** &mdash; The configured font, TextMeshPro's default, the essential-resources font, or one built from Unity's own built-in typeface.
 
 ---
@@ -516,6 +568,7 @@ A value bar: health, shield, resource, cast, or gauge.
 `public SkinBarTokens Sanitized()`
 
 :   Clamps every token into its supported range.
+
     - **Returns** &mdash; A clamped copy, with `Track` and `Fill` sanitized in turn; this instance is unchanged.
 
 ---
@@ -599,6 +652,7 @@ Rise-and-fade numbers for damage, healing, and shields.
 `public SkinFloatingNumberTokens Sanitized()`
 
 :   Clamps every token into its supported range.
+
     - **Returns** &mdash; A clamped copy; this instance is unchanged. `RiseEasing` is left as authored.
 
 ---
@@ -670,6 +724,7 @@ which draws a plain quad instead of a magenta error surface.
 `public Material Acquire(SkinMaterialRequest request)`
 
 :   Returns a material for `request`, sharing an existing one when the parameters match exactly.
+
     - `request` &mdash; The immutable request to validate and execute.
     - **Returns** &mdash; A shared reference-counted material for the request, or null when the shader is unavailable.
 
@@ -680,12 +735,14 @@ which draws a plain quad instead of a magenta error surface.
 `public static SkinMaterialPool EnsureFor(Component owner)`
 
 :   Finds the pool owning `owner`, creating one on the nearest canvas root when absent. Returns null only when the owner is not in a scene.
+
     - `owner` &mdash; Scene component whose nearest parent pool or Canvas host should own materials.
     - **Returns** &mdash; The existing parent pool, a new pool on the Canvas or owner object, or null for a null owner.
 
 `public void Release(Material material)`
 
 :   Drops one reference to a pooled material.
+
     - `material` &mdash; Material previously acquired from this pool; foreign or null materials are ignored.
 
 ---
@@ -743,6 +800,7 @@ Transition timings. Every duration scales by `MotionScale`.
 `public static float Ease(SkinEasing easing, float t)`
 
 :   Maps a normalized 0..1 progress value through the selected easing curve. Input and output are clamped for presentation use only.
+
     - `t` &mdash; Progress from 0 to 1; anything outside that range is clamped first.
     - `easing` &mdash; Linear, smooth-step, cubic-out, or back-out curve applied to normalized time.
     - **Returns** &mdash; Eased progress. Every curve stays within 0..1 except `SkinEasing.BackOut`, which rises above 1 near the end and is what gives it its overshoot, so a caller that lerps with this result must tolerate values past the target.
@@ -750,11 +808,13 @@ Transition timings. Every duration scales by `MotionScale`.
 `public SkinMotionTokens Sanitized()`
 
 :   Clamps every token into its supported range.
+
     - **Returns** &mdash; A clamped copy; this instance is unchanged. `ReduceMotion` and `BarEasing` are left as authored.
 
 `public float Scale(float seconds)`
 
 :   The effective duration for `seconds` under this skin.
+
     - `seconds` &mdash; The unscaled duration the animation would like.
     - **Returns** &mdash; `seconds` multiplied by `MotionScale`, never negative, and zero whenever `ReduceMotion` is set. Treat a zero result as an instruction to snap rather than animate.
 
@@ -902,12 +962,14 @@ customer can move the whole interface without editing a prefab.
 `public static Vector2 AnchorPoint(SkinAnchor anchor)`
 
 :   The normalized anchor point for `anchor`.
+
     - `anchor` &mdash; Named safe-area location to convert into normalized coordinates.
     - **Returns** &mdash; The matching point with (0,0) at the bottom left and (1,1) at the top right, ready to use as a RectTransform anchor and pivot. A value outside the enum falls back to the bottom right.
 
 `public static SkinRegionTokens At(SkinAnchor anchor, Vector2 offset, Vector2 size)`
 
 :   A visible region anchored at `anchor`.
+
     - `offset` &mdash; Inward distance from the anchor in reference pixels.
     - `size` &mdash; Size in reference pixels; zero on an axis sizes to content.
     - `anchor` &mdash; Safe-area edge or corner that fixes both region anchors and pivot.
@@ -916,6 +978,7 @@ customer can move the whole interface without editing a prefab.
 `public static SkinRegionTokens Band(SkinAnchor anchor, float height, float sideInset = 0f, float edgeOffset = 0f)`
 
 :   A visible full-bleed horizontal band of `height` reference pixels, hung from the top or bottom of the safe area.
+
     - `anchor` &mdash; Edge the band hangs from. Only the vertical half is read, so any of the three top anchors gives a top band and any of the three bottom anchors gives a bottom band.
     - `height` &mdash; Band height in reference pixels.
     - `sideInset` &mdash; Left and right inset in reference pixels. Zero is true full bleed, which is what the shipped gauge rail uses.
@@ -925,16 +988,19 @@ customer can move the whole interface without editing a prefab.
 `public Vector2 InwardOffset()`
 
 :   Converts `Offset` into a signed anchored position so positive values always move a region inward from its anchor.
+
     - **Returns** &mdash; `Offset` with its sign flipped on each axis whose anchor sits at the far edge. A centred axis keeps the raw value, where positive still means right and up.
 
 `public SkinRegionTokens Sanitized()`
 
 :   Copies the region with nonnegative dimensions and a scale capped at two. A nonpositive scale becomes one; other fields are retained.
+
     - **Returns** &mdash; A presentation copy with those clamps applied. This method does not validate finite values or modify the source region.
 
 `public SkinRegionTokens ScaledBand(float scale)`
 
 :   Clamps every token into its supported range.
+
     - `scale` &mdash; Factor from `CompiledSkinLayout.BandScale`. One, or anything outside a sane range, returns this region untouched.
     - **Returns** &mdash; A clamped copy; this instance is unchanged. A zero or negative `Scale` becomes 1, and a negative `Size` axis becomes zero.
 
@@ -1026,17 +1092,20 @@ all, which is the right answer for it.
 `public SkinStagePresenceTokens Sanitized()`
 
 :   Clamps every token into its supported range.
+
     - **Returns** &mdash; A clamped copy; this instance is unchanged. `Enabled` and both colours are left as authored.
 
 `public float ScaleForRank(int rank)`
 
 :   The size multiplier for a combatant standing at `rank`.
+
     - `rank` &mdash; Depth rank, 0 at the front. Negative values are treated as the front.
     - **Returns** &mdash; `RankScale` raised to `rank`, or exactly 1 when staging is off, so a caller can multiply unconditionally.
 
 `public Color TintForRank(Color tint, int rank)`
 
 :   Lights and depth-fades one combatant's tint for its rank.
+
     - `tint` &mdash; The combatant's own tint, normally white for unmodified art.
     - `rank` &mdash; Depth rank, 0 at the front. Negative values are treated as the front.
     - **Returns** &mdash; The tint pulled toward `KeyLightColor` and then darkened for depth. Alpha is carried through untouched, so this composes with a death fade rather than fighting it. Staging off returns `tint` unchanged.
@@ -1080,6 +1149,7 @@ The status pip strip drawn above a combatant.
 `public SkinStatusPipTokens Sanitized()`
 
 :   Clamps every token into its supported range.
+
     - **Returns** &mdash; A clamped copy, with `Surface` sanitized in turn; this instance is unchanged.
 
 ---
@@ -1124,23 +1194,27 @@ so a glowing widget still occupies exactly its `RectTransform`.
 `public void Apply(SkinSurfaceTokens value)`
 
 :   Updates apply on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
+
     - `value` &mdash; Shape, fill, stroke, glow, and shadow tokens to sanitize and draw.
 
 `public void ApplySegments(int count, Color color)`
 
 :   Applies segment ticks, used by segmented bars.
+
     - `color` &mdash; Shader color used for separators between filled segments.
     - `count` &mdash; Requested segment count, clamped to zero through 32.
 
 `public void SetFillColors(Color primary, Color secondary)`
 
 :   Replaces only the fill colours, keeping shape and glow.
+
     - `primary` &mdash; Replacement first gradient stop.
     - `secondary` &mdash; Replacement second gradient stop.
 
 `public void SetGlow(Color color, float radius, float intensity)`
 
 :   Replaces only the glow, keeping shape and fill.
+
     - `color` &mdash; Replacement outer-glow color.
     - `intensity` &mdash; Replacement glow multiplier sanitized to the supported shader range.
     - `radius` &mdash; Replacement glow radius in reference pixels.
@@ -1222,6 +1296,7 @@ a handful of surfaces rather than hunting individual prefabs.
 `public static SkinSurfaceTokens Flat(Color fill, float cornerRadius = 0f)`
 
 :   A flat, strokeless, glowless surface in `fill`.
+
     - `cornerRadius` &mdash; Corner radius in reference pixels; zero gives square corners.
     - `fill` &mdash; Single color assigned to both surface gradient stops.
     - **Returns** &mdash; A rounded-rect surface with no stroke, glow, or shadow, ready to be built on.
@@ -1229,17 +1304,20 @@ a handful of surfaces rather than hunting individual prefabs.
 `public SkinSurfaceTokens Sanitized()`
 
 :   Clamps every token into its supported range.
+
     - **Returns** &mdash; A clamped copy; this instance is unchanged. `GradientAngleDegrees` wraps into 0..360 rather than clamping, and the colours are left exactly as authored.
 
 `public SkinSurfaceTokens WithFill(Color fill)`
 
 :   Returns this surface with its fill replaced by `fill`.
+
     - `fill` &mdash; Replacement color written to both gradient stops on the returned copy.
     - **Returns** &mdash; A copy with both gradient stops set to `fill`, so a gradient surface reads as flat until a second stop is set again.
 
 `public SkinSurfaceTokens WithGlow(Color color, float radius, float intensity)`
 
 :   Returns this surface with its glow replaced.
+
     - `radius` &mdash; Glow radius in reference pixels, measured outward from the silhouette.
     - `intensity` &mdash; Glow strength; above 1 the halo reads as bloom.
     - `color` &mdash; Replacement outer-glow color on the returned token copy.
@@ -1278,6 +1356,7 @@ accessibility setting, without touching content or invalidating a replay.
 `public static SkinTargetingTokens Default()`
 
 :   The shipped default: reticle, adapting to the device.
+
     - **Returns** &mdash; Reticle with adaptation enabled.
 
 ---
@@ -1339,6 +1418,7 @@ Type sizing and treatment. Fonts stay optional so no font is redistributed.
 `public SkinTypographyTokens Sanitized()`
 
 :   Clamps every token into its supported range.
+
     - **Returns** &mdash; A clamped copy; this instance is unchanged. `Font`, `UseOutline`, and `OutlineColor` are left as authored.
 
 ---

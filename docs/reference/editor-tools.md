@@ -50,6 +50,7 @@ Unity's asset APIs. No serialized YAML is authored by the tool.
 `public static PresentationStagePreset GetOrCreateStagePreset(BattleLayoutIdentity identity)`
 
 :   Creates an editable example using the shipped recipes and neutral art. Repeated calls preserve existing assets and all authored values. Camera movement starts disabled until its composition is validated.
+
     - `identity` &mdash; Fantasy or science-fiction example identity used to choose the native asset path.
     - **Returns** &mdash; The preserved or newly created editable preset for this identity.
 

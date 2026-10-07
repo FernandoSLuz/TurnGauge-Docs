@@ -21,6 +21,7 @@ Zero-amount entries do not exist - a cost that was not charged is simply absent.
 `public ActionCostState(StableId resourceId, int amount)`
 
 :   Creates a cost entry. Throws when `resourceId` is invalid or when `amount` is not positive.
+
     - `amount` &mdash; The strictly positive quantity paid or refunded on this ledger line.
     - `resourceId` &mdash; The required resource-pool identity charged by this line.
 
@@ -53,6 +54,7 @@ this doubles as the answer to "what is that combatant doing right now".
 `public ActiveActionState(ulong rootActionSequence, ulong opportunitySequence, StableId actorId, StableId skillId, long acceptedTick, IEnumerable<StableId> lockedTargetIds, TimingResolutionKind timingResolutionKind, IEnumerable<ActionCostState> paidCosts, InterruptRefundPolicy interruptRefundPolicy, IEnumerable<ActionCostState> refundedCosts, bool queueCooldownStarted, ActiveCastState cast)`
 
 :   Creates an active action, normalising the three collections into a canonical order: locked targets ascending, cost ledgers sorted by resource. Throws when the identity values are zero or invalid, when either enumerable is null, when locked targets are duplicated or exceed the per-command limit, when costs are duplicated or exceed the per-skill limit, or when a refund is not covered by the matching paid cost.
+
     - `rootActionSequence` &mdash; The sequence of the root action this belongs to; the value the snapshot orders its active actions by.
     - `opportunitySequence` &mdash; The decision opportunity this action was accepted against. Unique across a snapshot's active actions.
     - `acceptedTick` &mdash; The tick the action was accepted on, never later than the snapshot's own tick.
@@ -135,6 +137,7 @@ reaches `EndTick`.
 `public ActiveCastState(long startTick, long endTick, bool interruptible)`
 
 :   Creates a cast window. Throws when `startTick` is negative, when `endTick` is not strictly after it, or when the span exceeds the timing-tick limit.
+
     - `endTick` &mdash; The tick the cast completes on. The span `endTick - startTick` equals the skill's authored cast ticks.
     - `interruptible` &mdash; Whether another combatant's timing resolution may cancel this cast. Mirrors the skill's authored flag; the engine never flips it mid-cast.
     - `startTick` &mdash; The non-negative acceptance tick; `endTick` must follow it within the timing limit.
@@ -183,6 +186,7 @@ it rather than holding one across ticks.
 `public BattleCommand(ulong commandSequence, long requestedTick, StableId commandTypeId, StableId actorId, StableId? skillId, IEnumerable<StableId> requestedTargetIds, PropertySet properties)`
 
 :   Captures one exact command sequence, requested tick, actor, optional skill, targets, and properties. Invalid IDs, negative ticks, or oversized targets throw before submission.
+
     - `commandSequence` &mdash; Position in the battle's command history, which must equal the engine's next expected number. It is supplied rather than assigned so that a command built against a stale view of the battle is rejected outright instead of being applied out of order.
     - `requestedTick` &mdash; Tick the caller believes the battle is on. The engine rejects the command when it has already moved past it, rather than acting on a decision made against a battle that no longer looks that way.
     - `commandTypeId` &mdash; Which kind of command this is, such as `BattleIds.ConcedeCommand` or `BattleIds.UseSkillCommand`. It must be a type the compiled content registers.
@@ -226,6 +230,7 @@ it rather than holding one across ticks.
 `public static BattleCommand Concede(ulong sequence, long tick, StableId actorId)`
 
 :   Builds a forfeit for one combatant, with no skill, no targets, and no properties, which is the exact shape the engine requires of a concede.
+
     - `sequence` &mdash; The engine's next expected command sequence number.
     - `tick` &mdash; The tick the battle is currently on.
     - `actorId` &mdash; The combatant conceding. Its whole team is marked as having conceded and the battle ends, so this forfeits the match rather than skipping a turn.
@@ -259,6 +264,7 @@ event-chain hash, so a dropped or reordered event is detectable.
 `public BattleEvent(long tick, ulong eventSequence, ulong rootActionSequence, StableId eventTypeId, PropertySet properties)`
 
 :   Creates an immutable event record. The engine emits these; callers normally read events rather than construct them.
+
     - `tick` &mdash; Authoritative tick at emission. Must not be negative.
     - `eventSequence` &mdash; Battle-wide emission order, starting at 1. Must not be 0.
     - `rootActionSequence` &mdash; The action sequence this event belongs to, or 0 for a battle or scheduler event that sits outside any root action.
@@ -801,18 +807,21 @@ and comparing two moments possible. It has no public constructor: snapshots come
 `public ActiveActionState FindActiveAction(StableId actorId)`
 
 :   Looks up what a combatant is currently doing. A snapshot holds at most one active action per actor, so this result is unambiguous.
+
     - `actorId` &mdash; The exact combatant identity whose in-flight action is requested.
     - **Returns** &mdash; The actor's in-flight action, or `null` when it has none.
 
 `public CombatantState FindCombatant(StableId id)`
 
 :   Looks up a combatant by ID, living or dead. A linear scan over `Combatants`; hoist the result if you need it repeatedly in one frame.
+
     - `id` &mdash; The exact combatant identity to match during the linear scan.
     - **Returns** &mdash; The combatant, or `null` when no combatant has that ID.
 
 `public CooldownState FindCooldown(StableId ownerId, StableId skillId)`
 
 :   Looks up a live cooldown for one combatant's skill.
+
     - `ownerId` &mdash; The combatant whose cooldown to look for.
     - `skillId` &mdash; The exact skill identity paired with `ownerId`.
     - **Returns** &mdash; The cooldown, or `null` when the skill is not on cooldown - a null result is the way to test readiness, since expired cooldowns are dropped rather than zeroed.
@@ -820,6 +829,7 @@ and comparing two moments possible. It has no public constructor: snapshots come
 `public ResourceState FindResource(StableId ownerId, StableId resourceId)`
 
 :   Looks up one combatant's pool for one resource.
+
     - `ownerId` &mdash; The combatant that owns the pool.
     - `resourceId` &mdash; The exact resource identity paired with `ownerId`.
     - **Returns** &mdash; The pool, or `null` when that combatant has no pool for that resource.
@@ -827,6 +837,7 @@ and comparing two moments possible. It has no public constructor: snapshots come
 `public TeamState FindTeam(StableId id)`
 
 :   Looks up a team by ID.
+
     - `id` &mdash; The exact team identity to match during the linear scan.
     - **Returns** &mdash; The team, or `null` when no team has that ID.
 
@@ -849,6 +860,7 @@ be edited in place; the engine replaces the instance when any of it changes.
 `public CombatantState(StableId id, StableId teamId, int maximumHealth, int health, bool targetable)`
 
 :   Creates a combatant with no compiled definition, human control, no AI policy, and no formation placement - the shape used by profiles 1 and 2. Throws when either ID is invalid, when `maximumHealth` is not positive, or when `health` falls outside 0..`maximumHealth`.
+
     - `health` &mdash; Current health. Zero is legal and means the combatant is dead.
     - `targetable` &mdash; Whether target resolution may select this combatant at all. A living combatant that is not targetable is still skipped as a source and a target.
     - `id` &mdash; The required battle-unique combatant identity.
@@ -924,6 +936,7 @@ snapshot holds at most one entry per owner-and-skill pair.
 `public CooldownState(StableId ownerId, StableId skillId, CooldownClockKind clockKind, int remainingElapsedTicks, int remainingOwnerOpportunities, ulong startedActionSequence)`
 
 :   Creates a live cooldown. Exactly one of the two remaining counters is used, chosen by `clockKind`; the unused one must be zero. Throws when either ID is invalid, when `startedActionSequence` is zero, when the clock kind is unrecognised, or when the counters do not match the clock kind.
+
     - `remainingElapsedTicks` &mdash; For an elapsed-tick clock, the ticks still to wait - remaining, not elapsed. Must be positive and within the timing-tick limit. Must be zero for an owner-opportunity clock.
     - `remainingOwnerOpportunities` &mdash; For an owner-opportunity clock, how many more of the owner's own actions must complete before the skill is free again. Must be positive and within the timing-tick limit. Must be zero for an elapsed-tick clock.
     - `startedActionSequence` &mdash; The root action that started this cooldown. The engine uses it to avoid counting that same action against an owner-opportunity clock.
@@ -997,6 +1010,7 @@ entry is served, so that ordering is what decides turn order.
 `public DecisionEntry(ulong opportunitySequence, long readyTick, StableId actorId, DecisionControlKind controlKind)`
 
 :   Creates a decision entry. A zero opportunity sequence, a negative ready tick, an unset actor, or an undefined control kind throws.
+
     - `opportunitySequence` &mdash; The engine-assigned sequence for this readiness. Must be non-zero and unique inside the queue that receives the entry.
     - `readyTick` &mdash; The tick at which the actor became ready.
     - `controlKind` &mdash; Whether the command answering this opportunity comes from the player or from the actor's automatic decision policy.
@@ -1038,6 +1052,7 @@ halves are required: neither an invalid key nor a null value can be stored.
 `public PropertyEntry(StableId key, TaggedValue value)`
 
 :   Pairs a key with a value, rejecting the default StableId as a key and a null value.
+
     - `key` &mdash; The non-default semantic identifier used to sort and retrieve the property.
     - `value` &mdash; The non-null tagged payload associated with `key`.
 
@@ -1081,6 +1096,7 @@ identically, so content and replays can be compared byte for byte.
 `public PropertySet(IEnumerable<PropertyEntry> entries)`
 
 :   Copies entries into an immutable set.
+
     - `entries` &mdash; Must already be in ascending StableId ordinal order with no repeated key; more than 256 entries is rejected. Copied immediately, so later changes to the source are not seen.
 
 **Properties**
@@ -1098,11 +1114,13 @@ identically, so content and replays can be compared byte for byte.
 `public IEnumerator<PropertyEntry> GetEnumerator()`
 
 :   Walks the entries in ascending key order, which is the same order the canonical encoder writes them in.
+
     - **Returns** &mdash; An enumerator over entries in ascending property-key order.
 
 `public TaggedValue Require(StableId key, TaggedValueTag expectedTag)`
 
 :   Reads a property that must be present with a known tag, throwing an ArgumentException when it is missing or carries a different tag. This is the accessor to use inside a mechanics extension once compile-time validation has already established the property is mandatory.
+
     - `expectedTag` &mdash; The tag the value must carry; a mismatch throws rather than converting.
     - `key` &mdash; The identifier of the mandatory property.
     - **Returns** &mdash; The value, never null.
@@ -1110,6 +1128,7 @@ identically, so content and replays can be compared byte for byte.
 `public bool TryGetValue(StableId key, out TaggedValue value)`
 
 :   Finds a property by key, using a binary search over the sorted entries and allocating nothing.
+
     - `value` &mdash; The value when the key is present, and null when it is not.
     - `key` &mdash; The property identifier to locate by ordinal binary search.
     - **Returns** &mdash; True when the key is present.
@@ -1132,6 +1151,7 @@ entry per owner-and-resource pair, so this is the whole of that pool's state.
 `public ResourceState(StableId ownerId, StableId resourceId, int maximum, int current)`
 
 :   Creates a resource pool. Throws when either ID is invalid, when `maximum` is not positive, or when `current` falls outside 0..`maximum`.
+
     - `ownerId` &mdash; The combatant that owns the pool. Resources are never shared.
     - `current` &mdash; The available amount, inclusively bounded from zero through `maximum`.
     - `maximum` &mdash; The positive immutable capacity of this pool.
@@ -1176,6 +1196,7 @@ contract version during restore and is not the way to author a new one.
 `public StartTeam(StableId teamId, IEnumerable<StartCombatant> combatants)`
 
 :   Creates a profile-1 starting team containing at least one living targetable combatant.
+
     - `combatants` &mdash; One to the per-team limit of non-null profile-1 combatants with unique identifiers.
     - `teamId` &mdash; The non-default identity that must differ from the opposing team's identifier.
 
@@ -1194,6 +1215,7 @@ contract version during restore and is not the way to author a new one.
 `public static StartTeam CreateB2(StableId teamId, IEnumerable<StartCombatant> combatants)`
 
 :   Creates a profile-2 starting team containing at least one living combatant.
+
     - `combatants` &mdash; One to the per-team limit of non-null profile-2 combatants with unique identifiers.
     - `teamId` &mdash; The non-default identity that must differ from the opposing team's identifier.
     - **Returns** &mdash; An immutable profile-2 team whose combatants are sorted by identifier.
@@ -1301,108 +1323,126 @@ holder.
 `public static TaggedValue FromBoolean(bool value)`
 
 :   Wraps a bool, readable afterwards only through BooleanValue.
+
     - `value` &mdash; The Boolean payload to store without conversion.
     - **Returns** &mdash; A value tagged `TaggedValueTag.Boolean`.
 
 `public static TaggedValue FromBooleans(IEnumerable<bool> values)`
 
 :   Copies bools into an immutable array value, readable afterwards only through BooleanArrayValue.
+
     - `values` &mdash; Copied immediately. More than 4,096 entries is rejected.
     - **Returns** &mdash; An immutable Boolean-array value preserving source order.
 
 `public static TaggedValue FromBytes(byte[] value)`
 
 :   Copies a byte blob into a value readable afterwards only through BytesValue. Like FromUInt32, the Bytes tag sits outside schema 3's property union and is rejected when schema 3 content is compiled or canonically serialized.
+
     - `value` &mdash; Copied immediately, so mutating the caller's array afterwards does not affect the value. Longer than 1 MiB is rejected.
     - **Returns** &mdash; A legacy-compatible bytes value containing a defensive copy of the payload.
 
 `public static TaggedValue FromChance64(Chance64 value)`
 
 :   Wraps a probability, storing its raw units unchanged and readable afterwards only through Chance64Value.
+
     - `value` &mdash; The probability payload whose raw units are preserved.
     - **Returns** &mdash; A value tagged `TaggedValueTag.Chance64`.
 
 `public static TaggedValue FromChance64s(IEnumerable<Chance64> values)`
 
 :   Copies probabilities into an immutable array value, readable afterwards only through Chance64ArrayValue.
+
     - `values` &mdash; Copied immediately. More than 4,096 entries is rejected.
     - **Returns** &mdash; An immutable probability-array value preserving source order.
 
 `public static TaggedValue FromFixed64(Fixed64 value)`
 
 :   Wraps a fixed-point number, storing its raw units unchanged and readable afterwards only through Fixed64Value.
+
     - `value` &mdash; The fixed-point payload whose raw units are preserved.
     - **Returns** &mdash; A value tagged `TaggedValueTag.Fixed64`.
 
 `public static TaggedValue FromFixed64s(IEnumerable<Fixed64> values)`
 
 :   Copies fixed-point numbers into an immutable array value, readable afterwards only through Fixed64ArrayValue.
+
     - `values` &mdash; Copied immediately. More than 4,096 entries is rejected.
     - **Returns** &mdash; An immutable fixed-point-array value preserving source order.
 
 `public static TaggedValue FromInt32(int value)`
 
 :   Wraps an int, readable afterwards only through Int32Value.
+
     - `value` &mdash; The signed 32-bit integer payload to store.
     - **Returns** &mdash; A value tagged `TaggedValueTag.Int32`.
 
 `public static TaggedValue FromInt32s(IEnumerable<int> values)`
 
 :   Copies ints into an immutable array value, readable afterwards only through Int32ArrayValue.
+
     - `values` &mdash; Copied immediately. More than 4,096 entries is rejected.
     - **Returns** &mdash; An immutable 32-bit integer-array value preserving source order.
 
 `public static TaggedValue FromInt64(long value)`
 
 :   Wraps a long, readable afterwards only through Int64Value.
+
     - `value` &mdash; The signed 64-bit integer payload to store.
     - **Returns** &mdash; A value tagged `TaggedValueTag.Int64`.
 
 `public static TaggedValue FromInt64s(IEnumerable<long> values)`
 
 :   Copies longs into an immutable array value, readable afterwards only through Int64ArrayValue.
+
     - `values` &mdash; Copied immediately. More than 4,096 entries is rejected.
     - **Returns** &mdash; An immutable 64-bit integer-array value preserving source order.
 
 `public static TaggedValue FromStableId(StableId value)`
 
 :   Wraps an identifier, readable afterwards only through StableIdValue.
+
     - `value` &mdash; Must be a valid StableId; the default identifier is rejected so a property can never carry a placeholder reference.
     - **Returns** &mdash; A value tagged `TaggedValueTag.StableId` that contains the supplied identifier.
 
 `public static TaggedValue FromStableIds(IEnumerable<StableId> values)`
 
 :   Copies identifiers into an immutable array value, readable afterwards only through StableIdArrayValue.
+
     - `values` &mdash; Copied immediately, so later changes to the source are not seen. More than 256 entries, or any default identifier among them, is rejected.
     - **Returns** &mdash; A value tagged `TaggedValueTag.StableIdArray` with an immutable copy of the identifiers.
 
 `public static TaggedValue FromString(string value)`
 
 :   Wraps a string, readable afterwards only through StringValue.
+
     - `value` &mdash; Must already be normalized to Unicode NFC; a string that is not gets rejected rather than normalized for you. It must also contain only valid Unicode scalar sequences and must not exceed 1 MiB once encoded as UTF-8.
     - **Returns** &mdash; A value tagged `TaggedValueTag.String` containing the validated text.
 
 `public static TaggedValue FromStrings(IEnumerable<string> values)`
 
 :   Copies strings into an immutable array value, readable afterwards only through StringArrayValue.
+
     - `values` &mdash; Copied immediately. More than 4,096 entries is rejected, and every entry must satisfy the same NFC, valid-Unicode, and 1 MiB UTF-8 rules FromString applies.
     - **Returns** &mdash; An immutable string-array value containing the validated NFC strings in source order.
 
 `public static TaggedValue FromUInt32(uint value)`
 
 :   Wraps a uint, readable afterwards only through UInt32Value. Prefer FromInt64 or FromUInt64 for new content: the UInt32 tag sits outside schema 3's property union and is rejected when schema 3 content is compiled or canonically serialized.
+
     - `value` &mdash; The unsigned 32-bit integer payload to store for legacy profiles.
     - **Returns** &mdash; A value tagged `TaggedValueTag.UInt32`.
 
 `public static TaggedValue FromUInt64(ulong value)`
 
 :   Wraps a ulong, readable afterwards only through UInt64Value.
+
     - `value` &mdash; The unsigned 64-bit integer payload to store.
     - **Returns** &mdash; A value tagged `TaggedValueTag.UInt64`.
 
 `public static TaggedValue FromUInt64s(IEnumerable<ulong> values)`
 
 :   Copies ulongs into an immutable array value, readable afterwards only through UInt64ArrayValue.
+
     - `values` &mdash; Copied immediately. More than 4,096 entries is rejected.
     - **Returns** &mdash; An immutable unsigned 64-bit integer-array value preserving source order.
 
@@ -1460,6 +1500,7 @@ two of these.
 `public TeamState(StableId id, bool conceded)`
 
 :   Creates a team state. Throws when `id` is invalid.
+
     - `conceded` &mdash; Whether the team has conceded. A conceded team is treated as having no surviving side when the engine tests for a terminal result, even while its combatants are still alive.
     - `id` &mdash; The required battle-unique team identity.
 

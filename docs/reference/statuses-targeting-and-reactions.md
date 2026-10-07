@@ -23,6 +23,7 @@ stat. This is therefore the base value, not the effective one.
 `public CombatantStatState(StableId ownerId, StableId statId, Fixed64 value)`
 
 :   Creates a stat entry. Throws when either ID is invalid; the value itself is not range-checked against the stat definition here.
+
     - `ownerId` &mdash; Valid combatant identifier that scopes the stat entry within the battle snapshot.
     - `statId` &mdash; Valid compiled stat identifier paired with `ownerId` for lookup.
     - `value` &mdash; Deterministic base amount before live status modifiers; definition-specific bounds are not checked here.
@@ -61,6 +62,7 @@ mutate the battle.
 `public ReactionContext(CompiledBattleContent content, BattleSnapshot snapshot, ulong rootActionSequence, int parentDepth, StableId sourceCombatantId, StableId targetCombatantId, StableId triggeringEffectTag, ReactionTriggerPhase phase)`
 
 :   Creates a context. The snapshot is wrapped in a `BattleStateView`, so the authoritative snapshot is not reachable from the rule. Throws when content or snapshot is null, when `rootActionSequence` is zero, when `parentDepth` is negative or above `SimulationLimits.ReactionMaximumDepth`, or when any of the three IDs is invalid.
+
     - `rootActionSequence` &mdash; The root action whose resolution triggered this candidate. Reaction depth, count, and once-per-root budgets are all tracked per root action.
     - `parentDepth` &mdash; Reaction nesting depth of the execution that triggered this candidate; the reaction runs one level deeper if it fires.
     - `sourceCombatantId` &mdash; The combatant that owns the reaction being offered.
@@ -123,6 +125,7 @@ with a diagnostic.
 `public ReactionEvaluation(bool eligible, StableId sourceCombatantId, StableId targetCombatantId, Diagnostic diagnostic)`
 
 :   Creates an evaluation. Throws when either ID is invalid, when an eligible evaluation carries a diagnostic, or when an ineligible one carries none.
+
     - `eligible` &mdash; Whether the reaction fires.
     - `sourceCombatantId` &mdash; The combatant the reaction acts as; it need not be the one the context offered.
     - `targetCombatantId` &mdash; The combatant the reaction acts on; it need not be the one the context offered.
@@ -166,6 +169,7 @@ signature is what buys bounded reaction chains before a battle ever runs.
 `public ReactionSignature(IEnumerable<StableId> triggerEffectTags, IEnumerable<StableId> emittedEffectTags, bool finiteByConstruction)`
 
 :   Creates a signature. Both tag lists are sorted into canonical order; an invalid or repeated tag is rejected rather than collapsed, as is a list longer than `SimulationLimits.TagsPerCombatantDefinition`. Throws when `triggerEffectTags` yields no tags at all.
+
     - `triggerEffectTags` &mdash; Effect tags whose resolution may offer this rule. At least one is required.
     - `emittedEffectTags` &mdash; Every effect tag the rule can cause to resolve. Declaring extra tags is merely conservative; declaring too few defeats the cycle analysis.
     - `finiteByConstruction` &mdash; Declares that the rule cannot fire without bound on its own. See `FiniteByConstruction` for what compilation does with it.
@@ -204,6 +208,7 @@ which is why `RemainingAmount` is always positive.
 `public ShieldState(StableId shieldId, StableId ownerId, StableId sourceId, int priority, ulong applicationSequence, int remainingAmount, int maximumAuthoredAmount, ulong? linkedStatusApplicationSequence, ulong sourceRootActionSequence)`
 
 :   Creates a shield. Throws when any of the three IDs is invalid, when either sequence is zero, when the remaining or maximum amount is not positive, when the remaining amount exceeds the maximum, or when a linked status sequence is supplied as zero.
+
     - `shieldId` &mdash; The authored shield identity from the effect that created it, which several applications may share; `applicationSequence` is what identifies this one.
     - `sourceId` &mdash; The combatant that applied the shield.
     - `priority` &mdash; Absorption order among the owner's shields; lower is spent first.
@@ -272,6 +277,7 @@ the entry whenever a status is refreshed, stacked, or ticked, and it is
 `public StatusInstanceState(StableId ownerId, StableId sourceId, StableId statusDefinitionId, ulong applicationSequence, ulong sourceRootActionSequence, int stackCount, StatusDurationClock durationClock, int remainingDuration, long nextPeriodicTick, ulong excludedOriginatingRootActionSequence, ulong? linkedShieldApplicationSequence, PropertySet instanceConfiguration)`
 
 :   Creates a status instance. Throws when any of the three IDs is invalid, when either sequence is zero, when the stack count is outside 1..`SimulationLimits.IndependentStatusStacks`, when the duration clock is not a defined value, when the remaining duration is negative, above `SimulationLimits.TimingTicks`, or zero under any clock other than `StatusDurationClock.ElapsedTicks`, when the next periodic tick is negative, or when a linked shield sequence is supplied as zero.
+
     - `sourceId` &mdash; The combatant that applied the status.
     - `applicationSequence` &mdash; Identity of this application, taken from the snapshot's application counter and never reused.
     - `sourceRootActionSequence` &mdash; The root action that created this application.
@@ -355,6 +361,7 @@ reachable from here, so a resolver cannot alter the battle it inspects.
 `public TargetContext(CompiledBattleContent content, BattleSnapshot snapshot, StableId actorId, CompiledSkillDefinition skill)`
 
 :   Wraps the inputs for one resolver call. The snapshot is projected into a `BattleStateView`, so the resolver never receives the live snapshot.
+
     - `content` &mdash; The compiled catalog the skill and its IDs come from.
     - `snapshot` &mdash; Battle state to project; it is read, never retained or mutated.
     - `actorId` &mdash; The combatant whose skill use is being targeted.
@@ -420,6 +427,7 @@ resolver anything, so a resolver must report the same shape on every call.
 `public TargetRequestContract(int minimumRequestedIds, int maximumRequestedIds, bool zeroRequestedInvokesAutomaticSelection, int randomCount, TargetLifeState allowedLifeState, TargetTeamRelation teamRelation, bool actorMayAppear)`
 
 :   Declares a contract whose `MaximumResolvedTargets` is inferred: the requested-ID maximum when there is one, otherwise the random count when there is one, otherwise 1 for a `TargetTeamRelation.Self` contract and `SimulationLimits.ResolvedTargetsPerOperation` for any wider relation.
+
     - `minimumRequestedIds` &mdash; Fewest target IDs a command may carry; zero for a resolver that selects on the caller's behalf.
     - `maximumRequestedIds` &mdash; Most target IDs a command may carry, capped by `SimulationLimits.RequestedTargetsPerCommand`. Zero forbids caller-supplied IDs outright.
     - `zeroRequestedInvokesAutomaticSelection` &mdash; Whether an empty request asks the resolver to choose. When false, a command that ends up locking nothing is rejected.
@@ -431,6 +439,7 @@ resolver anything, so a resolver must report the same shape on every call.
 `public TargetRequestContract(int minimumRequestedIds, int maximumRequestedIds, bool zeroRequestedInvokesAutomaticSelection, int randomCount, TargetLifeState allowedLifeState, TargetTeamRelation teamRelation, bool actorMayAppear, int maximumResolvedTargets)`
 
 :   Declares a contract with an explicit `MaximumResolvedTargets`, for a resolver whose locked-set size is not implied by its requested-ID or random counts.
+
     - `minimumRequestedIds` &mdash; Fewest target IDs a command may carry; zero for a resolver that selects on the caller's behalf.
     - `maximumRequestedIds` &mdash; Most target IDs a command may carry, capped by `SimulationLimits.RequestedTargetsPerCommand`. Zero forbids caller-supplied IDs outright.
     - `zeroRequestedInvokesAutomaticSelection` &mdash; Whether an empty request asks the resolver to choose. When false, a command that ends up locking nothing is rejected.
@@ -494,6 +503,7 @@ leaves the battle untouched.
 `public TargetRequestResult(bool accepted, IEnumerable<StableId> lockedTargets, Diagnostic diagnostic)`
 
 :   Builds a verdict. Prefer `Accept` and `Reject`, which keep the accepted flag and the diagnostic consistent for you.
+
     - `accepted` &mdash; Whether the request is legal.
     - `lockedTargets` &mdash; Targets to lock. They are sorted and deduplicated on the way in, so the order supplied here cannot affect the battle.
     - `diagnostic` &mdash; The refusal reason. It must be default for an accepted verdict and must carry a valid ID for a rejected one.
@@ -517,12 +527,14 @@ leaves the battle untouched.
 `public static TargetRequestResult Accept(IEnumerable<StableId> lockedTargets)`
 
 :   Accepts a request and names the targets to lock.
+
     - `lockedTargets` &mdash; Targets to lock, in any order; they are sorted and deduplicated. Pass an empty set when the contract declares a random count and the engine should draw instead.
     - **Returns** &mdash; An accepted verdict carrying no diagnostic.
 
 `public static TargetRequestResult Reject(StableId reasonId, string detail = null)`
 
 :   Refuses a request. The command is rejected and the battle is left as it was.
+
     - `reasonId` &mdash; The diagnostic ID reported to the caller. It must be valid, so a rejection can always be explained.
     - `detail` &mdash; Optional extra context, such as the offending target ID. It is diagnostic text and is not meant for players.
     - **Returns** &mdash; A rejected verdict with no locked targets.

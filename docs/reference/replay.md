@@ -46,6 +46,7 @@ whole run with `replay.migration.invalid-result`.
 `public ReplayMigrationResult Migrate(byte[] immutableInput)`
 
 :   Rewrites one replay from `FromFormatVersion` to `ToFormatVersion`.
+
     - `immutableInput` &mdash; The replay bytes as they exist at `FromFormatVersion`. The caller owns this array; read it, do not write to it.
     - **Returns** &mdash; A success carrying the rewritten bytes, or a failure carrying the diagnostic that explains the refusal. Never null.
 
@@ -212,12 +213,14 @@ machine. Obtain one from `Capture(BattleEngine)` or from
 `public static ReplayEnvelope Capture(BattleEngine engine)`
 
 :   Records the engine's battle as it stands right now, using the engine's own scheduler registry. Capture only reads the engine - it does not advance, reset, or otherwise disturb the battle, so it is safe to call mid-battle and again later. It fails closed rather than handing back a replay that cannot be trusted: it throws if the engine, content, start request, and snapshot profiles disagree, if the snapshot's content identity does not match the engine's content, or if the battle already exceeds the portable replay command, checkpoint, or byte limits.
+
     - `engine` &mdash; The engine to record. Must not be null.
     - **Returns** &mdash; An immutable recording that `ReplaySerializer.Write` is already known to accept.
 
 `public static ReplayEnvelope Capture(BattleEngine engine, BattleSchedulerRegistry schedulerRegistry)`
 
 :   Records the engine's battle using an explicitly supplied scheduler registry instead of the engine's own. Behaves exactly as `Capture(BattleEngine)` otherwise.
+
     - `engine` &mdash; The engine to record. Must not be null.
     - `schedulerRegistry` &mdash; The registry used to hash scheduler state into the final checkpoint under the B2 profile. Must not be null. Pass the same registry the battle was run with, or the recorded state hash will not match on playback.
     - **Returns** &mdash; An immutable recording that `ReplaySerializer.Write` is already known to accept.
@@ -317,12 +320,14 @@ read, never altered.
 `public static ReplayExecutionResult Execute(ReplayEnvelope replay)`
 
 :   Executes a replay against fresh registries holding only the built-in schedulers and mechanics. Use an overload that takes registries when the recording references custom implementations, because a built-in registry cannot resolve them.
+
     - `replay` &mdash; The recording to reproduce.
     - **Returns** &mdash; Success with the reproduced final state, or the first divergence.
 
 `public static ReplayExecutionResult Execute(ReplayEnvelope replay, BattleSchedulerRegistry schedulerRegistry)`
 
 :   Executes a replay with a caller-supplied scheduler registry, and built-in mechanics.
+
     - `replay` &mdash; The recording to reproduce.
     - `schedulerRegistry` &mdash; Registry the recording's scheduler is resolved and its state decoded through. It must contain the scheduler the recording was made with.
     - **Returns** &mdash; Success with the reproduced final state, or the first divergence.
@@ -330,6 +335,7 @@ read, never altered.
 `public static ReplayExecutionResult Execute(ReplayEnvelope replay, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Executes a replay with both registries supplied. This is the overload to use for any game that registered its own formulas, effects, targeting, AI, reactions, or schedulers: reproducing a recording requires the same implementations under the same IDs and contract versions it was recorded against.
+
     - `replay` &mdash; The recording to reproduce.
     - `schedulerRegistry` &mdash; Registry the recording's scheduler is resolved and its state decoded through.
     - `mechanicsRegistry` &mdash; Registry the recording's mechanics implementations are resolved through. Still required for the earliest recording format, which has no mechanics to resolve.
@@ -362,6 +368,7 @@ as a failed `ReplayMigrationResult` when a run needs them.
 `public ReplayMigrationChain(IEnumerable<IReplayMigration> migrations)`
 
 :   Copies and validates the steps the chain will run.
+
     - `migrations` &mdash; The steps, in any order; the chain sorts them by origin version itself. Every entry must be non-null, must start at version 1 or higher, and must advance exactly one version, and no two entries may start at the same version. Anything else throws `ArgumentException`. A version no entry covers is allowed here and surfaces only when a run reaches it.
 
 **Methods**
@@ -369,6 +376,7 @@ as a failed `ReplayMigrationResult` when a run needs them.
 `public ReplayMigrationResult Migrate(byte[] immutableInput, int fromVersion, int targetVersion)`
 
 :   Runs one step per version from `fromVersion` up to `targetVersion`, passing each step's output to the next. Stops at the first failure and returns it unchanged.
+
     - `immutableInput` &mdash; The replay bytes as they exist at `fromVersion`. Copied before the first step, so this array is never written to.
     - `fromVersion` &mdash; The format version the bytes are currently in. Must be 1 or greater.
     - `targetVersion` &mdash; The format version to reach. Equal to `fromVersion` runs no step and succeeds with an unchanged copy; lower than it is refused, as migrations only move forward.
@@ -409,12 +417,14 @@ array you read out can be used to edit the result afterwards.
 `public static ReplayMigrationResult Failure(Diagnostic diagnostic)`
 
 :   Reports a migration that could not be performed. Throws `ArgumentException` for a default-constructed diagnostic, because a failure a caller cannot identify is worse than none.
+
     - `diagnostic` &mdash; Valid machine-readable reason migration could not produce a complete target-version replay.
     - **Returns** &mdash; A failed result carrying no byte payload and preserving the supplied diagnostic.
 
 `public static ReplayMigrationResult Success(byte[] bytes)`
 
 :   Reports a migration that produced `bytes`, which are copied into the result. Throws `ArgumentNullException` when they are null; a success can never carry a null buffer.
+
     - `bytes` &mdash; The canonical byte payload to read.
     - **Returns** &mdash; A successful result that owns a defensive copy of the non-null canonical target-version bytes.
 
@@ -476,12 +486,14 @@ quietly loaded, which is what lets two machines agree that they are replaying th
 `public static ReplayReadResult Read(byte[] utf8)`
 
 :   Reads a replay against a registry of the built-in mechanics only. A replay whose compiled content binds a custom formula, effect, targeting rule, AI policy, or reaction cannot be resolved from the built-ins and will come back as a failure; pass the registry those implementations were registered in to the other overload instead.
+
     - `utf8` &mdash; The replay document, as canonical UTF-8 JSON bytes.
     - **Returns** &mdash; The decoded replay on success, or a failure carrying the diagnostic that rejected it.
 
 `public static ReplayReadResult Read(byte[] utf8, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Decodes a replay and verifies it end to end: the version tuple must resolve to a known contract profile, both embedded payloads must match their recorded hashes and their own canonical encodings, the content manifest and registry binding digests must agree with the compiled content, and the command and checkpoint history must be complete and in order. The document is then re-encoded and compared against the input bytes. A rejected replay is returned as an unsuccessful result rather than thrown, so a project loading a file it did not produce - a shared bug report, a leaderboard submission, an older build's save - can inspect the diagnostic and carry on without guarding the call.
+
     - `utf8` &mdash; The replay document, as canonical UTF-8 JSON bytes.
     - `mechanicsRegistry` &mdash; Registry the embedded compiled content's mechanics bindings are resolved through. It must contain every implementation the replay was recorded with, at the contract versions it recorded.
     - **Returns** &mdash; The decoded replay, together with the content and start request it embedded, on success; otherwise a failure carrying the diagnostic that rejected it.
@@ -489,6 +501,7 @@ quietly loaded, which is what lets two machines agree that they are replaying th
 `public static byte[] Write(ReplayEnvelope replay)`
 
 :   Encodes a replay to its canonical bytes, emitting the field set that matches the replay's contract profile. The replay is checked before it is written, so an internally inconsistent one - a missing periodic checkpoint, a command without its submission boundary, a registry digest that does not match the embedded content - fails here rather than producing a file that only fails when someone tries to load it.
+
     - `replay` &mdash; The replay to encode.
     - **Returns** &mdash; Canonical UTF-8 JSON, never longer than `MaximumReplayBytes`.
 
@@ -514,6 +527,7 @@ can branch on the reason instead of matching on the message text.
 `public ReplayWriteException(StableId diagnosticId, string message)`
 
 :   Creates the exception and pairs its message with the diagnostic ID that classifies it.
+
     - `diagnosticId` &mdash; Identifies the class of failure. Must be a valid ID.
     - `message` &mdash; Explanation for a human reader. It is also kept as the diagnostic's detail, so the two never drift apart.
 

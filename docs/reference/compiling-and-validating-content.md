@@ -23,6 +23,7 @@ content and the same hashes.
 `public AuthoringCompileOptions(CancellationToken cancellationToken = default(CancellationToken), bool includeWarnings = true)`
 
 :   Creates a set of compile options. Both arguments are optional and default to an uncancellable compile that reports warnings.
+
     - `cancellationToken` &mdash; Polled between compile stages. Useful for an editor import or a batch job over a large catalog, where a compile can take long enough to be worth abandoning.
     - `includeWarnings` &mdash; Whether warnings survive into the reported diagnostics. Errors are kept either way.
 
@@ -65,6 +66,7 @@ diagnostic on the result instead of an exception here.
 `public AuthoringCompileRequest(BattleContentCatalog catalog, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry, AuthoringCompileOptions options = null)`
 
 :   Pins one catalog to explicit scheduler/mechanics registries and compile options. The compiler does not scan assemblies or replace either registry.
+
     - `catalog` &mdash; The authoring catalog root to compile.
     - `schedulerRegistry` &mdash; Registry each encounter's scheduler reference is resolved against.
     - `mechanicsRegistry` &mdash; Registry every formula, effect, target, AI policy, and reaction reference is resolved against.
@@ -93,6 +95,7 @@ diagnostic on the result instead of an exception here.
 `public static AuthoringCompileRequest WithBuiltIns(BattleContentCatalog catalog, AuthoringCompileOptions options = null)`
 
 :   Builds a request against freshly created registries holding only the package's built-in schedulers and mechanics. Use the constructor instead once you have registered anything of your own: a catalog that references a custom formula, effect, target, AI policy, reaction, or scheduler will not compile against the built-ins alone.
+
     - `catalog` &mdash; The authoring catalog root to compile.
     - `options` &mdash; Compile options; null selects `AuthoringCompileOptions.Default`.
     - **Returns** &mdash; A request carrying new built-in registry instances, not shared ones.
@@ -158,6 +161,7 @@ into one however differently their text reads.
 `public AuthoringDiagnostic(StableId diagnosticId, AuthoringDiagnosticSeverity severity, PortableSourceCoordinate source, string ownerStableIdRaw = null, StableId? relatedId = null, Diagnostic? nestedB3Diagnostic = null, string humanDetail = null)`
 
 :   Creates a diagnostic, rejecting anything a report could not present coherently: an invalid diagnostic ID, a severity other than Error or Warning, an invalid source coordinate, an invalid related ID or nested diagnostic, or an owner ID that disagrees with the source coordinate's owner key.
+
     - `diagnosticId` &mdash; The stable code naming this problem, such as `authoring.id.duplicate`. Take it from the package's authoring diagnostic IDs rather than composing text.
     - `severity` &mdash; Error or Warning; any other value throws.
     - `source` &mdash; Where the problem is. The coordinate names serialized fields, not C# members, so it keeps pointing at the same authored site across refactors.
@@ -201,18 +205,21 @@ into one however differently their text reads.
 `public bool Equals(AuthoringDiagnostic other)`
 
 :   Value equality over every field except `HumanDetail`, which is what lets two differently-worded reports of one problem collapse into a single entry.
+
     - `other` &mdash; The value to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override bool Equals(object obj)`
 
 :   Value equality against any object; false for other types and for null.
+
     - `obj` &mdash; The object to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override int GetHashCode()`
 
 :   A hash over the same fields `Equals(AuthoringDiagnostic)` compares, `HumanDetail` excluded.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---
@@ -376,12 +383,14 @@ The B4 mapping path converts captured authoring snapshots into the established B
 `public AuthoringCompileResult Compile(AuthoringCompileRequest request)`
 
 :   Compiles one authoring catalogue into a published immutable snapshot, or reports the diagnostics that stopped it. The compiler is fail-closed and synchronous: a single error discards the whole snapshot rather than handing back partly compiled content, and cancellation or an unexpected compiler fault arrives as a failed result instead of an exception. The catalogue's Unity objects are read once and never retained, so the result can be kept for the lifetime of the game while the authoring assets are free to change or unload.
+
     - `request` &mdash; The catalogue to compile, the scheduler and mechanics registries to resolve it against, and the options to compile under. A null `AuthoringCompileRequest.Options` means `AuthoringCompileOptions.Default`.
     - **Returns** &mdash; A successful result carrying the published catalogue, or a failed one carrying only diagnostics. Never null.
 
 `public AuthoringValidationReport Validate(AuthoringCompileRequest request)`
 
 :   Runs the same pipeline as `Compile` and then discards the snapshot, keeping only the diagnostics. It costs what a compile costs and reports exactly what a compile would report, so it answers "would this catalogue build?" without the caller holding on to content it does not want yet.
+
     - `request` &mdash; The same request `Compile` takes.
     - **Returns** &mdash; A report whose `AuthoringValidationReport.IsValid` is true exactly when the equivalent compile would have succeeded. Never null.
 
@@ -405,6 +414,7 @@ registrations. TurnGauge never scans assemblies for implementations.
 `public BattleRegistrySet CreateRegistries()`
 
 :   Creates fresh built-in registries, then lets the provider add its project-specific registrations. A fresh pair is returned on every call so mutable registry state is never shared between sessions.
+
     - **Returns** &mdash; A fresh complete pair after project configuration.
 
 ---
@@ -426,6 +436,7 @@ another by accident.
 `public BattleRegistrySet(BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Creates a complete non-null registry pair.
+
     - `schedulerRegistry` &mdash; Scheduler implementations.
     - `mechanicsRegistry` &mdash; Formula, effect, target, AI, and reaction implementations.
 
@@ -444,6 +455,7 @@ another by accident.
 `public static BattleRegistrySet WithBuiltIns()`
 
 :   Creates a fresh pair containing only TurnGauge built-ins.
+
     - **Returns** &mdash; A new registry pair that is safe to extend independently.
 
 ---
@@ -471,6 +483,7 @@ same catalog drive a live battle, a headless batch, and an editor preview.
 `public CompiledAuthoringCatalog(CompiledBattleContent battleContent, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry, Sha256Digest compiledSnapshotHash, Sha256Digest contentManifestHash, IEnumerable<KeyValuePair<StableId, CompiledFormationPreset>> formationPresets, IEnumerable<KeyValuePair<StableId, CompiledEncounterSnapshot>> encounters)`
 
 :   Publishes a compiled catalog, defensively copying both indexes into key-sorted immutable form.
+
     - `battleContent` &mdash; The compiled content the engine simulates.
     - `schedulerRegistry` &mdash; The scheduler registry this compile resolved against, carried through so a battle can be created from the catalog alone.
     - `mechanicsRegistry` &mdash; The mechanics registry this compile resolved against, carried through for the same reason.
@@ -529,6 +542,7 @@ any number of differently seeded battles.
 `public CompiledEncounterSnapshot(StableId encounterId, BattleStartRequest startRequest, CompiledEncounterFormationLayout formationLayout, Sha256Digest startRequestHash)`
 
 :   Publishes one compiled encounter.
+
     - `encounterId` &mdash; Id of the authored encounter; must be a valid id.
     - `startRequest` &mdash; The compiled start a battle is created from.
     - `formationLayout` &mdash; Compiled seating for both teams.
@@ -569,6 +583,7 @@ A defensively copied, key-sorted immutable index.
 `public FrozenSortedIndex(IEnumerable<KeyValuePair<TKey, TValue>> source)`
 
 :   Copies the supplied entries, sorts them by key, and refuses duplicate keys. Sorting once here is what lets every later lookup be a binary search, and the copy means the caller can keep mutating the collection it passed in without disturbing the index.
+
     - `source` &mdash; Entries to index, in any order. Enumerated exactly once.
 
 **Properties**
@@ -586,11 +601,13 @@ A defensively copied, key-sorted immutable index.
 `public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()`
 
 :   Walks the entries in ascending key order, which is not necessarily the order they were supplied in. Iteration is therefore stable across runs however the source collection was assembled.
+
     - **Returns** &mdash; An enumerator that visits the frozen key-value pairs in ascending key order.
 
 `public bool TryGetValue(TKey key, out TValue value)`
 
 :   Finds the entry with the given key by binary search, so lookup cost grows with the logarithm of `Count` rather than linearly.
+
     - `key` &mdash; Key to match, compared with its own comparer.
     - `value` &mdash; The matching value, or the value type's default when nothing matched.
     - **Returns** &mdash; True when an entry matched the key.

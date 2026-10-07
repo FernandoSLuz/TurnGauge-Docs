@@ -25,6 +25,7 @@ compile or projection diagnostic rather than rejected here.
 `public AspectRatio(int numerator, int denominator)`
 
 :   Copies the width and height terms without reducing or range-checking the fraction. Compilation reports components outside 1..10,000.
+
     - `denominator` &mdash; Height term retained verbatim as the fraction's denominator.
     - `numerator` &mdash; Width term retained verbatim as the fraction's numerator.
 
@@ -43,18 +44,21 @@ compile or projection diagnostic rather than rejected here.
 `public bool Equals(AspectRatio other)`
 
 :   Equal only when both terms match, because the fraction is never reduced.
+
     - `other` &mdash; The value to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override bool Equals(object obj)`
 
 :   Value comparison against a boxed ratio; any other type is never equal.
+
     - `obj` &mdash; The object to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override int GetHashCode()`
 
 :   Combines both terms; consistent with `Equals(AspectRatio)`.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---
@@ -189,6 +193,7 @@ scanning.
 `public bool TryGetSlot(StableId slotId, out CompiledFormationSlot slot)`
 
 :   Looks up one seat by id with a binary search over `Slots`.
+
     - `slotId` &mdash; Id of the seat to find.
     - `slot` &mdash; The matching seat, or null when the preset declares no such slot.
     - **Returns** &mdash; True when a seat with that id exists.
@@ -322,6 +327,7 @@ overlap - by which point the art is in and the formation is hard to change.
 `public static FormationPresetDefinition Build(string stableIdRaw, FormationArrangement arrangement, int slotsPerSide)`
 
 :   Builds a preset for `arrangement` with `slotsPerSide` seats on each side.
+
     - `stableIdRaw` &mdash; Stable id for the produced preset.
     - `slotsPerSide` &mdash; Seats per side, 1 to `MaximumSlotsPerSide`.
     - `arrangement` &mdash; Rank, column, staggered-column, or perspective seat geometry to materialize.
@@ -338,9 +344,9 @@ public enum FormationFacing : byte
 `TurnGauge.Authoring` &middot; <small>Runtime/Authoring/Formation/FormationDefinitions.cs</small>
 
 Which way the occupant of a formation slot is presented as facing. It
-reaches the battle through presentation only: the built-in 2D stage flips
-the combatant token's sprite horizontally for `Left` and
-leaves it unflipped for `Right`. Neither name is zero, so
+reaches the battle through presentation only: the built-in 2D stage
+mirrors the combatant token's sprite only when the slot facing differs
+from its source-art facing (Right by default). Neither name is zero, so
 default(FormationFacing) is not a facing at all and preset compilation
 rejects any slot carrying a value other than these two.
 
@@ -414,6 +420,7 @@ on the same pixels on every platform.
 `public FormationPoint(int x, int y)`
 
 :   Copies authored X/Y coordinates in formation reference units. Range and overlap checks occur during compilation.
+
     - `x` &mdash; Horizontal position, 0 at the design rectangle's left edge.
     - `y` &mdash; Vertical position, 0 at the design rectangle's bottom edge.
 
@@ -432,18 +439,21 @@ on the same pixels on every platform.
 `public bool Equals(FormationPoint other)`
 
 :   Equal only when both components match.
+
     - `other` &mdash; The value to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override bool Equals(object obj)`
 
 :   Value comparison against a boxed point; any other type is never equal.
+
     - `obj` &mdash; The object to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override int GetHashCode()`
 
 :   Combines both components; consistent with `Equals(FormationPoint)`.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---
@@ -480,6 +490,7 @@ engine-independent immutable records; this object is never retained.
 `public static FormationPresetDefinition CreateTransient(string stableIdRaw, int aspectNumerator, int aspectDenominator, IEnumerable<FormationSlotDefinition> formationSlots, int schemaVersion = CurrentSchemaVersion)`
 
 :   Explicit in-memory construction hook for tests and customer tooling. It creates no asset, GUID, or implicit persistent mutation.
+
     - `stableIdRaw` &mdash; Preset ID text, stored verbatim. It is not checked here: empty or invalid ID text becomes a compile diagnostic instead.
     - `aspectNumerator` &mdash; Numerator of the design aspect the slots are authored against.
     - `aspectDenominator` &mdash; Denominator of that design aspect.
@@ -515,6 +526,7 @@ compiling to a default.
 `public FormationSlotDefinition(string slotIdRaw, string rowIdRaw, string sideIdRaw, int normalizedX, int normalizedY, FormationFacing formationFacing, string sortingLayerKeyRaw, int authoredSortingOrder, int normalizedApproachX, int normalizedApproachY, IEnumerable<FormationVfxAnchorDefinition> vfxAnchors)`
 
 :   Creates a seat from authored values. Nothing is validated here: parsing, range and uniqueness checks belong to the deterministic compiler, so a bad value surfaces as a compile diagnostic rather than an exception from this call.
+
     - `slotIdRaw` &mdash; Seat id text. It must be non-empty, valid id text and unique within the preset; a duplicate is a compile error.
     - `rowIdRaw` &mdash; Grouping id for the row this seat sits in. It must be non-empty, valid id text, but it is shared freely: several seats normally carry the same row id.
     - `sideIdRaw` &mdash; Grouping id for the side of the field this seat sits on. It must be non-empty, valid id text, and every seat a team actually occupies has to agree on it, so a team cannot straddle two sides.
@@ -597,6 +609,7 @@ validates every value and snapshots it into an immutable
 `public FormationVfxAnchorDefinition(string anchorIdRaw, int normalizedX, int normalizedY)`
 
 :   Creates an anchor from authored values. Nothing is validated here: parsing and range checks belong to the deterministic compiler, so an out-of-range or unparsable value surfaces as a compile diagnostic rather than an exception from this call.
+
     - `anchorIdRaw` &mdash; Anchor id text. It must be non-empty, valid id text and unique among the anchors of its slot, or preset compilation fails. Null is stored as the empty string.
     - `normalizedX` &mdash; Horizontal position in the preset's normalised design space; see `PositionX`.
     - `normalizedY` &mdash; Vertical position in the same space; see `PositionY`.
@@ -637,6 +650,7 @@ to the preset's design aspect and centres the result inside it.
 `public FormationViewport(int left, int bottom, int width, int height)`
 
 :   Copies the viewport origin and size in integer pixels. Projection reports non-positive dimensions instead of dividing by them.
+
     - `left` &mdash; Left edge in pixels.
     - `bottom` &mdash; Bottom edge in pixels; the rectangle grows upward.
     - `width` &mdash; Width in pixels. Projection fails unless positive.
@@ -665,18 +679,21 @@ to the preset's design aspect and centres the result inside it.
 `public bool Equals(FormationViewport other)`
 
 :   Equal only when all four edges match.
+
     - `other` &mdash; The value to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override bool Equals(object obj)`
 
 :   Value comparison against a boxed viewport; any other type is never equal.
+
     - `obj` &mdash; The object to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override int GetHashCode()`
 
 :   Combines all four edges; consistent with `Equals(FormationViewport)`.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---
@@ -699,6 +716,7 @@ projected screen coordinates cannot be passed for one another by mistake.
 `public ProjectedFormationPoint(int x, int y)`
 
 :   Copies projected X/Y pixel coordinates for a concrete viewport. It carries no transform or scene reference.
+
     - `x` &mdash; Absolute horizontal pixel coordinate in the destination viewport's space.
     - `y` &mdash; Absolute vertical pixel coordinate in the destination viewport's space.
 
@@ -717,18 +735,21 @@ projected screen coordinates cannot be passed for one another by mistake.
 `public bool Equals(ProjectedFormationPoint other)`
 
 :   Equal only when both components match.
+
     - `other` &mdash; The value to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override bool Equals(object obj)`
 
 :   Value comparison against a boxed point; any other type is never equal.
+
     - `obj` &mdash; The object to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override int GetHashCode()`
 
 :   Combines both components; consistent with `Equals(ProjectedFormationPoint)`.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---

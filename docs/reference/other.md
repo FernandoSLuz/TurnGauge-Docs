@@ -44,6 +44,7 @@ Routes the active input module's cancel event without depending on a particular 
 `public void OnCancel(BaseEventData eventData)`
 
 :   View that receives the cancel intent, or null when the relay is inactive.
+
     - `eventData` &mdash; Event data consumed when the owner handles the cancel intent.
 
 ---
@@ -71,6 +72,7 @@ does not retain mutable static scratch state.
 `public static bool TryFindClearBounds(BattleStageBounds stage, IReadOnlyList<BattleStageBounds> obstacles, out BattleStageBounds bounds)`
 
 :   Finds the largest axis-aligned rectangle inside `stage` that does not positively intersect any obstacle. Obstacles outside the stage are ignored; obstacles crossing its edge are clipped. A touching edge has zero intersection and therefore does not reduce the available area. Ties prefer the rectangle whose centre is closest to the original stage centre, then lexicographic (left, bottom, width, height) order, making results independent of obstacle input ordering.
+
     - `stage` &mdash; Valid normalized stage bounds.
     - `obstacles` &mdash; Information bands or other occupied bounds.
     - `bounds` &mdash; Receives the largest clear rectangle.
@@ -201,6 +203,7 @@ remain shared with the source and must be treated as read-only.
 `public BattleProfileCatalog(BattleContentCatalog source, string encounterId, BattleRulesPreset preset)`
 
 :   Creates a partial runtime catalog for one presentation profile. The nodes this class replaces are isolated; referenced definitions that are not replaced remain shared with the source and are read-only for consumers of the returned catalog.
+
     - `source` &mdash; Authored catalog to copy.
     - `encounterId` &mdash; Stable encounter identifier to select.
     - `preset` &mdash; Scheduler behavior to apply.
@@ -252,6 +255,7 @@ the three hashes pin it to one compiled encounter.
 `public BattleRuntimeCheckpoint(StableId encounterId, uint seed, Sha256Digest contentManifestHash, Sha256Digest compiledSnapshotHash, Sha256Digest startRequestHash, byte[] stateBytes)`
 
 :   Creates a restore point, usually from external persisted fields. All identity fields are validated and the state payload is defensively copied.
+
     - `encounterId` &mdash; Exact encounter the state belongs to.
     - `seed` &mdash; Seed originally used to create the battle.
     - `contentManifestHash` &mdash; Compiled content manifest hash.
@@ -286,6 +290,7 @@ the three hashes pin it to one compiled encounter.
 `public byte[] GetStateBytes()`
 
 :   Returns a defensive copy of the canonical state bytes.
+
     - **Returns** &mdash; A new byte array containing the checkpoint's canonical battle state.
 
 ---
@@ -435,27 +440,32 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 `public BattleRuntimeOperationResult AdvanceOneAction()`
 
 :   Advances the battle to the end of exactly one action instead of a budget of ticks, which is what a turn-based or animation-driven host wants: call it once per attack and let the visuals finish before calling it again. It stops at a human decision without inventing a command.
+
     - **Returns** &mdash; The resulting lifecycle state and authoritative snapshot.
 
 `public BattleRuntimeOperationResult AdvanceTicks(int count)`
 
 :   Advances an exact positive integer number of simulation ticks and stops at engine boundaries. Non-positive counts fail without mutation.
+
     - `count` &mdash; Positive number of simulation ticks.
     - **Returns** &mdash; The resulting lifecycle state and authoritative snapshot.
 
 `public BattleRuntimeValueResult<BattleRuntimeCheckpoint> CaptureCheckpoint()`
 
 :   Captures canonical state plus the hashes required for exact restore. The returned checkpoint owns a defensive copy of its byte payload.
+
     - **Returns** &mdash; A checkpoint value, or BattleNotRunning/CheckpointInvalid.
 
 `public BattleRuntimeValueResult<byte[]> CaptureReplay()`
 
 :   Captures canonical replay JSON for the active battle using the same scheduler registry that compiled and runs it.
+
     - **Returns** &mdash; Replay bytes, or BattleNotRunning/ReplayCaptureFailed.
 
 `public void ConfigureBattle(BattleContentCatalog content, string encounter, uint seed)`
 
 :   Configures an explicit catalog without mutating it or starting a battle.
+
     - `content` &mdash; Authored catalog prepared at StartBattle; it is not modified by this controller.
     - `encounter` &mdash; Stable encounter ID in the supplied catalog.
     - `seed` &mdash; Fixed deterministic seed used by subsequent starts.
@@ -463,6 +473,7 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 `public void ConfigurePresentation(BattlePresentationProfile profile)`
 
 :   Chooses a native or custom view before starting. The authored profile is read-only.
+
     - `profile` &mdash; Authored view and presentation configuration, or null to use the legacy host.
 
 `public void CycleSpeed()`
@@ -476,6 +487,7 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 `public BattleRuntimeOperationResult Restore(BattleRuntimeCheckpoint checkpoint)`
 
 :   Restores an exact canonical checkpoint against the current catalog. All catalog and encounter hashes must match before state is decoded; a rejected restore leaves an existing battle unchanged.
+
     - `checkpoint` &mdash; Checkpoint value and canonical state bytes.
     - **Returns** &mdash; The restored state or a typed fail-closed diagnostic.
 
@@ -490,11 +502,13 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 `public BattleRuntimeOperationResult StartBattle()`
 
 :   Starts the serialized encounter with the configured seed policy. Compilation and configuration failures are returned and published; the method does not throw an integration exception or select fallback content.
+
     - **Returns** &mdash; The resulting lifecycle state, snapshot, and typed failure.
 
 `public BattleRuntimeOperationResult StartBattle(string requestedEncounterId, uint seed)`
 
 :   Starts an explicit authored encounter and seed. Invalid, missing, or unknown IDs fail closed and leave an already active battle unchanged.
+
     - `requestedEncounterId` &mdash; Exact authored stable-ID text.
     - `seed` &mdash; Unsigned deterministic battle seed.
     - **Returns** &mdash; The resulting lifecycle state, snapshot, and typed failure.
@@ -502,6 +516,7 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 `public BattleRuntimeOperationResult StartBattle(StableId requestedEncounterId, uint seed)`
 
 :   Starts an explicit authored encounter and seed. Unknown content or a failed compile is reported without replacing an active battle.
+
     - `requestedEncounterId` &mdash; Exact valid authored encounter ID.
     - `seed` &mdash; Unsigned deterministic battle seed.
     - **Returns** &mdash; The resulting lifecycle state, snapshot, and typed failure.
@@ -509,23 +524,27 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 `public BattleRuntimeOperationResult Stop()`
 
 :   Stops and tears down the active battle while returning its last snapshot. Calling Stop without an active battle fails without events.
+
     - **Returns** &mdash; The stopped state and final snapshot, or BattleNotRunning.
 
 `public BattleRuntimeOperationResult Submit(BattleUiCommandChoice choice)`
 
 :   Submits a UI choice after deterministic command translation. A stale actor, unavailable skill, or unsatisfied target contract is rejected without inventing a different command.
+
     - `choice` &mdash; Intent emitted by a battle UI.
     - **Returns** &mdash; The authoritative command result and resulting snapshot.
 
 `public BattleRuntimeOperationResult Submit(BattleCommand command)`
 
 :   Submits an advanced, already-built battle command. Gameplay rejection is returned as `BattleRuntimeFailure.CommandRejected`; fatal invariants move the controller to the failed state.
+
     - `command` &mdash; Exact command for authoritative validation.
     - **Returns** &mdash; The command disposition, resulting state, and snapshot.
 
 `public void UpdateStagePresentation(UnityEngine.Object stagePresentation)`
 
 :   Updates visual recipes, bindings and feel during a battle. Cancels old pending effects and restores their offsets without restarting simulation, replacing its view, or writing to the authored profile.
+
     - `stagePresentation` &mdash; Optional PresentationStagePreset asset; null clears profile effects. Other object types warn and clear them.
 
 ---
@@ -874,6 +893,7 @@ A presentation-only rectangle in normalized screen space, with a bottom-left ori
 `public BattleStageBounds(float left, float bottom, float width, float height)`
 
 :   Creates normalized bottom-left stage bounds.
+
     - `left` &mdash; Normalized left edge.
     - `bottom` &mdash; Normalized bottom edge.
     - `width` &mdash; Normalized width.
@@ -968,11 +988,13 @@ Serializable visual values copied by views before they render.
 `public BattleTheme Clone()`
 
 :   Returns a shallow copy so a view can adjust values without editing the asset.
+
     - **Returns** &mdash; A new theme object sharing the referenced Unity assets.
 
 `public static BattleTheme Create(BattleLayoutIdentity identity)`
 
 :   Builds a new theme with the layout family's background, panel, accent, and foreground defaults.
+
     - `identity` &mdash; Layout family to seed.
     - **Returns** &mdash; A new theme with that family's default colors.
 
@@ -1026,6 +1048,7 @@ authoritative engine validation.
 `public static BattleUiCommandTranslationResult Translate(BattleUiCommandChoice choice, BattleSnapshot snapshot, CompiledAuthoringCatalog catalog)`
 
 :   Translates a presentation choice against the current authoritative snapshot and compiled command shapes. It returns a failed result for null context, a stale actor, an unavailable skill, or an unsatisfied target contract; normal validation failures do not throw.
+
     - `choice` &mdash; Player intent to translate.
     - `snapshot` &mdash; Current authoritative state.
     - `catalog` &mdash; Compiled content used by the battle.
@@ -1065,6 +1088,7 @@ A legal action and the candidate IDs supplied by its actual resolver.
 `public BattleViewAction(StableId id, string label, string description, int minimumTargets, int maximumTargets, bool automaticTargets, FrozenList<StableId> candidates = null)`
 
 :   Creates an action projection; candidates are caller supplied view data and are not validated here.
+
     - `id` &mdash; Stable action identity.
     - `label` &mdash; Display label.
     - `description` &mdash; Display description.
@@ -1148,11 +1172,13 @@ Unity lifecycle shell. Native adapters share selection and command semantics.
 `public virtual void ApplyTheme(BattleTheme theme)`
 
 :   Copies a theme and refreshes the rendered view.
+
     - `theme` &mdash; Theme to copy, or null for defaults.
 
 `public virtual bool BlocksStagePointer(float screenX, float screenY)`
 
 :   Checks whether this view consumes a stage pointer at the supplied screen coordinate.
+
     - `screenX` &mdash; Screen-space horizontal coordinate.
     - `screenY` &mdash; Screen-space vertical coordinate.
     - **Returns** &mdash; Always false in the base view; a concrete view overrides this when its UI blocks the stage.
@@ -1160,26 +1186,31 @@ Unity lifecycle shell. Native adapters share selection and command semantics.
 `public abstract void BuildDefaultLayout(BattleLayoutIdentity identity)`
 
 :   Builds the view's default layout for a layout family.
+
     - `identity` &mdash; Layout family to author.
 
 `public virtual void Configure(BattlePresentationProfile profile)`
 
 :   Retains the supplied profile reference and applies a cloned theme. Null profile or theme inputs use defaults; authored theme values and simulation state are not changed.
+
     - `profile` &mdash; Profile to apply, or null to use default theme values.
 
 `public void ConfigureStageBounds(BattleStageBounds? bounds)`
 
 :   Configures a view's stage reservation without changing combat state. Null retains host framing.
+
     - `bounds` &mdash; Normalized bottom-left rectangle to reserve, or null to release the reservation.
 
 `public void HandleIntent(BattleViewIntent intent)`
 
 :   Dispatches a user intent through the view session.
+
     - `intent` &mdash; Input intent to process.
 
 `public virtual bool OwnsPointerSurface(object surface)`
 
 :   Checks whether this view handles the supplied external pointer surface.
+
     - `surface` &mdash; Host surface object to inspect.
     - **Returns** &mdash; Always false in the base view; a concrete technology adapter overrides this when it owns the surface.
 
@@ -1190,17 +1221,20 @@ Unity lifecycle shell. Native adapters share selection and command semantics.
 `public void Render(BattleViewState state)`
 
 :   Renders a state snapshot without changing simulation state.
+
     - `state` &mdash; Latest presentation snapshot.
 
 `public bool TryGetStageBounds(out BattleStageBounds bounds)`
 
 :   Returns the authored stage reservation when enabled.
+
     - `bounds` &mdash; Receives the normalized bottom-left stage rectangle.
     - **Returns** &mdash; True when this view reserves a valid stage rectangle.
 
 `public abstract string[] ValidateBindings()`
 
 :   Reports missing or invalid bindings needed by this view.
+
     - **Returns** &mdash; Human-readable validation messages; an empty array means valid.
 
 ---
@@ -1220,6 +1254,7 @@ Immutable, renderer-independent information shown for one combatant.
 `public BattleViewCombatant(StableId id, string name, string team, int health, int maximumHealth, int shield = 0, string resources = "", string statuses = "", StableId teamId = default, int statusCount = 0)`
 
 :   Creates a read-only combatant projection; null display strings become empty.
+
     - `id` &mdash; Stable combatant identity.
     - `name` &mdash; Display name.
     - `team` &mdash; Display team label.
@@ -1290,6 +1325,7 @@ Immutable command choice forwarded for authoritative validation.
 `public BattleViewCommand(StableId actorId, StableId? skillId, bool isConcede, FrozenList<StableId> targets = null)`
 
 :   Packages actor, skill, concession, and requested targets for host validation; it performs no command legality checks.
+
     - `actorId` &mdash; Actor whose decision is represented.
     - `skillId` &mdash; Selected skill, or null for concession.
     - `isConcede` &mdash; Whether this is a concession request.
@@ -1330,6 +1366,7 @@ A UI gesture; the host still validates the resulting command.
 `public BattleViewIntent(BattleViewIntentKind kind, StableId id = default)`
 
 :   Creates an intent with an optional action or target ID.
+
     - `kind` &mdash; Interaction requested by the view.
     - `id` &mdash; Action or target identity, when applicable.
 
@@ -1380,6 +1417,7 @@ The single snapshot-to-UI projection for every native or customer renderer.
 `public static BattleViewState Create(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog, DisplayStringTable labels = null, IEnumerable<string> feedback = null, StableId? rosterTeamId = null)`
 
 :   Projects a battle snapshot and compiled content into read-only HUD rows, available actions, target candidates, timeline labels and a terminal result. Does not submit commands or advance the simulation.
+
     - `snapshot` &mdash; Authoritative snapshot to present. Null returns the empty view state.
     - `catalog` &mdash; Compiled content used for decision shapes, costs and target candidates. Null returns the empty view state.
     - `labels` &mdash; Optional display-name table; missing names fall back to stable identities.
@@ -1404,6 +1442,7 @@ Pure grouping helpers for immutable presentation rosters.
 `public static FrozenList<FrozenList<BattleViewCombatant>> BuildPages(FrozenList<BattleViewCombatant> combatants, int capacity)`
 
 :   Builds pages containing one team each; teams follow first occurrence and members keep input order.
+
     - `combatants` &mdash; Source projections; a null source or null entries produces no members.
     - `capacity` &mdash; Positive maximum members per page.
     - **Returns** &mdash; Frozen pages of combatant projections.
@@ -1411,6 +1450,7 @@ Pure grouping helpers for immutable presentation rosters.
 `public static int FindActorPage(FrozenList<FrozenList<BattleViewCombatant>> pages, StableId? actorId)`
 
 :   Finds the page containing an actor by exact stable ID, or returns the first page.
+
     - `pages` &mdash; Roster pages produced by `BuildPages`.
     - `actorId` &mdash; Current decision actor, when one is available.
     - **Returns** &mdash; The zero-based page containing the actor, or zero when no exact match exists.
@@ -1418,6 +1458,7 @@ Pure grouping helpers for immutable presentation rosters.
 `public static FrozenList<BattleViewCombatant> ForTeam(BattleViewState state, StableId teamId)`
 
 :   Returns every member with the exact team ID, including defeated members.
+
     - `state` &mdash; State supplying the roster; null produces an empty result.
     - `teamId` &mdash; Valid stable team identity.
     - **Returns** &mdash; Matching members in source order.
@@ -1481,16 +1522,19 @@ Shared interaction state survives visual tree reconstruction. Never owns an engi
 `public void Dispatch(BattleViewIntent intent)`
 
 :   Processes an intent locally and forwards only a choice; the host remains authoritative.
+
     - `intent` &mdash; Interaction to apply to the current selection.
 
 `public void Reject(string error)`
 
 :   Clears the pending submission and records a host rejection.
+
     - `error` &mdash; Host-provided rejection text; null becomes empty.
 
 `public void UpdateState(BattleViewState state)`
 
 :   Replaces host state and prunes selections no longer available.
+
     - `state` &mdash; New host snapshot; null selects `BattleViewState.Empty`.
 
 ---
@@ -1510,6 +1554,7 @@ A complete read-only view; contains no scene objects or authority to change comb
 `public BattleViewState(string decisionKey, string heading, StableId? actorId, bool canConcede, FrozenList<BattleViewCombatant> combatants = null, FrozenList<BattleViewAction> actions = null, FrozenList<string> timeline = null, FrozenList<string> feedback = null, string resultText = "", StableId? rosterTeamId = null)`
 
 :   Creates an immutable renderer-independent decision snapshot.
+
     - `decisionKey` &mdash; Host decision identity.
     - `heading` &mdash; Display heading.
     - `actorId` &mdash; Deciding actor, when any.
@@ -1702,6 +1747,7 @@ documentation capture both call.
 `public static bool ConfigureSampleGround(CombatantTokenView token)`
 
 :   Authors a stable foot anchor for the six shipped idle grids without cropping their art. Their full cells include transparent padding below the feet; renderer bounds alone would place shadows and targeting there. Custom art is left untouched and can author its own ground anchor.
+
     - `token` &mdash; Sample token whose root renderer wears a sliced idle frame.
     - **Returns** &mdash; True when a known sample frame supplied a configured foot anchor.
 
@@ -1776,6 +1822,7 @@ are reported by `BattleForecast.Run` as
 `public ForecastRequest(int maximumTickDelta, int maximumActions, int maximumEvents)`
 
 :   Creates a forecast bound. All three caps are checked at `BattleForecast.Run` time, not here.
+
     - `maximumTickDelta` &mdash; Ticks to look ahead of the source engine's current tick, not an absolute tick. Valid range is 0 to `SimulationLimits.ForecastTickDelta`.
     - `maximumActions` &mdash; The most action-terminal events the forecast may pass through. Valid range is 1 to `SimulationLimits.ForecastActions`.
     - `maximumEvents` &mdash; The most events the forecast may collect. Valid range is 1 to `SimulationLimits.ForecastEvents`.
@@ -1909,6 +1956,7 @@ of the stage and its other information bands.
 `public bool TryGetFeedbackBounds(out BattleStageBounds bounds)`
 
 :   Returns the normalized rectangle reserved for feedback.
+
     - `bounds` &mdash; Receives the reserved rectangle when available.
     - **Returns** &mdash; True when a valid reservation is available.
 
@@ -1929,6 +1977,7 @@ Optional screen-space hit-test owned by a view.
 `public bool BlocksStagePointer(float screenX, float screenY)`
 
 :   Returns whether the view blocks a stage pointer at the coordinates.
+
     - `screenX` &mdash; Screen-space horizontal coordinate.
     - `screenY` &mdash; Screen-space vertical coordinate.
     - **Returns** &mdash; True when the view owns an opaque hit area at those coordinates.
@@ -1936,6 +1985,7 @@ Optional screen-space hit-test owned by a view.
 `public bool OwnsPointerSurface(object surface)`
 
 :   Returns whether the supplied surface belongs to this view.
+
     - `surface` &mdash; Renderer-specific input-surface identity.
     - **Returns** &mdash; True when the surface belongs to this view.
 
@@ -1974,6 +2024,7 @@ Optional authored stage reservation. Custom views may retain the host's framing.
 `public bool TryGetStageBounds(out BattleStageBounds bounds)`
 
 :   Provides a presentation-only normalized stage reservation that the host may use for camera framing without changing combat.
+
     - `bounds` &mdash; Receives the reservation when available.
     - **Returns** &mdash; True when authored bounds are available.
 
@@ -2000,11 +2051,13 @@ Renderer-neutral contract for rendering state and forwarding intents.
 `public void HandleIntent(BattleViewIntent intent)`
 
 :   Handles a user intent.
+
     - `intent` &mdash; Interaction to process.
 
 `public void Render(BattleViewState state)`
 
 :   Replaces the rendered state.
+
     - `state` &mdash; Immutable state to render.
 
 ---
@@ -2148,6 +2201,7 @@ RNG is drawn, so consulting it can never change a battle.
 `public static FrozenList<StableId> GetCandidates(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog, StableId actorId, StableId skillId)`
 
 :   Lists every combatant the skill's resolver currently considers a legal pick for `actorId`.
+
     - `snapshot` &mdash; Current authoritative state; read, never advanced.
     - `catalog` &mdash; Compiled content and the registry the resolver is looked up in.
     - `actorId` &mdash; The combatant that would use the skill.
@@ -2157,6 +2211,7 @@ RNG is drawn, so consulting it can never change a battle.
 `public static bool ValidateRequest(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog, StableId actorId, StableId skillId, IReadOnlyList<StableId> requested, out string message)`
 
 :   Puts a proposed pick through the same resolver check the engine runs before it accepts a command.
+
     - `snapshot` &mdash; Current authoritative state; read, never advanced.
     - `catalog` &mdash; Compiled content and the registry the resolver is looked up in.
     - `actorId` &mdash; The combatant that would use the skill.
@@ -2202,6 +2257,7 @@ already agrees with the engine. Eight looks, one data source.
 `public static TargetingPreset Adapt(TargetingPreset authored, bool adapt, int candidatesPerSide, bool portrait, bool touch)`
 
 :   The preset a pick should actually be expressed with, given the device and the stage in front of the player. A preset that adapts is worth more than four a buyer has to configure, so the shipped default starts at `TargetingPreset.Reticle` and moves when the situation makes it the wrong tool. A project that wants its authored choice honoured verbatim turns adaptation off.
+
     - `authored` &mdash; The preset the skin asks for.
     - `adapt` &mdash; False returns `authored` untouched.
     - `candidatesPerSide` &mdash; The largest candidate count on either side.
@@ -2212,6 +2268,7 @@ already agrees with the engine. Eight looks, one data source.
 `public static TargetTreatment ClassifyTreatment(StableId resolverId, TargetLifeState allowedLifeState)`
 
 :   The treatment `resolverId` should be previewed in.
+
     - `allowedLifeState` &mdash; The life state the resolver accepts. Dead outranks the shape: revive is the one skill that wants a corpse legible, and showing it as an ordinary ally pick is what makes players think it is broken.
     - `resolverId` &mdash; The shipped resolver key, such as `target.one-enemy.v1`.
     - **Returns** &mdash; The matching treatment, or `TargetTreatment.SinglePick` for a resolver this version does not know. A custom resolver therefore gets the reticle rather than nothing, which is wrong in a way a player can see and recover from rather than wrong in a way that looks like a missing feature.
@@ -2219,6 +2276,7 @@ already agrees with the engine. Eight looks, one data source.
 `public static TargetTreatment Degrade(TargetTreatment treatment, int candidateCount)`
 
 :   Degrades a treatment for the party size and stage shape in front of it. Three thresholds decide everything: one candidate, more than `PerHeadMarkCeiling`, and a portrait stage. No per-encounter targeting art, and nothing to re-author when a project changes its party size.
+
     - `treatment` &mdash; The treatment the resolver classified to.
     - `candidateCount` &mdash; How many combatants the query returned.
     - **Returns** &mdash; The treatment to draw. A region shape with one candidate collapses to the single-pick look; everything else is returned as classified.
@@ -2226,12 +2284,14 @@ already agrees with the engine. Eight looks, one data source.
 `public static bool TakesAPlayerPick(TargetTreatment treatment)`
 
 :   Whether this treatment asks the player to choose, rather than showing them what the resolver has already decided.
+
     - `treatment` &mdash; The treatment to classify.
     - **Returns** &mdash; True for the three shapes that take a pick. The other five resolve themselves, which is exactly why they still have to be previewed: nothing else will tell the player what is about to be hit.
 
 `public static bool UsesPerHeadMarks(int resolvedCount, bool portrait)`
 
 :   Whether each resolved target gets its own mark, or the region carries a count instead.
+
     - `resolvedCount` &mdash; How many combatants the shape resolves to.
     - `portrait` &mdash; Whether the stage is taller than it is wide.
     - **Returns** &mdash; False past `PerHeadMarkCeiling`, and false in portrait, where rows run horizontally and a band reads where per-head ticks do not.
@@ -2331,11 +2391,13 @@ A replaceable UXML surface. All decision state lives outside the visual tree.
 `public override void ApplyTheme(BattleTheme theme)`
 
 :   Applies the shared theme to the bound UI Toolkit surface.
+
     - `theme` &mdash; Theme values to apply.
 
 `public override bool BlocksStagePointer(float screenX, float screenY)`
 
 :   Tests whether a screen point belongs to an interactive battle surface.
+
     - `screenX` &mdash; Screen-space horizontal coordinate.
     - `screenY` &mdash; Screen-space vertical coordinate.
     - **Returns** &mdash; True when the picked element is an interactive battle control.
@@ -2343,16 +2405,19 @@ A replaceable UXML surface. All decision state lives outside the visual tree.
 `public override void BuildDefaultLayout(BattleLayoutIdentity identity)`
 
 :   Replaces the current UXML tree with an immediately generated default layout. Existing document elements are cleared; when the UIDocument has no root, the method only clears the asset assignment and returns.
+
     - `identity` &mdash; Layout identity requested by the presentation profile.
 
 `public override void Configure(BattlePresentationProfile profile)`
 
 :   Loads the profile's VisualTreeAsset and forwards the profile settings to the base view.
+
     - `profile` &mdash; Profile whose layout and theme should be used.
 
 `public override bool OwnsPointerSurface(object surface)`
 
 :   Reports whether the last pointer hit belonged to this view's panel.
+
     - `surface` &mdash; Panel object previously used for the pointer hit.
     - **Returns** &mdash; True only when the last hit was owned by this view and the supplied panel matches.
 
@@ -2367,18 +2432,21 @@ A replaceable UXML surface. All decision state lives outside the visual tree.
 `public void SetVisualHost(VisualElement host, Action<BattleViewIntent> dispatchIntent = null)`
 
 :   Hosts this view in a dedicated public visual container, or returns to its UIDocument when null. The host owns panel attachment and dimensions; this view owns its children and bindings.
+
     - `host` &mdash; Dedicated container for the authored layout.
     - `dispatchIntent` &mdash; Optional host routing for visual input, such as preview decision guards.
 
 `public bool TryGetFeedbackBounds(out BattleStageBounds bounds)`
 
 :   Finds a clear feedback rectangle using the currently attached visual tree, including the complete timeline header.
+
     - `bounds` &mdash; Receives the largest normalized area inside the authored stage reservation that avoids visible HUD panels.
     - **Returns** &mdash; True when layout is ready and a clear area exists. False means feedback must wait or stay hidden.
 
 `public override string[] ValidateBindings()`
 
 :   Validates required UXML names and button types without changing battle state.
+
     - **Returns** &mdash; Diagnostic messages; an empty array means the required bindings are valid.
 
 ---
@@ -2529,6 +2597,7 @@ Prefab-authored uGUI surface. Named slots may appear anywhere in the authored tr
 `public override bool BlocksStagePointer(float screenX, float screenY)`
 
 :   Tests whether a screen point falls within a visible raycastable battle slot.
+
     - `screenX` &mdash; Screen-space horizontal coordinate.
     - `screenY` &mdash; Screen-space vertical coordinate.
     - **Returns** &mdash; True when a visible slot contains the supplied screen point.
@@ -2536,6 +2605,7 @@ Prefab-authored uGUI surface. Named slots may appear anywhere in the authored tr
 `public override void BuildDefaultLayout(BattleLayoutIdentity identity)`
 
 :   Generates the built-in responsive uGUI layout under the selected root.
+
     - `identity` &mdash; Layout identity used to choose the default arrangement.
 
 `public void Rebind()`
@@ -2545,12 +2615,14 @@ Prefab-authored uGUI surface. Named slots may appear anywhere in the authored tr
 `public bool TryGetFeedbackBounds(out BattleStageBounds bounds)`
 
 :   Finds a clear feedback rectangle from the current HUD geometry, without moving the formation or camera.
+
     - `bounds` &mdash; Receives the largest normalized area inside the authored stage reservation that avoids visible HUD panels.
     - **Returns** &mdash; True when layout is ready and a clear area exists. False means feedback must wait or stay hidden.
 
 `public override string[] ValidateBindings()`
 
 :   Checks required named slots and reports missing, duplicate or incompatible controls.
+
     - **Returns** &mdash; Diagnostic messages; an empty array means the authored hierarchy is valid.
 
 ---

@@ -22,6 +22,7 @@ catalog; any error in the returned report aborts compilation.
 `public AiValidationContext(CompiledBattleContent content)`
 
 :   Binds the context to the catalog being compiled.
+
     - `content` &mdash; Non-null compiled catalog used to validate skill, status, and other IDs named by AI policy properties.
 
 **Properties**
@@ -48,6 +49,7 @@ replay, Workbench, tooltips, and range previews.
 `public static FormulaContext BuildContext(CompiledBattleContent content, BattleSnapshot snapshot, FormulaEvaluationRequest request)`
 
 :   Freezes every input the requested primitive's formula is allowed to read: source stat, potency, target defense, hit and critical chances, variance and clamp bounds, and the status modifiers that apply, in canonical order. Building a context reads state but never draws, so the same context can be evaluated or previewed.
+
     - `content` &mdash; Compiled catalog the request's IDs and the battle rules are read from. It must be a profile 3 catalog.
     - `snapshot` &mdash; State the combatants, stats, and statuses are read from. It must be a profile 3 snapshot, and it is not modified.
     - `request` &mdash; Coordinates of the primitive to build inputs for.
@@ -56,6 +58,7 @@ replay, Workbench, tooltips, and range previews.
 `public static FormulaResult Evaluate(BattleMechanicsRegistry registry, FormulaEvaluationRequest request, FormulaContext context, IMechanicsRandomSource random)`
 
 :   Runs the request's formula and returns the authoritative result. This is the only call here that consumes RNG, and it is the same call the reducer makes, so given the same context and the same draw cursor it produces the same number every time.
+
     - `registry` &mdash; Registry the primitive's formula ID and contract version are resolved through.
     - `context` &mdash; Frozen inputs, normally from `BuildContext`. Its source, target, effect entry, and primitive index must match the request or the call throws.
     - `random` &mdash; Draw cursor the formula consumes, in the order `DescribeRandomInputs` declared.
@@ -65,6 +68,7 @@ replay, Workbench, tooltips, and range previews.
 `public static FormulaPreview Preview(CompiledBattleContent content, BattleSnapshot snapshot, BattleMechanicsRegistry registry, FormulaEvaluationRequest request)`
 
 :   Reports the range the same inputs could produce, without drawing and without changing anything. This is the surface tooltips and range previews should call: it can be asked at any time, as often as wanted, and cannot advance the battle or disturb its RNG.
+
     - `content` &mdash; Compiled catalog the request's IDs are read from. It must be a profile 3 catalog.
     - `snapshot` &mdash; State the preview is computed against. It is not modified.
     - `registry` &mdash; Registry the primitive's formula ID and contract version are resolved through.
@@ -74,6 +78,7 @@ replay, Workbench, tooltips, and range previews.
 `public static StatusApplicationPreview PreviewStatusApplication(CompiledBattleContent content, BattleSnapshot snapshot, StableId targetId, StableId statusId, Chance64 baseChance)`
 
 :   Resolves the odds of one status landing on one target: the authored base chance reduced by the target's matching resistances, or refused outright when the target is immune. No RNG is consumed. The live reducer decides status application with this same call, so a tooltip built from it shows the chance the engine will actually roll against.
+
     - `content` &mdash; Compiled catalog the status and the target's definition are read from.
     - `snapshot` &mdash; State the target is looked up in. It is not modified.
     - `targetId` &mdash; Combatant the status would be applied to.
@@ -127,41 +132,48 @@ diagnostic rather than quietly running against a substitute.
 `public static BattleMechanicsRegistry CreateWithBuiltIns()`
 
 :   Builds a registry holding every implementation TurnGauge ships: the standard damage, healing, and scalar formulas, the built-in effect and target resolvers, the priority, conditional, and weighted AI policies, and the effect-tag reaction rule. This is the usual starting point - keep registering onto the result to add your own.
+
     - **Returns** &mdash; A new registry containing only the built-in entries.
 
 `public BattleMechanicsRegistry Register(IFormula implementation)`
 
 :   Files a formula under its FormulaId and FormulaContractVersion.
+
     - `implementation` &mdash; Its FormulaId and FormulaContractVersion must equal its ImplementationId and ContractVersion, or registration throws.
     - **Returns** &mdash; A new registry containing the entry; this instance is unchanged.
 
 `public BattleMechanicsRegistry Register(IEffectResolver implementation)`
 
 :   Files an effect resolver under its ResolverId and EffectContractVersion.
+
     - `implementation` &mdash; Its ResolverId and EffectContractVersion must equal its ImplementationId and ContractVersion, or registration throws.
     - **Returns** &mdash; A new registry containing the entry; this instance is unchanged.
 
 `public BattleMechanicsRegistry Register(ITargetResolver implementation)`
 
 :   Files a target resolver under its ResolverId and TargetContractVersion.
+
     - `implementation` &mdash; Its ResolverId and TargetContractVersion must equal its ImplementationId and ContractVersion, or registration throws.
     - **Returns** &mdash; A new registry containing the entry; this instance is unchanged.
 
 `public BattleMechanicsRegistry Register(IAiPolicy implementation)`
 
 :   Files an AI policy under its PolicyId and AiContractVersion.
+
     - `implementation` &mdash; Its PolicyId and AiContractVersion must equal its ImplementationId and ContractVersion, or registration throws.
     - **Returns** &mdash; A new registry containing the entry; this instance is unchanged.
 
 `public BattleMechanicsRegistry Register(IReactionRule implementation)`
 
 :   Files a reaction rule under its ImplementationId. IReactionRule has no separate ID alias, so only the version aliases are cross-checked.
+
     - `implementation` &mdash; Its ReactionContractVersion must equal its ContractVersion, or registration throws.
     - **Returns** &mdash; A new registry containing the entry; this instance is unchanged.
 
 `public MechanicsResolveResult<IAiPolicy> ResolveAi(StableId id, int version)`
 
 :   Looks up a registered AI policy. A failed lookup is reported in the result rather than thrown.
+
     - `version` &mdash; Contract version, matched exactly; there is no latest-version fallback, and a version below one is rejected outright.
     - `id` &mdash; Exact AI policy implementation key recorded by the compiled automatic-decision policy.
     - **Returns** &mdash; The policy, or a failed result carrying the diagnostic. Never null.
@@ -169,6 +181,7 @@ diagnostic rather than quietly running against a substitute.
 `public MechanicsResolveResult<IEffectResolver> ResolveEffect(StableId id, int version)`
 
 :   Looks up a registered effect resolver. A failed lookup is reported in the result rather than thrown.
+
     - `version` &mdash; Contract version, matched exactly; there is no latest-version fallback, and a version below one is rejected outright.
     - `id` &mdash; Exact effect-resolver key recorded on the compiled effect entry.
     - **Returns** &mdash; The resolver, or a failed result carrying the diagnostic. Never null.
@@ -176,6 +189,7 @@ diagnostic rather than quietly running against a substitute.
 `public MechanicsResolveResult<IFormula> ResolveFormula(StableId id, int version)`
 
 :   Looks up a registered formula. A failed lookup is reported in the result rather than thrown.
+
     - `version` &mdash; Contract version, matched exactly; there is no latest-version fallback, and a version below one is rejected outright.
     - `id` &mdash; Exact formula implementation key; invalid, missing, wrong-category, and wrong-version cases return distinct diagnostics.
     - **Returns** &mdash; The formula, or a failed result whose diagnostic distinguishes an unknown ID, an ID registered under another category, and an ID registered only at other versions. Never null.
@@ -183,6 +197,7 @@ diagnostic rather than quietly running against a substitute.
 `public MechanicsResolveResult<IReactionRule> ResolveReaction(StableId id, int version)`
 
 :   Looks up a registered reaction rule. A failed lookup is reported in the result rather than thrown.
+
     - `version` &mdash; Contract version, matched exactly; there is no latest-version fallback, and a version below one is rejected outright.
     - `id` &mdash; Exact reaction-rule implementation key recorded by the compiled reaction definition.
     - **Returns** &mdash; The rule, or a failed result carrying the diagnostic. Never null.
@@ -190,6 +205,7 @@ diagnostic rather than quietly running against a substitute.
 `public MechanicsResolveResult<ITargetResolver> ResolveTarget(StableId id, int version)`
 
 :   Looks up a registered target resolver. A failed lookup is reported in the result rather than thrown.
+
     - `version` &mdash; Contract version, matched exactly; there is no latest-version fallback, and a version below one is rejected outright.
     - `id` &mdash; Exact target-resolver key recorded on the compiled skill target contract.
     - **Returns** &mdash; The resolver, or a failed result carrying the diagnostic. Never null.
@@ -266,12 +282,14 @@ The authoritative snapshot deliberately is not reachable from this type.
 `public CombatantState FindCombatant(StableId id)`
 
 :   Looks up a combatant by identifier, living or dead. This is a linear scan over `Combatants`, so hoist the result rather than repeating the call inside a loop.
+
     - `id` &mdash; Identifier of the combatant to find.
     - **Returns** &mdash; The combatant, or `null` when none carries that identifier.
 
 `public ResourceState FindResource(StableId ownerId, StableId resourceId)`
 
 :   Looks up one combatant's pool for one resource. Pools are never shared between combatants, so the pair matches at most one entry.
+
     - `ownerId` &mdash; The combatant that owns the pool.
     - `resourceId` &mdash; The resource the pool holds.
     - **Returns** &mdash; The pool, or `null` when that combatant has no pool for that resource.
@@ -279,6 +297,7 @@ The authoritative snapshot deliberately is not reachable from this type.
 `public TeamState FindTeam(StableId id)`
 
 :   Looks up a team by identifier.
+
     - `id` &mdash; Identifier of the team to find.
     - **Returns** &mdash; The team, or `null` when neither team carries that identifier.
 
@@ -304,6 +323,7 @@ from is restored.
 `public EffectPlan(IEnumerable<EffectPrimitive> primitives, IEnumerable<Diagnostic> diagnostics)`
 
 :   Builds a plan from a resolver's primitives and diagnostics. Both arguments are required; pass an empty diagnostic list for a plan the engine should execute.
+
     - `primitives` &mdash; Primitives in execution order, none of them null, at most the per-effect planning limit.
     - `diagnostics` &mdash; Reasons the plan cannot be executed, or empty.
 
@@ -342,6 +362,7 @@ these inputs.
 `public EffectPlanningContext(CompiledBattleContent content, BattleSnapshot snapshot, StableId sourceId, StableId targetId, StableId effectEntryId)`
 
 :   Binds the context to one source, target, and effect entry. Every argument is required and all three IDs must be valid.
+
     - `content` &mdash; Compiled catalog the resolver may read while planning.
     - `snapshot` &mdash; Authoritative state to project into the read-only view the resolver sees; the snapshot itself is not exposed.
     - `sourceId` &mdash; Combatant performing the action.
@@ -450,6 +471,7 @@ still decides how much of it lands.
 `public static EffectPrimitive AdjustScheduler(SchedulerAdjustmentKind kind, long delta)`
 
 :   Creates a scheduler-adjustment primitive. The battle's scheduler must expose an adjustment adapter that supports this kind, or the step fails; the adapter clamps the delta and reports what it applied.
+
     - `kind` &mdash; Which timing value to move; it must be a defined kind.
     - `delta` &mdash; Signed amount to move it by, in ticks or gauge units according to the kind.
     - **Returns** &mdash; A validated scheduler-adjustment primitive retaining the requested kind and signed ticks-or-gauge delta.
@@ -457,6 +479,7 @@ still decides how much of it lands.
 `public static EffectPrimitive ApplyShield(StableId shieldId, Fixed64 amount, int priority, StableId? linkedStatusDefinitionId = null)`
 
 :   Updates apply shield on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
+
     - `shieldId` &mdash; Identity of the shield to create; it must be valid.
     - `amount` &mdash; Strength of the shield; the engine clamps it to at least one point.
     - `priority` &mdash; Absorption order among the target's shields; the lowest absorbs first.
@@ -466,6 +489,7 @@ still decides how much of it lands.
 `public static EffectPrimitive ApplyStatus(StableId statusDefinitionId, Chance64 baseChance)`
 
 :   Creates a status-application primitive. The engine narrows the chance by the target's resistances, skips the roll entirely when the target is immune, and draws RNG only when the narrowed chance is neither impossible nor guaranteed.
+
     - `statusDefinitionId` &mdash; Status definition to apply; it must be valid and present in the compiled catalog.
     - `baseChance` &mdash; Chance before the target's resistances and immunities are taken into account.
     - **Returns** &mdash; A validated status-application primitive carrying the definition ID and pre-resistance probability.
@@ -473,6 +497,7 @@ still decides how much of it lands.
 `public static EffectPrimitive ChangeResource(StableId resourceId, long delta)`
 
 :   Creates a resource-change primitive. The engine clamps the delta to the resource's range, so the change that actually lands can be smaller than the one asked for.
+
     - `resourceId` &mdash; Resource on the target to change; it must be valid and the target must own it.
     - `delta` &mdash; Signed amount to add, in resource points.
     - **Returns** &mdash; A validated resource-change primitive carrying the resource ID and unclamped signed point delta.
@@ -480,6 +505,7 @@ still decides how much of it lands.
 `public static EffectPrimitive Damage(MechanicsImplementationReference formula, PropertySet formulaProperties, bool bypassShield = false, bool bypassDefense = false, bool bypassIncomingModifiers = false)`
 
 :   Creates a damage primitive: the engine evaluates the formula and applies its result to the target, through the target's shields unless they are bypassed.
+
     - `formula` &mdash; Formula ID and contract version; both are required and must resolve at execution time.
     - `formulaProperties` &mdash; Authored configuration for that formula; null is treated as empty.
     - `bypassShield` &mdash; Applies the result straight to health, leaving the target's shields untouched.
@@ -490,6 +516,7 @@ still decides how much of it lands.
 `public static EffectPrimitive Dispel(StatusPolarity polarity, IEnumerable<StableId> tags, int maximumCount)`
 
 :   Creates a dispel primitive that removes dispellable statuses from the target, oldest application first. Only statuses whose definition is marked dispellable are candidates, so a dispel can legitimately remove nothing.
+
     - `polarity` &mdash; Polarity a status must match to qualify: Neutral, Buff, or Debuff.
     - `tags` &mdash; Tag filter - a status qualifies when it shares at least one of these tags; null or empty means no tag filter. The list is sorted and deduplicated.
     - `maximumCount` &mdash; Most statuses this primitive may remove; it must be at least one and no more than the per-combatant status limit.
@@ -498,6 +525,7 @@ still decides how much of it lands.
 `public static EffectPrimitive Heal(MechanicsImplementationReference formula, PropertySet formulaProperties)`
 
 :   Creates a healing primitive. The engine clamps the formula's result to the target's missing health, and a dead target is healed for nothing.
+
     - `formula` &mdash; Formula ID and contract version; both are required and must resolve at execution time.
     - `formulaProperties` &mdash; Authored configuration for that formula; null is treated as empty.
     - **Returns** &mdash; A validated healing primitive carrying the exact formula reference and a non-null property set.
@@ -505,12 +533,14 @@ still decides how much of it lands.
 `public static EffectPrimitive InterruptCast(StableId reasonId)`
 
 :   Creates a primitive that cancels the target's in-progress cast. A target with no cast in progress - including one whose cast completed at this same tick boundary - is a deterministic no-op; a cast that is not interruptible fails the step.
+
     - `reasonId` &mdash; Reason recorded on the interrupt; it must be valid.
     - **Returns** &mdash; A validated cast-interruption primitive carrying the stable reason ID reported by the engine.
 
 `public static EffectPrimitive RemoveStatus(StableId statusDefinitionId)`
 
 :   Creates a primitive that removes one instance of the named status from the target, dispellable or not, and does nothing when the target does not carry it.
+
     - `statusDefinitionId` &mdash; Status definition to remove; it must be valid.
     - **Returns** &mdash; A validated single-status removal primitive that ignores authored dispellable restrictions at execution time.
 
@@ -560,6 +590,7 @@ compilation.
 `public EffectValidationContext(CompiledBattleContent content)`
 
 :   Binds the context to the catalog being compiled.
+
     - `content` &mdash; Non-null compiled catalog used to validate effect properties and every definition they reference.
 
 **Properties**
@@ -590,6 +621,7 @@ the arithmetic it stands for.
 `public FormulaAttribution(MechanicsImplementationReference formula, StableId sourceId, StableId targetId, StableId effectEntryId, int primitiveIndex, PropertySet inputs, IEnumerable<FormulaContribution> contributions, IEnumerable<FormulaRandomSample> randomSamples, Fixed64 unclampedResult, Fixed64 roundedResult, Fixed64 clampContribution, Fixed64 finalResult)`
 
 :   Records one evaluation. Throws when the source, target or effect-entry identifier is invalid, when the primitive index is out of range, or when a collection exceeds its structural limit.
+
     - `formula` &mdash; Identity and contract version of the formula implementation that performed the evaluation.
     - `primitiveIndex` &mdash; Position of the resolved primitive within its effect entry's planned primitives.
     - `inputs` &mdash; The named input values the formula read, such as base stat, potency, defense, chances and the endpoint bounds.
@@ -672,6 +704,7 @@ excluded from authoritative battle state and its canonical hash.
 `public FormulaAttributionTrace(long tick, StableId eventTypeId, ulong rootActionSequence, StableId effectEntryId, int primitiveIndex, Sha256Digest attributionHash, FormulaAttribution attribution)`
 
 :   Pairs an attribution with the coordinates of the event that references it. Throws unless the event type is a formula-result event, the effect-entry and primitive coordinates match `attribution`, and `attributionHash` is the canonical hash of that attribution.
+
     - `tick` &mdash; Tick of the reduction that produced the evaluation.
     - `eventTypeId` &mdash; The referencing event type: `BattleIds.EffectMissed`, `BattleIds.DamageResolved` or `BattleIds.HealingResolved`.
     - `rootActionSequence` &mdash; Sequence number of the action whose resolution produced the evaluation; must be nonzero.
@@ -763,6 +796,7 @@ no RNG behind it.
 `public FormulaContext(StableId sourceId, StableId targetId, StableId effectEntryId, int primitiveIndex, Fixed64 baseStat, Fixed64 potency, Fixed64 defense, Chance64 hitChance, Chance64 criticalChance, Fixed64 criticalMultiplier, Fixed64 varianceMinimum, Fixed64 varianceMaximum, Fixed64 endpointMinimum, Fixed64 endpointMaximum, IEnumerable<FormulaModifierInput> modifiers)`
 
 :   Freezes one set of formula inputs. Modifiers may be supplied in any order; the constructor sorts them into canonical order.
+
     - `effectEntryId` &mdash; Authored effect entry this primitive belongs to.
     - `primitiveIndex` &mdash; Position of the primitive inside its effect plan, used to keep attribution and traces addressable.
     - `baseStat` &mdash; Current value of the authored source stat, before any modifier in modifiers has been applied.
@@ -862,6 +896,7 @@ result.
 `public FormulaContribution(FormulaContributionKind kind, StableId sourceId, int priority, Fixed64 input, Fixed64 output)`
 
 :   Records one step. Throws when `kind` is not a defined value or `sourceId` is invalid.
+
     - `sourceId` &mdash; What produced the step: the status definition behind a modifier, or the formula's own identifier for a step the formula performed.
     - `priority` &mdash; Ordering priority of the modifier that produced the step; zero for steps the formula performed itself.
     - `input` &mdash; Value entering the step.
@@ -934,6 +969,7 @@ evaluated by the live reducer or previewed without consuming RNG.
 `public FormulaEvaluationRequest(StableId sourceId, StableId targetId, StableId effectEntryId, int primitiveIndex, EffectPrimitive primitive)`
 
 :   Names one primitive to evaluate and the pair it runs between. Throws when any ID is invalid or when the primitive is not a damage or healing primitive.
+
     - `effectEntryId` &mdash; Authored effect entry the primitive was planned from.
     - `primitiveIndex` &mdash; Position of the primitive inside its effect plan. It must be below the planned-primitives-per-effect limit.
     - `primitive` &mdash; The planned primitive. Its tag must be CalculateAndDamage or CalculateAndHeal; any other tag is rejected.
@@ -982,6 +1018,7 @@ order on every machine, and FormulaContext sorts by it on construction.
 `public FormulaModifierInput(FormulaContributionKind kind, int priority, StableId statusDefinitionId, ulong applicationSequence, int modifierIndex, Fixed64 value)`
 
 :   Captures one modifier contribution and its deterministic sort key.
+
     - `kind` &mdash; Which formula stage consumes this modifier. Only the flat, multiplicative, outgoing, and incoming modifier kinds are accepted.
     - `priority` &mdash; Authored ordering weight inside the stage; lower sorts first.
     - `statusDefinitionId` &mdash; ID of the status that supplies the modifier.
@@ -1035,6 +1072,7 @@ asking for one cannot draw from the battle RNG or advance the battle.
 `public FormulaPreview(Fixed64 minimum, Fixed64 maximum, Chance64 hitChance, Chance64 criticalChance, Chance64 statusChance)`
 
 :   Reports a forecast. Throws when `minimum` is greater than `maximum`.
+
     - `minimum` &mdash; Lowest value a use that lands can produce.
     - `maximum` &mdash; Highest value a use that lands can produce.
     - `statusChance` &mdash; Chance of an accompanying status application. The built-in damage and healing formulas leave this zero; status odds come from `BattleFormulaService.PreviewStatusApplication`.
@@ -1087,6 +1125,7 @@ or by evaluating a context whose chances and variance are pinned.
 `public FormulaPreviewContext(FormulaContext context)`
 
 :   Wraps the inputs a preview is allowed to read.
+
     - `context` &mdash; Non-null frozen evaluation inputs exposed to preview logic without an authoritative RNG or mutable snapshot.
 
 **Properties**
@@ -1135,6 +1174,7 @@ for one formula, a duplicate input ID, or a zero fixed bound.
 `public FormulaRandomInputDescriptor(StableId inputId, uint exclusiveUpperBound, bool conditional)`
 
 :   Declares a draw whose bound is known when content compiles.
+
     - `inputId` &mdash; Identifies the sample this draw produces in formula attribution. It must be unique among one formula's declared inputs.
     - `exclusiveUpperBound` &mdash; The bound the formula will pass to NextBelow. Zero is rejected.
     - `conditional` &mdash; True when the formula may legitimately skip this draw, as a guaranteed or impossible chance does. A non-conditional input must be drawn exactly once per evaluation.
@@ -1162,6 +1202,7 @@ for one formula, a duplicate input ID, or a zero fixed bound.
 `public static FormulaRandomInputDescriptor ForVarianceWidth(StableId inputId, bool conditional)`
 
 :   Declares a draw whose bound is the inclusive width of the evaluation context's variance range and therefore unknown until evaluation.
+
     - `inputId` &mdash; Identifies the sample this draw produces in formula attribution. It must be unique among one formula's declared inputs.
     - `conditional` &mdash; True when the formula may skip this draw, as equal variance bounds do.
     - **Returns** &mdash; A descriptor whose bound is resolved from each evaluation's inclusive variance width and whose fixed bound field is zero.
@@ -1169,6 +1210,7 @@ for one formula, a duplicate input ID, or a zero fixed bound.
 `public uint ResolveExclusiveUpperBound(FormulaContext context)`
 
 :   Resolves the bound this draw must use for one evaluation: the authored bound for a Fixed input, or the inclusive raw width of the context's variance range for a VarianceWidth input.
+
     - `context` &mdash; Supplies the variance range. Required only for a VarianceWidth input; a Fixed input returns its authored bound without reading it.
     - **Returns** &mdash; The exclusive upper bound the next draw is expected to use.
 
@@ -1192,6 +1234,7 @@ resolved without drawing and leaves no sample behind.
 `public FormulaRandomSample(StableId inputId, uint exclusiveUpperBound, uint sample)`
 
 :   Records one draw. Throws when `inputId` is invalid, the bound is zero, or the sample is not below the bound.
+
     - `inputId` &mdash; Which random input declared by the formula this draw belongs to.
     - `exclusiveUpperBound` &mdash; The bound the formula asked the random source for.
     - `sample` &mdash; The raw value returned, always below the bound.
@@ -1231,6 +1274,7 @@ formula's.
 `public FormulaResult(bool hit, bool critical, Fixed64 value, FormulaAttribution attribution)`
 
 :   Records one evaluation outcome together with its evidence.
+
     - `hit` &mdash; False makes the engine emit a miss and ignore value.
     - `critical` &mdash; Reported to callers and traces. Any critical multiplier must already be folded into value.
     - `value` &mdash; Result after rounding and endpoint clamping.
@@ -1274,6 +1318,7 @@ snapshot and no RNG are reachable from here.
 `public FormulaValidationContext(CompiledBattleContent content)`
 
 :   Binds the context to the catalog being compiled.
+
     - `content` &mdash; Non-null compiled catalog against which formula property IDs and referenced definitions are checked.
 
 **Properties**
@@ -1322,6 +1367,7 @@ survives.
 `public AiCandidatePlan BuildCandidates(AiContext context, PropertySet properties)`
 
 :   Derives build candidates from the supplied immutable context. Missing or illegal inputs produce the contract's typed empty/failure result.
+
     - `context` &mdash; Actor, the compiled policy definition with its rules, catalog, and a read-only state view.
     - `properties` &mdash; Authored configuration for this policy use.
     - **Returns** &mdash; Candidates in preference order, within the per-decision candidate limit. Returning null fails the decision.
@@ -1329,6 +1375,7 @@ survives.
 `public ValidationReport Validate(AiValidationContext context, PropertySet properties)`
 
 :   Checks one authored property set while content compiles. Any error in the returned report aborts compilation.
+
     - `context` &mdash; Catalog the properties refer into.
     - `properties` &mdash; Authored configuration for this policy use.
     - **Returns** &mdash; Errors and warnings. Must not be null.
@@ -1373,6 +1420,7 @@ should happen; the engine decides how much of it actually lands.
 `public EffectPlan Plan(EffectPlanningContext context, PropertySet properties)`
 
 :   Derives plan from the supplied immutable context. Missing or illegal inputs produce the contract's typed empty/failure result.
+
     - `context` &mdash; Source, target, effect entry ID, catalog, and a read-only state view.
     - `properties` &mdash; Authored configuration for this effect entry.
     - **Returns** &mdash; An ordered plan within the per-effect primitive limit; it must not be null. A plan carrying diagnostics fails the step with the first of them and restores the snapshot the engine started from.
@@ -1380,6 +1428,7 @@ should happen; the engine decides how much of it actually lands.
 `public ValidationReport Validate(EffectValidationContext context, PropertySet properties)`
 
 :   Checks one authored property set while content compiles. Any error in the returned report aborts compilation.
+
     - `context` &mdash; Catalog the properties refer into.
     - `properties` &mdash; Authored configuration for this effect entry.
     - **Returns** &mdash; Errors and warnings. Must not be null.
@@ -1428,12 +1477,14 @@ registered through the same interface, with no privileged path.
 `public FrozenList<FormulaRandomInputDescriptor> DescribeRandomInputs(PropertySet properties)`
 
 :   Declares every draw Evaluate may take for these properties, in the order it will take them. The engine builds its draw cursor from this list, and content compilation rejects more than eight entries or a duplicate input ID.
+
     - `properties` &mdash; Authored configuration for this use of the formula.
     - **Returns** &mdash; The declared draws in evaluation order, or an empty list when the formula never draws. Must not be null.
 
 `public FormulaResult Evaluate(FormulaContext context, PropertySet properties, IMechanicsRandomSource random)`
 
 :   Produces the authoritative result for one primitive. Read inputs from context only, take draws in declared order, and report the contributions and samples actually used in the result's attribution.
+
     - `context` &mdash; Frozen inputs for this evaluation.
     - `properties` &mdash; Authored configuration for this use of the formula.
     - `random` &mdash; Engine-owned draw cursor, valid only for the duration of this call. It must not be stored, shared, or used after returning.
@@ -1442,6 +1493,7 @@ registered through the same interface, with no privileged path.
 `public FormulaPreview Preview(FormulaPreviewContext context, PropertySet properties)`
 
 :   Reports the range the same inputs could produce, without drawing and without changing anything. Tooltips, range previews, and the Workbench call this; a draw attempted here fails, so pin the context instead - the built-in formulas evaluate twice with the variance bounds held equal.
+
     - `context` &mdash; Preview wrapper around the inputs Evaluate would read.
     - `properties` &mdash; Authored configuration for this use of the formula.
     - **Returns** &mdash; Minimum and maximum results plus the chances shown to a player. Must not be null, and the range must cover every value Evaluate can return for those inputs.
@@ -1449,6 +1501,7 @@ registered through the same interface, with no privileged path.
 `public ValidationReport Validate(FormulaValidationContext context, PropertySet properties)`
 
 :   Checks one authored property set while content compiles. Return ValidationReport.Valid when every key is understood and in range; any error aborts compilation and surfaces the diagnostic you returned.
+
     - `context` &mdash; Catalog the properties refer into.
     - `properties` &mdash; Authored configuration for this use of the formula.
     - **Returns** &mdash; Errors and warnings. Must not be null.
@@ -1516,6 +1569,7 @@ receive an RNG, and the instance must not outlive the call it arrived on.
 `public uint NextBelow(uint exclusiveUpperBound)`
 
 :   Consumes the next declared draw and returns a uniform value in the range 0 (inclusive) to exclusiveUpperBound (exclusive).
+
     - `exclusiveUpperBound` &mdash; Must match the bound declared for this position by DescribeRandomInputs. A mismatch that cannot be skipped as a conditional input raises a draw-contract diagnostic.
     - **Returns** &mdash; A value below the bound, taken from authoritative battle RNG.
 
@@ -1559,6 +1613,7 @@ depth, count, and once-per-root budgets.
 `public ReactionEvaluation Evaluate(ReactionContext context, PropertySet properties)`
 
 :   Decides eligibility for one candidate reaction and names the source and target it will use, which need not be the pair that triggered it.
+
     - `context` &mdash; The triggering effect tag, trigger phase, root action sequence, current reaction depth, catalog, and a read-only state view.
     - `properties` &mdash; Authored configuration for this reaction definition.
     - **Returns** &mdash; An eligible evaluation, or an ineligible one carrying the reason. Must not be null; declining to fire is a normal outcome, not an error.
@@ -1566,6 +1621,7 @@ depth, count, and once-per-root budgets.
 `public ValidationReport Validate(ReactionValidationContext context, PropertySet properties)`
 
 :   Checks one authored property set while content compiles. Any error in the returned report aborts compilation.
+
     - `context` &mdash; Catalog the properties refer into.
     - `properties` &mdash; Authored configuration for this reaction definition.
     - **Returns** &mdash; Errors and warnings. Must not be null.
@@ -1615,6 +1671,7 @@ candidate set, and validation of the actual request.
 `public FrozenList<StableId> GetCandidates(TargetContext context, PropertySet properties)`
 
 :   Lists every combatant this resolver currently considers eligible. Called before taunt-style restrictions narrow the set and before any requested IDs are validated.
+
     - `context` &mdash; Actor, skill, catalog, and a read-only state view.
     - `properties` &mdash; Authored configuration for this resolver use.
     - **Returns** &mdash; Candidate IDs in any order; the engine sorts and deduplicates them. An empty result means the skill has no legal target right now.
@@ -1622,6 +1679,7 @@ candidate set, and validation of the actual request.
 `public ValidationReport Validate(TargetValidationContext context, PropertySet properties)`
 
 :   Checks one authored property set while content compiles. Any error in the returned report aborts compilation.
+
     - `context` &mdash; Catalog the properties refer into.
     - `properties` &mdash; Authored configuration for this resolver use.
     - **Returns** &mdash; Errors and warnings. Must not be null.
@@ -1629,6 +1687,7 @@ candidate set, and validation of the actual request.
 `public TargetRequestResult ValidateRequested(TargetContext context, PropertySet properties, FrozenList<StableId> requested)`
 
 :   Accepts or rejects a request and returns the set the engine should lock. A rejection here is an ordinary command rejection, not an error.
+
     - `context` &mdash; Actor, skill, catalog, and a read-only state view.
     - `properties` &mdash; Authored configuration for this resolver use.
     - `requested` &mdash; Exactly what the command asked for, in authored order. Empty means the caller wants automatic selection: when the request contract allows that, accept the automatic set, or accept an empty set when the contract declares a random count, because the engine owns those draws.
@@ -2142,6 +2201,7 @@ instead of replacing it.
 `public MechanicsRegistryBinding(MechanicsCategoryTag category, StableId implementationId, int contractVersion)`
 
 :   Builds a binding key, rejecting an undefined category, an invalid implementation ID, or a version that is not positive.
+
     - `contractVersion` &mdash; Matched exactly at resolution; there is no latest-version fallback. Must be greater than zero.
     - `category` &mdash; Defined mechanics interface family under which resolution must search.
     - `implementationId` &mdash; Valid persistence-safe registry key recorded by compiled content and replay data.
@@ -2165,18 +2225,21 @@ instead of replacing it.
 `public bool Equals(MechanicsRegistryBinding other)`
 
 :   Compares category, implementation ID, and contract version; two bindings are equal only when all three match.
+
     - `other` &mdash; The value to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override bool Equals(object obj)`
 
 :   Compares against a boxed binding on the same three parts. Anything that is not a binding is unequal, including null.
+
     - `obj` &mdash; The object to compare with this instance.
     - **Returns** &mdash; True when the supplied value is equal to this value; otherwise false.
 
 `public override int GetHashCode()`
 
 :   Mixes all three parts of the key, so two registrations of the same ID at different contract versions do not share a bucket.
+
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---
@@ -2228,6 +2291,7 @@ declared signature - and any error aborts compilation.
 `public ReactionValidationContext(CompiledBattleContent content)`
 
 :   Binds the context to the catalog being compiled.
+
     - `content` &mdash; Non-null compiled catalog used to verify reaction properties, references, and signature-covered tags.
 
 **Properties**
@@ -2313,6 +2377,7 @@ compilation.
 `public TargetValidationContext(CompiledBattleContent content)`
 
 :   Binds the context to the catalog being compiled.
+
     - `content` &mdash; Non-null compiled catalog available for validating authored target-resolver configuration.
 
 **Properties**
@@ -2344,6 +2409,7 @@ diagnostics worth showing the author.
 `public ValidationReport(IEnumerable<Diagnostic> errors, IEnumerable<Diagnostic> warnings)`
 
 :   Collects errors and warnings into one immutable report.
+
     - `errors` &mdash; Diagnostics that make the validated thing unusable. Copied on the way in, so the caller may keep reusing its own collection afterwards.
     - `warnings` &mdash; Diagnostics worth reporting that still leave the thing usable.
 
@@ -2370,6 +2436,7 @@ diagnostics worth showing the author.
 `public static ValidationReport Error(StableId id, string detail = null)`
 
 :   Appends a error diagnostic with a stable ID and human detail. Callers branch on the ID/severity, not the text.
+
     - `id` &mdash; The identity of the failure, which is what callers branch on.
     - `detail` &mdash; Context for a human reader, such as the offending id; null becomes empty.
     - **Returns** &mdash; An invalid report containing exactly one error diagnostic and no warnings.
@@ -2377,6 +2444,7 @@ diagnostics worth showing the author.
 `public static ValidationReport Warning(StableId id, string detail = null)`
 
 :   Appends a warning diagnostic with a stable ID and human detail. Callers branch on the ID/severity, not the text.
+
     - `id` &mdash; The identity of the concern being raised.
     - `detail` &mdash; Context for a human reader; null becomes empty.
     - **Returns** &mdash; A report whose `IsValid` is still true, because warnings do not fail validation.

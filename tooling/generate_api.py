@@ -226,6 +226,13 @@ def render_group(group, entries, product):
                         out.append(':   ' + ' '.join(summary.split()))
                     else:
                         out.append(':   &mdash;')
+                    has_details = bool(member['doc']['params'] or member['doc']['returns'])
+                    if has_details:
+                        # A blank line is required for Markdown to parse the
+                        # indented details as a list inside the definition.
+                        # Without it, the browser renders "- name - text" as
+                        # part of the paragraph and can absorb the next member.
+                        out.append('')
                     if member['doc']['params']:
                         for param in member['doc']['params']:
                             out.append('    - `%s` &mdash; %s' % (
