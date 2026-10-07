@@ -14,12 +14,12 @@ workbench, and a battle interface you can restyle from one asset.</p>
 </div>
 
 <figure markdown>
-  ![A battle drawn with the Slate Nocturne skin](assets/images/hero-battle.png){ .shot }
-  <figcaption>Slate Nocturne, the default skin. Roster, turn-order strip, skill tray, tooltip,
-  log and the bars above each combatant are drawn by a signed-distance-field shader, so the
-  interface ships no texture and no font. <strong>Character art is yours:</strong> this frame
-  binds none, which is why each combatant is a name, its bars and its status pips over empty
-  ground.</figcaption>
+  ![Fantasy UGUI sample at the initial action decision](assets/images/native-profiles/initial-action-Fantasy-UGUI-1920_1080.png){ .shot }
+  <figcaption>Fantasy UGUI sample at the initial action decision, with shipped character art
+  and action selection visible. Customize this sample composition in Combat Studio and choose
+  the UI technology and visuals that fit your game. Captured in Unity 6000.3.25f1 (Unity 6.3),
+  1920 x 1080. Compare this source capture in the
+  <a href="how-to/compare-native-layouts/">native layout gallery</a>.</figcaption>
 </figure>
 
 ---
@@ -32,9 +32,10 @@ workbench, and a battle interface you can restyle from one asset.</p>
 
 ### See it work
 
-Run the shipped demo scene, then prove with your own seed that the same inputs replay.
+Open the no-code tutorial, run the shipped demo scene, then prove with your own seed that the
+same inputs replay.
 
-[Install and run the demo ->](tutorials/first-battle.md)
+[Build your combat without code ->](tutorials/build-without-code.md)
 
 </div>
 
@@ -70,7 +71,7 @@ Step a battle tick by tick, read the formula trace behind a number you did not e
 
 </div>
 
-Looking for a type rather than a task? The [API reference](reference/index.md) lists 417 public
+Looking for a type rather than a task? The [API reference](reference/index.md) lists 423 public
 types, grouped by what they are for and filterable as you type.
 
 ## What it does
