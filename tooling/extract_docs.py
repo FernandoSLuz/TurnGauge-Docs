@@ -11,6 +11,8 @@ import os
 import re
 import sys
 
+from resolve_inheritdoc import resolve_inheritdoc
+
 # --- declaration matching -------------------------------------------------
 
 NAMESPACE = re.compile(r'^\s*namespace\s+([A-Za-z0-9_.]+)')
@@ -260,7 +262,13 @@ def parse_doc(lines):
     if not summary and buffer.strip() and '<' not in buffer:
         # A bare /// comment with no tags is still a summary.
         summary = clean_inline(buffer)
+    inheritance_tags = re.findall(r'<inheritdoc\b[^>]*>', buffer)
+    inheritance = None
+    if inheritance_tags:
+        inheritance = ('implicit' if len(inheritance_tags) == 1 and
+                       re.fullmatch(r'<inheritdoc\s*/>', inheritance_tags[0]) else 'unsupported')
     return {
+        'inheritdoc': inheritance,
         'summary': summary,
         'remarks': section(buffer, 'remarks'),
         'returns': section(buffer, 'returns'),
@@ -526,6 +534,7 @@ def collect(root):
         for name in sorted(files):
             if name.endswith('.cs'):
                 parse_file(os.path.join(base, name), rel + '/' + name, out)
+    resolve_inheritdoc(out)
     return out
 
 

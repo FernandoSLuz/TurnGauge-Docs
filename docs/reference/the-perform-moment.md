@@ -48,15 +48,19 @@ Verify capture behavior in your project's render pipeline before enabling this m
 
 `public void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 `public void Reset()`
 
-:   &mdash;
+:   Called when playback is torn down or fast-forwarded past. Put the world back: a module that has moved a camera or tinted a sprite must undo it here, or the effect leaks into the next battle.
 
 `public void Tick(float presentationDeltaSeconds)`
 
-:   &mdash;
+:   Called every presentation tick while the battle is playing, already scaled by the presenter's speed. Use it to advance a shake, a zoom, or a fade; a module with nothing to advance can leave it empty.
+
+    - `presentationDeltaSeconds` &mdash; Elapsed presentation time, never negative.
 
 ---
 
@@ -89,7 +93,9 @@ pretending to work - use that pipeline's own volume overrides instead.
 
 `public override void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 ---
 
@@ -120,7 +126,9 @@ and will not recompute it.
 
 `public override void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 ---
 
@@ -152,11 +160,13 @@ only if that project does not move it during a shake.
 
 `public override void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 `public override void Reset()`
 
-:   &mdash;
+:   Called when playback is torn down or fast-forwarded past. Put the world back: a module that has moved a camera or tinted a sprite must undo it here, or the effect leaks into the next battle.
 
 ---
 
@@ -186,11 +196,13 @@ camera is left alone rather than moved in a way the project did not ask for.
 
 `public override void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 `public override void Reset()`
 
-:   &mdash;
+:   Called when playback is torn down or fast-forwarded past. Put the world back: a module that has moved a camera or tinted a sprite must undo it here, or the effect leaks into the next battle.
 
 ---
 
@@ -233,15 +245,19 @@ the battle.
 
 `public void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 `public void Reset()`
 
-:   &mdash;
+:   Called when playback is torn down or fast-forwarded past. Put the world back: a module that has moved a camera or tinted a sprite must undo it here, or the effect leaks into the next battle.
 
 `public void Tick(float presentationDeltaSeconds)`
 
-:   &mdash;
+:   Called every presentation tick while the battle is playing, already scaled by the presenter's speed. Use it to advance a shake, a zoom, or a fade; a module with nothing to advance can leave it empty.
+
+    - `presentationDeltaSeconds` &mdash; Elapsed presentation time, never negative.
 
 ---
 
@@ -447,15 +463,19 @@ enough to read as examples.
 
 `public abstract void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 `public virtual void Reset()`
 
-:   &mdash;
+:   Called when playback is torn down or fast-forwarded past. Put the world back: a module that has moved a camera or tinted a sprite must undo it here, or the effect leaks into the next battle.
 
 `public virtual void Tick(float presentationDeltaSeconds)`
 
-:   &mdash;
+:   Called every presentation tick while the battle is playing, already scaled by the presenter's speed. Use it to advance a shake, a zoom, or a fade; a module with nothing to advance can leave it empty.
+
+    - `presentationDeltaSeconds` &mdash; Elapsed presentation time, never negative.
 
 ---
 
@@ -550,15 +570,19 @@ nothing, which makes a missing string visible instead of silent.
 
 `public void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 `public void Reset()`
 
-:   &mdash;
+:   Called when playback is torn down or fast-forwarded past. Put the world back: a module that has moved a camera or tinted a sprite must undo it here, or the effect leaks into the next battle.
 
 `public void Tick(float presentationDeltaSeconds)`
 
-:   &mdash;
+:   Called every presentation tick while the battle is playing, already scaled by the presenter's speed. Use it to advance a shake, a zoom, or a fade; a module with nothing to advance can leave it empty.
+
+    - `presentationDeltaSeconds` &mdash; Elapsed presentation time, never negative.
 
 ---
 
@@ -600,6 +624,8 @@ override there.
 
 `public override void OnPhaseBegin(PerformPhaseContext context)`
 
-:   &mdash;
+:   Called once as each phase begins, in registration order. Throwing here is contained by the presenter and reported, and the remaining modules still run, so one broken module cannot take the battle down with it.
+
+    - `context` &mdash; Beat, phase, presenter, and resolved world positions available to the module.
 
 ---
