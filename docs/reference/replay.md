@@ -215,7 +215,7 @@ machine. Obtain one from `Capture(BattleEngine)` or from
     - `engine` &mdash; The engine to record. Must not be null.
     - **Returns** &mdash; An immutable recording that `ReplaySerializer.Write` is already known to accept.
 
-`public static ReplayEnvelope Capture()`
+`public static ReplayEnvelope Capture(BattleEngine engine, BattleSchedulerRegistry schedulerRegistry)`
 
 :   Records the engine's battle using an explicitly supplied scheduler registry instead of the engine's own. Behaves exactly as `Capture(BattleEngine)` otherwise.
     - `engine` &mdash; The engine to record. Must not be null.
@@ -320,14 +320,14 @@ read, never altered.
     - `replay` &mdash; The recording to reproduce.
     - **Returns** &mdash; Success with the reproduced final state, or the first divergence.
 
-`public static ReplayExecutionResult Execute()`
+`public static ReplayExecutionResult Execute(ReplayEnvelope replay, BattleSchedulerRegistry schedulerRegistry)`
 
 :   Executes a replay with a caller-supplied scheduler registry, and built-in mechanics.
     - `replay` &mdash; The recording to reproduce.
     - `schedulerRegistry` &mdash; Registry the recording's scheduler is resolved and its state decoded through. It must contain the scheduler the recording was made with.
     - **Returns** &mdash; Success with the reproduced final state, or the first divergence.
 
-`public static ReplayExecutionResult Execute()`
+`public static ReplayExecutionResult Execute(ReplayEnvelope replay, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Executes a replay with both registries supplied. This is the overload to use for any game that registered its own formulas, effects, targeting, AI, reactions, or schedulers: reproducing a recording requires the same implementations under the same IDs and contract versions it was recorded against.
     - `replay` &mdash; The recording to reproduce.
@@ -479,7 +479,7 @@ quietly loaded, which is what lets two machines agree that they are replaying th
     - `utf8` &mdash; The replay document, as canonical UTF-8 JSON bytes.
     - **Returns** &mdash; The decoded replay on success, or a failure carrying the diagnostic that rejected it.
 
-`public static ReplayReadResult Read()`
+`public static ReplayReadResult Read(byte[] utf8, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Decodes a replay and verifies it end to end: the version tuple must resolve to a known contract profile, both embedded payloads must match their recorded hashes and their own canonical encodings, the content manifest and registry binding digests must agree with the compiled content, and the command and checkpoint history must be complete and in order. The document is then re-encoded and compared against the input bytes. A rejected replay is returned as an unsuccessful result rather than thrown, so a project loading a file it did not produce - a shared bug report, a leaderboard submission, an older build's save - can inspect the diagnostic and carry on without guarding the call.
     - `utf8` &mdash; The replay document, as canonical UTF-8 JSON bytes.
@@ -524,4 +524,3 @@ can branch on the reason instead of matching on the message text.
 :   The machine-readable reason, pairing the ID this was constructed with against its message. Replay reading re-encodes what it parsed and reports any write failure through this same value, so a caller sees the identical reason whether it caught the exception or inspected a failed read result.
 
 ---
-

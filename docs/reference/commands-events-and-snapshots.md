@@ -50,7 +50,7 @@ this doubles as the answer to "what is that combatant doing right now".
 
 **Constructors**
 
-`public ActiveActionState()`
+`public ActiveActionState(ulong rootActionSequence, ulong opportunitySequence, StableId actorId, StableId skillId, long acceptedTick, IEnumerable<StableId> lockedTargetIds, TimingResolutionKind timingResolutionKind, IEnumerable<ActionCostState> paidCosts, InterruptRefundPolicy interruptRefundPolicy, IEnumerable<ActionCostState> refundedCosts, bool queueCooldownStarted, ActiveCastState cast)`
 
 :   Creates an active action, normalising the three collections into a canonical order: locked targets ascending, cost ledgers sorted by resource. Throws when the identity values are zero or invalid, when either enumerable is null, when locked targets are duplicated or exceed the per-command limit, when costs are duplicated or exceed the per-skill limit, or when a refund is not covered by the matching paid cost.
     - `rootActionSequence` &mdash; The sequence of the root action this belongs to; the value the snapshot orders its active actions by.
@@ -180,7 +180,7 @@ it rather than holding one across ticks.
 
 **Constructors**
 
-`public BattleCommand()`
+`public BattleCommand(ulong commandSequence, long requestedTick, StableId commandTypeId, StableId actorId, StableId? skillId, IEnumerable<StableId> requestedTargetIds, PropertySet properties)`
 
 :   Captures one exact command sequence, requested tick, actor, optional skill, targets, and properties. Invalid IDs, negative ticks, or oversized targets throw before submission.
     - `commandSequence` &mdash; Position in the battle's command history, which must equal the engine's next expected number. It is supplied rather than assigned so that a command built against a stale view of the battle is rejected outright instead of being applied out of order.
@@ -921,7 +921,7 @@ snapshot holds at most one entry per owner-and-skill pair.
 
 **Constructors**
 
-`public CooldownState()`
+`public CooldownState(StableId ownerId, StableId skillId, CooldownClockKind clockKind, int remainingElapsedTicks, int remainingOwnerOpportunities, ulong startedActionSequence)`
 
 :   Creates a live cooldown. Exactly one of the two remaining counters is used, chosen by `clockKind`; the unused one must be zero. Throws when either ID is invalid, when `startedActionSequence` is zero, when the clock kind is unrecognised, or when the counters do not match the clock kind.
     - `remainingElapsedTicks` &mdash; For an elapsed-tick clock, the ticks still to wait - remaining, not elapsed. Must be positive and within the timing-tick limit. Must be zero for an owner-opportunity clock.
@@ -994,7 +994,7 @@ entry is served, so that ordering is what decides turn order.
 
 **Constructors**
 
-`public DecisionEntry()`
+`public DecisionEntry(ulong opportunitySequence, long readyTick, StableId actorId, DecisionControlKind controlKind)`
 
 :   Creates a decision entry. A zero opportunity sequence, a negative ready tick, an unset actor, or an undefined control kind throws.
     - `opportunitySequence` &mdash; The engine-assigned sequence for this readiness. Must be non-zero and unique inside the queue that receives the entry.
@@ -1474,4 +1474,3 @@ two of these.
 :   Stable identity of this TeamState within battle state. Display labels and object references are resolved outside the simulation.
 
 ---
-

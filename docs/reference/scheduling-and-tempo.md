@@ -46,10 +46,6 @@ per round.
 
 **Properties**
 
-`public bool IsSchedulerReadiness`
-
-:   Whether that tick is the scheduler's own readiness rather than an engine due timer or the caller's ceiling. Only a readiness stop queues a decision; the other two just move the clock.
-
 `public int SchedulerContractVersion`
 
 :   The scheduler contract version this implementation targets. Resolution matches on ID and version together, so a state saved under another version is refused rather than reinterpreted.
@@ -62,17 +58,9 @@ per round.
 
 :   The canonical codec for this scheduler's state. Because it is exposed here, registering the scheduler does not require naming the codec separately.
 
-`public SchedulerAdvanceStopReason StopReason`
-
-:   Why the advance stops there, reported back to the engine as the advance result's stop reason.
-
-`public long Tick`
-
-:   The tick the advance will stop at, never earlier than the tick it started from.
-
 **Methods**
 
-`public SchedulerAdvanceResult Advance()`
+`public SchedulerAdvanceResult Advance(SchedulerAdvanceContext context, SchedulerState state)`
 
 :   Moves the schedule to its next boundary, which is the earliest of the leading ready tick, the earliest engine due timer, and the caller's tick ceiling. Stopping on the scheduler's own readiness queues one decision and reports a ready opportunity; stopping on either of the other two only advances timers. The state is normalised first: ready ticks and queued decisions belonging to actors that are no longer eligible are dropped, and participants that lost eligibility are counted as resolved. A round whose participants have all resolved is closed and the next one opened before any readiness is examined, so a round boundary and a new decision never come out of the same call, and at most one decision is queued per call.
     - `context` &mdash; Current tick, timing views, the next opportunity sequence to allocate, the engine's due timers, and the optional tick ceiling.
@@ -85,14 +73,14 @@ per round.
     - `context` &mdash; The compiled definition, the creation tick, and one timing view per combatant. Only tick zero is accepted.
     - **Returns** &mdash; The initial state, or a failure carrying `SchedulerDiagnosticIds.DefinitionInvalid` when the definition is not an Action Order one at the expected contract version and state tag, `SchedulerDiagnosticIds.NoEligibleCombatants` when nobody can act, or `SchedulerDiagnosticIds.StateInvalid` or `SchedulerDiagnosticIds.SpeedInvalid` when the timing views are not a valid roster.
 
-`public SchedulerTransitionResult OnOpportunityAccepted()`
+`public SchedulerTransitionResult OnOpportunityAccepted(SchedulerOpportunityContext context, SchedulerState state)`
 
 :   Drops the head decision as the engine consumes it, leaving everything else untouched. No recovery is charged and no round bookkeeping happens here, because the actor has not finished acting yet.
     - `context` &mdash; The opportunity sequence and actor being consumed, which must identify the current head of the decision queue.
     - `state` &mdash; The state still holding that decision.
     - **Returns** &mdash; The state without that decision plus a single no-work record, or a failure carrying `SchedulerDiagnosticIds.StateInvalid` when the sequence and actor do not match the queue head.
 
-`public SchedulerTransitionResult OnOpportunityFinished()`
+`public SchedulerTransitionResult OnOpportunityFinished(SchedulerOpportunityResult result, SchedulerState state)`
 
 :   Charges the actor's recovery and marks it resolved for the round in progress. The next ready tick is the finish tick plus the recovery scaled by effective speed, and when that resolution completes the round, the round is closed and the next one opened within the same call. Recovery is charged for every outcome, interrupted and skipped included, so an actor cannot act again for free by having its action cut short.
     - `result` &mdash; The finished opportunity, its outcome, and the recovery the actor owes.
@@ -171,7 +159,7 @@ tag is `SchedulerStateTag.ActionOrder`.
 
 **Constructors**
 
-`public ActionOrderState()`
+`public ActionOrderState(IEnumerable<ReadyTickEntry> readyTicks, ulong roundIndex, RoundState round)`
 
 :   Creates an Action Order payload. The ready ticks are sorted here into `(readyTick, actorId)` order, at most one per actor and no more than the combatant limit; a null round throws.
     - `roundIndex` &mdash; The 1-based index of the round in progress. Must be positive; it increments once per completed round and is never allowed to wrap.
@@ -225,18 +213,6 @@ decision is outstanding.
 
 **Properties**
 
-`public StableId ActorId`
-
-:   The actor whose gauge this working figure belongs to.
-
-`public long GaugeUnits`
-
-:   The gauge total reached at the target tick, held as a 64-bit value because it may sit at or above the threshold until the crossing has been converted into a decision and the threshold subtracted.
-
-`public long RecoveryLockUntilTick`
-
-:   The actor's recovery lock, carried through unchanged; filling is measured from whichever is later, this lock or the tick the advance started from, so a lock already in the past costs nothing.
-
 `public int SchedulerContractVersion`
 
 :   The scheduler contract version this implementation targets. Resolution matches on ID and version together, so a state saved under another version is refused rather than reinterpreted.
@@ -251,7 +227,7 @@ decision is outstanding.
 
 **Methods**
 
-`public SchedulerAdvanceResult Advance()`
+`public SchedulerAdvanceResult Advance(SchedulerAdvanceContext context, SchedulerState state)`
 
 :   Moves the schedule to its next boundary, which is the earliest of the first gauge crossing, the earliest engine due timer, and the caller's tick ceiling. Stopping on a crossing converts every gauge that reached the threshold into a queued decision in the same call; stopping on either of the other two only fills gauges and advances timers. What happens while a decision is already queued depends on the input-pause policy held in state: an automatic decision, or a human one under `InputPausePolicy.PauseOnInput`, stops the clock entirely; under `InputPausePolicy.WaitForInput` gauges keep filling but are capped one unit below the threshold, so time passes without a second opportunity opening; under `InputPausePolicy.Active` the battle carries on and another combatant may become ready meanwhile.
     - `context` &mdash; Current tick, timing views, the next opportunity sequence to allocate, the engine's due timers, and the optional tick ceiling.
@@ -264,14 +240,14 @@ decision is outstanding.
     - `context` &mdash; The compiled definition, the creation tick, and one timing view per combatant. Only tick zero is accepted.
     - **Returns** &mdash; The initial state, or a failure carrying `SchedulerDiagnosticIds.DefinitionInvalid` when the definition is not an ATB one at the expected contract version and state tag, `SchedulerDiagnosticIds.AtbThresholdInvalid` when the gauge threshold is not positive and within the gauge limit, `SchedulerDiagnosticIds.SpeedInvalid` when an actor would gain more than a full gauge in one tick, `SchedulerDiagnosticIds.AtbGaugeInvalid` when a starting gauge is negative or not below the threshold, or `SchedulerDiagnosticIds.NoEligibleCombatants` when nobody can act.
 
-`public SchedulerTransitionResult OnOpportunityAccepted()`
+`public SchedulerTransitionResult OnOpportunityAccepted(SchedulerOpportunityContext context, SchedulerState state)`
 
 :   Drops the head decision as the engine consumes it, leaving every gauge as it was. No recovery lock is applied here, because the actor has not finished acting yet; its gauge simply stays out of the fill while it is busy.
     - `context` &mdash; The opportunity sequence and actor being consumed, which must identify the current head of the decision queue.
     - `state` &mdash; The state still holding that decision.
     - **Returns** &mdash; The state without that decision plus a single no-work record, or a failure carrying `SchedulerDiagnosticIds.StateInvalid` when the sequence and actor do not match the queue head.
 
-`public SchedulerTransitionResult OnOpportunityFinished()`
+`public SchedulerTransitionResult OnOpportunityFinished(SchedulerOpportunityResult result, SchedulerState state)`
 
 :   Freezes the actor's gauge until the finish tick plus its recovery, leaving the accumulated units untouched. The recovery is taken as an absolute number of ticks and is not scaled by speed, so under ATB speed governs how fast the gauge refills afterwards and not how long the pause itself lasts. Recovery is charged for every outcome, interrupted and skipped included, so an actor cannot act again for free by having its action cut short.
     - `result` &mdash; The finished opportunity, its outcome, and the recovery the actor owes.
@@ -350,7 +326,7 @@ state's tag is `SchedulerStateTag.Atb`.
 
 **Constructors**
 
-`public AtbState()`
+`public AtbState(int gaugeThresholdUnits, InputPausePolicy inputPausePolicy, IEnumerable<GaugeEntry> gaugeEntries)`
 
 :   Creates an ATB payload. Gauge entries are sorted here by actor, at most one per actor and no more than the combatant limit, and every one of them must be strictly below `gaugeThresholdUnits`.
     - `gaugeThresholdUnits` &mdash; The units an actor must accumulate to become ready. Copied from the compiled scheduler definition; must be positive and within the ATB gauge limit.
@@ -426,20 +402,6 @@ here, or the lookup fails with
 `Register` call returns a new registry and leaves this one untouched, so a
 shared base registry can be extended per game without being copied defensively.
 
-**Properties**
-
-`public ISchedulerAdjustmentAdapter AdjustmentAdapter`
-
-:   How effects retime an actor under this scheduler, or null when the scheduler was registered without one. A battle whose content uses the scheduler-adjustment effect refuses to start while this is null.
-
-`public IBattleScheduler Scheduler`
-
-:   The registered scheduler. Its ID and contract version are the key this entry is found by, and entries are held sorted by that pair so a lookup can stop as soon as it passes the ID it wants.
-
-`public ISchedulerStateCodec StateCodec`
-
-:   The canonical codec for this scheduler's state. It is never null and always carries the same ID and contract version as `Scheduler`, since the registry rejects any other pairing at construction.
-
 **Methods**
 
 `public static BattleSchedulerRegistry CreateWithBuiltIns()`
@@ -453,14 +415,14 @@ shared base registry can be extended per game without being copied defensively.
     - `scheduler` &mdash; The scheduler to register. It must implement `ISchedulerStateCodecProvider` and expose a non-null codec.
     - **Returns** &mdash; A new registry holding the existing registrations plus this one; this instance is unchanged.
 
-`public BattleSchedulerRegistry Register()`
+`public BattleSchedulerRegistry Register(IBattleScheduler scheduler, ISchedulerStateCodec stateCodec)`
 
 :   Registers a scheduler with an explicit state codec and no adjustment adapter. A battle whose content uses the scheduler-adjustment effect then refuses to start on this scheduler, so pass an adapter if any skill, status, or reaction retimes an actor.
     - `scheduler` &mdash; Deterministic implementation with a valid ID and positive contract version not already registered as a pair.
     - `stateCodec` &mdash; Non-null canonical codec whose scheduler ID and contract version match `scheduler` and whose state tag is supported.
     - **Returns** &mdash; A new registry holding the existing registrations plus this one; this instance is unchanged.
 
-`public BattleSchedulerRegistry Register()`
+`public BattleSchedulerRegistry Register(IBattleScheduler scheduler, ISchedulerStateCodec stateCodec, ISchedulerAdjustmentAdapter adjustmentAdapter)`
 
 :   Registers a scheduler with an explicit state codec and adjustment adapter.
     - `stateCodec` &mdash; The canonical codec for this scheduler's state. Its scheduler ID and contract version must equal the scheduler's, and its state tag must be Action Order or ATB.
@@ -468,7 +430,7 @@ shared base registry can be extended per game without being copied defensively.
     - `scheduler` &mdash; Deterministic implementation whose valid ID and positive contract version form the unique registration key.
     - **Returns** &mdash; A new registry holding the existing registrations plus this one; this instance is unchanged.
 
-`public BattleSchedulerResolveResult Resolve()`
+`public BattleSchedulerResolveResult Resolve(StableId schedulerId, int schedulerContractVersion)`
 
 :   Looks up the scheduler registered under an exact ID and contract version, together with its state codec and its adjustment adapter.
     - `schedulerContractVersion` &mdash; The version the caller requires. The same ID registered at a different version does not match, which is what stops an older saved state from being reinterpreted by a newer scheduler.
@@ -528,7 +490,7 @@ instance that exists has already passed the simulation's structural limits.
 
 **Constructors**
 
-`public CompiledSkillTiming()`
+`public CompiledSkillTiming(StableId skillId, int castTicks, int recoveryTicks, bool interruptible, InterruptRefundPolicy interruptRefundPolicy, CooldownStartPolicy cooldownStartPolicy, CooldownClockKind cooldownClockKind, int cooldownAmount, int minimumRequestedTargets, int maximumRequestedTargets, TimingResolutionKind timingResolutionKind, IEnumerable<CompiledActionCost> costs)`
 
 :   Creates a skill timing record, rejecting any field that falls outside the simulation's structural limits.
     - `castTicks` &mdash; Ticks between acceptance and resolution; zero resolves the action in the step that accepts it.
@@ -728,14 +690,14 @@ Order and ATB schedulers.
     - `context` &mdash; The compiled definition, the creation tick, and one timing view per combatant.
     - **Returns** &mdash; The initial state, or a failure whose diagnostic prevents the battle from starting.
 
-`public SchedulerTransitionResult OnOpportunityAccepted()`
+`public SchedulerTransitionResult OnOpportunityAccepted(SchedulerOpportunityContext context, SchedulerState state)`
 
 :   Called once as the engine consumes the head of the decision queue, before the actor's command resolves. Remove that decision from the returned state; the actor is not finished acting yet, so do not charge recovery here.
     - `context` &mdash; The opportunity sequence and actor being consumed, which must identify the current queue head.
     - `state` &mdash; The state still holding that decision.
     - **Returns** &mdash; The state without that decision, or a failure, which the engine treats as fatal.
 
-`public SchedulerTransitionResult OnOpportunityFinished()`
+`public SchedulerTransitionResult OnOpportunityFinished(SchedulerOpportunityResult result, SchedulerState state)`
 
 :   Called once after an opportunity completes, is interrupted, or is skipped. This is where recovery is charged and the actor's next readiness is set, and where a round-based scheduler marks the actor resolved and may open the next round.
     - `result` &mdash; The finished opportunity, its outcome, and the recovery the actor owes.
@@ -793,7 +755,7 @@ needs one.
 
 **Methods**
 
-`public SchedulerAdjustmentResult Apply()`
+`public SchedulerAdjustmentResult Apply(SchedulerAdjustmentContext context, SchedulerState state)`
 
 :   Applies one adjustment, returning a new state rather than editing the one supplied. Verify the request first - that the kind is supported, that the state is this scheduler's and stands at the context's current tick, and that the actor is present, eligible, and not busy - and refuse it with a diagnostic instead of throwing.
     - `context` &mdash; The actor, the kind of adjustment, the requested delta, the timing views, and the next opportunity sequence available.
@@ -1016,7 +978,7 @@ start the next one.
 
 **Constructors**
 
-`public RoundState()`
+`public RoundState(long startedTick, IEnumerable<StableId> participantIds, IEnumerable<StableId> resolvedParticipantIds)`
 
 :   Creates a round. Both identifier sets are sorted here, so caller order does not matter, but they must hold valid unique IDs, the resolved set must be a subset of the participants, and the participant count may not exceed the combatant limit.
     - `startedTick` &mdash; The tick the round began on. The owning `SchedulerState` additionally rejects a round that begins after its own tick.
@@ -1068,7 +1030,7 @@ order and nothing else.
 
 **Constructors**
 
-`public SchedulerAdjustmentContext()`
+`public SchedulerAdjustmentContext(long currentTick, StableId actorId, SchedulerAdjustmentKind kind, long delta, IEnumerable<SchedulerCombatantTimingView> combatants, ulong nextOpportunitySequence)`
 
 :   Describes one requested adjustment and freezes the timing views into an actor-ID-ordered snapshot, so later changes to the caller's collection cannot reach the adapter.
     - `currentTick` &mdash; The tick the adjustment is requested on. It must equal `SchedulerState.LastAdvancedTick` of the state passed alongside it, or the built-in adapters refuse the adjustment with `SchedulerDiagnosticIds.StateInvalid`.
@@ -1144,14 +1106,14 @@ was.
 
 **Methods**
 
-`public static SchedulerAdjustmentResult Failure()`
+`public static SchedulerAdjustmentResult Failure(SchedulerState unchangedState, Diagnostic diagnostic)`
 
 :   Reports that the adjustment was refused. The engine raises the diagnostic and rolls the step back, so the battle keeps its last valid snapshot.
     - `unchangedState` &mdash; The state the adapter was handed, returned untouched. Required.
     - `diagnostic` &mdash; Why the adjustment was refused. Prefer an ID from `SchedulerDiagnosticIds` so tooling classifies the failure.
     - **Returns** &mdash; A failed result that preserves `unchangedState`, emits no work, applies zero delta, and carries the diagnostic.
 
-`public static SchedulerAdjustmentResult Success()`
+`public static SchedulerAdjustmentResult Success(SchedulerState state, long actualDelta, IEnumerable<SchedulerWork> work = null)`
 
 :   Reports an applied adjustment and freezes the work into an immutable list, so a later change to the caller's collection cannot reach the engine.
     - `state` &mdash; The state after the adjustment. Required.
@@ -1177,7 +1139,7 @@ earliest due timer or the ceiling.
 
 **Constructors**
 
-`public SchedulerAdvanceContext()`
+`public SchedulerAdvanceContext(long currentTick, IEnumerable<SchedulerCombatantTimingView> combatants, ulong nextOpportunitySequence, IEnumerable<SchedulerDueTimer> dueTimers = null, long? tickCeiling = null)`
 
 :   Freezes the supplied timing views and due timers into ordered snapshots the scheduler cannot observe changing afterwards.
     - `currentTick` &mdash; The tick the scheduler is advancing from. It must equal `SchedulerState.LastAdvancedTick` of the state passed alongside it.
@@ -1261,7 +1223,7 @@ advance can never leave the battle partly advanced.
     - `diagnostic` &mdash; Machine-readable reason the requested scheduler advance was rejected without producing state or work.
     - **Returns** &mdash; A failed advance result carrying only the supplied diagnostic, so callers cannot consume partial state.
 
-`public static SchedulerAdvanceResult Success()`
+`public static SchedulerAdvanceResult Success(SchedulerState state, IEnumerable<SchedulerWork> work, SchedulerAdvanceStopReason stopReason)`
 
 :   Reports a completed advance and freezes the work into an immutable list, so a later change to the caller's collection cannot reach the engine.
     - `state` &mdash; The state after the advance. Required.
@@ -1307,7 +1269,7 @@ can neither read nor change authoritative battle state through it.
 
 **Constructors**
 
-`public SchedulerCombatantTimingView()`
+`public SchedulerCombatantTimingView(StableId actorId, int effectiveSpeedRaw, DecisionControlKind controlKind, bool isEligible, bool isBusy, int initialAtbGaugeUnits = 0)`
 
 :   Captures one actor's timing inputs. The constructor stores the values as given; the scheduler validates them when the transition runs.
     - `effectiveSpeedRaw` &mdash; Fixed-point speed where `SimulationLimits.EffectiveSpeedScale` (10,000) is normal speed.
@@ -1360,7 +1322,7 @@ creation happens at battle start and never mid-battle.
 
 **Constructors**
 
-`public SchedulerCreateContext()`
+`public SchedulerCreateContext(CompiledSchedulerDefinition definition, long currentTick, IEnumerable<SchedulerCombatantTimingView> combatants)`
 
 :   Freezes the supplied timing views into an actor-ID-ordered snapshot, so later changes to the caller's collection cannot reach the scheduler.
     - `currentTick` &mdash; Tick the scheduler state is created at; the built-in schedulers accept only zero.
@@ -1504,7 +1466,7 @@ scheduler normally needs only `DueTick` and `Kind`.
 
 **Constructors**
 
-`public SchedulerDueTimer()`
+`public SchedulerDueTimer(SchedulerDueTimerKind kind, long dueTick, StableId ownerId, StableId timerId, ulong applicationSequence = 0UL)`
 
 :   Describes one due timer, rejecting a kind and identity combination the engine could not pair back to a record.
     - `dueTick` &mdash; Tick the timer comes due on; may not be negative.
@@ -1572,7 +1534,7 @@ state-invalid failure.
 
 **Constructors**
 
-`public SchedulerOpportunityContext()`
+`public SchedulerOpportunityContext(long currentTick, ulong opportunitySequence, StableId actorId, IEnumerable<SchedulerCombatantTimingView> combatants)`
 
 :   Names the decision being consumed and freezes the timing views into an actor-ID-ordered snapshot.
     - `currentTick` &mdash; The current tick, which must equal `SchedulerState.LastAdvancedTick` of the state passed alongside it.
@@ -1635,7 +1597,7 @@ the same actor consecutive turns.
 
 **Constructors**
 
-`public SchedulerOpportunityResult()`
+`public SchedulerOpportunityResult(long currentTick, ulong opportunitySequence, StableId actorId, int recoveryTicks, SchedulerOpportunityOutcome outcome, IEnumerable<SchedulerCombatantTimingView> combatants)`
 
 :   Reports a finished opportunity and freezes the timing views into an actor-ID-ordered snapshot.
     - `currentTick` &mdash; The tick the opportunity finished on, which must equal `SchedulerState.LastAdvancedTick` of the state passed alongside it.
@@ -1727,7 +1689,7 @@ transition returns a new instance instead of editing this one.
 :   Drops every queued decision, keeping the tick and the payload. The engine uses this when a battle ends with decisions still pending.
     - **Returns** &mdash; A state with an empty queue, or this same instance when the queue was already empty.
 
-`public static SchedulerState CreateActionOrder()`
+`public static SchedulerState CreateActionOrder(StableId schedulerId, int schedulerContractVersion, long lastAdvancedTick, IEnumerable<DecisionEntry> decisionEntries, ActionOrderState actionOrder)`
 
 :   Builds an Action Order state. The tag and payload must agree, so `actionOrder` is required; its round may not have begun after `lastAdvancedTick`, and no actor may be both ready and queued.
     - `decisionEntries` &mdash; The queue to sort into service order. Actors and opportunity sequences must be unique, and the count may not exceed the ready-decision limit.
@@ -1737,7 +1699,7 @@ transition returns a new instance instead of editing this one.
     - `schedulerId` &mdash; Valid registry identifier of the scheduler implementation that produced the state.
     - **Returns** &mdash; A new immutable state tagged as Action Order with its decisions sorted into service order; inconsistent payloads throw.
 
-`public static SchedulerState CreateAtb()`
+`public static SchedulerState CreateAtb(StableId schedulerId, int schedulerContractVersion, long lastAdvancedTick, IEnumerable<DecisionEntry> decisionEntries, AtbState atb)`
 
 :   Builds an ATB state. The tag and payload must agree, so `atb` is required.
     - `decisionEntries` &mdash; The queue to sort into service order. Actors and opportunity sequences must be unique, and the count may not exceed the ready-decision limit.
@@ -1868,7 +1830,7 @@ opportunity has already been committed.
     - `diagnostic` &mdash; Machine-readable reason an accepted or finished opportunity could not transition the scheduler state.
     - **Returns** &mdash; A failed transition containing neither state nor work; the engine treats this committed-opportunity failure as fatal.
 
-`public static SchedulerTransitionResult Success()`
+`public static SchedulerTransitionResult Success(SchedulerState state, IEnumerable<SchedulerWork> work)`
 
 :   Reports a completed transition and freezes the work into an immutable list. When nothing changed, the built-in schedulers return a single no-work record rather than an empty list.
     - `state` &mdash; The state after the transition. Required.
@@ -1999,4 +1961,3 @@ ticks and require exactly one target, which
 | `InterruptFirstLockedCast` | Chooses interrupt first locked cast semantics for timing resolution kind. |
 
 ---
-

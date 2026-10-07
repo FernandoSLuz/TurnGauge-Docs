@@ -464,7 +464,7 @@ and stages it, and can never change what happened.
 
 **Constructors**
 
-`public PerformPhaseContext()`
+`public PerformPhaseContext(BattlePresenter presenter, PresentationBeatContext beat, PresentationBeatSpec spec, int phaseIndex, Vector3 sourceWorld, Vector3 targetWorld)`
 
 :   Creates a phase context. The presenter builds these; a test may build one directly.
     - `beat` &mdash; Simulation event context being staged by the current presentation beat.
@@ -526,7 +526,7 @@ nothing, which makes a missing string visible instead of silent.
 
 **Constructors**
 
-`public SkillAnnouncementPerformModule()`
+`public SkillAnnouncementPerformModule(SkillTitleView titleView, DisplayStringTable displayStrings, PerformFeelPreset performFeel = null)`
 
 :   The skill-title card is bound to opening phases, with raw skill IDs used when no display label exists.
     - `titleView` &mdash; Card to drive; null makes the module inert.
@@ -589,4 +589,3 @@ override there.
 :   &mdash;
 
 ---
-

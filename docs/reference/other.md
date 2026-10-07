@@ -1,9 +1,9 @@
 # Other
 
-66 types in this area.
+68 types in this area.
 
 !!! abstract "On this page"
-    [AudioArtBinding](#audioartbinding) &middot; [AudioBinding](#audiobinding) &middot; [BattleCancelRelay](#battlecancelrelay) &middot; [BattleLayoutIdentity](#battlelayoutidentity) &middot; [BattlePresentationLabel](#battlepresentationlabel) &middot; [BattlePresentationProfile](#battlepresentationprofile) &middot; [BattleProfileCatalog](#battleprofilecatalog) &middot; [BattleRulesPreset](#battlerulespreset) &middot; [BattleRuntimeCheckpoint](#battleruntimecheckpoint) &middot; [BattleRuntimeController](#battleruntimecontroller) &middot; [BattleRuntimeEndReason](#battleruntimeendreason) &middot; [BattleRuntimeEndedEvent](#battleruntimeendedevent) &middot; [BattleRuntimeEventsEvent](#battleruntimeeventsevent) &middot; [BattleRuntimeFailedEvent](#battleruntimefailedevent) &middot; [BattleRuntimeFailure](#battleruntimefailure) &middot; [BattleRuntimeHumanControlRequirement](#battleruntimehumancontrolrequirement) &middot; [BattleRuntimeOperationResult](#battleruntimeoperationresult) &middot; [BattleRuntimePacing](#battleruntimepacing) &middot; [BattleRuntimeSeedPolicy](#battleruntimeseedpolicy) &middot; [BattleRuntimeSnapshotCause](#battleruntimesnapshotcause) &middot; [BattleRuntimeSnapshotEvent](#battleruntimesnapshotevent) &middot; [BattleRuntimeStartedEvent](#battleruntimestartedevent) &middot; [BattleRuntimeState](#battleruntimestate) &middot; [BattleRuntimeUnityEvent](#battleruntimeunityevent) &middot; [BattleRuntimeValueResult](#battleruntimevalueresult) &middot; [BattleStageBounds](#battlestagebounds) &middot; [BattleTheme](#battletheme) &middot; [BattleUiCommandTranslationResult](#battleuicommandtranslationresult) &middot; [BattleUiCommandTranslator](#battleuicommandtranslator) &middot; [BattleUiTechnology](#battleuitechnology) &middot; [BattleViewAction](#battleviewaction) &middot; [BattleViewBehaviour](#battleviewbehaviour) &middot; [BattleViewCombatant](#battleviewcombatant) &middot; [BattleViewCommand](#battleviewcommand) &middot; [BattleViewIntent](#battleviewintent) &middot; [BattleViewIntentKind](#battleviewintentkind) &middot; [BattleViewProjection](#battleviewprojection) &middot; [BattleViewRoster](#battleviewroster) &middot; [BattleViewSession](#battleviewsession) &middot; [BattleViewState](#battleviewstate) &middot; [CustomMechanicsRegistryProvider](#custommechanicsregistryprovider) &middot; [CustomShieldEffectResolver](#customshieldeffectresolver) &middot; [DemoIdleSheet](#demoidlesheet) &middot; [DisplayStringTableAsset](#displaystringtableasset) &middot; [Entry](#entry) &middot; [ForecastRequest](#forecastrequest) &middot; [ForecastResult](#forecastresult) &middot; [ForecastStopReason](#forecaststopreason) &middot; [GeneratedUiText](#generateduitext) &middot; [IBattlePointerBlocker](#ibattlepointerblocker) &middot; [IBattleStageInformationLayout](#ibattlestageinformationlayout) &middot; [IBattleStageLayout](#ibattlestagelayout) &middot; [IBattleView](#ibattleview) &middot; [IInteractiveBattleView](#iinteractivebattleview) &middot; [LowestHealthAllyTargetResolver](#lowesthealthallytargetresolver) &middot; [ParticleArtBinding](#particleartbinding) &middot; [SessionEndState](#sessionendstate) &middot; [TargetCandidateQuery](#targetcandidatequery) &middot; [TargetPreview](#targetpreview) &middot; [TargetTreatment](#targettreatment) &middot; [TargetingPreset](#targetingpreset) &middot; [TokenArtBinding](#tokenartbinding) &middot; [ToolkitBattleView](#toolkitbattleview) &middot; [TurnGaugeDemoBootstrap](#turngaugedemobootstrap) &middot; [UguiBattleView](#uguibattleview) &middot; [VfxBinding](#vfxbinding)
+    [AudioArtBinding](#audioartbinding) &middot; [AudioBinding](#audiobinding) &middot; [BattleCancelRelay](#battlecancelrelay) &middot; [BattleFeedbackLayout](#battlefeedbacklayout) &middot; [BattleLayoutIdentity](#battlelayoutidentity) &middot; [BattlePresentationLabel](#battlepresentationlabel) &middot; [BattlePresentationProfile](#battlepresentationprofile) &middot; [BattleProfileCatalog](#battleprofilecatalog) &middot; [BattleRulesPreset](#battlerulespreset) &middot; [BattleRuntimeCheckpoint](#battleruntimecheckpoint) &middot; [BattleRuntimeController](#battleruntimecontroller) &middot; [BattleRuntimeEndReason](#battleruntimeendreason) &middot; [BattleRuntimeEndedEvent](#battleruntimeendedevent) &middot; [BattleRuntimeEventsEvent](#battleruntimeeventsevent) &middot; [BattleRuntimeFailedEvent](#battleruntimefailedevent) &middot; [BattleRuntimeFailure](#battleruntimefailure) &middot; [BattleRuntimeHumanControlRequirement](#battleruntimehumancontrolrequirement) &middot; [BattleRuntimeOperationResult](#battleruntimeoperationresult) &middot; [BattleRuntimePacing](#battleruntimepacing) &middot; [BattleRuntimeSeedPolicy](#battleruntimeseedpolicy) &middot; [BattleRuntimeSnapshotCause](#battleruntimesnapshotcause) &middot; [BattleRuntimeSnapshotEvent](#battleruntimesnapshotevent) &middot; [BattleRuntimeStartedEvent](#battleruntimestartedevent) &middot; [BattleRuntimeState](#battleruntimestate) &middot; [BattleRuntimeUnityEvent](#battleruntimeunityevent) &middot; [BattleRuntimeValueResult](#battleruntimevalueresult) &middot; [BattleStageBounds](#battlestagebounds) &middot; [BattleTheme](#battletheme) &middot; [BattleUiCommandTranslationResult](#battleuicommandtranslationresult) &middot; [BattleUiCommandTranslator](#battleuicommandtranslator) &middot; [BattleUiTechnology](#battleuitechnology) &middot; [BattleViewAction](#battleviewaction) &middot; [BattleViewBehaviour](#battleviewbehaviour) &middot; [BattleViewCombatant](#battleviewcombatant) &middot; [BattleViewCommand](#battleviewcommand) &middot; [BattleViewIntent](#battleviewintent) &middot; [BattleViewIntentKind](#battleviewintentkind) &middot; [BattleViewProjection](#battleviewprojection) &middot; [BattleViewRoster](#battleviewroster) &middot; [BattleViewSession](#battleviewsession) &middot; [BattleViewState](#battleviewstate) &middot; [CustomMechanicsRegistryProvider](#custommechanicsregistryprovider) &middot; [CustomShieldEffectResolver](#customshieldeffectresolver) &middot; [DemoIdleSheet](#demoidlesheet) &middot; [DisplayStringTableAsset](#displaystringtableasset) &middot; [Entry](#entry) &middot; [ForecastRequest](#forecastrequest) &middot; [ForecastResult](#forecastresult) &middot; [ForecastStopReason](#forecaststopreason) &middot; [GeneratedUiText](#generateduitext) &middot; [IBattleFeedbackLayout](#ibattlefeedbacklayout) &middot; [IBattlePointerBlocker](#ibattlepointerblocker) &middot; [IBattleStageInformationLayout](#ibattlestageinformationlayout) &middot; [IBattleStageLayout](#ibattlestagelayout) &middot; [IBattleView](#ibattleview) &middot; [IInteractiveBattleView](#iinteractivebattleview) &middot; [LowestHealthAllyTargetResolver](#lowesthealthallytargetresolver) &middot; [ParticleArtBinding](#particleartbinding) &middot; [SessionEndState](#sessionendstate) &middot; [TargetCandidateQuery](#targetcandidatequery) &middot; [TargetPreview](#targetpreview) &middot; [TargetTreatment](#targettreatment) &middot; [TargetingPreset](#targetingpreset) &middot; [TokenArtBinding](#tokenartbinding) &middot; [ToolkitBattleView](#toolkitbattleview) &middot; [TurnGaugeDemoBootstrap](#turngaugedemobootstrap) &middot; [UguiBattleView](#uguibattleview) &middot; [VfxBinding](#vfxbinding)
 
 ## AudioArtBinding
 
@@ -45,6 +45,36 @@ Routes the active input module's cancel event without depending on a particular 
 
 :   View that receives the cancel intent, or null when the relay is inactive.
     - `eventData` &mdash; Event data consumed when the owner handles the cancel intent.
+
+---
+
+## BattleFeedbackLayout
+
+```csharp
+public static class BattleFeedbackLayout
+```
+
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
+
+Computes a deterministic clear rectangle for presentation feedback.
+
+The routine is renderer- and engine-independent. It clips positive
+obstacle intersections to the supplied stage, considers every pair of
+resulting x edges, and finds the largest y gap in that vertical slab.
+The expected obstacle count is small (normally twelve or fewer), so the
+bounded temporary arrays are rebuilt once per call. Callers should cache
+the result across frames when geometry is stable; this helper deliberately
+does not retain mutable static scratch state.
+
+**Methods**
+
+`public static bool TryFindClearBounds(BattleStageBounds stage, IReadOnlyList<BattleStageBounds> obstacles, out BattleStageBounds bounds)`
+
+:   Finds the largest axis-aligned rectangle inside `stage` that does not positively intersect any obstacle. Obstacles outside the stage are ignored; obstacles crossing its edge are clipped. A touching edge has zero intersection and therefore does not reduce the available area. Ties prefer the rectangle whose centre is closest to the original stage centre, then lexicographic (left, bottom, width, height) order, making results independent of obstacle input ordering.
+    - `stage` &mdash; Valid normalized stage bounds.
+    - `obstacles` &mdash; Information bands or other occupied bounds.
+    - `bounds` &mdash; Receives the largest clear rectangle.
+    - **Returns** &mdash; False when the stage is invalid or fully covered.
 
 ---
 
@@ -219,7 +249,7 @@ the three hashes pin it to one compiled encounter.
 
 **Constructors**
 
-`public BattleRuntimeCheckpoint()`
+`public BattleRuntimeCheckpoint(StableId encounterId, uint seed, Sha256Digest contentManifestHash, Sha256Digest compiledSnapshotHash, Sha256Digest startRequestHash, byte[] stateBytes)`
 
 :   Creates a restore point, usually from external persisted fields. All identity fields are validated and the state payload is defensively copied.
     - `encounterId` &mdash; Exact encounter the state belongs to.
@@ -442,17 +472,6 @@ Coordinates authored presentation profiles, runtime views and optional stage pre
 `public void Pause()`
 
 :   Freezes the battle and everything drawing it. Repeating the call does nothing, and no tick is lost: the clock simply stops accumulating.
-
-`public void Play(string key, PresentationCue cue)`
-
-:   Plays a cue through the selected explicit or fallback adapter.
-    - `key` &mdash; Cue key to play.
-    - `cue` &mdash; Cue payload.
-
-`public void Play(string key)`
-
-:   Plays an audio cue through the selected explicit or fallback adapter.
-    - `key` &mdash; Cue key to play.
 
 `public BattleRuntimeOperationResult Restore(BattleRuntimeCheckpoint checkpoint)`
 
@@ -1004,7 +1023,7 @@ authoritative engine validation.
 
 **Methods**
 
-`public static BattleUiCommandTranslationResult Translate()`
+`public static BattleUiCommandTranslationResult Translate(BattleUiCommandChoice choice, BattleSnapshot snapshot, CompiledAuthoringCatalog catalog)`
 
 :   Translates a presentation choice against the current authoritative snapshot and compiled command shapes. It returns a failed result for null context, a stale actor, an unavailable skill, or an unsatisfied target contract; normal validation failures do not throw.
     - `choice` &mdash; Player intent to translate.
@@ -1043,7 +1062,7 @@ A legal action and the candidate IDs supplied by its actual resolver.
 
 **Constructors**
 
-`public BattleViewAction(StableId id, string label, string description,)`
+`public BattleViewAction(StableId id, string label, string description, int minimumTargets, int maximumTargets, bool automaticTargets, FrozenList<StableId> candidates = null)`
 
 :   Creates an action projection; candidates are caller supplied view data and are not validated here.
     - `id` &mdash; Stable action identity.
@@ -1198,7 +1217,7 @@ Immutable, renderer-independent information shown for one combatant.
 
 **Constructors**
 
-`public BattleViewCombatant(StableId id, string name, string team, int health,)`
+`public BattleViewCombatant(StableId id, string name, string team, int health, int maximumHealth, int shield = 0, string resources = "", string statuses = "", StableId teamId = default, int statusCount = 0)`
 
 :   Creates a read-only combatant projection; null display strings become empty.
     - `id` &mdash; Stable combatant identity.
@@ -1268,7 +1287,7 @@ Immutable command choice forwarded for authoritative validation.
 
 **Constructors**
 
-`public BattleViewCommand(StableId actorId, StableId? skillId, bool isConcede,)`
+`public BattleViewCommand(StableId actorId, StableId? skillId, bool isConcede, FrozenList<StableId> targets = null)`
 
 :   Packages actor, skill, concession, and requested targets for host validation; it performs no command legality checks.
     - `actorId` &mdash; Actor whose decision is represented.
@@ -1358,7 +1377,7 @@ The single snapshot-to-UI projection for every native or customer renderer.
 
 **Methods**
 
-`public static BattleViewState Create(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog,)`
+`public static BattleViewState Create(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog, DisplayStringTable labels = null, IEnumerable<string> feedback = null, StableId? rosterTeamId = null)`
 
 :   Projects a battle snapshot and compiled content into read-only HUD rows, available actions, target candidates, timeline labels and a terminal result. Does not submit commands or advance the simulation.
     - `snapshot` &mdash; Authoritative snapshot to present. Null returns the empty view state.
@@ -1488,7 +1507,7 @@ A complete read-only view; contains no scene objects or authority to change comb
 
 **Constructors**
 
-`public BattleViewState(string decisionKey, string heading, StableId? actorId, bool canConcede,)`
+`public BattleViewState(string decisionKey, string heading, StableId? actorId, bool canConcede, FrozenList<BattleViewCombatant> combatants = null, FrozenList<BattleViewAction> actions = null, FrozenList<string> timeline = null, FrozenList<string> feedback = null, string resultText = "", StableId? rosterTeamId = null)`
 
 :   Creates an immutable renderer-independent decision snapshot.
     - `decisionKey` &mdash; Host decision identity.
@@ -1560,8 +1579,8 @@ public sealed class CustomMechanicsRegistryProvider : BattleRegistryProvider
 
 `TurnGauge.Samples.CustomMechanics` &middot; <small>Samples/CustomMechanics/CustomMechanicsRegistryProvider.cs</small>
 
-!!! warning "Not yet documented"
-    This type has no summary comment in the source. Its name and signature are accurate; the description is missing.
+Adds the sample shield effect and lowest-health ally target resolver to
+the built-in registry set used by authored battles and replay.
 
 ---
 
@@ -1874,6 +1893,27 @@ Marks adapter-owned text that participates in presentation themes.
 
 ---
 
+## IBattleFeedbackLayout
+
+```csharp
+public interface IBattleFeedbackLayout
+```
+
+`TurnGauge.UI` &middot; <small>Runtime/PresentationCore/BattleViewState.cs</small>
+
+Optional presentation-only reservation for feedback that must stay clear
+of the stage and its other information bands.
+
+**Methods**
+
+`public bool TryGetFeedbackBounds(out BattleStageBounds bounds)`
+
+:   Returns the normalized rectangle reserved for feedback.
+    - `bounds` &mdash; Receives the reserved rectangle when available.
+    - **Returns** &mdash; True when a valid reservation is available.
+
+---
+
 ## IBattlePointerBlocker
 
 ```csharp
@@ -2105,7 +2145,7 @@ RNG is drawn, so consulting it can never change a battle.
 
 **Methods**
 
-`public static FrozenList<StableId> GetCandidates()`
+`public static FrozenList<StableId> GetCandidates(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog, StableId actorId, StableId skillId)`
 
 :   Lists every combatant the skill's resolver currently considers a legal pick for `actorId`.
     - `snapshot` &mdash; Current authoritative state; read, never advanced.
@@ -2114,7 +2154,7 @@ RNG is drawn, so consulting it can never change a battle.
     - `skillId` &mdash; The skill whose resolver is consulted.
     - **Returns** &mdash; Candidate ids, ascending and without duplicates. Empty for a missing argument, an unknown skill, an unregistered resolver, or a resolver that threw; an empty result therefore means "offer no picks" rather than "every combatant is legal".
 
-`public static bool ValidateRequest()`
+`public static bool ValidateRequest(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog, StableId actorId, StableId skillId, IReadOnlyList<StableId> requested, out string message)`
 
 :   Puts a proposed pick through the same resolver check the engine runs before it accepts a command.
     - `snapshot` &mdash; Current authoritative state; read, never advanced.
@@ -2159,7 +2199,7 @@ already agrees with the engine. Eight looks, one data source.
 
 **Methods**
 
-`public static TargetingPreset Adapt()`
+`public static TargetingPreset Adapt(TargetingPreset authored, bool adapt, int candidatesPerSide, bool portrait, bool touch)`
 
 :   The preset a pick should actually be expressed with, given the device and the stage in front of the player. A preset that adapts is worth more than four a buyer has to configure, so the shipped default starts at `TargetingPreset.Reticle` and moves when the situation makes it the wrong tool. A project that wants its authored choice honoured verbatim turns adaptation off.
     - `authored` &mdash; The preset the skin asks for.
@@ -2169,7 +2209,7 @@ already agrees with the engine. Eight looks, one data source.
     - `touch` &mdash; Whether the device is touch-first.
     - **Returns** &mdash; The preset to drive the pick with.
 
-`public static TargetTreatment ClassifyTreatment()`
+`public static TargetTreatment ClassifyTreatment(StableId resolverId, TargetLifeState allowedLifeState)`
 
 :   The treatment `resolverId` should be previewed in.
     - `allowedLifeState` &mdash; The life state the resolver accepts. Dead outranks the shape: revive is the one skill that wants a corpse legible, and showing it as an ordinary ally pick is what makes players think it is broken.
@@ -2265,7 +2305,7 @@ token sprite (the token-* art keys from the art manifest).
 ## ToolkitBattleView
 
 ```csharp
-public sealed class ToolkitBattleView : BattleViewBehaviour
+public sealed class ToolkitBattleView : BattleViewBehaviour, IBattleFeedbackLayout
 ```
 
 `TurnGauge.UI` &middot; <small>Runtime/PresentationUIToolkit/ToolkitBattleView.cs</small>
@@ -2329,6 +2369,12 @@ A replaceable UXML surface. All decision state lives outside the visual tree.
 :   Hosts this view in a dedicated public visual container, or returns to its UIDocument when null. The host owns panel attachment and dimensions; this view owns its children and bindings.
     - `host` &mdash; Dedicated container for the authored layout.
     - `dispatchIntent` &mdash; Optional host routing for visual input, such as preview decision guards.
+
+`public bool TryGetFeedbackBounds(out BattleStageBounds bounds)`
+
+:   Finds a clear feedback rectangle using the currently attached visual tree, including the complete timeline header.
+    - `bounds` &mdash; Receives the largest normalized area inside the authored stage reservation that avoids visible HUD panels.
+    - **Returns** &mdash; True when layout is ready and a clear area exists. False means feedback must wait or stay hidden.
 
 `public override string[] ValidateBindings()`
 
@@ -2422,33 +2468,9 @@ result surface as typed end-of-session states without an exception loop.
 
 :   Simulation ticks represented by one presentation second at 1x speed.
 
-`public StableId CombatantId`
-
-:   &mdash;
-
-`public Sprite[] Frames`
-
-:   &mdash;
-
-`public int LastFrame`
-
-:   &mdash;
-
-`public int PhaseOffset`
-
-:   &mdash;
-
-`public SpriteRenderer Renderer`
-
-:   &mdash;
-
 `public static readonly float[] SpeedSteps`
 
 :   The specification section 9 presentation speed steps.
-
-`public CombatantTokenView View`
-
-:   &mdash;
 
 **Methods**
 
@@ -2485,7 +2507,7 @@ result surface as typed end-of-session states without an exception loop.
 ## UguiBattleView
 
 ```csharp
-public sealed class UguiBattleView : BattleViewBehaviour
+public sealed class UguiBattleView : BattleViewBehaviour, IBattleFeedbackLayout
 ```
 
 `TurnGauge.UI` &middot; <small>Runtime/PresentationUGUI/UguiBattleView.cs</small>
@@ -2520,6 +2542,12 @@ Prefab-authored uGUI surface. Named slots may appear anywhere in the authored tr
 
 :   Forces slot discovery again after an authored hierarchy change.
 
+`public bool TryGetFeedbackBounds(out BattleStageBounds bounds)`
+
+:   Finds a clear feedback rectangle from the current HUD geometry, without moving the formation or camera.
+    - `bounds` &mdash; Receives the largest normalized area inside the authored stage reservation that avoids visible HUD panels.
+    - **Returns** &mdash; True when layout is ready and a clear area exists. False means feedback must wait or stay hidden.
+
 `public override string[] ValidateBindings()`
 
 :   Checks required named slots and reports missing, duplicate or incompatible controls.
@@ -2538,4 +2566,3 @@ public sealed class VfxBinding
 Maps one presentation VFX key to an optional pooled prototype.
 
 ---
-

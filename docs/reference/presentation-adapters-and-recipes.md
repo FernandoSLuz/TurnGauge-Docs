@@ -366,7 +366,7 @@ non-authoritative and never enters any battle hash.
 
 :   Creates an instant, silent beat: zero duration, no animation, VFX or audio key, no floating number and no camera shake. This is what an unauthored beat of a recipe reads as.
 
-`public PresentationBeatSpec()`
+`public PresentationBeatSpec(long durationRawSeconds, string animationKey, string vfxKey, PresentationVfxAnchorKind vfxAnchorKind, string vfxAnchorId, string audioKey, FloatingNumberStyle floatingNumberStyle, bool cameraShake)`
 
 :   Creates a beat from authored values. Nothing is validated or clamped here: the duration is stored exactly as given and only clamped when read, and null keys are stored as empty strings.
     - `durationRawSeconds` &mdash; Beat length in raw Fixed64 seconds. May exceed the 0..30 s cap, in which case `ExceedsDurationCap` reports it.
@@ -378,7 +378,7 @@ non-authoritative and never enters any battle hash.
     - `floatingNumberStyle` &mdash; The number style for this beat, or `FloatingNumberStyle.None` for no number.
     - `cameraShake` &mdash; True to request a camera shake; the host's optional shake sink decides what that looks like.
 
-`public PresentationBeatSpec()`
+`public PresentationBeatSpec(long durationRawSeconds, string animationKey, string vfxKey, PresentationVfxAnchorKind vfxAnchorKind, string vfxAnchorId, string audioKey, FloatingNumberStyle floatingNumberStyle, FloatingNumberStyle criticalNumberStyle, bool cameraShake)`
 
 :   Creates a beat that also names the style to use when the hit was a critical. Identical to the shorter form otherwise, which leaves the critical style at `FloatingNumberStyle.Critical`.
     - `durationRawSeconds` &mdash; Beat length in raw Fixed64 seconds.
@@ -471,7 +471,7 @@ for the beat, never any authoritative value or engine reference.
 
 **Constructors**
 
-`public PresentationCue()`
+`public PresentationCue(Vector3 worldPosition, FormationFacing facing, Transform parent, StableId sourceId, StableId targetId)`
 
 :   Creates a cue from an already-resolved placement. The cue carries placement and identity only, never an authoritative battle value.
     - `parent` &mdash; Optional parent for spawned instances; null leaves them unparented.
@@ -641,7 +641,7 @@ any battle hash.
 
 **Methods**
 
-`public static PresentationRecipeSet CreateTransient()`
+`public static PresentationRecipeSet CreateTransient(string stableIdRaw, IEnumerable<PresentationRecipeDefinition> authoredRecipes = null)`
 
 :   Creates a non-persistent recipe set for runtime composition. The caller owns and must destroy the returned ScriptableObject.
     - `authoredRecipes` &mdash; Recipe assets copied into serialized order; null produces an empty set.
@@ -690,4 +690,3 @@ Where a beat's VFX anchors, resolved through the compiled slot.
 | `Anchor` | A named VFX anchor of the slot, chosen by the beat's anchor id. |
 
 ---
-

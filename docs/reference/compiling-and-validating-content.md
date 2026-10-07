@@ -20,7 +20,7 @@ content and the same hashes.
 
 **Constructors**
 
-`public AuthoringCompileOptions()`
+`public AuthoringCompileOptions(CancellationToken cancellationToken = default(CancellationToken), bool includeWarnings = true)`
 
 :   Creates a set of compile options. Both arguments are optional and default to an uncancellable compile that reports warnings.
     - `cancellationToken` &mdash; Polled between compile stages. Useful for an editor import or a batch job over a large catalog, where a compile can take long enough to be worth abandoning.
@@ -62,7 +62,7 @@ diagnostic on the result instead of an exception here.
 
 **Constructors**
 
-`public AuthoringCompileRequest()`
+`public AuthoringCompileRequest(BattleContentCatalog catalog, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry, AuthoringCompileOptions options = null)`
 
 :   Pins one catalog to explicit scheduler/mechanics registries and compile options. The compiler does not scan assemblies or replace either registry.
     - `catalog` &mdash; The authoring catalog root to compile.
@@ -90,7 +90,7 @@ diagnostic on the result instead of an exception here.
 
 **Methods**
 
-`public static AuthoringCompileRequest WithBuiltIns()`
+`public static AuthoringCompileRequest WithBuiltIns(BattleContentCatalog catalog, AuthoringCompileOptions options = null)`
 
 :   Builds a request against freshly created registries holding only the package's built-in schedulers and mechanics. Use the constructor instead once you have registered anything of your own: a catalog that references a custom formula, effect, target, AI policy, reaction, or scheduler will not compile against the built-ins alone.
     - `catalog` &mdash; The authoring catalog root to compile.
@@ -155,7 +155,7 @@ into one however differently their text reads.
 
 **Constructors**
 
-`public AuthoringDiagnostic()`
+`public AuthoringDiagnostic(StableId diagnosticId, AuthoringDiagnosticSeverity severity, PortableSourceCoordinate source, string ownerStableIdRaw = null, StableId? relatedId = null, Diagnostic? nestedB3Diagnostic = null, string humanDetail = null)`
 
 :   Creates a diagnostic, rejecting anything a report could not present coherently: an invalid diagnostic ID, a severity other than Error or Warning, an invalid source coordinate, an invalid related ID or nested diagnostic, or an owner ID that disagrees with the source coordinate's owner key.
     - `diagnosticId` &mdash; The stable code naming this problem, such as `authoring.id.duplicate`. Take it from the package's authoring diagnostic IDs rather than composing text.
@@ -423,7 +423,7 @@ another by accident.
 
 **Constructors**
 
-`public BattleRegistrySet()`
+`public BattleRegistrySet(BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Creates a complete non-null registry pair.
     - `schedulerRegistry` &mdash; Scheduler implementations.
@@ -468,7 +468,7 @@ same catalog drive a live battle, a headless batch, and an editor preview.
 
 **Constructors**
 
-`public CompiledAuthoringCatalog()`
+`public CompiledAuthoringCatalog(CompiledBattleContent battleContent, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry, Sha256Digest compiledSnapshotHash, Sha256Digest contentManifestHash, IEnumerable<KeyValuePair<StableId, CompiledFormationPreset>> formationPresets, IEnumerable<KeyValuePair<StableId, CompiledEncounterSnapshot>> encounters)`
 
 :   Publishes a compiled catalog, defensively copying both indexes into key-sorted immutable form.
     - `battleContent` &mdash; The compiled content the engine simulates.
@@ -526,7 +526,7 @@ any number of differently seeded battles.
 
 **Constructors**
 
-`public CompiledEncounterSnapshot()`
+`public CompiledEncounterSnapshot(StableId encounterId, BattleStartRequest startRequest, CompiledEncounterFormationLayout formationLayout, Sha256Digest startRequestHash)`
 
 :   Publishes one compiled encounter.
     - `encounterId` &mdash; Id of the authored encounter; must be a valid id.
@@ -596,4 +596,3 @@ A defensively copied, key-sorted immutable index.
     - **Returns** &mdash; True when an entry matched the key.
 
 ---
-

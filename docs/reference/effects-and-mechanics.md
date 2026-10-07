@@ -45,7 +45,7 @@ replay, Workbench, tooltips, and range previews.
 
 **Methods**
 
-`public static FormulaContext BuildContext()`
+`public static FormulaContext BuildContext(CompiledBattleContent content, BattleSnapshot snapshot, FormulaEvaluationRequest request)`
 
 :   Freezes every input the requested primitive's formula is allowed to read: source stat, potency, target defense, hit and critical chances, variance and clamp bounds, and the status modifiers that apply, in canonical order. Building a context reads state but never draws, so the same context can be evaluated or previewed.
     - `content` &mdash; Compiled catalog the request's IDs and the battle rules are read from. It must be a profile 3 catalog.
@@ -53,7 +53,7 @@ replay, Workbench, tooltips, and range previews.
     - `request` &mdash; Coordinates of the primitive to build inputs for.
     - **Returns** &mdash; The frozen inputs for exactly that primitive. Unless the effect authored its own source stat, healing scales off the rules' spirit stat and damage off the power stat; healing also gets no variance band and no critical chance unless the effect asked for one.
 
-`public static FormulaResult Evaluate()`
+`public static FormulaResult Evaluate(BattleMechanicsRegistry registry, FormulaEvaluationRequest request, FormulaContext context, IMechanicsRandomSource random)`
 
 :   Runs the request's formula and returns the authoritative result. This is the only call here that consumes RNG, and it is the same call the reducer makes, so given the same context and the same draw cursor it produces the same number every time.
     - `registry` &mdash; Registry the primitive's formula ID and contract version are resolved through.
@@ -62,7 +62,7 @@ replay, Workbench, tooltips, and range previews.
     - `request` &mdash; The immutable request to validate and execute.
     - **Returns** &mdash; Hit, critical, final magnitude, and the attribution the engine hashes into its event. Never null.
 
-`public static FormulaPreview Preview()`
+`public static FormulaPreview Preview(CompiledBattleContent content, BattleSnapshot snapshot, BattleMechanicsRegistry registry, FormulaEvaluationRequest request)`
 
 :   Reports the range the same inputs could produce, without drawing and without changing anything. This is the surface tooltips and range previews should call: it can be asked at any time, as often as wanted, and cannot advance the battle or disturb its RNG.
     - `content` &mdash; Compiled catalog the request's IDs are read from. It must be a profile 3 catalog.
@@ -71,7 +71,7 @@ replay, Workbench, tooltips, and range previews.
     - `request` &mdash; Coordinates of the primitive to forecast.
     - **Returns** &mdash; Minimum and maximum for a use that lands, plus the chances shown to a player. Never null.
 
-`public static StatusApplicationPreview PreviewStatusApplication()`
+`public static StatusApplicationPreview PreviewStatusApplication(CompiledBattleContent content, BattleSnapshot snapshot, StableId targetId, StableId statusId, Chance64 baseChance)`
 
 :   Resolves the odds of one status landing on one target: the authored base chance reduced by the target's matching resistances, or refused outright when the target is immune. No RNG is consumed. The live reducer decides status application with this same call, so a tooltip built from it shows the chance the engine will actually roll against.
     - `content` &mdash; Compiled catalog the status and the target's definition are read from.
@@ -454,7 +454,7 @@ still decides how much of it lands.
     - `delta` &mdash; Signed amount to move it by, in ticks or gauge units according to the kind.
     - **Returns** &mdash; A validated scheduler-adjustment primitive retaining the requested kind and signed ticks-or-gauge delta.
 
-`public static EffectPrimitive ApplyShield()`
+`public static EffectPrimitive ApplyShield(StableId shieldId, Fixed64 amount, int priority, StableId? linkedStatusDefinitionId = null)`
 
 :   Updates apply shield on presentation state only. The call cannot submit a command, advance a tick, or change an authoritative hash.
     - `shieldId` &mdash; Identity of the shield to create; it must be valid.
@@ -477,7 +477,7 @@ still decides how much of it lands.
     - `delta` &mdash; Signed amount to add, in resource points.
     - **Returns** &mdash; A validated resource-change primitive carrying the resource ID and unclamped signed point delta.
 
-`public static EffectPrimitive Damage()`
+`public static EffectPrimitive Damage(MechanicsImplementationReference formula, PropertySet formulaProperties, bool bypassShield = false, bool bypassDefense = false, bool bypassIncomingModifiers = false)`
 
 :   Creates a damage primitive: the engine evaluates the formula and applies its result to the target, through the target's shields unless they are bypassed.
     - `formula` &mdash; Formula ID and contract version; both are required and must resolve at execution time.
@@ -587,7 +587,7 @@ the arithmetic it stands for.
 
 **Constructors**
 
-`public FormulaAttribution()`
+`public FormulaAttribution(MechanicsImplementationReference formula, StableId sourceId, StableId targetId, StableId effectEntryId, int primitiveIndex, PropertySet inputs, IEnumerable<FormulaContribution> contributions, IEnumerable<FormulaRandomSample> randomSamples, Fixed64 unclampedResult, Fixed64 roundedResult, Fixed64 clampContribution, Fixed64 finalResult)`
 
 :   Records one evaluation. Throws when the source, target or effect-entry identifier is invalid, when the primitive index is out of range, or when a collection exceeds its structural limit.
     - `formula` &mdash; Identity and contract version of the formula implementation that performed the evaluation.
@@ -669,7 +669,7 @@ excluded from authoritative battle state and its canonical hash.
 
 **Constructors**
 
-`public FormulaAttributionTrace()`
+`public FormulaAttributionTrace(long tick, StableId eventTypeId, ulong rootActionSequence, StableId effectEntryId, int primitiveIndex, Sha256Digest attributionHash, FormulaAttribution attribution)`
 
 :   Pairs an attribution with the coordinates of the event that references it. Throws unless the event type is a formula-result event, the effect-entry and primitive coordinates match `attribution`, and `attributionHash` is the canonical hash of that attribution.
     - `tick` &mdash; Tick of the reduction that produced the evaluation.
@@ -760,7 +760,7 @@ no RNG behind it.
 
 **Constructors**
 
-`public FormulaContext()`
+`public FormulaContext(StableId sourceId, StableId targetId, StableId effectEntryId, int primitiveIndex, Fixed64 baseStat, Fixed64 potency, Fixed64 defense, Chance64 hitChance, Chance64 criticalChance, Fixed64 criticalMultiplier, Fixed64 varianceMinimum, Fixed64 varianceMaximum, Fixed64 endpointMinimum, Fixed64 endpointMaximum, IEnumerable<FormulaModifierInput> modifiers)`
 
 :   Freezes one set of formula inputs. Modifiers may be supplied in any order; the constructor sorts them into canonical order.
     - `effectEntryId` &mdash; Authored effect entry this primitive belongs to.
@@ -859,7 +859,7 @@ result.
 
 **Constructors**
 
-`public FormulaContribution()`
+`public FormulaContribution(FormulaContributionKind kind, StableId sourceId, int priority, Fixed64 input, Fixed64 output)`
 
 :   Records one step. Throws when `kind` is not a defined value or `sourceId` is invalid.
     - `sourceId` &mdash; What produced the step: the status definition behind a modifier, or the formula's own identifier for a step the formula performed.
@@ -931,7 +931,7 @@ evaluated by the live reducer or previewed without consuming RNG.
 
 **Constructors**
 
-`public FormulaEvaluationRequest()`
+`public FormulaEvaluationRequest(StableId sourceId, StableId targetId, StableId effectEntryId, int primitiveIndex, EffectPrimitive primitive)`
 
 :   Names one primitive to evaluate and the pair it runs between. Throws when any ID is invalid or when the primitive is not a damage or healing primitive.
     - `effectEntryId` &mdash; Authored effect entry the primitive was planned from.
@@ -979,7 +979,7 @@ order on every machine, and FormulaContext sorts by it on construction.
 
 **Constructors**
 
-`public FormulaModifierInput()`
+`public FormulaModifierInput(FormulaContributionKind kind, int priority, StableId statusDefinitionId, ulong applicationSequence, int modifierIndex, Fixed64 value)`
 
 :   Captures one modifier contribution and its deterministic sort key.
     - `kind` &mdash; Which formula stage consumes this modifier. Only the flat, multiplicative, outgoing, and incoming modifier kinds are accepted.
@@ -1032,7 +1032,7 @@ asking for one cannot draw from the battle RNG or advance the battle.
 
 **Constructors**
 
-`public FormulaPreview()`
+`public FormulaPreview(Fixed64 minimum, Fixed64 maximum, Chance64 hitChance, Chance64 criticalChance, Chance64 statusChance)`
 
 :   Reports a forecast. Throws when `minimum` is greater than `maximum`.
     - `minimum` &mdash; Lowest value a use that lands can produce.
@@ -2341,7 +2341,7 @@ diagnostics worth showing the author.
 
 **Constructors**
 
-`public ValidationReport()`
+`public ValidationReport(IEnumerable<Diagnostic> errors, IEnumerable<Diagnostic> warnings)`
 
 :   Collects errors and warnings into one immutable report.
     - `errors` &mdash; Diagnostics that make the validated thing unusable. Copied on the way in, so the caller may keep reusing its own collection afterwards.
@@ -2382,4 +2382,3 @@ diagnostics worth showing the author.
     - **Returns** &mdash; A report whose `IsValid` is still true, because warnings do not fail validation.
 
 ---
-

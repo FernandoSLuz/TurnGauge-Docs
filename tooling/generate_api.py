@@ -135,7 +135,7 @@ def render_index(groups, order, product, total_types, tiers=None, excluded=0):
     out.append('')
     out.append('</div>')
     out.append('')
-    return '\n'.join(out) + '\n'
+    return '\n'.join(out).rstrip() + '\n'
 
 
 def render_group(group, entries, product):
@@ -238,7 +238,7 @@ def render_group(group, entries, product):
         out.append('---')
         out.append('')
 
-    return '\n'.join(out) + '\n'
+    return '\n'.join(out).rstrip() + '\n'
 
 
 def render_coverage(groups, order, product, api, excluded=0):
@@ -302,7 +302,7 @@ def render_coverage(groups, order, product, api, excluded=0):
     out.append('The areas worth caring about are the ones you call directly. Those are '
                'listed first on the [reference index](index.md).')
     out.append('')
-    return '\n'.join(out) + '\n'
+    return '\n'.join(out).rstrip() + '\n'
 
 
 def load_tiers(tiers_path):

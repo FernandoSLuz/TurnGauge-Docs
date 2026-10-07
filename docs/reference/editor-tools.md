@@ -18,20 +18,6 @@ discover or create a look: a customer had to create a blank asset and fill
 in fields with no preview. "Create editable copy" is the intended entry
 point for authoring a custom skin.
 
-**Fields**
-
-`public BattleSkinPreset Asset`
-
-:   The asset this entry was loaded from, or null for a shipped skin. The actions that need a file on disk are disabled while it is null.
-
-`public bool IsShipped`
-
-:   Whether the look is defined in package code rather than by an asset. Shipped entries are listed first and cannot be edited in place, which is what `Create editable copy` is for.
-
-`public CompiledBattleSkin Skin`
-
-:   The compiled look this row previews. For a project asset it is a compile of that asset taken at refresh time, so an edit made elsewhere appears once the window regains focus, not before.
-
 **Methods**
 
 `public static void Open()`
@@ -68,4 +54,3 @@ Unity's asset APIs. No serialized YAML is authored by the tool.
     - **Returns** &mdash; The preserved or newly created editable preset for this identity.
 
 ---
-

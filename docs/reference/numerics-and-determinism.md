@@ -60,7 +60,7 @@ through here is one of only two ways to obtain one; the other is stepping a
     - `bytes` &mdash; The canonical byte payload to read.
     - **Returns** &mdash; The canonical battle snapshot reconstructed with built-in scheduler implementations.
 
-`public static BattleSnapshot DecodeBattleState()`
+`public static BattleSnapshot DecodeBattleState(byte[] bytes, BattleSchedulerRegistry schedulerRegistry)`
 
 :   Strictly reads decode battle state and rejects malformed, trailing, unsupported, or incompatible data without a partial result.
     - `bytes` &mdash; The canonical byte payload to read.
@@ -73,7 +73,7 @@ through here is one of only two ways to obtain one; the other is stepping a
     - `bytes` &mdash; The canonical byte payload to read.
     - **Returns** &mdash; The compiled content reconstructed with the built-in mechanics registry.
 
-`public static CompiledBattleContent DecodeCompiledSnapshot()`
+`public static CompiledBattleContent DecodeCompiledSnapshot(byte[] bytes, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Strictly reads decode compiled snapshot and rejects malformed, trailing, unsupported, or incompatible data without a partial result.
     - `bytes` &mdash; The canonical byte payload to read.
@@ -92,7 +92,7 @@ through here is one of only two ways to obtain one; the other is stepping a
     - `snapshot` &mdash; The complete deterministic battle state to encode.
     - **Returns** &mdash; The unique canonical byte representation of the battle state.
 
-`public static byte[] EncodeBattleState()`
+`public static byte[] EncodeBattleState(BattleSnapshot snapshot, BattleSchedulerRegistry schedulerRegistry)`
 
 :   Serializes a battle snapshot while resolving B2 or B3 scheduler state through the supplied registry.
     - `schedulerRegistry` &mdash; The registry that supplies codecs for scheduler identities present in the snapshot.
@@ -135,7 +135,7 @@ through here is one of only two ways to obtain one; the other is stepping a
     - `snapshot` &mdash; The complete deterministic battle state to canonicalize.
     - **Returns** &mdash; The digest identifying the canonical battle-state payload.
 
-`public static Sha256Digest HashBattleState()`
+`public static Sha256Digest HashBattleState(BattleSnapshot snapshot, BattleSchedulerRegistry schedulerRegistry)`
 
 :   Computes the SHA-256 digest of battle state encoded through a supplied scheduler registry.
     - `schedulerRegistry` &mdash; The registry that supplies codecs for scheduler identities present in the snapshot.
@@ -854,4 +854,3 @@ carries no text and is not a usable id; see `IsValid`.
     - **Returns** &mdash; True when `text` satisfies the grammar.
 
 ---
-

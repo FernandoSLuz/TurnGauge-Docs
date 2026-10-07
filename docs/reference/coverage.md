@@ -4,10 +4,10 @@ Generated from source alongside the reference itself, so it cannot quietly drift
 
 | Scope | Documented | Total | Coverage |
 | --- | --- | --- | --- |
-| Public types | 419 | 420 | 100% |
-| Public members | 2695 | 2789 | 97% |
+| Public types | 423 | 423 | 100% |
+| Public members | 2617 | 2690 | 97% |
 
-Measured over the 420 types this reference publishes.
+Measured over the 423 types this reference publishes.
 
 ## What is excluded, and why
 
@@ -29,7 +29,7 @@ Coverage is reported over the published surface for the same reason: documenting
 | [Compiling and validating content](compiling-and-validating-content.md) | 13 | 13 | 100% |
 | [Formations](formations.md) | 16 | 16 | 100% |
 | [Skinning and appearance](skinning-and-appearance.md) | 21 | 21 | 100% |
-| [Interface and widgets](interface-and-widgets.md) | 26 | 26 | 100% |
+| [Interface and widgets](interface-and-widgets.md) | 27 | 27 | 100% |
 | [Stage and tokens](stage-and-tokens.md) | 24 | 24 | 100% |
 | [The perform moment](the-perform-moment.md) | 13 | 13 | 100% |
 | [Presentation adapters and recipes](presentation-adapters-and-recipes.md) | 17 | 17 | 100% |
@@ -37,11 +37,10 @@ Coverage is reported over the published surface for the same reason: documenting
 | [Analysis and balancing](analysis-and-balancing.md) | 13 | 13 | 100% |
 | [Numerics and determinism](numerics-and-determinism.md) | 8 | 8 | 100% |
 | [Editor tools](editor-tools.md) | 2 | 2 | 100% |
-| [Other](other.md) | 66 | 65 | 98% |
+| [Other](other.md) | 68 | 68 | 100% |
 
 ## How to read this
 
 Low coverage in an area is usually **not** a sign that the types are unclear. Much of the surface is small immutable data carriers and enums whose names and signatures are self-describing: a `StableId Id { get; }` needs no prose.
 
 The areas worth caring about are the ones you call directly. Those are listed first on the [reference index](index.md).
-

@@ -1,6 +1,6 @@
 # API reference
 
-The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **420 types.**
+The types you are meant to use in TurnGauge, grouped by what they are for rather than by namespace. **423 types.**
 
 !!! info "What is not listed here"
     74 further types are public in the source but left out of this reference. They are public only because `internal` is per-assembly in C# and the package spans several assemblies -- plumbing, not API. They carry `[EditorBrowsable(Never)]` in the source to say so. Nothing you need is hidden: if a documented type exposes it, it is documented too.
@@ -331,6 +331,7 @@ The types a new project meets first.
 | [`TooltipData`](interface-and-widgets.md#tooltipdata) | struct | Interface and widgets | A passive tooltip value computed by the DRIVER through the public preview surface (`BattleFormulaService.Preview` / `PreviewStatusApplication`, `FormulaPreview`, and `IEffectResolv... |
 | [`TooltipPanelView`](interface-and-widgets.md#tooltippanelview) | class | Interface and widgets | The skill tooltip: cost, timing, target shape, and the driver-computed preview figures. |
 | [`TransportBarView`](interface-and-widgets.md#transportbarview) | class | Interface and widgets | Scenario picker, seed field, and playback controls, drawn with the skin. |
+| [`UiPortraitFacing`](interface-and-widgets.md#uiportraitfacing) | struct | Interface and widgets | Describes the direction painted into a portrait and the direction the presentation wants that portrait to face. |
 | [`UiStatusEntry`](interface-and-widgets.md#uistatusentry) | struct | Interface and widgets | One combatant's surfaced status-panel row. |
 | [`UiTimelineEntry`](interface-and-widgets.md#uitimelineentry) | struct | Interface and widgets | One chip on the turn-order rail: who acts, whose side they are on, how much of them is left, and whether they are still standing. |
 | [`BattlePresenter`](stage-and-tokens.md#battlepresenter) | class | Stage and tokens | The pure presentation consumer. |
@@ -423,6 +424,7 @@ The types a new project meets first.
 | [`AudioArtBinding`](other.md#audioartbinding) | class | Other | Binds a recipe audio key (an sfx-* clip name) to art. |
 | [`AudioBinding`](other.md#audiobinding) | class | Other | Maps one presentation audio key to a Unity audio clip. |
 | [`BattleCancelRelay`](other.md#battlecancelrelay) | class | Other | Routes the active input module's cancel event without depending on a particular input package. |
+| [`BattleFeedbackLayout`](other.md#battlefeedbacklayout) | class | Other | Computes a deterministic clear rectangle for presentation feedback. |
 | [`BattleLayoutIdentity`](other.md#battlelayoutidentity) | enum | Other | Visual family used for starter palettes and default stage reservations. |
 | [`BattlePresentationLabel`](other.md#battlepresentationlabel) | class | Other | One display text override owned by a presentation profile. |
 | [`BattlePresentationProfile`](other.md#battlepresentationprofile) | class | Other | Authored references only. |
@@ -460,7 +462,7 @@ The types a new project meets first.
 | [`BattleViewRoster`](other.md#battleviewroster) | class | Other | Pure grouping helpers for immutable presentation rosters. |
 | [`BattleViewSession`](other.md#battleviewsession) | class | Other | Shared interaction state survives visual tree reconstruction. |
 | [`BattleViewState`](other.md#battleviewstate) | class | Other | A complete read-only view; contains no scene objects or authority to change combat. |
-| [`CustomMechanicsRegistryProvider`](other.md#custommechanicsregistryprovider) | class | Other | _Undocumented._ |
+| [`CustomMechanicsRegistryProvider`](other.md#custommechanicsregistryprovider) | class | Other | Adds the sample shield effect and lowest-health ally target resolver to the built-in registry set used by authored battles and replay. |
 | [`CustomShieldEffectResolver`](other.md#customshieldeffectresolver) | class | Other | Creates a shield equal to a configured fraction of missing health. |
 | [`DemoIdleSheet`](other.md#demoidlesheet) | class | Other | Reads the sample character art, which ships as a grid of idle frames rather than as a single still so combatants breathe instead of standing frozen. |
 | [`DisplayStringTableAsset`](other.md#displaystringtableasset) | class | Other | The shipped serialized string-table asset the demo driver supplies to the presenter (specification section 3: display text comes from an explicit table, never from compiled snapsho... |
@@ -469,6 +471,7 @@ The types a new project meets first.
 | [`ForecastResult`](other.md#forecastresult) | class | Other | Immutable outcome of one `BattleForecast.Run` call: where the lookahead stopped, the state and events of the throwaway clone it ran, and the non-authoritative evidence it produced. |
 | [`ForecastStopReason`](other.md#forecaststopreason) | enum | Other | Why one `BattleForecast.Run` call stopped. |
 | [`GeneratedUiText`](other.md#generateduitext) | class | Other | Marks adapter-owned text that participates in presentation themes. |
+| [`IBattleFeedbackLayout`](other.md#ibattlefeedbacklayout) | interface | Other | Optional presentation-only reservation for feedback that must stay clear of the stage and its other information bands. |
 | [`IBattlePointerBlocker`](other.md#ibattlepointerblocker) | interface | Other | Optional screen-space hit-test owned by a view. |
 | [`IBattleStageInformationLayout`](other.md#ibattlestageinformationlayout) | interface | Other | Optional presentation-only choice to group combatant information beside the action stage. |
 | [`IBattleStageLayout`](other.md#ibattlestagelayout) | interface | Other | Optional authored stage reservation. |
@@ -488,4 +491,3 @@ The types a new project meets first.
 | [`VfxBinding`](other.md#vfxbinding) | class | Other | Maps one presentation VFX key to an optional pooled prototype. |
 
 </div>
-

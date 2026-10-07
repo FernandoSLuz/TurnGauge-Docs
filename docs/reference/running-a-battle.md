@@ -106,17 +106,9 @@ Owns immutable battle state and advances it through deterministic command, sched
 
 **Properties**
 
-`public BattleCommand Command`
-
-:   The command the AI policy settled on, or null when no rule produced a legal one. A null command is not a failure: the opportunity is skipped and the actor's recovery is taken from the scheduler's no-action setting.
-
 `public CompiledBattleContent Content`
 
 :   The compiled content this battle runs against. Keep it beside the snapshot: restoring or replaying the battle needs content that hashes to the manifest digest recorded on the snapshot, and any other content is refused.
-
-`public int DrawCount`
-
-:   How many draws the formula has taken through this cursor so far.
 
 `public BattleMechanicsRegistry MechanicsRegistry`
 
@@ -126,14 +118,6 @@ Owns immutable battle state and advances it through deterministic command, sched
 
 :   The mechanics profile, taken from `Content`. It selects which reducer runs, and so determines which parts of a snapshot are populated at all: stats, statuses, shields, and reactions only exist under the B3 profile.
 
-`public int RecordedCommandCount`
-
-:   How many commands the replay history holds, reading the copy only once one has been made. Periodic checkpoints are placed on a fixed interval of this count.
-
-`public DeterministicRng RngAfterSelection`
-
-:   The random generator as it stands after the draws the selection made. It is deliberately handed back rather than written straight to the battle state, because planning that ends in no command must not consume randomness the replay would then have to reproduce.
-
 `public uint Seed`
 
 :   The seed the battle's random sequence was expanded from. Record it alongside the content and the start request; those three plus the command order are what a reproduction needs.
@@ -142,135 +126,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 
 :   The start request the battle was created from. It stays reachable because restore and replay must be handed the same one, and because execution keeps reading per-combatant start data from it, such as granted skills and the initial gauge.
 
-`public AiDecisionTrace Trace`
-
-:   Evidence of how the policy reached this decision: the rules it considered, the conditions each one passed or failed, and the candidate weights. Always present, including when `Command` is null, so a designer can see why an actor did nothing. The trace is diagnostic and never feeds back into execution.
-
-**Fields**
-
-`public List<ActiveActionState> ActiveActions`
-
-:   Working copy of the root actions currently in flight, including any cast still running.
-
-`public StableId? B1PendingDecisionActorId`
-
-:   The actor a B1 battle is waiting on. Later profiles leave it null and track pending decisions on `BattleSnapshot.SchedulerState` instead.
-
-`public List<CombatantState> Combatants`
-
-:   Working copy of the combatant states. Damage and healing replace entries here, which is where a combatant stops being living.
-
-`public ulong CompletedRootActionCount`
-
-:   How many root actions have finished resolving. The configured root-action limit is tested against this.
-
-`public Sha256Digest ContentManifestHash`
-
-:   Digest of the compiled content, carried straight through so the rebuilt snapshot still refuses to restore against other content.
-
-`public List<CooldownState> Cooldowns`
-
-:   Working copy of the running cooldowns, whether counted in elapsed ticks or in owner opportunities.
-
-`public Sha256Digest EventChainHash`
-
-:   Running digest over every event emitted so far. It is advanced as each event is created, which is what lets a replay prove it produced the same events in the same order.
-
-`public List<ExecutionFrame> Frames`
-
-:   The pending execution work, reduced from the front. Reducers push the frames they produce onto the front rather than appending them, so work spawned by a frame resolves before whatever was already queued behind it.
-
-`public ulong NextActionSequence`
-
-:   The sequence the next root action will be given.
-
-`public ulong NextApplicationSequence`
-
-:   The sequence the next status or shield application will be given.
-
-`public ulong NextCommandSequence`
-
-:   The sequence the next submitted command must carry. Validation consumes it whether the command is accepted or rejected.
-
-`public ulong NextEventSequence`
-
-:   The sequence the next emitted event will be given.
-
-`public ulong NextOpportunitySequence`
-
-:   The sequence the next decision opportunity will be given, one per combatant the scheduler makes ready.
-
-`public ulong NextReactionSequence`
-
-:   The sequence the next triggered reaction will be given.
-
-`public SimulationContractProfile Profile`
-
-:   The profile the battle runs under. Reduction branches on it and never changes it.
-
-`public List<ReactionRootBudgetState> ReactionRoots`
-
-:   Working copy of the per-root-action reaction budgets that stop reaction chains recurring without bound. Populated under the B3 profile only.
-
-`public Sha256Digest RegistryBindingHash`
-
-:   Digest of the mechanics binding ids and contract versions the content declared when the battle was created, carried straight through so restore can refuse content that declares different ones.
-
-`public List<ResourceState> Resources`
-
-:   Working copy of the per-combatant resource pools that skill costs are paid from and refunded to.
-
-`public BattleResultState Result`
-
-:   The battle result. Making it terminal is what ends the fight.
-
-`public DeterministicRng Rng`
-
-:   The random cursor. Every draw must write the advanced generator back here, because drawing from a stale value repeats the same number and breaks the replay.
-
-`public StableId SchedulerId`
-
-:   Id of the scheduler driving the battle, carried straight through.
-
-`public SchedulerState SchedulerState`
-
-:   The scheduler's own state. Reducers replace it wholesale with the state a scheduler transition returned rather than editing it in place.
-
-`public List<ShieldState> Shields`
-
-:   Working copy of the outstanding shields. Populated under the B3 profile only.
-
-`public List<CombatantStatState> Stats`
-
-:   Working copy of the per-combatant stat values. Populated under the B3 profile only.
-
-`public List<StatusInstanceState> Statuses`
-
-:   Working copy of the applied status instances. Populated under the B3 profile only.
-
-`public List<SystemStatusActionState> SystemStatusActions`
-
-:   Working copy of the engine-owned status boundary actions due at a future tick. Populated under the B3 profile only.
-
-`public List<TeamState> Teams`
-
-:   Working copy of the team states, so concession can be applied in place.
-
-`public long Tick`
-
-:   The battle clock. Only a scheduler timer advance moves it, and only forwards.
-
 **Methods**
-
-`public void AddPeriodicCheckpoint(ReplayCheckpoint checkpoint)`
-
-:   Appends one periodic replay checkpoint, copying the frozen list from the source snapshot on first write in the same way as `AddRecordedCommand`. Checkpoints let a replay resume from partway through a long recording instead of re-executing it from the opening tick.
-    - `checkpoint` &mdash; The state and event-chain digests to record at this point in the command history.
-
-`public void AddRecordedCommand(RecordedCommand command)`
-
-:   Appends one accepted or rejected command to the replay history.
-    - `command` &mdash; The command and its disposition, as it should appear in the recording.
 
 `public AdvanceTicksResult AdvanceTicks(int count)`
 
@@ -278,17 +134,12 @@ Owns immutable battle state and advances it through deterministic command, sched
     - `count` &mdash; How many ticks to advance, relative to the current tick. Zero is allowed; negative values are not.
     - **Returns** &mdash; Why the call stopped, the absolute tick it aimed at, the events it emitted in tick and event-sequence order, and the resulting snapshot.
 
-`public BattleSnapshot Build()`
-
-:   Freezes the working state into an immutable `BattleSnapshot`.
-    - **Returns** &mdash; The snapshot the caller should adopt as authoritative.
-
 `public BattleEngine Clone()`
 
 :   Returns a second engine positioned on the current snapshot and sharing the same content, start request, seed, scheduler, and registries.
     - **Returns** &mdash; An independently step-able engine at the same immutable snapshot, with shared static dependencies and empty diagnostic trace buffers.
 
-`public static BattleEngine Create()`
+`public static BattleEngine Create(CompiledBattleContent content, BattleStartRequest startRequest, uint seed)`
 
 :   Starts a new battle on the built-in schedulers and the built-in mechanics and returns it standing on the opening snapshot. Nothing is reduced yet and no event exists: the opening work, including `battle.started`, is queued on that snapshot and is first reduced by a step or advance call. This is the overload to reach for unless the project ships a custom scheduler or a custom formula, effect, target, AI, or reaction implementation.
     - `content` &mdash; Compiled content whose profile must match that of `startRequest`; the profile also decides which reducer the returned engine runs.
@@ -296,7 +147,7 @@ Owns immutable battle state and advances it through deterministic command, sched
     - `seed` &mdash; Seed for the battle's random sequence. The same seed and the same command order reproduce the run exactly.
     - **Returns** &mdash; An engine standing on the battle's first snapshot.
 
-`public static BattleEngine Create()`
+`public static BattleEngine Create(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSchedulerRegistry registry)`
 
 :   Starts a new battle on a caller-supplied scheduler registry, keeping the built-in mechanics. Use this when the project ships its own turn-order or gauge scheduler but no custom formulas or effects.
     - `content` &mdash; Compiled content whose profile must match that of `startRequest`.
@@ -305,7 +156,7 @@ Owns immutable battle state and advances it through deterministic command, sched
     - `registry` &mdash; Registry consulted for the scheduler named by the start request. It must also supply a state codec that accepts the state the scheduler creates, otherwise the battle is refused rather than started on a state that could not be saved.
     - **Returns** &mdash; An engine standing on the battle's first snapshot.
 
-`public static BattleEngine Create()`
+`public static BattleEngine Create(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Starts a new battle on caller-supplied scheduler and mechanics registries. This is the overload a B3 battle with custom formulas, effects, targeting, AI, or reactions needs, because the compiled content is checked against the mechanics registry up front: every implementation the content names must be registered at the contract version it was compiled for, or the battle is refused here rather than failing partway through a fight.
     - `content` &mdash; Compiled content whose profile must match that of `startRequest`.
@@ -330,13 +181,7 @@ Owns immutable battle state and advances it through deterministic command, sched
 :   Returns the current authoritative state. The returned snapshot is immutable and is never edited in place, so it stays valid after the engine steps; call again to see the state that followed.
     - **Returns** &mdash; The immutable authoritative snapshot currently owned by this engine; later reductions replace rather than mutate it.
 
-`public uint NextBelow(uint exclusiveUpperBound)`
-
-:   Advances the battle's random stream and returns a uniform value from 0 (inclusive) to `exclusiveUpperBound` (exclusive).
-    - `exclusiveUpperBound` &mdash; The bound declared for this position in the formula's random inputs.
-    - **Returns** &mdash; A value below the bound, taken from the authoritative battle stream.
-
-`public static BattleEngine Restore()`
+`public static BattleEngine Restore(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSnapshot snapshot)`
 
 :   Resumes a saved battle on the built-in schedulers and mechanics, continuing from `snapshot` exactly where it left off, including the position in the random sequence.
     - `content` &mdash; The same compiled content the battle was created against.
@@ -345,7 +190,7 @@ Owns immutable battle state and advances it through deterministic command, sched
     - `snapshot` &mdash; A snapshot previously taken from that battle.
     - **Returns** &mdash; An engine standing on `snapshot`.
 
-`public static BattleEngine Restore()`
+`public static BattleEngine Restore(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSnapshot snapshot, BattleSchedulerRegistry registry)`
 
 :   Resumes a saved battle on a caller-supplied scheduler registry, keeping the built-in mechanics. Use this when the save was written by a battle running a custom scheduler, since the saved scheduler state can only be recognised by the codec that registry provides.
     - `content` &mdash; The same compiled content the battle was created against.
@@ -355,7 +200,7 @@ Owns immutable battle state and advances it through deterministic command, sched
     - `registry` &mdash; Registry that must resolve the scheduler named on the snapshot.
     - **Returns** &mdash; An engine standing on `snapshot`.
 
-`public static BattleEngine Restore()`
+`public static BattleEngine Restore(CompiledBattleContent content, BattleStartRequest startRequest, uint seed, BattleSnapshot snapshot, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Resumes a saved battle on caller-supplied scheduler and mechanics registries. A B3 save needs this overload for two separate checks: `mechanicsRegistry` must resolve every mechanics binding `content` names, each at the contract version it was compiled for, and the binding digest recorded on the snapshot must equal the digest recomputed from that content. Content that has since moved a skill, status, or policy onto a different implementation id or contract version is therefore refused here instead of silently changing how the rest of the fight resolves. The digest covers those declared ids and versions only, so a different implementation object registered under the same id and version is not detected.
     - `content` &mdash; The same compiled content the battle was created against.
@@ -443,14 +288,14 @@ while the battle is still running.
 
 **Methods**
 
-`public static BattleResultState Concession()`
+`public static BattleResultState Concession(StableId winningTeamId, StableId losingTeamId)`
 
 :   A terminal `battle.concession`: the battle ended because one team conceded rather than because it was eliminated.
     - `winningTeamId` &mdash; The team that did not concede.
     - `losingTeamId` &mdash; The conceding team.
     - **Returns** &mdash; A terminal concession state naming the surviving and conceding teams.
 
-`public static BattleResultState Defeat()`
+`public static BattleResultState Defeat(StableId winningTeamId, StableId losingTeamId)`
 
 :   A terminal `battle.defeat`: one team survived and it is not the perspective team.
     - `winningTeamId` &mdash; The surviving team - the perspective team's opponent.
@@ -467,7 +312,7 @@ while the battle is still running.
 :   A terminal `battle.stalled`: both teams were still standing when the battle hit its configured root-action or tick limit, so the engine stopped without a winner.
     - **Returns** &mdash; A terminal stalled state with no winner or loser identity.
 
-`public static BattleResultState Victory()`
+`public static BattleResultState Victory(StableId winningTeamId, StableId losingTeamId)`
 
 :   A terminal `battle.victory`: one team survived and it is the start request's perspective team.
     - `winningTeamId` &mdash; The surviving perspective team.
@@ -534,7 +379,7 @@ before they return, so a request they produce is one the engine will accept.
 
 **Methods**
 
-`public static BattleStartRequest CreateB2()`
+`public static BattleStartRequest CreateB2(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeam> teams)`
 
 :   Builds a profile-2 start whose scheduler and combatants are resolved against compiled content before the request exists. Unlike the profile-1 constructor it reports a bad id at build time rather than leaving the engine to reject the pairing later, which is why it needs the content the battle will be run with.
     - `content` &mdash; Profile-2 compiled content. Every id in the start is looked up in it, and content compiled for another profile is refused.
@@ -542,7 +387,7 @@ before they return, so a request they produce is one the engine will accept.
     - `teams` &mdash; Exactly two non-null teams with distinct ids, built through `StartTeam.CreateB2`. Combatant ids must not repeat across the pair, and the two teams together may hold at most `SimulationLimits.TotalCombatants` members.
     - **Returns** &mdash; A profile-2 start request whose teams and content references are ready for engine validation.
 
-`public static BattleStartRequest CreateB3()`
+`public static BattleStartRequest CreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams)`
 
 :   Builds a profile-3 start, taking the perspective team to be whichever of the two team ids sorts first. Throws on the first broken start rule; call `TryCreateB3` to receive a diagnostic instead.
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
@@ -550,7 +395,7 @@ before they return, so a request they produce is one the engine will accept.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.
     - **Returns** &mdash; A profile-3 start request whose default perspective is the first team in canonical order.
 
-`public static BattleStartRequest CreateB3()`
+`public static BattleStartRequest CreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams, StableId perspectiveTeamId)`
 
 :   Builds a profile-3 start with the perspective team chosen explicitly. Throws on the first broken start rule; call `TryCreateB3` to receive a diagnostic instead.
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
@@ -559,7 +404,7 @@ before they return, so a request they produce is one the engine will accept.
     - `perspectiveTeamId` &mdash; The team results are reported from; must be one of the two teams supplied.
     - **Returns** &mdash; A profile-3 start request reporting results from `perspectiveTeamId`.
 
-`public static B3CreationResult<BattleStartRequest> TryCreateB3()`
+`public static B3CreationResult<BattleStartRequest> TryCreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams)`
 
 :   Builds a profile-3 start exactly as the matching `CreateB3` overload does, inferring the perspective team, but reports a broken start rule as a failed result instead of throwing.
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
@@ -567,7 +412,7 @@ before they return, so a request they produce is one the engine will accept.
     - `teams` &mdash; Exactly two non-null teams with distinct ids.
     - **Returns** &mdash; A successful result holding the request, or a failed result carrying the single diagnostic for the first rule that was broken.
 
-`public static B3CreationResult<BattleStartRequest> TryCreateB3()`
+`public static B3CreationResult<BattleStartRequest> TryCreateB3(CompiledBattleContent content, StableId schedulerId, IEnumerable<StartTeamV3> teams, StableId perspectiveTeamId)`
 
 :   Builds a profile-3 start with an explicit perspective team, reporting a broken start rule as a failed result instead of throwing.
     - `content` &mdash; The compiled profile-3 content every id is resolved against.
@@ -1068,4 +913,3 @@ over by the engine, so a later drain will not return them again.
 :   The authoritative state after the reduction. On `StepEventOutcome.FatalInvariant` the failed reduction is rolled back, so this is the last valid snapshot instead.
 
 ---
-

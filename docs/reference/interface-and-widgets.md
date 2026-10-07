@@ -1,9 +1,9 @@
 # Interface and widgets
 
-26 types in this area.
+27 types in this area.
 
 !!! abstract "On this page"
-    [BattleEventNarrator](#battleeventnarrator) &middot; [BattleNumberFormat](#battlenumberformat) &middot; [BattleUiCommandChoice](#battleuicommandchoice) &middot; [BattleUiRoot](#battleuiroot) &middot; [DecisionOptions](#decisionoptions) &middot; [DecisionShapeCompiler](#decisionshapecompiler) &middot; [DisplayStringTable](#displaystringtable) &middot; [DisplayStringTableProvider](#displaystringtableprovider) &middot; [FeedbackLogView](#feedbacklogview) &middot; [ResultBannerView](#resultbannerview) &middot; [SafeAreaFitter](#safeareafitter) &middot; [SkillCommandShape](#skillcommandshape) &middot; [SkillTitleView](#skilltitleview) &middot; [SkillTrayView](#skilltrayview) &middot; [SkinnedTokenPlate](#skinnedtokenplate) &middot; [SkinnedValueBar](#skinnedvaluebar) &middot; [SkinnedWidgetFactory](#skinnedwidgetfactory) &middot; [StatusRosterView](#statusrosterview) &middot; [TargetPickerView](#targetpickerview) &middot; [TargetShape](#targetshape) &middot; [TimelineStripView](#timelinestripview) &middot; [TooltipData](#tooltipdata) &middot; [TooltipPanelView](#tooltippanelview) &middot; [TransportBarView](#transportbarview) &middot; [UiStatusEntry](#uistatusentry) &middot; [UiTimelineEntry](#uitimelineentry)
+    [BattleEventNarrator](#battleeventnarrator) &middot; [BattleNumberFormat](#battlenumberformat) &middot; [BattleUiCommandChoice](#battleuicommandchoice) &middot; [BattleUiRoot](#battleuiroot) &middot; [DecisionOptions](#decisionoptions) &middot; [DecisionShapeCompiler](#decisionshapecompiler) &middot; [DisplayStringTable](#displaystringtable) &middot; [DisplayStringTableProvider](#displaystringtableprovider) &middot; [FeedbackLogView](#feedbacklogview) &middot; [ResultBannerView](#resultbannerview) &middot; [SafeAreaFitter](#safeareafitter) &middot; [SkillCommandShape](#skillcommandshape) &middot; [SkillTitleView](#skilltitleview) &middot; [SkillTrayView](#skilltrayview) &middot; [SkinnedTokenPlate](#skinnedtokenplate) &middot; [SkinnedValueBar](#skinnedvaluebar) &middot; [SkinnedWidgetFactory](#skinnedwidgetfactory) &middot; [StatusRosterView](#statusrosterview) &middot; [TargetPickerView](#targetpickerview) &middot; [TargetShape](#targetshape) &middot; [TimelineStripView](#timelinestripview) &middot; [TooltipData](#tooltipdata) &middot; [TooltipPanelView](#tooltippanelview) &middot; [TransportBarView](#transportbarview) &middot; [UiPortraitFacing](#uiportraitfacing) &middot; [UiStatusEntry](#uistatusentry) &middot; [UiTimelineEntry](#uitimelineentry)
 
 ## BattleEventNarrator
 
@@ -119,7 +119,7 @@ A player-chosen command the driver (not the UI) will submit.
 
 **Constructors**
 
-`public BattleUiCommandChoice()`
+`public BattleUiCommandChoice(StableId actorId, bool isConcede, StableId? skillId, FrozenList<StableId> targets)`
 
 :   Records one choice for the driver to act on.
     - `actorId` &mdash; Pending human actor that owns the choice.
@@ -356,29 +356,24 @@ shipped default skin rather than rendering unstyled boxes.
     - `combatantId` &mdash; Combatant the art belongs to.
     - `portrait` &mdash; The sprite to crop, or null to drop one already supplied. The interface never loads art itself, so a combatant with no portrait draws a chip with a plain surface instead.
 
-`public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing)`
-
-:   Supplies a portrait and its source-art direction. The UI derives the displayed
-    direction from the combatant's current team row, then mirrors only when it differs from
-    `sourceFacing`.
-    - `combatantId` &mdash; Combatant the art belongs to.
-    - `portrait` &mdash; The sprite to crop, or null to drop one already supplied.
-    - `sourceFacing` &mdash; Direction encoded by the unmirrored source sprite.
-
 `public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing, FormationFacing desiredFacing)`
 
-:   Supplies a portrait with both directions explicit. Use this overload when a UI-only host needs
-    a destination independent of its current team row. The portrait is mirrored only when the two
-    values differ; `Left` to `Left` is intentionally unmirrored. Portrait crop and framing remain
-    independent of token ground points, HUD elements and world-effect anchors.
+:   Supplies a portrait and its authored and displayed directions.
     - `combatantId` &mdash; Combatant the art belongs to.
-    - `portrait` &mdash; The sprite to crop, or null to drop one already supplied.
+    - `portrait` &mdash; The sprite to crop, or null to remove it.
+    - `sourceFacing` &mdash; Direction encoded by the unmirrored sprite.
+    - `desiredFacing` &mdash; Direction this portrait should face on the rail.
+
+`public void SetCombatantPortrait(StableId combatantId, Sprite portrait, FormationFacing sourceFacing)`
+
+:   Supplies a portrait with its authored direction while letting the timeline choose the displayed direction from its current team state. This overload is used by UI-only presenters that have no stage token.
+    - `combatantId` &mdash; Combatant the art belongs to.
+    - `portrait` &mdash; The sprite to crop, or null to remove it.
     - `sourceFacing` &mdash; Direction encoded by the unmirrored source sprite.
-    - `desiredFacing` &mdash; Direction the portrait should face in the rail.
 
 `public void SetPlayerTeam(StableId teamId)`
 
-:   Names the team the rail and the health bars should read as "ours". Presentation only: it selects team colors and refreshes portraits whose destination is derived from the team row; explicit portrait destinations remain fixed.
+:   Names the team the rail and the health bars should read as "ours". Presentation only: it updates team colors and refreshes portraits whose displayed direction is derived from the team row. Explicit portrait destinations remain fixed.
     - `teamId` &mdash; The player's team. The default id makes every combatant read as an opponent, which is the honest answer when no perspective was supplied.
 
 `public void SetTargetCandidates(StableId skillId, IReadOnlyList<StableId> candidates)`
@@ -447,7 +442,7 @@ display projection, never a submission.
 
 **Constructors**
 
-`public DecisionOptions()`
+`public DecisionOptions(bool hasActor, StableId actorId, bool canConcede, IReadOnlyList<SkillCommandShape> skills)`
 
 :   Creates an option set. A null skill list becomes an empty one, so a caller never has to null-check `Skills`.
     - `hasActor` &mdash; False for the "nothing to decide" set; see `None`.
@@ -495,7 +490,7 @@ re-resolution and calls no engine mutator or preview API.
 
 **Methods**
 
-`public static DecisionOptions Compile()`
+`public static DecisionOptions Compile(BattleSnapshot snapshot, CompiledAuthoringCatalog catalog)`
 
 :   Builds the option set for the decision at the head of the snapshot's queue. Only that first entry is considered, and only when it is human-controlled, because it is the one the engine serves next. A granted skill is offered only when the snapshot shows no live cooldown for it, every resource cost is affordable from the actor's current pools, no status on the actor restricts one of the skill's tags, and its target resolver is registered. Concession is offered when the compiled content registers the concede command at all.
     - `snapshot` &mdash; State to read; nothing in it is mutated.
@@ -798,18 +793,6 @@ intact while still giving the player something clickable.
 
 **Fields**
 
-`public SkinSurfaceGraphic Background`
-
-:   The skinned surface behind the button. It is reskinned in place to show selection rather than swapped for another graphic.
-
-`public Button Button`
-
-:   The clickable component. Its listener is wired once when the entry is created and reads `SkillId` at click time, so rebinding the entry to another skill needs no rewiring.
-
-`public TMP_Text Caption`
-
-:   The short target description in the card's footer, such as "ONE ENEMY".
-
 `public const float CardHeight`
 
 :   Height of one skill card in reference pixels. The command deck is 280 tall, a 46-pixel log strip caps it, and the actor prompt takes a line above the cards, which is what leaves 196 rather than the 216 a card would take if it had the band to itself.
@@ -826,22 +809,6 @@ intact while still giving the player something clickable.
 
 :   Width of the narrower concede card in reference pixels.
 
-`public TMP_Text Cost`
-
-:   The cost in the card's top-right corner. Always in the same place, so a player learns to look there once rather than reading each card.
-
-`public LayoutElement Element`
-
-:   The card's layout element, kept so the tray can re-measure the card against how many are being offered rather than pinning every deck to one fixed width.
-
-`public GameObject Host`
-
-:   The button's root object. Entries are pooled rather than destroyed, so this is deactivated when the tray offers fewer skills than it has already built.
-
-`public SkinSurfaceGraphic Icon`
-
-:   The icon plate in the card's top-left corner. It is recoloured per card rather than carrying art, so the deck ships no icon set and a project can drop its own sprite in without a layout change.
-
 `public const int MaximumButtons`
 
 :   Buttons drawn before the tray stops adding more.
@@ -849,14 +816,6 @@ intact while still giving the player something clickable.
 `public const float MaximumCardWidth`
 
 :   Widest a single card is allowed to grow when few skills are offered, in reference pixels. Without a ceiling a one-skill decision would hand the whole deck to one button.
-
-`public TMP_Text Name`
-
-:   The skill's display name, resolved through the display-string table and falling back to the raw ID text.
-
-`public StableId SkillId`
-
-:   The skill this entry currently stands for. It changes as the tray is reapplied, which is why the click and focus handlers read it rather than capturing it.
 
 **Events**
 
@@ -949,7 +908,7 @@ it reads no simulation state and computes nothing authoritative.
 
 **Methods**
 
-`public void ApplyState()`
+`public void ApplyState(int health, int maximumHealth, int shieldAmount, int statusCount, bool isDead)`
 
 :   Mirrors health, shield, and status counts onto the plate. Does nothing until `Build` has run.
     - `health` &mdash; Current health, used only to derive the bar's fraction.
@@ -986,7 +945,7 @@ it reads no simulation state and computes nothing authoritative.
     - `fraction` &mdash; Normalized scheduler readiness forwarded to the gauge bar.
     - `visible` &mdash; Whether the scheduler gauge participates in layout.
 
-`public void SetGroundPlacement()`
+`public void SetGroundPlacement(float widthPixels, float groundLinePixels, float overlapPixels, float unitsPerPixel)`
 
 :   Moves the plate to a combatant's ground line and sizes it to their art. A nameplate pinned to a fixed offset above the token origin worked only while every combatant was the same 84-pixel square. Once they are painted illustrations of different heights, the plate has to follow the body it belongs to or it ends up across somebody's chest.
     - `widthPixels` &mdash; Width to draw at, in reference pixels. It is widened to 1.4 times the art so the name has room beside the readout, and floored at `PlateWidth` so a narrow combatant still gets a legible plate. Zero or less keeps the current width.
@@ -994,7 +953,7 @@ it reads no simulation state and computes nothing authoritative.
     - `overlapPixels` &mdash; How far the plate's top edge rises above that ground line. A small positive value tucks the plate under the body it belongs to.
     - `unitsPerPixel` &mdash; World units one reference pixel is worth.
 
-`public void SetGroundPlacement()`
+`public void SetGroundPlacement(float widthPixels, float groundLinePixels, float overlapPixels, float unitsPerPixel, float centreXPixels)`
 
 :   Places the plate using the visual ground line and its horizontal centre, both relative to the token root. The four-argument overload remains the compatibility path for callers that use the token origin.
     - `widthPixels` &mdash; Width to draw in reference pixels; zero keeps the current width.
@@ -1140,7 +1099,7 @@ a font, and nothing depends on a shipped prefab.
 
 **Methods**
 
-`public static HorizontalLayoutGroup AddHorizontalLayout()`
+`public static HorizontalLayoutGroup AddHorizontalLayout(RectTransform rect, float spacing, RectOffset padding, TextAnchor alignment = TextAnchor.MiddleCenter)`
 
 :   Adds a horizontal layout group with skin-consistent spacing.
     - `alignment` &mdash; Placement of the non-expanding child row within available space.
@@ -1155,7 +1114,7 @@ a font, and nothing depends on a shipped prefab.
     - `rect` &mdash; Rect already carrying the layout elements whose preferred height should drive it.
     - **Returns** &mdash; A new ContentSizeFitter constrained only to vertical preferred size.
 
-`public static VerticalLayoutGroup AddVerticalLayout()`
+`public static VerticalLayoutGroup AddVerticalLayout(RectTransform rect, float spacing, RectOffset padding)`
 
 :   Adds a vertical layout group with skin-consistent spacing.
     - `padding` &mdash; Left, right, top, and bottom content inset assigned to the group.
@@ -1169,7 +1128,7 @@ a font, and nothing depends on a shipped prefab.
     - `rect` &mdash; HUD region whose anchors, pivot, position, optional size, and scale are updated.
     - `region` &mdash; Compiled safe-area anchor, inward offset, size, stretch, and visibility-independent scale.
 
-`public static TMP_Text CreateLabel()`
+`public static TMP_Text CreateLabel(string name, Transform parent, CompiledBattleSkin skin, int fontSize, Color color, TextAnchor alignment)`
 
 :   Creates a label using the skin's typography.
     - `alignment` &mdash; Horizontal and vertical text placement within the label rect.
@@ -1187,7 +1146,7 @@ a font, and nothing depends on a shipped prefab.
     - `parent` &mdash; Transform that owns the new rect while preserving local coordinates.
     - **Returns** &mdash; The RectTransform of a new child GameObject.
 
-`public static SkinSurfaceGraphic CreateSurface()`
+`public static SkinSurfaceGraphic CreateSurface(string name, Transform parent, SkinSurfaceTokens tokens)`
 
 :   Creates the create surface asset/value from this template's explicit settings. The caller owns persistence and must supply any requested stable ID.
     - `name` &mdash; Unity hierarchy name assigned to the surface GameObject.
@@ -1232,29 +1191,9 @@ no simulation state.
 
 **Fields**
 
-`public SkinSurfaceGraphic Background`
-
-:   The plate drawn behind the row. Hidden while the combatant is down, so a dead row reads as an empty slot rather than a live one.
-
-`public TMP_Text Detail`
-
-:   The caption line to the right of the name, carrying shield and status counts, or `Down` alone once the combatant is dead.
-
-`public SkinnedValueBar Health`
-
-:   The health bar. It eases towards its new fraction rather than snapping, so `Tick` has to be called for the movement to be seen.
-
-`public GameObject Host`
-
-:   The row object itself. It is deactivated rather than destroyed when the roster shrinks, which is how the pool avoids reallocating.
-
 `public const int MaximumRows`
 
 :   Rows drawn before the rest collapse into a count on the last one. The roster docks into a fixed cell of the command deck, and the stage above it is protected, so it has a real ceiling rather than a preference. Past this many combatants the last row reports how many are not shown, which is more honest than a list that quietly runs off the top of its own panel.
-
-`public TMP_Text Name`
-
-:   The combatant label. Falls back to the raw id when the display string table has no name, and is drawn muted once the combatant is down.
 
 **Methods**
 
@@ -1264,7 +1203,7 @@ no simulation state.
     - `entries` &mdash; Rows to draw; null or empty hides every row.
     - `labels` &mdash; Name source; null falls back to `DisplayStringTable.Empty`, which shows raw ids.
 
-`public void Apply()`
+`public void Apply(IReadOnlyList<UiStatusEntry> entries, DisplayStringTable labels, StableId allyTeamId)`
 
 :   Rebuilds the roster, colouring each health bar by whether the combatant is on `allyTeamId`.
     - `entries` &mdash; Rows to draw; null or empty hides every row.
@@ -1308,29 +1247,9 @@ a button raises an event for the interface to act on.
 
 **Fields**
 
-`public SkinSurfaceGraphic Background`
-
-:   The skinned surface behind the button, reskinned in place to show which candidates are currently picked.
-
-`public TMP_Text Caption`
-
-:   The health readout under the name.
-
-`public StableId CombatantId`
-
-:   The combatant this entry currently stands for. The click handler reads it rather than capturing it, so rebinding needs no rewiring.
-
-`public GameObject Host`
-
-:   The button's root object, pooled rather than destroyed so a battle with a changing candidate count does not churn objects.
-
 `public const int MaximumButtons`
 
 :   Legacy compatibility constant. The picker no longer truncates its candidates; every supplied candidate is placed in the scrolling row.
-
-`public TMP_Text Name`
-
-:   The candidate's display name.
 
 **Events**
 
@@ -1367,7 +1286,7 @@ a button raises an event for the interface to act on.
 :   Highlights exactly the candidates in `picked`.
     - `picked` &mdash; The ids picked so far; null or empty clears every highlight.
 
-`public void Show()`
+`public void Show(string prompt, IReadOnlyList<StableId> candidates, bool allowsMultiple, DisplayStringTable labels, IReadOnlyList<UiStatusEntry> status)`
 
 :   Offers exactly the candidates it is handed.
     - `prompt` &mdash; The line above the buttons, such as "Fireball: choose 1 enemy". Shown verbatim, so it is the caller's job to localize it.
@@ -1399,7 +1318,7 @@ never the engine's exact target resolution.
 
 **Constructors**
 
-`public TargetShape()`
+`public TargetShape(TargetTeamRelation relation, TargetLifeState lifeState, int minimumTargets, int maximumTargets, int maximumResolvedTargets, bool actorMayAppear, bool automaticSelection)`
 
 :   Creates a shape from an already-resolved target contract. It copies the declared limits as given and validates nothing.
     - `relation` &mdash; Allowed team relation to the actor.
@@ -1410,7 +1329,7 @@ never the engine's exact target resolution.
     - `actorMayAppear` &mdash; Whether the acting combatant is itself a legal pick.
     - `automaticSelection` &mdash; Whether a command carrying no ids is legal, leaving the pick to the resolver.
 
-`public TargetShape()`
+`public TargetShape(TargetTeamRelation relation, TargetLifeState lifeState, int minimumTargets, int maximumTargets, int maximumResolvedTargets, bool actorMayAppear, bool automaticSelection, StableId resolverId)`
 
 :   Copies target-count limits and pick policy with the resolver identity used for stage previews. Values are retained without validation; this shape neither resolves targets nor authorizes a command.
     - `relation` &mdash; Allowed team relation to the actor.
@@ -1496,10 +1415,6 @@ the scheduler is.
 
 :   Edge of the acting chip in reference pixels.
 
-`public SkinSurfaceGraphic Background`
-
-:   The chip plate. Its stroke carries the team colour and its glow marks the actor about to act.
-
 `public const float ChipGap`
 
 :   Gap between chips in reference pixels.
@@ -1516,25 +1431,9 @@ the scheduler is.
 
 :   Edge of a chip once the rail is crowded, in reference pixels.
 
-`public GameObject DeadCross`
-
-:   The two struck diagonals shown once a combatant is down.
-
 `public const float HeaderGutter`
 
 :   Clearance held on the left of the band for the "TURN ORDER" title, in reference pixels. Named because the header, the chip row and the hairline all have to agree about it, and it used to be written out three times as a literal.
-
-`public SkinSurfaceGraphic Health`
-
-:   The health underline along the chip's bottom edge.
-
-`public GameObject Host`
-
-:   The chip object. Deactivated rather than destroyed when the order shortens, so the strip reuses its chips for the whole battle.
-
-`public TMP_Text Label`
-
-:   The name under the chip. It is drawn for the acting chip only: at 96 pixels a face and a rim identify a combatant faster than a name set small enough to fit under one.
 
 `public const int MaximumChipPips`
 
@@ -1544,37 +1443,9 @@ the scheduler is.
 
 :   Chips drawn before the strip stops adding more.
 
-`public GameObject NowTag`
-
-:   The NOW tag, shown on the leading chip only.
-
-`public Vector2 Origin`
-
-:   Where the chip started the current slide from.
-
 `public const float OverflowReachPixels`
 
 :   Room the trailing "+n" counter needs past the last chip, in reference pixels.
-
-`public readonly List<SkinSurfaceGraphic> Pips`
-
-:   The status pips riding the chip's top-right corner.
-
-`public Image Portrait`
-
-:   The cropped portrait, hidden when the host supplied no art.
-
-`public RectTransform PortraitFrame`
-
-:   The rect the portrait is cropped inside.
-
-`public RectTransform Rect`
-
-:   The chip's rect, moved directly rather than by a layout group.
-
-`public Vector2 Target`
-
-:   Where the chip is sliding to, in the row's local space.
 
 `public const float TransportGutter`
 
@@ -1588,12 +1459,20 @@ the scheduler is.
     - `actors` &mdash; Decision order as the simulation reported it, soonest first: index 0 is the chip raised and marked NOW. Entries past `MaximumChips` collapse into a trailing counter, and null is treated as an empty order.
     - `labels` &mdash; Display names for the actors. A missing entry falls back to the actor's identifier, and null is treated as an empty table.
 
-`public void Apply()`
+`public void Apply(IReadOnlyList<UiTimelineEntry> entries, DisplayStringTable labels, IReadOnlyDictionary<StableId, Sprite> portraits)`
 
 :   Rebuilds the rail from full chip entries.
     - `entries` &mdash; Decision order, soonest first. Entries past `MaximumChips` collapse into a trailing counter rather than wrapping to a second line; null is an empty order.
     - `labels` &mdash; Display names for the actors; a missing entry falls back to the raw identifier.
     - `portraits` &mdash; Art to crop each chip's face from, keyed by combatant. Null, or a combatant with no entry, draws a chip with no face rather than a placeholder.
+
+`public void Apply(IReadOnlyList<UiTimelineEntry> entries, DisplayStringTable labels, IReadOnlyDictionary<StableId, Sprite> portraits, IReadOnlyDictionary<StableId, UiPortraitFacing> portraitFacings)`
+
+:   Rebuilds the rail and uses explicit portrait direction metadata when available. Entries without metadata retain the legacy rule: source art is right-facing and enemy chips are mirrored toward the player.
+    - `entries` &mdash; Decision order, soonest first.
+    - `labels` &mdash; Display names for the actors.
+    - `portraits` &mdash; Art to crop for each combatant.
+    - `portraitFacings` &mdash; Optional authored and displayed direction per portrait.
 
 `public void Build(CompiledBattleSkin battleSkin)`
 
@@ -1604,6 +1483,13 @@ the scheduler is.
 
 :   Advances the slide that follows a reorder. Driven by the presenter's visual clock, so pause and speed apply to the rail exactly as they do to the stage, and a reduced-motion skin snaps instead.
     - `deltaSeconds` &mdash; Positive presentation-clock duration. Non-positive values are ignored.
+
+`public bool TryGetPortraitFrameScale(StableId combatantId, out Vector3 scale)`
+
+:   Reads the current portrait transform for a visible combatant. This is a presentation observer for editor previews and diagnostics; it does not expose or mutate the chip's private hierarchy.
+    - `combatantId` &mdash; Combatant whose visible portrait is queried.
+    - `scale` &mdash; Local portrait scale, or zero when no portrait is visible.
+    - **Returns** &mdash; True when a visible portrait for the id exists.
 
 ---
 
@@ -1623,7 +1509,7 @@ and displays it; it never invokes a simulation or preview API itself.
 
 **Constructors**
 
-`public TooltipData()`
+`public TooltipData(StableId skillId, string costText, string timingText, string targetShapeText, bool hasPreview, Fixed64 previewMinimum, Fixed64 previewMaximum, Chance64 hitChance, Chance64 criticalChance, Chance64 statusChance)`
 
 :   Captures one already-computed tooltip. Null text arguments are stored as empty strings, so a consumer never needs a null check.
     - `hasPreview` &mdash; True when the driver ran a numeric preview. While it is false the shipped tooltip panel hides the amount range and the hit and critical figures, and shows only the status chance.
@@ -1681,7 +1567,7 @@ and displays it; it never invokes a simulation or preview API itself.
 
 **Methods**
 
-`public static TooltipData TextOnly()`
+`public static TooltipData TextOnly(StableId skillId, string costText, string timingText, string targetShapeText)`
 
 :   A skill with no numeric preview still carries its cost, timing, and targeting copy.
     - `costText` &mdash; Driver-authored localized cost line.
@@ -1813,6 +1699,44 @@ hashes.
 
 ---
 
+## UiPortraitFacing
+
+```csharp
+public readonly struct UiPortraitFacing
+```
+
+`TurnGauge.Presentation` &middot; <small>Runtime/Presentation/UI/BattleUiRoot.cs</small>
+
+Describes the direction painted into a portrait and the direction the
+presentation wants that portrait to face. Keeping these values with the
+portrait, rather than deriving a flip from team membership, lets an ally
+illustration authored facing left remain left-facing on a left-facing
+formation slot.
+
+**Constructors**
+
+`public UiPortraitFacing(FormationFacing source, FormationFacing desired)`
+
+:   Records the source and displayed directions of one portrait.
+    - `source` &mdash; Direction in which the source artwork is painted.
+    - `desired` &mdash; Direction the portrait should face in this UI.
+
+**Properties**
+
+`public FormationFacing Desired`
+
+:   Direction the portrait is presented toward.
+
+`public bool IsMirrored`
+
+:   Whether the source must be mirrored to reach the desired direction.
+
+`public FormationFacing Source`
+
+:   Direction encoded by the source portrait.
+
+---
+
 ## UiStatusEntry
 
 ```csharp
@@ -1825,7 +1749,7 @@ One combatant's surfaced status-panel row.
 
 **Constructors**
 
-`public UiStatusEntry()`
+`public UiStatusEntry(StableId combatantId, int health, int maximumHealth, int shield, int statusCount, bool isDead)`
 
 :   Records one row exactly as the snapshot reported it.
     - `combatantId` &mdash; Compiled combatant identity used for label and token lookup.
@@ -1835,7 +1759,7 @@ One combatant's surfaced status-panel row.
     - `shield` &mdash; Current shield amount displayed alongside health.
     - `statusCount` &mdash; Number of active statuses represented by roster pips.
 
-`public UiStatusEntry()`
+`public UiStatusEntry(StableId combatantId, int health, int maximumHealth, int shield, int statusCount, bool isDead, StableId teamId)`
 
 :   Records one row, including the team that decides its colour.
     - `combatantId` &mdash; Compiled combatant identity used for label and token lookup.
@@ -1896,7 +1820,7 @@ matters.
 
 **Constructors**
 
-`public UiTimelineEntry()`
+`public UiTimelineEntry(StableId combatantId, bool isAlly, float healthFraction, int statusCount, bool isDead)`
 
 :   Records one chip from values the interface was already given.
     - `combatantId` &mdash; Combatant the chip stands for; also the portrait lookup key.

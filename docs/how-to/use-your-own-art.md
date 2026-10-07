@@ -123,9 +123,10 @@ token's existing source-facing metadata. A newly configured token defaults to a 
 use the overload with `sourceArtFacing` whenever the imported illustration points elsewhere:
 
 ```csharp
-// This sprite was painted facing left, and the formation slot currently faces right.
-presenter.SetCombatantArt(combatantId, leftFacingSprite, FormationFacing.Left);
-// The stage body and its rail portrait are mirrored once for the right-facing slot.
+// The source faces left; the formation slot faces right.
+presenter.SetCombatantArt(
+    combatantId, leftFacingSprite, FormationFacing.Left);
+// The body and rail portrait are mirrored once.
 ```
 
 For a UI-only binding with no stage token, the three-argument

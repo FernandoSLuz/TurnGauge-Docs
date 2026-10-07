@@ -20,7 +20,7 @@ and may reject it.
 
 **Constructors**
 
-`public AiCandidateDescription()`
+`public AiCandidateDescription(StableId ruleId, StableId skillId, int priority, uint weight, IEnumerable<StableId> requestedTargets)`
 
 :   Describes one candidate action.
     - `ruleId` &mdash; Authored rule this candidate comes from. Must be a rule of the policy being executed.
@@ -93,7 +93,7 @@ conditions that were evaluated for it and the diagnostic that rejected it.
 
 **Constructors**
 
-`public AiCandidateTrace()`
+`public AiCandidateTrace(StableId ruleId, StableId skillId, IEnumerable<AiConditionTrace> conditions, Diagnostic? rejection, int priority, uint weight)`
 
 :   Records the evaluation of one candidate.
     - `ruleId` &mdash; Rule the candidate came from.
@@ -181,7 +181,7 @@ or mutate the simulation.
 
 **Constructors**
 
-`public AiContext()`
+`public AiContext(CompiledBattleContent content, BattleSnapshot snapshot, StableId actorId, CompiledAiPolicyDefinition policy)`
 
 :   Binds compiled content, immutable snapshot, acting combatant, and compiled policy for one AI decision. Policies may read it but cannot mutate the engine.
     - `content` &mdash; Compiled content the decision is resolved against.
@@ -225,7 +225,7 @@ Traces are surfaced on step, forecast, and replay results.
 
 **Constructors**
 
-`public AiDecisionTrace()`
+`public AiDecisionTrace(long tick, ulong opportunitySequence, StableId actorId, StableId policyId, MechanicsImplementationReference implementation, IEnumerable<AiCandidateTrace> candidates, ulong? selectionBound, ulong? selectionSample, IEnumerable<StableId> targetCandidates, IEnumerable<uint> targetSamples, BattleCommand selectedCommand, bool noLegalCommand)`
 
 :   Records one automatic decision. Either a command was selected or the decision yielded no legal command; exactly one of those two outcomes must be supplied, and a no-legal-command decision must carry no selection or target draws.
     - `tick` &mdash; Tick on which the decision was made.
@@ -292,4 +292,3 @@ Traces are surfaced on step, forecast, and replay results.
 :   Tick the decision was taken on. Several decisions can land on the same tick, so match a trace by `OpportunitySequence` rather than by tick.
 
 ---
-

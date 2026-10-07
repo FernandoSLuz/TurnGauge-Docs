@@ -448,7 +448,7 @@ candidates, which the engine then validates before any of them can act.
 
 **Constructors**
 
-`public CompiledAiPolicyDefinition()`
+`public CompiledAiPolicyDefinition(StableId policyId, MechanicsImplementationReference implementation, PropertySet properties, IEnumerable<CompiledAiRule> rules)`
 
 :   Validates and freezes one AI policy. Rule ids must be unique within the policy, because candidates are matched back to their rule by id.
     - `implementation` &mdash; The `IAiPolicy` implementation to run, plus the contract version it was authored against.
@@ -489,7 +489,7 @@ all hold first, and the ordering data the policy selects with. Immutable.
 
 **Constructors**
 
-`public CompiledAiRule()`
+`public CompiledAiRule(StableId ruleId, StableId skillId, int priority, uint weight, IEnumerable<CompiledAiCondition> conditions, IEnumerable<StableId> requestedTargets)`
 
 :   Validates and freezes one AI rule. Both ids are required, and the engine later rejects any candidate whose skill id does not match the rule it names.
     - `priority` &mdash; Higher wins. The priority and conditional policies take the highest-priority legal rule and ignore weight; the weighted policy ignores priority.
@@ -645,7 +645,7 @@ changes after construction, so the same content can back many battles.
 :   Builds ready-made B1 content under the rules id rules.b1-concession that registers the two built-in command types and nothing else. It needs no authored assets, so it is the quickest way to stand an engine up in a test or a sample scene. The battle it backs can only end by concession, since no skill is defined.
     - **Returns** &mdash; Profile-1 concession content with the built-in concede and use-skill commands registered.
 
-`public static CompiledBattleContent CreateB2()`
+`public static CompiledBattleContent CreateB2(StableId rulesId, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledSkillTiming> skillTimings, IEnumerable<CompiledAutomaticDecisionPolicy> automaticDecisionPolicies)`
 
 :   Builds B2 content, which adds schedulers, skill timings, and automatic decision policies to the rules identity and command set B1 already had. Every collection is copied and sorted here, so the content is fixed and safe to share between battles from the moment it is returned.
     - `rulesId` &mdash; Names the rule set this content belongs to; the default identifier is rejected.
@@ -655,7 +655,7 @@ changes after construction, so the same content can back many battles.
     - `automaticDecisionPolicies` &mdash; Policies for automatically controlled combatants. A policy that names a skill with no timing in `skillTimings` is rejected, so a policy can never pick a skill the engine cannot run.
     - **Returns** &mdash; Immutable profile-2 content with every collection sorted and cross-reference validated.
 
-`public static CompiledBattleContent CreateB3()`
+`public static CompiledBattleContent CreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions)`
 
 :   Builds validated content resolved against the built-in mechanics alone. Use the overload that takes a registry if the content names an implementation you registered yourself.
     - `aiPolicyDefinitions` &mdash; Required AI policies with unique valid ids, bounded by `SimulationLimits.AiPolicyDefinitions` and resolved against declared skills.
@@ -670,7 +670,7 @@ changes after construction, so the same content can back many battles.
     - `statusDefinitions` &mdash; Required status definitions with unique valid ids, bounded by `SimulationLimits.StatusDefinitions` and checked against modifiers, periodic effects, and reactions.
     - **Returns** &mdash; Content that has passed every construction check. This never returns null: a broken rule throws the exception that described it, so reach for TryCreateB3 when you would rather read a diagnostic than catch.
 
-`public static CompiledBattleContent CreateB3()`
+`public static CompiledBattleContent CreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   Builds validated content resolved against a registry you supply, which is how custom formulas, effects, targets, AI, and reactions reach the simulation.
     - `mechanicsRegistry` &mdash; Registry every implementation the content names must resolve from, at the contract version the content asks for. Whatever registry you later hand the engine has to satisfy the same bindings, so pass the same one.
@@ -752,7 +752,7 @@ changes after construction, so the same content can back many battles.
     - `commandType` &mdash; Command type id to look for; an unknown or default id simply reports false.
     - **Returns** &mdash; when `commandType` is registered; otherwise, .
 
-`public static B3CreationResult<CompiledBattleContent> TryCreateB3()`
+`public static B3CreationResult<CompiledBattleContent> TryCreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions)`
 
 :   The reporting form of CreateB3, against the built-in mechanics alone: a broken construction rule comes back as a failed result instead of an exception. Prefer this when compiling authored content a user can edit, so a bad asset produces a message rather than a stack trace.
     - `aiPolicyDefinitions` &mdash; Required AI policies with unique valid ids, bounded by `SimulationLimits.AiPolicyDefinitions` and resolved against declared skills.
@@ -767,7 +767,7 @@ changes after construction, so the same content can back many battles.
     - `statusDefinitions` &mdash; Required status definitions with unique valid ids, bounded by `SimulationLimits.StatusDefinitions` and checked against modifiers, periodic effects, and reactions.
     - **Returns** &mdash; A successful result carrying the content, or a failed one whose diagnostics name the stage and the rule that broke. Only the construction rules this content model knows about are converted; an unexpected exception still propagates.
 
-`public static B3CreationResult<CompiledBattleContent> TryCreateB3()`
+`public static B3CreationResult<CompiledBattleContent> TryCreateB3(CompiledBattleRulesV3 rules, IEnumerable<StableId> registeredCommandTypeIds, IEnumerable<CompiledSchedulerDefinition> schedulerDefinitions, IEnumerable<CompiledStatDefinition> statDefinitions, IEnumerable<CompiledResourceDefinition> resourceDefinitions, IEnumerable<CompiledCombatantDefinition> combatantDefinitions, IEnumerable<CompiledSkillDefinition> skillDefinitions, IEnumerable<CompiledStatusDefinition> statusDefinitions, IEnumerable<CompiledReactionDefinition> reactionDefinitions, IEnumerable<CompiledAiPolicyDefinition> aiPolicyDefinitions, BattleMechanicsRegistry mechanicsRegistry)`
 
 :   The reporting form of CreateB3 against a registry you supply. This is the entry point an authoring pipeline wants: custom mechanics are honoured and every failure arrives as a diagnostic.
     - `mechanicsRegistry` &mdash; Registry every implementation the content names must resolve from, at the contract version the content asks for. The engine must later be handed a registry that satisfies the same bindings.
@@ -807,7 +807,7 @@ the order they were authored: by identifier, except
 
 **Constructors**
 
-`public CompiledCombatantDefinition()`
+`public CompiledCombatantDefinition(StableId definitionId, IEnumerable<CompiledStatValue> baseStats, IEnumerable<CompiledResourceDefault> resourceDefaults, IEnumerable<StableId> tags, IEnumerable<StableId> grantedSkillIds, StableId? defaultAiPolicyId, IEnumerable<CompiledStatusResistance> resistances, IEnumerable<StableId> immuneStatusIds, IEnumerable<StableId> immuneStatusTags, IEnumerable<StableId> intrinsicReactionDefinitionIds)`
 
 :   Compiles one combatant archetype, sorting every collection into canonical order and rejecting duplicate keys. The sequences are copied, so the caller may keep using its own collections afterwards.
     - `definitionId` &mdash; Identity a start request names to spawn this archetype. Required.
@@ -880,7 +880,7 @@ multi-target skill produces one plan per target.
 
 **Constructors**
 
-`public CompiledEffectEntry()`
+`public CompiledEffectEntry(StableId entryId, MechanicsImplementationReference resolver, PropertySet properties, IEnumerable<StableId> effectTags)`
 
 :   Validates and freezes one effect entry. The resolver is only named here, not resolved: a reference to an implementation missing from the mechanics registry fails later, when the catalog is validated or the entry is planned.
     - `entryId` &mdash; Identity of this entry inside its owner. It appears in attribution traces, and owners require it to be unique among their entries.
@@ -922,7 +922,7 @@ compiled catalog each time the skill resolves, so a skill in flight cannot drift
 
 **Constructors**
 
-`public CompiledSkillDefinition()`
+`public CompiledSkillDefinition(StableId skillId, IEnumerable<StableId> tags, CompiledSkillTiming timing, MechanicsImplementationReference targetResolver, PropertySet targetProperties, TargetLockPolicy targetLockPolicy, InvalidTargetPolicy invalidTargetPolicy, IEnumerable<CompiledEffectEntry> effects)`
 
 :   Validates and freezes one skill definition. Timing must belong to the same skill id, and the two target policies must be values this contract version supports, so an incoherent skill cannot reach a battle.
     - `tags` &mdash; Skill tags. Stored sorted and de-duplicated.
@@ -985,7 +985,7 @@ bookkeeping (stacks, remaining duration, next periodic tick) and never these rul
 
 **Constructors**
 
-`public CompiledStatusDefinition()`
+`public CompiledStatusDefinition(StableId statusId, StatusPolarity polarity, IEnumerable<StableId> tags, StableId? exclusiveGroupId, StatusStackPolicy stackPolicy, int maximumStacks, Fixed64 strength, bool refreshKeepHigherMetadata, CompiledStatusDuration duration, CompiledStatusPeriodicPolicy periodic, IEnumerable<CompiledStatModifier> modifiers, IEnumerable<StableId> restrictedSkillTags, bool tauntHostileSingleTarget, IEnumerable<CompiledEffectEntry> periodicEffects, IEnumerable<StableId> reactionDefinitionIds, bool dispellable, bool persistOnDeath, bool preventNextOpportunity = false)`
 
 :   Validates and freezes one status definition. Stacking, duration, and periodic values are cross-checked against each other here, so an incoherent status cannot reach a battle.
     - `tags` &mdash; Status tags. Stored sorted and de-duplicated.
@@ -1488,15 +1488,6 @@ diagnostic when the owning catalog is compiled.
 
 :   The entries in authored order. Every call hands back a new array, so adding to or reordering the result does not change the set - but the entries themselves are the same objects, so editing one still edits this set.
 
-**Methods**
-
-`public int Compare()`
-
-:   Orders two array-limit issues by raw key, then value tag, then declared value count. Every step is an ordinal comparison, so the order a compile reports these issues in does not shift with the current culture or with the order the properties were authored in.
-    - `left` &mdash; The issue on the left of the comparison.
-    - `right` &mdash; The issue on the right of the comparison.
-    - **Returns** &mdash; A value less than, equal to, or greater than zero as `left` sorts before, with, or after `right`.
-
 ---
 
 ## ReactionDefinition
@@ -1617,7 +1608,7 @@ shape; switching to ATB requires choosing an input policy and positive threshold
 
 **Methods**
 
-`public static SchedulerDefinition CreateTransient()`
+`public static SchedulerDefinition CreateTransient(string stableIdRaw, SchedulerStateTag stateTag, int noActionRecoveryTicks, InputPausePolicy inputPausePolicy = default(InputPausePolicy), int gaugeThresholdUnits = 0, int schemaVersion = CurrentSchemaVersion)`
 
 :   The scheduler contract this content was authored against. It must equal the version the package ships, which is 1.
     - `stableIdRaw` &mdash; Scheduler ID text, stored verbatim and not checked here. Note that this one is looked up in the scheduler registry rather than merely being an identity, so text that names no registration compiles to an unresolved scheduler rather than to a renamed one.
@@ -1723,7 +1714,7 @@ skills are not set here; they come from the compiled combatant definition.
 
 **Constructors**
 
-`public StartCombatantV3()`
+`public StartCombatantV3(StableId combatantId, StableId combatantDefinitionId, DecisionControlKind controlKind, StableId? aiPolicyOverrideId, int currentHealth, int maximumHealth, bool targetable, IEnumerable<StartResourceV3> resources, StableId formationSlotId, StableId formationRowId, StableId formationSideId, int initialAtbGaugeUnits, IEnumerable<StartStatusApplicationV3> initialStatuses)`
 
 :   Describes one combatant's first tick. Every id is checked for shape here but resolved against compiled content only when the start request is created.
     - `combatantId` &mdash; Identity of this instance. Must be unique across the whole battle, not just within its team.
@@ -2184,4 +2175,3 @@ replaces the default the combatant definition already declares for that
 resource; every resource left out of the list keeps its default.
 
 ---
-

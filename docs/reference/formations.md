@@ -319,7 +319,7 @@ overlap - by which point the art is in and the formation is hard to change.
 
 **Methods**
 
-`public static FormationPresetDefinition Build()`
+`public static FormationPresetDefinition Build(string stableIdRaw, FormationArrangement arrangement, int slotsPerSide)`
 
 :   Builds a preset for `arrangement` with `slotsPerSide` seats on each side.
     - `stableIdRaw` &mdash; Stable id for the produced preset.
@@ -477,7 +477,7 @@ engine-independent immutable records; this object is never retained.
 
 **Methods**
 
-`public static FormationPresetDefinition CreateTransient()`
+`public static FormationPresetDefinition CreateTransient(string stableIdRaw, int aspectNumerator, int aspectDenominator, IEnumerable<FormationSlotDefinition> formationSlots, int schemaVersion = CurrentSchemaVersion)`
 
 :   Explicit in-memory construction hook for tests and customer tooling. It creates no asset, GUID, or implicit persistent mutation.
     - `stableIdRaw` &mdash; Preset ID text, stored verbatim. It is not checked here: empty or invalid ID text becomes a compile diagnostic instead.
@@ -512,7 +512,7 @@ compiling to a default.
 
 :   Creates a seat with empty ids at the origin, facing `FormationFacing.Right` and declaring no anchors, as the inspector does when you add a list entry. Its empty ids fail compilation, so it has to be filled in before the preset builds.
 
-`public FormationSlotDefinition()`
+`public FormationSlotDefinition(string slotIdRaw, string rowIdRaw, string sideIdRaw, int normalizedX, int normalizedY, FormationFacing formationFacing, string sortingLayerKeyRaw, int authoredSortingOrder, int normalizedApproachX, int normalizedApproachY, IEnumerable<FormationVfxAnchorDefinition> vfxAnchors)`
 
 :   Creates a seat from authored values. Nothing is validated here: parsing, range and uniqueness checks belong to the deterministic compiler, so a bad value surfaces as a compile diagnostic rather than an exception from this call.
     - `slotIdRaw` &mdash; Seat id text. It must be non-empty, valid id text and unique within the preset; a duplicate is a compile error.
@@ -543,7 +543,7 @@ compiling to a default.
 
 `public FormationFacing Facing`
 
-:   Which way the occupant of this seat is presented as facing. It reaches the battle through presentation only, where the built-in 2D stage flips the token's sprite for `FormationFacing.Left`. It must be one of the two named values, because the enum's default is not a facing and compilation rejects it.
+:   Which way the occupant of this seat is presented as facing. It reaches the battle through presentation only, where the built-in 2D stage mirrors the token's sprite only when this differs from its source-art facing (Right by default). It must be one of the two named values, because the enum's default is not a facing and compilation rejects it.
 
 `public int PositionX`
 
@@ -594,7 +594,7 @@ validates every value and snapshots it into an immutable
 
 :   Creates an anchor with an empty id at the origin, as the inspector does when you add a list entry. The empty id fails compilation, so an anchor created this way has to be filled in before the preset builds.
 
-`public FormationVfxAnchorDefinition()`
+`public FormationVfxAnchorDefinition(string anchorIdRaw, int normalizedX, int normalizedY)`
 
 :   Creates an anchor from authored values. Nothing is validated here: parsing and range checks belong to the deterministic compiler, so an out-of-range or unparsable value surfaces as a compile diagnostic rather than an exception from this call.
     - `anchorIdRaw` &mdash; Anchor id text. It must be non-empty, valid id text and unique among the anchors of its slot, or preset compilation fails. Null is stored as the empty string.
@@ -732,4 +732,3 @@ projected screen coordinates cannot be passed for one another by mistake.
     - **Returns** &mdash; A deterministic hash code for this value.
 
 ---
-

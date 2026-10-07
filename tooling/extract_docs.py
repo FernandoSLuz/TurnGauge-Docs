@@ -19,6 +19,12 @@ TYPE = re.compile(
     r'^\s*public\s+((?:sealed\s+|abstract\s+|static\s+|readonly\s+|partial\s+)*)'
     r'(class|struct|interface|enum)\s+([A-Za-z0-9_]+)([^{]*)')
 
+# Recognize nested non-public types so their public-looking fields do not leak
+# into the public outer type's generated entry.
+TYPE_ANY = re.compile(
+    r'^\s*((?:(?:public|private|protected|internal|static|sealed|abstract|partial|readonly)\s+)*)'
+    r'(class|struct|interface|enum)\s+([A-Za-z0-9_]+)([^{]*)')
+
 # The terminator alternatives are tried left to right, so `=>` has to precede the
 # bare `=` or every expression-bodied property would read as a field. `=` is in the
 # list because a field with an initializer -- `public const float X = 30f;`, and the
@@ -50,6 +56,116 @@ DOC_LINE = re.compile(r'^\s*///\s?(.*)$')
 DIRECTIVE = re.compile(r'^\s*#\s*(if|else|elif|endif|region|endregion|pragma|nullable|define|undef|line|warning|error)\b')
 
 EXCLUDE_DIR_PARTS = ('Tests', 'InternalTools', 'Internal', 'OptionalDemos', 'Library', 'obj', 'Temp')
+
+
+def parameter_text(code):
+    """Return the balanced parameter text after the first opening parenthesis.
+
+    Signatures in the package are sometimes formatted over several lines and may
+    contain nested calls in defaults.  Splitting at the first ``)`` silently
+    truncated those signatures, so scan the balanced expression instead.
+    """
+    start = code.find('(')
+    if start < 0:
+        return ''
+    depth = 0
+    quote = None
+    escaped = False
+    for index in range(start, len(code)):
+        char = code[index]
+        if quote:
+            if escaped:
+                escaped = False
+            elif char == '\\':
+                escaped = True
+            elif char == quote:
+                quote = None
+            continue
+        if char in ('"', "'"):
+            quote = char
+        elif char == '(':
+            depth += 1
+        elif char == ')':
+            depth -= 1
+            if depth == 0:
+                return code[start + 1:index].strip()
+    return code[start + 1:].strip()
+
+
+def parenthesis_delta(code):
+    """Count structural parentheses while ignoring quoted defaults."""
+    depth = 0
+    quote = None
+    escaped = False
+    for char in code:
+        if quote:
+            if escaped:
+                escaped = False
+            elif char == '\\':
+                escaped = True
+            elif char == quote:
+                quote = None
+            continue
+        if char in ('"', "'"):
+            quote = char
+        elif char == '(':
+            depth += 1
+        elif char == ')':
+            depth -= 1
+    return depth
+
+
+def strip_line_comment(code):
+    """Remove ``//`` comments without treating URL/string contents as comments."""
+    quote = None
+    verbatim = False
+    escaped = False
+    index = 0
+    while index < len(code):
+        char = code[index]
+        if quote:
+            if verbatim and char == '"':
+                if index + 1 < len(code) and code[index + 1] == '"':
+                    index += 2
+                    continue
+                quote = None
+            elif not verbatim and escaped:
+                escaped = False
+            elif not verbatim and char == '\\':
+                escaped = True
+            elif not verbatim and char == quote:
+                quote = None
+            index += 1
+            continue
+        if char == '@' and index + 1 < len(code) and code[index + 1] == '"':
+            quote, verbatim = '"', True
+            index += 2
+            continue
+        if char in ('"', "'"):
+            quote, verbatim = char, False
+            index += 1
+            continue
+        if char == '/' and index + 1 < len(code) and code[index + 1] == '/':
+            return code[:index]
+        index += 1
+    return code
+
+
+def declaration_line(lines, index, code):
+    """Coalesce a declaration's multiline parameter list without consuming its body."""
+    if parenthesis_delta(code) <= 0:
+        return lines, index, code
+    if not (CTOR.match(code) or MEMBER.match(code) or INTERFACE_MEMBER.match(code)):
+        return lines, index, code
+
+    parts = [code]
+    depth = parenthesis_delta(code)
+    while depth > 0 and index + 1 < len(lines):
+        index += 1
+        continuation = strip_line_comment(lines[index])
+        parts.append(continuation)
+        depth += parenthesis_delta(continuation)
+    return lines, index, ' '.join(part.strip() for part in parts)
 
 
 # --- XML doc comment parsing ---------------------------------------------
@@ -116,7 +232,8 @@ def parse_doc(lines):
 
 def parse_file(path, display, out):
     try:
-        lines = io.open(path, encoding='utf-8').read().split('\n')
+        with io.open(path, encoding='utf-8') as source:
+            lines = source.read().split('\n')
     except Exception:
         return
 
@@ -135,15 +252,25 @@ def parse_file(path, display, out):
     # Attributes such as [CreateAssetMenu(...)] often span several lines. While
     # one is open, intervening lines must not clear the pending doc comment.
     attribute_depth = 0
+    ignored_nested_depths = []
+    pending_nested_bases = []
 
-    for raw in lines:
+    index = 0
+    while index < len(lines):
+        raw = lines[index]
         doc = DOC_LINE.match(raw)
         if doc:
             doc_buffer.append(doc.group(1))
+            index += 1
             continue
 
-        code = raw.split('//')[0]
+        code = strip_line_comment(raw)
         stripped = raw.strip()
+
+        # A declaration may put each parameter on its own line.  Coalesce only
+        # lines already recognised as declarations, so a method body call cannot
+        # swallow the following source into a phantom signature.
+        lines, index, code = declaration_line(lines, index, code)
 
         ns = NAMESPACE.match(code)
         if ns:
@@ -151,8 +278,20 @@ def parse_file(path, display, out):
             doc_buffer = []
 
         matched_declaration = False
+        suppressed = bool(ignored_nested_depths)
 
-        t = TYPE.match(code)
+        # A private/internal nested type remains lexically inside the public
+        # outer type. Keep tracking braces, but suppress declarations within it.
+        nested_type = TYPE_ANY.match(code) if current is not None and entered_body else None
+        nested_nonpublic = nested_type and not TYPE.match(code)
+        nested_nonpublic_base = brace if nested_nonpublic else None
+        if nested_nonpublic:
+            suppressed = True
+            doc_buffer = []
+            if '(' not in code and '{' not in code:
+                pending_nested_bases.append(brace)
+
+        t = TYPE.match(code) if not suppressed else None
         if t:
             modifiers, kind, name, tail = (
                 t.group(1).strip(), t.group(2), t.group(3), t.group(4).strip())
@@ -182,7 +321,7 @@ def parse_file(path, display, out):
             matched_declaration = True
             doc_buffer = []
 
-        elif current is not None and entered_body:
+        elif current is not None and entered_body and not suppressed:
             entry = out[current]
 
             if entry['kind'] == 'enum':
@@ -201,13 +340,13 @@ def parse_file(path, display, out):
                 if not mm and entry['kind'] == 'interface':
                     mm = INTERFACE_MEMBER.match(code)
                 if ctor and ctor.group(1) == entry['name']:
-                    params = code.split('(', 1)[1]
+                    params = parameter_text(code)
                     entry['members'].append({
                         'kind': 'constructor',
                         'modifiers': '',
                         'type': '',
                         'name': entry['name'],
-                        'signature': 'public ' + entry['name'] + '(' + params.split(')')[0] + ')',
+                        'signature': 'public ' + entry['name'] + '(' + params + ')',
                         'doc': parse_doc(doc_buffer),
                     })
                     matched_declaration = True
@@ -233,7 +372,7 @@ def parse_file(path, display, out):
                         kind = 'property'
                     signature = 'public ' + (modifiers + ' ' if modifiers else '') + rtype + ' ' + name
                     if tail == '(':
-                        signature += '(' + code.split('(', 1)[1].split(')')[0] + ')'
+                        signature += '(' + parameter_text(code) + ')'
                     entry['members'].append({
                         'kind': kind,
                         'modifiers': modifiers,
@@ -262,6 +401,14 @@ def parse_file(path, display, out):
 
         brace += code.count('{') - code.count('}')
 
+        if pending_nested_bases and brace > pending_nested_bases[-1]:
+            ignored_nested_depths.append(pending_nested_bases.pop())
+
+        if nested_nonpublic and brace > nested_nonpublic_base:
+            ignored_nested_depths.append(nested_nonpublic_base)
+        while ignored_nested_depths and brace <= ignored_nested_depths[-1]:
+            ignored_nested_depths.pop()
+
         if current is not None and depth_of_type is not None:
             if not entered_body:
                 if brace > depth_of_type:
@@ -273,6 +420,8 @@ def parse_file(path, display, out):
                     current = None
                     depth_of_type = None
                     entered_body = False
+
+        index += 1
 
 
 def collect(root):

@@ -267,7 +267,7 @@ surfaced as the typed request-gate failure instead of throwing.
 
 :   Creates the bounds from `AnalysisLimits.DefaultRootActionsPerBattle`, `AnalysisLimits.DefaultTicksPerBattle`, and `AnalysisLimits.DefaultCancellationPollRootActionInterval`, which are well inside every accepted range.
 
-`public BattleBatchLimits()`
+`public BattleBatchLimits(int maximumRootActionsPerBattle, long maximumTicksPerBattle, int cancellationPollRootActionInterval)`
 
 :   Creates per-battle bounds. Values are stored exactly as given; the range check happens in the batch request gate.
     - `maximumRootActionsPerBattle` &mdash; The completed root-action count at which a battle stops and records `BatchOutcomeKind.RootActionLimit`.
@@ -305,7 +305,7 @@ starts.
 
 **Constructors**
 
-`public BattleBatchRequest()`
+`public BattleBatchRequest(CompiledBattleContent content, BattleStartRequest startRequest, BattleSchedulerRegistry schedulerRegistry, BattleMechanicsRegistry mechanicsRegistry, BatchSeedPlan seedPlan, BattleBatchLimits limits, CancellationToken cancellationToken)`
 
 :   Captures the batch input as given. Nothing is validated here, so constructing a request never throws and never starts work.
     - `content` &mdash; The compiled content every battle in the batch runs against.
@@ -437,7 +437,7 @@ is excluded from CSV, JSON, and `RecordSetHash`.
 
 **Constructors**
 
-`public BattleOutcomeRecord()`
+`public BattleOutcomeRecord(uint seed, BatchOutcomeKind kind, StableId? resultId, StableId? winningTeamId, StableId? losingTeamId, long finalTick, ulong completedRootActions, int eventCount, long totalDamageDealt, long totalHealingDone, int survivingCombatants, Sha256Digest finalStateHash, Sha256Digest finalEventChainHash, Diagnostic? diagnostic)`
 
 :   Creates a record and enforces its pairing invariants: a result ID exists exactly on `BatchOutcomeKind.Terminal` records, team result IDs require that result ID, counters are nonnegative, both hashes are valid, and only fatal-invariant records carry a diagnostic.
     - `seed` &mdash; The batch seed this battle ran with.
@@ -578,4 +578,3 @@ One winning team and how many batch records it won.
 :   How many records in the batch named this team the winner. It is always at least one, because a team that won nothing gets no entry at all rather than a zero.
 
 ---
-

@@ -30,41 +30,17 @@ The Skin Browser materializes any of these into an editable
 
 :   Height of the full-bleed command deck, in reference pixels.
 
-`public float CornerRadius`
-
-:   Corner radius every surface in the look starts from, in reference pixels. Bars clamp it to half their own height, so a generous value rounds a thin bar into a capsule instead of distorting it.
-
 `public const string DefaultSkinId`
 
 :   Identity of the skin loaded when a scene assigns none.
-
-`public SkinFillMode FillMode`
-
-:   Fill treatment for the look's surfaces. The stage backdrop ignores it and always uses a radial gradient, since it is the one surface that has to sit behind everything else.
 
 `public const float GaugeBandHeight`
 
 :   Height of the full-bleed turn-order band, in reference pixels.
 
-`public float GlowIntensity`
-
-:   Base glow intensity, scaled by the same fraction as `GlowRadius`. Values above 1 read as bloom without a post-processing stack.
-
-`public float GlowRadius`
-
-:   Base outer glow radius. Each recipe scales it - raised panels, pips, and bar fills take a fraction of it - so a single zero here turns the glow off across the whole look.
-
-`public float GradientSpread`
-
-:   How far the second gradient stop is darkened away from the fill colour. Zero leaves the two stops identical, which makes even a gradient fill read as flat.
-
 `public const float LogStripHeight`
 
 :   Height of the log strip that caps the command deck, in reference pixels.
-
-`public SkinShape PipShape`
-
-:   Silhouette of the status pips, the one shape that changes from look to look. It also decides whether a pip is given a corner radius at all, since only a rounded rectangle reads one.
 
 `public const string PreviousDefaultSkinId`
 
@@ -73,18 +49,6 @@ The Skin Browser materializes any of these into an editable
 `public const float SafeMargin`
 
 :   Safe margin held clear at the screen edge, in reference pixels.
-
-`public float ShadowRadius`
-
-:   Base drop-shadow softness. A surface that ends up with a radius of zero is also given a fully transparent shadow colour, so it draws no shadow rather than a hard edge.
-
-`public float StrokeWidth`
-
-:   Border thickness the look's surfaces are stroked with. The stage backdrop is the exception and drops it to zero, since it draws no border behind the rest of the interface.
-
-`public SkinShape SurfaceShape`
-
-:   Silhouette every panel, button, and bar in the look is cut from. The four original skins are rounded rectangles; Ironlight is chamfered, which is most of what makes it read as machined metal rather than as soft plastic.
 
 **Methods**
 
@@ -393,7 +357,7 @@ assigned.
 
 **Constructors**
 
-`public CompiledBattleSkin()`
+`public CompiledBattleSkin(string stableIdText, string displayName, string description, SkinPaletteTokens palette, SkinTypographyTokens typography, CompiledSkinSurfaces surfaces, CompiledSkinBars bars, SkinStatusPipTokens statusPips, SkinFloatingNumberTokens floatingNumbers, SkinMotionTokens motion, SkinStagePresenceTokens stagePresence, SkinTargetingTokens targeting, CompiledSkinLayout layout)`
 
 :   Assembles a skin from finished token groups. Values are stored exactly as given; clamping is `BattleSkinPreset.Compile`'s job, not this constructor's. A null surface, bar, or layout group throws, because the interface has nothing to fall back to for those.
     - `bars` &mdash; Complete styling for health, shield, resource, cast, and scheduler bars.
@@ -949,7 +913,7 @@ customer can move the whole interface without editing a prefab.
     - `anchor` &mdash; Safe-area edge or corner that fixes both region anchors and pivot.
     - **Returns** &mdash; A visible region at scale 1.
 
-`public static SkinRegionTokens Band()`
+`public static SkinRegionTokens Band(SkinAnchor anchor, float height, float sideInset = 0f, float edgeOffset = 0f)`
 
 :   A visible full-bleed horizontal band of `height` reference pixels, hung from the top or bottom of the safe area.
     - `anchor` &mdash; Edge the band hangs from. Only the vertical half is read, so any of the three top anchors gives a top band and any of the three bottom anchors gives a bottom band.
@@ -1378,4 +1342,3 @@ Type sizing and treatment. Fonts stay optional so no font is redistributed.
     - **Returns** &mdash; A clamped copy; this instance is unchanged. `Font`, `UseOutline`, and `OutlineColor` are left as authored.
 
 ---
-

@@ -58,7 +58,7 @@ mutate the battle.
 
 **Constructors**
 
-`public ReactionContext()`
+`public ReactionContext(CompiledBattleContent content, BattleSnapshot snapshot, ulong rootActionSequence, int parentDepth, StableId sourceCombatantId, StableId targetCombatantId, StableId triggeringEffectTag, ReactionTriggerPhase phase)`
 
 :   Creates a context. The snapshot is wrapped in a `BattleStateView`, so the authoritative snapshot is not reachable from the rule. Throws when content or snapshot is null, when `rootActionSequence` is zero, when `parentDepth` is negative or above `SimulationLimits.ReactionMaximumDepth`, or when any of the three IDs is invalid.
     - `rootActionSequence` &mdash; The root action whose resolution triggered this candidate. Reaction depth, count, and once-per-root budgets are all tracked per root action.
@@ -163,7 +163,7 @@ signature is what buys bounded reaction chains before a battle ever runs.
 
 **Constructors**
 
-`public ReactionSignature()`
+`public ReactionSignature(IEnumerable<StableId> triggerEffectTags, IEnumerable<StableId> emittedEffectTags, bool finiteByConstruction)`
 
 :   Creates a signature. Both tag lists are sorted into canonical order; an invalid or repeated tag is rejected rather than collapsed, as is a list longer than `SimulationLimits.TagsPerCombatantDefinition`. Throws when `triggerEffectTags` yields no tags at all.
     - `triggerEffectTags` &mdash; Effect tags whose resolution may offer this rule. At least one is required.
@@ -201,7 +201,7 @@ which is why `RemainingAmount` is always positive.
 
 **Constructors**
 
-`public ShieldState()`
+`public ShieldState(StableId shieldId, StableId ownerId, StableId sourceId, int priority, ulong applicationSequence, int remainingAmount, int maximumAuthoredAmount, ulong? linkedStatusApplicationSequence, ulong sourceRootActionSequence)`
 
 :   Creates a shield. Throws when any of the three IDs is invalid, when either sequence is zero, when the remaining or maximum amount is not positive, when the remaining amount exceeds the maximum, or when a linked status sequence is supplied as zero.
     - `shieldId` &mdash; The authored shield identity from the effect that created it, which several applications may share; `applicationSequence` is what identifies this one.
@@ -269,7 +269,7 @@ the entry whenever a status is refreshed, stacked, or ticked, and it is
 
 **Constructors**
 
-`public StatusInstanceState()`
+`public StatusInstanceState(StableId ownerId, StableId sourceId, StableId statusDefinitionId, ulong applicationSequence, ulong sourceRootActionSequence, int stackCount, StatusDurationClock durationClock, int remainingDuration, long nextPeriodicTick, ulong excludedOriginatingRootActionSequence, ulong? linkedShieldApplicationSequence, PropertySet instanceConfiguration)`
 
 :   Creates a status instance. Throws when any of the three IDs is invalid, when either sequence is zero, when the stack count is outside 1..`SimulationLimits.IndependentStatusStacks`, when the duration clock is not a defined value, when the remaining duration is negative, above `SimulationLimits.TimingTicks`, or zero under any clock other than `StatusDurationClock.ElapsedTicks`, when the next periodic tick is negative, or when a linked shield sequence is supplied as zero.
     - `sourceId` &mdash; The combatant that applied the status.
@@ -417,7 +417,7 @@ resolver anything, so a resolver must report the same shape on every call.
 
 **Constructors**
 
-`public TargetRequestContract()`
+`public TargetRequestContract(int minimumRequestedIds, int maximumRequestedIds, bool zeroRequestedInvokesAutomaticSelection, int randomCount, TargetLifeState allowedLifeState, TargetTeamRelation teamRelation, bool actorMayAppear)`
 
 :   Declares a contract whose `MaximumResolvedTargets` is inferred: the requested-ID maximum when there is one, otherwise the random count when there is one, otherwise 1 for a `TargetTeamRelation.Self` contract and `SimulationLimits.ResolvedTargetsPerOperation` for any wider relation.
     - `minimumRequestedIds` &mdash; Fewest target IDs a command may carry; zero for a resolver that selects on the caller's behalf.
@@ -428,7 +428,7 @@ resolver anything, so a resolver must report the same shape on every call.
     - `teamRelation` &mdash; Relation an eligible combatant must have to the acting combatant's team.
     - `actorMayAppear` &mdash; Whether the acting combatant may be one of its own targets.
 
-`public TargetRequestContract()`
+`public TargetRequestContract(int minimumRequestedIds, int maximumRequestedIds, bool zeroRequestedInvokesAutomaticSelection, int randomCount, TargetLifeState allowedLifeState, TargetTeamRelation teamRelation, bool actorMayAppear, int maximumResolvedTargets)`
 
 :   Declares a contract with an explicit `MaximumResolvedTargets`, for a resolver whose locked-set size is not implied by its requested-ID or random counts.
     - `minimumRequestedIds` &mdash; Fewest target IDs a command may carry; zero for a resolver that selects on the caller's behalf.
@@ -550,4 +550,3 @@ the actor", so it includes the actor itself unless
 | `Any` | Team membership does not narrow the candidate set. |
 
 ---
-
