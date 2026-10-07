@@ -521,6 +521,14 @@ whenever the screen, safe area, or any field changes.
 
 :   Recomputes and applies the stage viewport. Cheap to call repeatedly: when the result matches the viewport already applied, the presenter is not touched at all. Screen and safe-area changes trigger this automatically, so an explicit call is only needed to force a re-frame.
 
+`public void ApplyNow(int width, int height, Rect safeArea)`
+
+:   Applies framing for an explicit display size, including editor Game view dimensions.
+
+    - `width` &mdash; Display width in pixels. Outside Explicit mode, non-positive values resolve to the frame's 1x1 fallback; Explicit mode ignores display dimensions.
+    - `height` &mdash; Display height in pixels. Outside Explicit mode, non-positive values resolve to the frame's 1x1 fallback; Explicit mode ignores display dimensions.
+    - `safeArea` &mdash; Safe area in the same bottom-left pixel coordinate space as the display.
+
 `public FormationViewport Resolve(int screenWidth, int screenHeight, Rect safeAreaPixels)`
 
 :   Computes the stage viewport for a screen. Public and parameterised so EditMode tests can verify every mode and margin without a device. Pure: it reads the serialized fields but applies nothing to the presenter.

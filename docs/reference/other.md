@@ -2225,12 +2225,12 @@ Chooses the living targetable ally with the lowest health ratio.
 
 `public TargetRequestResult ValidateRequested(TargetContext context, PropertySet properties, FrozenList<StableId> requested)`
 
-:   Rejects manual picks and accepts the resolver's computed lowest-health ally.
+:   Rejects manual picks and accepts the living, targetable ally with the lowest Health/MaximumHealth ratio, breaking ties by stable ID.
 
     - `context` &mdash; Snapshot and actor context used to recompute the candidate.
     - `properties` &mdash; Resolver properties, which must be empty.
     - `requested` &mdash; Manual ids supplied by the caller; any non-empty request is rejected.
-    - **Returns** &mdash; A rejection for manual requests, otherwise an acceptance containing the computed id.
+    - **Returns** &mdash; A rejection for manual requests, otherwise an acceptance containing the computed id or an empty list when no candidate is available.
 
 ---
 
