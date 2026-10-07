@@ -618,9 +618,9 @@ labels never enter simulation state, hashes, checkpoints, or replays.
 
 `public abstract DisplayStringTable Build()`
 
-:   Derives build from the supplied immutable context. Missing or illegal inputs produce the contract's typed empty/failure result.
+:   Builds a display table from this provider's serialized source.
 
-    - **Returns** &mdash; An immutable ID-to-label table assembled from this provider's serialized source.
+    - **Returns** &mdash; A display table containing the provider's authored labels.
 
 ---
 
@@ -1246,7 +1246,7 @@ a font, and nothing depends on a shipped prefab.
 
 `public static SkinSurfaceGraphic CreateSurface(string name, Transform parent, SkinSurfaceTokens tokens)`
 
-:   Creates the create surface asset/value from this template's explicit settings. The caller owns persistence and must supply any requested stable ID.
+:   Creates a transient, non-raycast surface and applies its visual tokens immediately.
 
     - `name` &mdash; Unity hierarchy name assigned to the surface GameObject.
     - `parent` &mdash; Transform that receives the new non-raycast surface child.
@@ -1578,7 +1578,7 @@ the scheduler is.
 
     - `entries` &mdash; Decision order, soonest first. Entries past `MaximumChips` collapse into a trailing counter rather than wrapping to a second line; null is an empty order.
     - `labels` &mdash; Display names for the actors; a missing entry falls back to the raw identifier.
-    - `portraits` &mdash; Art to crop each chip's face from, keyed by combatant. Null, or a combatant with no entry, draws a chip with no face rather than a placeholder.
+    - `portraits` &mdash; Art to crop each chip's face from, keyed by combatant. Null, or a combatant with no entry, draws a chip with textual initials instead.
 
 `public void Apply(IReadOnlyList<UiTimelineEntry> entries, DisplayStringTable labels, IReadOnlyDictionary<StableId, Sprite> portraits, IReadOnlyDictionary<StableId, UiPortraitFacing> portraitFacings)`
 

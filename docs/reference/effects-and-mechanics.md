@@ -1366,7 +1366,7 @@ survives.
 
 `public AiCandidatePlan BuildCandidates(AiContext context, PropertySet properties)`
 
-:   Derives build candidates from the supplied immutable context. Missing or illegal inputs produce the contract's typed empty/failure result.
+:   Builds a bounded plan of command candidates in preference order from the actor, policy, read-only state and authored properties.
 
     - `context` &mdash; Actor, the compiled policy definition with its rules, catalog, and a read-only state view.
     - `properties` &mdash; Authored configuration for this policy use.
@@ -1419,7 +1419,7 @@ should happen; the engine decides how much of it actually lands.
 
 `public EffectPlan Plan(EffectPlanningContext context, PropertySet properties)`
 
-:   Derives plan from the supplied immutable context. Missing or illegal inputs produce the contract's typed empty/failure result.
+:   Plans an ordered, bounded sequence of effect primitives from the supplied read-only state and authored properties without mutating the simulation.
 
     - `context` &mdash; Source, target, effect entry ID, catalog, and a read-only state view.
     - `properties` &mdash; Authored configuration for this effect entry.

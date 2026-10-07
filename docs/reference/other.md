@@ -21,11 +21,11 @@ Binds a recipe audio key (an sfx-* clip name) to art.
 
 `public string AudioKey`
 
-:   &mdash;
+:   Recipe audio key whose clip is being bound.
 
 `public AudioClip Clip`
 
-:   &mdash;
+:   Audio clip played for the bound recipe key.
 
 ---
 
@@ -1689,51 +1689,63 @@ Creates a shield equal to a configured fraction of missing health.
 
 `public int ContractVersion`
 
-:   &mdash;
+:   Gets the contract version implemented by this resolver.
 
 `public int EffectContractVersion`
 
-:   &mdash;
+:   Gets the effect registry contract version implemented by this resolver.
 
 `public StableId ImplementationId`
 
-:   &mdash;
+:   Gets the stable implementation id used for compatibility checks.
 
 `public StableId ResolverId`
 
-:   &mdash;
+:   Gets the resolver's stable registry id.
 
 **Fields**
 
 `public static readonly StableId Id`
 
-:   &mdash;
+:   Stable registry id for this effect resolver.
 
 `public static readonly StableId PriorityKey`
 
-:   &mdash;
+:   Property key for the shield priority.
 
 `public static readonly StableId RatioKey`
 
-:   &mdash;
+:   Property key for the missing-health fraction to convert into shield.
 
 `public static readonly StableId ShieldKey`
 
-:   &mdash;
+:   Property key for the shield identity to apply.
 
 **Methods**
 
 `public static long CalculateShieldRaw(int missingHealth, Fixed64 ratio)`
 
-:   &mdash;
+:   Calculates the fixed-point shield amount from missing health and a ratio.
+
+    - `missingHealth` &mdash; Positive amount of health missing from the target.
+    - `ratio` &mdash; Fixed-point fraction applied to the missing health.
+    - **Returns** &mdash; The raw fixed-point shield amount, or zero for non-positive inputs.
 
 `public EffectPlan Plan(EffectPlanningContext context, PropertySet properties)`
 
-:   &mdash;
+:   Plans a shield primitive equal to the target's missing health times the configured ratio.
+
+    - `context` &mdash; Planning context containing the target snapshot and content.
+    - `properties` &mdash; Validated effect properties controlling shield id, ratio, and priority.
+    - **Returns** &mdash; An effect plan, empty when no shield is needed or validation fails.
 
 `public ValidationReport Validate(EffectValidationContext context, PropertySet properties)`
 
-:   &mdash;
+:   Validates the three required property values and their ranges.
+
+    - `context` &mdash; Content context used to validate the effect.
+    - `properties` &mdash; Effect properties, requiring ratio, shield id, and priority.
+    - **Returns** &mdash; A valid report or a diagnostic identifying the first contract violation.
 
 ---
 
@@ -1833,7 +1845,7 @@ non-authoritative data and never enters any battle hash.
 
 `public override DisplayStringTable Build()`
 
-:   Builds the runtime `DisplayStringTable`. Invalid ids and null labels are skipped defensively; lookups for skipped ids fall back to the raw id text inside the table itself.
+:   Builds the runtime `DisplayStringTable`. Invalid ids and null entries and invalid ids are skipped defensively. A null label is stored as an empty string; lookups for missing ids fall back to the raw id text inside the table itself.
 
 ---
 
@@ -1853,11 +1865,11 @@ One stable-id-to-display-name pair.
 
 `public string Id`
 
-:   &mdash;
+:   Stable id parsed into the table when this entry is valid.
 
 `public string Label`
 
-:   &mdash;
+:   Display text stored for the parsed id; a null value becomes an empty string.
 
 ---
 
@@ -2154,51 +2166,71 @@ Chooses the living targetable ally with the lowest health ratio.
 
 `public int ContractVersion`
 
-:   &mdash;
+:   Gets the contract version implemented by this resolver.
 
 `public StableId ImplementationId`
 
-:   &mdash;
+:   Gets the stable implementation id used for compatibility checks.
 
 `public TargetRequestContract RequestContract`
 
-:   &mdash;
+:   Gets the request contract requiring one living, targetable ally and no manual picks.
 
 `public StableId ResolverId`
 
-:   &mdash;
+:   Gets the resolver's stable registry id.
 
 `public int TargetContractVersion`
 
-:   &mdash;
+:   Gets the target registry contract version implemented by this resolver.
 
 **Fields**
 
 `public static readonly StableId Id`
 
-:   &mdash;
+:   Stable registry id for this target resolver.
 
 **Methods**
 
 `public FrozenList<StableId> GetCandidates(TargetContext context, PropertySet properties)`
 
-:   &mdash;
+:   Returns the lowest-health living, targetable ally of the acting combatant.
+
+    - `context` &mdash; Snapshot and actor context used to identify allies.
+    - `properties` &mdash; Resolver properties, which must be empty.
+    - **Returns** &mdash; One candidate id, or an empty list when the actor or allies are unavailable.
 
 `public static StableId SelectLowestHealthRatio(BattleStateView snapshot, FrozenList<StableId> candidates)`
 
-:   &mdash;
+:   Selects the lowest-health-ratio valid candidate from a snapshot.
+
+    - `snapshot` &mdash; Battle snapshot used to resolve candidate ids.
+    - `candidates` &mdash; Candidate ids to compare.
+    - **Returns** &mdash; The selected id, or the default id when no candidate remains valid.
 
 `public static StableId SelectLowestHealthRatio(IEnumerable<CombatantState> candidates)`
 
-:   &mdash;
+:   Selects the lowest-health-ratio valid combatant from an enumerable.
+
+    - `candidates` &mdash; Combatants to compare.
+    - **Returns** &mdash; The selected id, or the default id when no candidate is valid.
 
 `public ValidationReport Validate(TargetValidationContext context, PropertySet properties)`
 
-:   &mdash;
+:   Validates that this resolver receives no custom properties.
+
+    - `context` &mdash; Targeting context used to validate the request.
+    - `properties` &mdash; Resolver properties, which must be empty.
+    - **Returns** &mdash; A valid report for an empty property set, otherwise an unknown-property diagnostic.
 
 `public TargetRequestResult ValidateRequested(TargetContext context, PropertySet properties, FrozenList<StableId> requested)`
 
-:   &mdash;
+:   Rejects manual picks and accepts the resolver's computed lowest-health ally.
+
+    - `context` &mdash; Snapshot and actor context used to recompute the candidate.
+    - `properties` &mdash; Resolver properties, which must be empty.
+    - `requested` &mdash; Manual ids supplied by the caller; any non-empty request is rejected.
+    - **Returns** &mdash; A rejection for manual requests, otherwise an acceptance containing the computed id.
 
 ---
 
@@ -2218,11 +2250,11 @@ Binds a recipe VFX key (a particle-* sprite name) to art.
 
 `public Sprite ParticleSprite`
 
-:   &mdash;
+:   Sprite used by the particle effect.
 
 `public string VfxKey`
 
-:   &mdash;
+:   Recipe VFX key whose particle sprite is being bound.
 
 ---
 
@@ -2438,11 +2470,11 @@ token sprite (the token-* art keys from the art manifest).
 
 `public string CombatantDefinitionId`
 
-:   &mdash;
+:   Stable combatant definition id whose token art is being bound.
 
 `public Sprite TokenSprite`
 
-:   &mdash;
+:   Sprite drawn for the combatant's token.
 
 ---
 
